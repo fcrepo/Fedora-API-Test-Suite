@@ -1,7 +1,6 @@
 package com.ibr.fedora.report;
 
 import com.ibr.fedora.TestSuiteGlobals;
-import com.ibr.fedora.TestsLabels;
 import org.apache.jena.rdf.model.*;
 import org.openrdf.model.vocabulary.EARL;
 
@@ -9,8 +8,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -71,19 +68,5 @@ public abstract class EarlCoreReporter {
         for (Entry<String, String> prefix : prefixes.entrySet()) {
             model.setNsPrefix(prefix.getKey(), prefix.getValue());
         }
-    }
-
-    public static String createTestCaseURL(String methodName) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
-        Object o = TestsLabels.class.newInstance();
-        Method me = TestsLabels.class.getDeclaredMethod(methodName);
-        Object[] m = (Object[]) me.invoke(o);
-        return m[2].toString();
-    }
-
-    public static String createTestCaseTitle(String methodName) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
-        Object o = TestsLabels.class.newInstance();
-        Method me = TestsLabels.class.getDeclaredMethod(methodName);
-        Object[] m = (Object[]) me.invoke(o);
-        return m[0].toString();
     }
 }

@@ -5,7 +5,6 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
 import org.testng.*;
-import org.testng.internal.Utils;
 import org.testng.xml.XmlSuite;
 
 import java.io.IOException;
@@ -63,52 +62,48 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
                 passedTests = testContext.getPassedTests();
                 failedTests = testContext.getFailedTests();
                 skippedTests = testContext.getSkippedTests();
-                getResultProperties(failedTests, FAIL);
-                getResultProperties(skippedTests, SKIP);
-                getResultProperties(passedTests, PASS);
             }
+
+            String[][] r = TestSuiteGlobals.orderTestsResults(passedTests, skippedTests, failedTests);
+            getResultProperties(r);
         }
     }
 
-    private void getResultProperties(IResultMap tests, String status) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        for (ITestResult result : tests.getAllResults()) {
-            makeResultResource(result, status);
+    private void getResultProperties(String[][] tests) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        for (String[] r : tests) {
+            makeResultResource(r);
         }
     }
 
-    private void makeResultResource(ITestResult result, String status) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        //String className = result.getTestClass().getName();
-        //className = className.substring(className.lastIndexOf(".") + 1);
-
+    private void makeResultResource(String[] result) throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Resource assertionResource = model.createResource(null, EarlCoreReporter.Assertion);
 
         Resource resultResource = model.createResource(null, EarlCoreReporter.TestResult);
 
-        Resource subjectResource = model.getResource(createTestCaseURL(result.getName()));
+        Resource subjectResource = model.getResource(result[0]);
         Resource assertorResource = model.getResource(TestSuiteGlobals.earlReportAssertor);
 
         assertionResource.addProperty(EarlCoreReporter.testSubject, subjectResource);
 
-        assertionResource.addProperty(EarlCoreReporter.test, model.getResource(createTestCaseTitle(result.getName())));
-
-        switch (status) {
-            case FAIL:
+        assertionResource.addProperty(EarlCoreReporter.test, model.getResource(result[3]));
+        System.out.println(result[3]);
+        switch (result[1]) {
+            case "FAIL":
                 resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.failed);
                 break;
-            case PASS:
+            case "PASS":
                 resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.passed);
                 break;
-            case SKIP:
+            case "SKIPPED":
                 resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.untested);
                 break;
             default:
                 break;
         }
 
-        if (result.getThrowable() != null) {
-            createExceptionProperty(result.getThrowable(), resultResource);
+        if (!result[4].isEmpty()) {
+            createExceptionProperty(result[4], resultResource);
         }
-
 
         assertionResource.addProperty(EarlCoreReporter.assertedBy, assertorResource);
 
@@ -120,10 +115,7 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
         assertionResource.addProperty(EarlCoreReporter.testResult, resultResource);
     }
 
-    private void createExceptionProperty(Throwable thrown, Resource resource) {
-        if (thrown.getClass().getName().contains(SKIP))
-            resource.addProperty(DCTerms.description, thrown.getMessage());
-        else
-            resource.addLiteral(DCTerms.description,  Utils.stackTrace(thrown, false)[0]);
+    private void createExceptionProperty(String stackTrace, Resource resource) {
+        resource.addProperty(DCTerms.description, stackTrace);
     }
 }
