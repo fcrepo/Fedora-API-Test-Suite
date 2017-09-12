@@ -37,7 +37,7 @@ public class TestsLabels {
     public static String[] postDigestResponseHeaderAuthentication(){
         return new String[] {
                 "NonRDFSource-PostDigestResponseHeaderAuthentication",
-                "On creation of an LDP-NR an implementation must create an associated LDP-RS describing that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
+                "A HTTP POST request that would create a LDP-NR and includes a Digest header (as described in [RFC3230]) for which the instance-digest in that header does not match that of the new LDP-NR must be rejected with a 409 Conflict response.",
                 "http://fedora.info/2017/06/30/spec/#httpPOSTLDPNR"
         };
     }

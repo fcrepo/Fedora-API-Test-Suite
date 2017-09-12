@@ -26,20 +26,14 @@ public class HttpPost {
         ps.append("\n1."+TestsLabels.httpPost()[1]).append("\n");
         ps.append("Request:\n");
         RestAssured.given()
-		                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-		                .contentType("text/turtle")
-		                .log().all()
-	                .when()
-	                	.post(host)
-	                .then()
-	                	.log().all()
-	                .statusCode(201);
-        
-        /*String responseBody = response.toString();
-        
-        JsonPath jsonPath = new JsonPath(responseBody);
-        
-        TestSuiteGlobals.resourcePointer = jsonPath.getString("location");*/
+                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                .contentType("text/turtle")
+                .log().all()
+                .when()
+                .post(host)
+                .then()
+                .log().all()
+                .statusCode(201);
         
         ps.append("\n -Case End- \n").close();
     }
@@ -50,15 +44,22 @@ public class HttpPost {
         PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n2."+TestsLabels.constrainByResponseHeader()[1]).append("\n");
         ps.append("Request:\n");
+
+        String resource =
+                RestAssured.given()
+                        .header("Content-Disposition", "attachment; filename=\"constrainByResponseHeader.txt\"")
+                        .when()
+                        .post(host).asString();
+
         RestAssured.given()
-	                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-	                	.contentType("text/turtle")
-	                	.log().all()
-	                .when()
-	                	.post(host)
-	                .then()
-	                	.log().all()
-	                .statusCode(201).header("Link", containsString("constrainedBy"));
+                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                .contentType("text/turtle")
+                .log().all()
+                .when()
+                .post(resource)
+                .then()
+                .log().all()
+                .statusCode(409).header("Link", containsString("constrainedBy"));
         
         ps.append("\n -Case End- \n").close();
     }
@@ -70,13 +71,14 @@ public class HttpPost {
         ps.append("\n3."+TestsLabels.postNonRDFSource()[1]).append('\n');
         ps.append("Request:\n");
         RestAssured.given()
-	                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-	                	.log().all()
-	                .when()
-	                	.post(host)
-	                .then()
-	                	.log().all()
-	                .statusCode(201);
+                .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
+                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                .log().all()
+                .when()
+                .post(host)
+                .then()
+                .log().all()
+                .statusCode(201);
         ps.append("\n -Case End- \n").close();
     }
 
@@ -87,13 +89,14 @@ public class HttpPost {
         ps.append("\n4."+TestsLabels.postResourceAndCheckAssociatedResource()[1]).append('\n');
         ps.append("Request:\n");
         RestAssured.given()
-	                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-	                	.log().all()
-	                .when()
-	                	.post(host)
-	                .then()
-	                	.log().all()
-	                .statusCode(201).header("Link", containsString("describedby"));
+                .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
+                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                .log().all()
+                .when()
+                .post(host)
+                .then()
+                .log().all()
+                .statusCode(201).header("Link", containsString("describedby"));
         
         ps.append("\n -Case End- \n").close();
     }
@@ -106,21 +109,23 @@ public class HttpPost {
             PrintStream ps = TestSuiteGlobals.logFile();
             ps.append("\n5."+TestsLabels.postDigestResponseHeaderAuthentication()[1]).append('\n');
             ps.append("Request:\n");
-            String resource = RestAssured.given()
-					          .when()
-					          	.post(host).asString();
+            String resource =
+                    RestAssured.given()
+                            .header("Content-Disposition", "attachment; filename=\"postDigestResponseHeaderAuthentication.txt\"")
+                            .when()
+                            .post(host).asString();
 
             this.resource = resource;
 
             RestAssured.given()
-	                    .header("digest", checksum)
-	                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-	                    	.log().all()
-	                    .when()
-	                    	.post(resource)
-	                    .then()
-	                    	.log().all()
-	                    .statusCode(409);
+                    .header("digest", checksum)
+                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                    .log().all()
+                    .when()
+                    .post(resource)
+                    .then()
+                    .log().all()
+                    .statusCode(409);
 
             ps.append("-Case End- \n").close();
         }else {
@@ -136,19 +141,16 @@ public class HttpPost {
             PrintStream ps = TestSuiteGlobals.logFile();
             ps.append("\n6."+TestsLabels.postDigestResponseHeaderAuthentication()[1]).append('\n');
             ps.append("Request:\n");
-            String resource = RestAssured.given()
-                    .when()
-                    .post(host).asString();
 
             RestAssured.given()
-	                    	.header("digest", checksum)
-	                    	.config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-	                    	.log().all()
-	                    .when()
-	                    	.post(resource)
-	                    .then()
-	                    	.log().all()
-	                    .statusCode(400);
+                    .header("digest", checksum)
+                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                    .log().all()
+                    .when()
+                    .post(resource)
+                    .then()
+                    .log().all()
+                    .statusCode(400);
 
             ps.append("\n -Case End- \n").close();
         }else {

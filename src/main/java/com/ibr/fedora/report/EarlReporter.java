@@ -86,7 +86,7 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
         assertionResource.addProperty(EarlCoreReporter.testSubject, subjectResource);
 
         assertionResource.addProperty(EarlCoreReporter.test, model.getResource(result[3]));
-        System.out.println(result[3]);
+
         switch (result[1]) {
             case "FAIL":
                 resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.failed);
