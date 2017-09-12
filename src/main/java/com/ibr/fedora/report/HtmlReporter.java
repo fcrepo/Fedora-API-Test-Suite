@@ -1,7 +1,6 @@
 package com.ibr.fedora.report;
 
 import com.ibr.fedora.TestSuiteGlobals;
-import com.ibr.fedora.TestsLabels;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.StringResource;
 import org.testng.*;
@@ -12,7 +11,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -143,53 +141,11 @@ public class HtmlReporter implements IReporter {
     private void makeMethodSummaryTable(IResultMap passed, IResultMap skipped, IResultMap failed) throws IOException, NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
         html.table(class_("indented"));
         html.tr().th().content("Test");
-        html.th().content("Result")._tr();
-        String[][] results = new String[7][4];
-        for (ITestResult result : passed.getAllResults()) {
-            ITestNGMethod method = result.getMethod();
-
-            Object o = TestsLabels.class.newInstance();
-            Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
-            Object[] normalizedName = (Object[]) m.invoke(o);
-
-            results[method.getPriority()][0] = normalizedName[2].toString();
-            results[method.getPriority()][1] = "PASS";
-            results[method.getPriority()][2] = normalizedName[1].toString();
-            results[method.getPriority()][3] = normalizedName[0].toString();
-        }
-        for(ITestResult result : skipped.getAllResults()){
-            ITestNGMethod method = result.getMethod();
-
-            Object o = TestsLabels.class.newInstance();
-            Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
-            Object[] normalizedName = (Object[]) m.invoke(o);
-
-            results[method.getPriority()][0] = normalizedName[2].toString();
-            results[method.getPriority()][1] = "SKIPPED";
-            results[method.getPriority()][2] = normalizedName[1].toString();
-            results[method.getPriority()][3] = normalizedName[0].toString();
-        }
-        for(ITestResult result : failed.getAllResults()){
-            ITestNGMethod method = result.getMethod();
-
-            Object o = TestsLabels.class.newInstance();
-            Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
-            Object[] normalizedName = (Object[]) m.invoke(o);
-
-            results[method.getPriority()][0] = normalizedName[2].toString();
-            results[method.getPriority()][1] = "FAIL";
-            results[method.getPriority()][2] = normalizedName[1].toString();
-            results[method.getPriority()][3] = normalizedName[0].toString();
-        }
+        html.th().content("Result");
+        html.th().content("")._tr();
+        String[][] results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
 
         for(String[] r : results){
-            /*String cssClass = "";
-            switch(r[1]){
-                case "PASS": cssClass = "Passed"; break;
-                case "SKIPPED": cssClass = "Skipped"; break;
-                case "FAIL": cssClass = "Failed"; break;
-            }*/
-
             html.tr();
             html.td().a(href(r[0]).target("_blank")).write(r[3])._a()._td();
             html.td().span(class_(r[1])).content(r[1])._td();
