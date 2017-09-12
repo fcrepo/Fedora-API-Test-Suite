@@ -120,7 +120,7 @@ public class HttpPost {
 	                    	.post(resource)
 	                    .then()
 	                    	.log().all()
-	                    .statusCode(201);
+	                    .statusCode(409);
 
             ps.append("-Case End- \n").close();
         }else {
@@ -148,7 +148,7 @@ public class HttpPost {
 	                    	.post(resource)
 	                    .then()
 	                    	.log().all()
-	                    .statusCode(201);
+	                    .statusCode(400);
 
             ps.append("\n -Case End- \n").close();
         }else {
