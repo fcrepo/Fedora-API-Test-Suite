@@ -49,4 +49,28 @@ public class TestsLabels {
                 "http://fedora.info/2017/06/30/spec/#httpPOSTLDPNR"
         };
     }
+    
+    public static String[] httpPut(){
+        return new String[] {
+                "HttpPut",
+                "Any LDP-NR must support PUT to replace the binary content of that resource.",
+                "http://fedora.info/2017/06/30/spec/#httpPUTLDPNR"
+        };
+    }
+    
+    public static String[] putDigestResponseHeaderAuthentication(){
+        return new String[] {
+                "NonRDFSource-PutDigestResponseHeaderAuthentication",
+                "A HTTP PUT request that includes a Digest header (as described in [RFC3230]) for which any instance-digest in that header does not match the instance it describes, must be rejected with a 409 Conflict response.",
+                "http://fedora.info/2017/06/30/spec/#httpPUTLDPNR"
+        };
+    }
+
+    public static String[] putDigestResponseHeaderVerification(){
+        return new String[] {
+                "NonRDFSource-PutDigestResponseHeaderVerification",
+                "A HTTP PUT request that includes an unsupported Digest type (as described in [RFC3230]), should be rejected with a 400 Bad Request response.",
+                "http://fedora.info/2017/06/30/spec/#httpPUTLDPNR"
+        };
+    }
 }
