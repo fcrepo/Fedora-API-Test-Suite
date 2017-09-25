@@ -48,6 +48,7 @@ public class HttpPost {
         String resource =
                 RestAssured.given()
                         .header("Content-Disposition", "attachment; filename=\"constrainByResponseHeader.txt\"")
+                        .body("TestString.")
                         .when()
                         .post(host).asString();
 
@@ -139,7 +140,7 @@ public class HttpPost {
         String checksum = "abc=abc";
         if(!this.resource.isEmpty()){
             PrintStream ps = TestSuiteGlobals.logFile();
-            ps.append("\n6."+TestsLabels.postDigestResponseHeaderAuthentication()[1]).append('\n');
+            ps.append("\n6."+TestsLabels.postDigestResponseHeaderVerification()[1]).append('\n');
             ps.append("Request:\n");
 
             RestAssured.given()
@@ -156,5 +157,91 @@ public class HttpPost {
         }else {
             throw new SkipException("Skipping this exception");
         }
+    }
+    
+    @Test(priority = 7)
+    @Parameters({"param1"})
+    public void httpPut(String host) throws FileNotFoundException {
+        PrintStream ps = TestSuiteGlobals.logFile();
+        
+        ps.append("\n7."+TestsLabels.httpPut()[1]).append("\n");
+        ps.append("Request:\n");
+        String resource =
+                RestAssured.given()
+                        .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+                        .body("TestString.")
+                        .when()
+                        .post(host).asString();
+
+        RestAssured.given()
+        .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+        .body("TestString2.")
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .log().all()
+        .when()
+        .put(resource)
+        .then()
+        .log().all()
+        .statusCode(204);
+        
+        ps.append("\n -Case End- \n").close();
+    }
+    
+    @Test(priority = 8)
+    @Parameters({"param1"})
+    public void putDigestResponseHeaderAuthentication(String host) throws FileNotFoundException {
+    	String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
+        PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n8."+TestsLabels.putDigestResponseHeaderAuthentication()[1]).append("\n");
+        ps.append("Request:\n");
+        String resource =
+                RestAssured.given()
+                        .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+                        .body("TestString.")
+                        .when()
+                        .post(host).asString();
+
+        RestAssured.given()
+        .header("digest", checksum)
+        .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+        .body("TestString2.")
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .log().all()
+        .when()
+        .put(resource)
+        .then()
+        .log().all()
+        .statusCode(409);
+        
+        ps.append("\n -Case End- \n").close();
+    }
+    
+    @Test(priority = 9)
+    @Parameters({"param1"})
+    public void putDigestResponseHeaderVerification(String host) throws FileNotFoundException {
+    	String checksum = "abc=abc";
+        PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n9."+TestsLabels.putDigestResponseHeaderVerification()[1]).append("\n");
+        ps.append("Request:\n");
+        String resource =
+                RestAssured.given()
+                        .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+                        .body("TestString.")
+                        .when()
+                        .post(host).asString();
+
+        RestAssured.given()
+        .header("digest", checksum)
+        .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+        .body("TestString2.")
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .log().all()
+        .when()
+        .put(resource)
+        .then()
+        .log().all()
+        .statusCode(400);
+        
+        ps.append("\n -Case End- \n").close();
     }
 }
