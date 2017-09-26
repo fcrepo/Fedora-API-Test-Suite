@@ -22,6 +22,18 @@ public abstract class TestSuiteGlobals {
     public static String ldptNamespace = "http://fedora.info/2017/06/30/spec/#";
     public static String earlReportAssertor = "https://wiki.duraspace.org/display/FF";
     public static String resourcePointer;
+    public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
+
+    public static boolean checkPayloadHeader(String header){
+        boolean isPayloadHeader = false;
+        for(String h : payloadHeaders){
+            if(h.equals(header)) {
+                isPayloadHeader = true;
+                break;
+            }
+        }
+        return isPayloadHeader;
+    }
 
     public static String today(){
         String date = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(new Date());

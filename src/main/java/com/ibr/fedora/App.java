@@ -28,6 +28,12 @@ public class App {
         }
 
         classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
+        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
+        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
+        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
+        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
+        classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
+        //classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
 
         test.setParameters(params);
         test.setXmlClasses(classes);

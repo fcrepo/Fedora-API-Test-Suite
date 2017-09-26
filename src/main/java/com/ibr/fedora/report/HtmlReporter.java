@@ -84,7 +84,7 @@ public class HtmlReporter implements IReporter {
 
     private void createWriter(String output) {
         BufferedWriter writer = null;
-        String date = TestSuiteGlobals.today();
+        //String date = TestSuiteGlobals.today();
         new File(TestSuiteGlobals.outputDirectory).mkdirs();
         try {
             writer = new BufferedWriter(new FileWriter(TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution-report.html"));
