@@ -28,6 +28,10 @@
     <rendersnake.version>1.8</rendersnake.version>
     <slf4j.simple.version>1.7.25</slf4j.simple.version>
     <slf4j.api.version>1.7.5</slf4j.api.version>
+    <checkstyle.plugin.version>2.15</checkstyle.plugin.version>
+    <fcrepo-build-tools.version>4.4.2</fcrepo-build-tools.version>
+    <project.copyrightYear>2017</project.copyrightYear>
+    <license.plugin.version>2.11</license.plugin.version>
     <app.main.class>com.ibr.fedora.App</app.main.class>
   </properties>
 
@@ -106,6 +110,79 @@
             <phase>package</phase>
             <goals>
               <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>${license.plugin.version}</version>
+        <configuration>
+          <header>fcrepo-license/LICENSE_HEADER.txt</header>
+          <mapping>
+            <java>SLASHSTAR_STYLE</java>
+          </mapping>
+          <includes>
+            <include>**/src/main/java/**</include>
+            <include>**/src/test/java/**</include>
+          </includes>
+          <excludes>
+            <exclude>target/**</exclude>
+            <exclude>**/src/test/resources/**</exclude>
+            <exclude>**/src/main/resources/**</exclude>
+            <exclude>**/*.properties</exclude>
+          </excludes>
+          <properties>
+            <name>${project.artifactId}</name>
+            <year>${project.copyrightYear}</year>
+            <holder>${project.organization.name}</holder>
+          </properties>
+          <encoding>UTF-8</encoding>
+          <strictCheck>true</strictCheck>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.fcrepo</groupId>
+            <artifactId>fcrepo-build-tools</artifactId>
+            <version>${fcrepo-build-tools.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${checkstyle.plugin.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.fcrepo</groupId>
+            <artifactId>fcrepo-build-tools</artifactId>
+            <version>${fcrepo-build-tools.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <consoleOutput>true</consoleOutput>
+          <logViolationsToConsole>true</logViolationsToConsole>
+          <failsOnError>true</failsOnError>
+          <failOnViolation>true</failOnViolation>
+          <violationSeverity>warning</violationSeverity>
+          <configLocation>fcrepo-checkstyle/checkstyle.xml</configLocation>
+          <suppressionsLocation>fcrepo-checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
+        </configuration>
+        <executions>
+          <execution>
+            <id>checkstyle</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
             </goals>
           </execution>
         </executions>
