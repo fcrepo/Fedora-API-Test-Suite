@@ -1,3 +1,6 @@
+/**
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -37,67 +40,73 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class HttpHead {
 
-    @Test(priority = 14)
-    @Parameters({"param1"})
-    public void httpHeadResponseNoBody(String host) throws FileNotFoundException {
-        PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n14."+ TestsLabels.httpHeadResponseNoBody()[1]).append("\n");
-        ps.append("Request:\n");
-        String resource =
-                RestAssured.given()
-                        .contentType("text/turtle")
-                        .when()
-                        .post(host).asString();
-        RestAssured.given()
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .when()
-                .head(resource)
-                .then()
-                .log().all()
-                .statusCode(200).assertThat().body(equalTo(""));
+/**
+ * @param host
+ */
+@Test(priority = 15)
+@Parameters({"param1"})
+public void httpHeadResponseNoBody(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n15." + TestsLabels.httpHeadResponseNoBody()[1]).append("\n");
+    ps.append("Request:\n");
+    final String resource =
+            RestAssured.given()
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
+    RestAssured.given()
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .head(resource)
+            .then()
+            .log().all()
+            .statusCode(200).assertThat().body(equalTo(""));
 
-        ps.append("\n -Case End- \n").close();
+    ps.append("\n -Case End- \n").close();
+}
+
+/**
+ * @param host
+ */
+@Test(priority = 16)
+@Parameters({"param1"})
+public void httpHeadResponseHeadersSameAsHttpGet(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n16." + TestsLabels.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
+    ps.append("Request:\n");
+    final String resource =
+            RestAssured.given()
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
+
+    final Headers headers =
+            RestAssured.given()
+                    .when()
+                    .get(resource).getHeaders();
+    final List<Header> hl = new ArrayList<>();
+    for (Header h : headers) {
+        if (!TestSuiteGlobals.checkPayloadHeader(h.getName())) {
+            hl.add(h);
+        }
     }
 
-    @Test(priority = 15)
-    @Parameters({"param1"})
-    public void httpHeadResponseHeadersSameAsHttpGet(String host) throws FileNotFoundException {
-        PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n15."+ TestsLabels.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
-        ps.append("Request:\n");
-        String resource =
-                RestAssured.given()
-                        .contentType("text/turtle")
-                        .when()
-                        .post(host).asString();
-
-        Headers headers =
-                RestAssured.given()
-                        .when()
-                        .get(resource).getHeaders();
-        List<Header> hl = new ArrayList<>();
-        for(Header h : headers){
-            if(!TestSuiteGlobals.checkPayloadHeader(h.getName())){
-                hl.add(h);
-            }
-        }
-
-        ResponseSpecBuilder spec = new ResponseSpecBuilder();
-        for(Header h : hl){
-            spec.expectHeader(h.getName(), h.getValue());
-        }
-        ResponseSpecification rs = spec.build();
-
-        RestAssured.given()
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .when()
-                .head(resource)
-                .then()
-                .spec(rs)
-                .log().all();
-
-        ps.append("\n -Case End- \n").close();
+    final ResponseSpecBuilder spec = new ResponseSpecBuilder();
+    for (Header h : hl) {
+        spec.expectHeader(h.getName(), h.getValue());
     }
+    final ResponseSpecification rs = spec.build();
+
+    RestAssured.given()
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .head(resource)
+            .then()
+            .spec(rs)
+            .log().all();
+
+    ps.append("\n -Case End- \n").close();
+}
 }

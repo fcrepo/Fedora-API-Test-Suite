@@ -1,3 +1,6 @@
+/**
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -20,7 +23,12 @@ package com.ibr.fedora.report;
 import com.ibr.fedora.TestSuiteGlobals;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.StringResource;
-import org.testng.*;
+import org.testng.IReporter;
+import org.testng.IResultMap;
+import org.testng.ISuite;
+import org.testng.ISuiteResult;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.xml.XmlSuite;
 
 import java.io.BufferedWriter;
@@ -33,7 +41,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.rendersnake.HtmlAttributesFactory.*;
+import static org.rendersnake.HtmlAttributesFactory.NO_ESCAPE;
+import static org.rendersnake.HtmlAttributesFactory.class_;
+import static org.rendersnake.HtmlAttributesFactory.href;
 
 public class HtmlReporter implements IReporter {
 
@@ -47,7 +57,14 @@ public class HtmlReporter implements IReporter {
 
     private HtmlCanvas html;
 
-    public void generateReport(List<XmlSuite> xmlSuites, List<ISuite> suites, String outputDirectory) {
+    /**
+     * Generate HTML report main method
+     * @param xmlSuites
+     * @param suites
+     * @param outputDirectory
+     */
+    public void generateReport(final List<XmlSuite> xmlSuites,
+    final List<ISuite> suites, final String outputDirectory) {
         try {
             for (ISuite suite : suites) {
                 html = new HtmlCanvas();
@@ -59,10 +76,9 @@ public class HtmlReporter implements IReporter {
                 html.h1().content("LDP Test Suite Summary");
 
                 // Getting the results for the said suite
-                Map<String, ISuiteResult> suiteResults = suite.getResults();
+                final Map<String, ISuiteResult> suiteResults = suite.getResults();
                 for (ISuiteResult sr : suiteResults.values()) {
-
-                    ITestContext tc = sr.getTestContext();
+                    final ITestContext tc = sr.getTestContext();
                     passedTests = tc.getPassedTests();
                     failedTests = tc.getFailedTests();
                     skippedTests = tc.getSkippedTests();
@@ -99,70 +115,72 @@ public class HtmlReporter implements IReporter {
                 ._style();
     }
 
-    private void createWriter(String output) {
+    private void createWriter(final String output) {
         BufferedWriter writer = null;
         //String date = TestSuiteGlobals.today();
         new File(TestSuiteGlobals.outputDirectory).mkdirs();
         try {
-            writer = new BufferedWriter(new FileWriter(TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution-report.html"));
+            writer = new BufferedWriter(new FileWriter(TestSuiteGlobals.outputDirectory + "/" +
+        TestSuiteGlobals.outputName + "-execution-report.html"));
             writer.write(output);
 
         } catch (IOException e) {
         } finally {
             try {
-                if (writer != null)
+                if (writer != null) {
                     writer.close();
+                }
             } catch (IOException e) {
             }
         }
     }
 
-    private HashMap<String, Integer> getClasses(IResultMap tests) {
-        HashMap<String, Integer> classes = new HashMap<String, Integer>();
-        Iterator<ITestResult> results = tests.getAllResults().iterator();
+    private HashMap<String, Integer> getClasses(final IResultMap tests) {
+        final HashMap<String, Integer> classes = new HashMap<String, Integer>();
+        final Iterator<ITestResult> results = tests.getAllResults().iterator();
         while (results.hasNext()) {
             String name = results.next().getTestClass().getName().toString();
             name = name.substring(name.lastIndexOf(".") + 1);
 
-            if (!classes.containsKey(name))
+            if (!classes.containsKey(name)) {
                 classes.put(name, 1);
-            else
+            } else {
                 classes.put(name, classes.get(name) + 1);
+            }
         }
         return classes;
     }
 
-    private void displayMethodsSummary(List<ISuite> suites) throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private void displayMethodsSummary(final List<ISuite> suites) throws
+    IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         for (ISuite suite : suites) {
-            Map<String, ISuiteResult> r = suite.getResults();
+            final Map<String, ISuiteResult> r = suite.getResults();
             for (ISuiteResult r2 : r.values()) {
-                ITestContext testContext = r2.getTestContext();
+                final ITestContext testContext = r2.getTestContext();
                 makeMethodsList(testContext);
             }
         }
     }
 
-    private void makeMethodsList(ITestContext testContext) throws IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        IResultMap failed = testContext.getFailedTests();
-        IResultMap passed = testContext.getPassedTests();
-        IResultMap skipped = testContext.getSkippedTests();
-
-        //html.h2().content("3.3 HTTP POST");
-        //html.h3().content("3.3.1 LDP-NRs").small().content("(must)");
-        //html.br();
-
+    private void makeMethodsList(final ITestContext testContext) throws
+    IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        final IResultMap failed = testContext.getFailedTests();
+        final IResultMap passed = testContext.getPassedTests();
+        final IResultMap skipped = testContext.getSkippedTests();
         makeMethodSummaryTable(passed, skipped, failed);
         html.br();
     }
 
-    private void makeMethodSummaryTable(IResultMap passed, IResultMap skipped, IResultMap failed) throws IOException, NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    private void makeMethodSummaryTable(final IResultMap passed, final IResultMap skipped, final IResultMap failed)
+throws IOException, NoSuchMethodException, IllegalAccessException,
+InstantiationException, InvocationTargetException {
         html.table(class_("indented"));
         html.tr().th().content("Test");
         html.th().content("Result");
         html.th().content("")._tr();
-        String[][] results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
+        final String[][] results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
 
-        for(String[] r : results){
+        for (String[] r : results) {
             html.tr();
             html.td().a(href(r[0]).target("_blank")).write(r[3])._a()._td();
             html.td().span(class_(r[1])).content(r[1])._td();
