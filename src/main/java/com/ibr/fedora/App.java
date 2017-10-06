@@ -1,4 +1,7 @@
-/*
+/**
+ * @author Jorge Abrego, Fernando Cardoza
+ */
+/* 
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
  * regarding copyright ownership.
@@ -28,42 +31,48 @@ import java.util.List;
 import java.util.Map;
 
 public class App {
-    public static void main(String[] args) {
-        TestNG testng = new TestNG();
-        XmlSuite suite = new XmlSuite();
-        suite.setName("ldptest");
+private App() { }
 
-        XmlTest test = new XmlTest(suite);
+/**
+ * Main configuration and execution of test cases
+ * 
+ * @param args
+ */
+public static void main(final String[] args) {
+final TestNG testng = new TestNG();
+final XmlSuite suite = new XmlSuite();
+suite.setName("ldptest");
 
-        Map<String, String> params = new HashMap<String, String>();
+final XmlTest test = new XmlTest(suite);
 
-        List<XmlClass> classes = new ArrayList<XmlClass>();
+final Map<String, String> params = new HashMap<String, String>();
 
-        int i = 0;
-        for(String arg : args){
-            params.put("param" + ++i, arg);
-        }
+final List<XmlClass> classes = new ArrayList<XmlClass>();
 
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
-        //classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
+int i = 0;
+for (String arg : args) {
+params.put("param" + ++i, arg);
+}
 
-        test.setParameters(params);
-        test.setXmlClasses(classes);
+classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
+classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
+classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
+classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
+classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
+classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
 
-        List<XmlTest> tests = new ArrayList<XmlTest>();
-        tests.add(test);
+test.setParameters(params);
+test.setXmlClasses(classes);
 
-        suite.setTests(tests);
+final List<XmlTest> tests = new ArrayList<XmlTest>();
+tests.add(test);
 
-        List<XmlSuite> suites = new ArrayList<XmlSuite>();
-        suites.add(suite);
+suite.setTests(tests);
 
-        testng.setXmlSuites(suites);
-        testng.run();
-    }
+final List<XmlSuite> suites = new ArrayList<XmlSuite>();
+suites.add(suite);
+
+testng.setXmlSuites(suites);
+testng.run();
+}
 }

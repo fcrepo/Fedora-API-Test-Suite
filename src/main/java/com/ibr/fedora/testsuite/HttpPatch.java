@@ -1,3 +1,6 @@
+/**
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -17,73 +20,89 @@
  */
 package com.ibr.fedora.testsuite;
 
-import com.ibr.fedora.TestSuiteGlobals;
-import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
 public class HttpPatch {
 
-    @Test(priority = 25)
-    @Parameters({"param1"})
-    public void supportPatch(String host) throws FileNotFoundException {
-        PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n25."+ TestsLabels.supportPatch()[1]).append('\n');
-        ps.append("Request:\n");
+/**
+ * @param host
+ */
+@Test(priority = 25)
+@Parameters({"param1"})
+public void supportPatch(final String host) throws IOException {
+    //final PrintStream ps = TestSuiteGlobals.logFile();
+    //ps.append("\n25." + TestsLabels.supportPatch()[1]).append('\n');
+    //ps.append("Request:\n");
 
-        String resource =
-                RestAssured.given()
-                        .contentType("text/turtle")
-                        .when()
-                        .post(host).asString();
-        System.out.println(resource);
-        RestAssured.given()
-                .header("Content-Type", "application/sparql-update")
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .body("PREFIX dc: <http://purl.org/dc/elements/1.1/> INSERT { <> dc:title \"some-resource-title\" . } WHERE { }")
-                .when()
-                .patch(resource)
-                .then()
-                .log().all()
-                .statusCode(204);
+    final String resource =
+            RestAssured.given()
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
+    System.out.println(resource);
 
-        ps.append("\n -Case End- \n").close();
+    final InputStream is = new FileInputStream("body.rdf");
+    int i;
+    char c;
+    while ((i = is.read()) != -1) {
+
+        // converts integer to character
+        c = (char)i;
+
+        // prints character
+        System.out.println(c);
     }
 
-    /*@Test(priority = 26)
-    @Parameters({"param1"})
-    public void failedPatch(String host) throws FileNotFoundException {
-        PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n26."+ TestsLabels.failedPatch()[1]).append('\n');
-        ps.append("Request:\n");
+    RestAssured.given()
+            .contentType("application/sparql-update")
+            //.config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .body(is)
+            .patch(resource)
+            .then()
+            .log().all()
+            .statusCode(204);
+    is.close();
+    //ps.append("\n -Case End- \n").close();
+}
 
-        String resource =
-                RestAssured.given()
-                        .contentType("text/turtle")
-                        .when()
-                        .post(host).asString();
+/*@Test(priority = 26)
+@Parameters({"param1"})
+public void failedPatch(String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n26." + TestsLabels.failedPatch()[1]).append('\n');
+    ps.append("Request:\n");
 
-        RestAssured.given()
-                .header("Content-Type", "application/sparql-update")
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .body("PREFIX fedora: <http://fedora.info/definitions/v4/repository#>\n" +
-                        "INSERT {   \n" +
-                        "  <> fedora:lastModified \"2017-09-25T21:03:50.431Z\"^^<http://www.w3.org/2001/XMLSchema#dateTime> .\n" +
-                        "}\n" +
-                        "WHERE { }")
-                .when()
-                .patch(resource)
-                .then()
-                .log().all()
-                .statusCode(409).header("Link", containsString("constrainedBy")).body(containsString("lastModified"));
+    final String resource =
+            RestAssured.given()
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
 
-        ps.append("\n -Case End- \n").close();
-    }*/
+    RestAssured.given()
+            .header("Content-Type", "application/sparql-update")
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body("PREFIX fedora: <http://fedora.info/definitions/v4/repository#>\n" +
+                    "INSERT {   \n" +
+                    "  <> fedora:lastModified \"2017-09-25T21:03:50.431Z\"^^
+                    + "<http://www.w3.org/2001/XMLSchema#dateTime> .\n" +
+                    "}\n" +
+                    "WHERE { }")
+            .when()
+            .patch(resource)
+            .then()
+            .log().all()
+            .statusCode(409).header("Link", containsString("constrainedBy")).body(containsString("lastModified"));
+
+    ps.append("\n -Case End- \n").close();
+}*/
 }

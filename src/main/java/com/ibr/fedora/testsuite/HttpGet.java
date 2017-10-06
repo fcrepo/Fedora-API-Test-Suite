@@ -1,3 +1,6 @@
+/**
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -31,50 +34,85 @@ import static org.hamcrest.Matchers.containsString;
 
 public class HttpGet {
 
-    @Test(priority = 12)
-    @Parameters({"param1"})
-    public void responseDescribesHeader(String host) throws FileNotFoundException {
-        PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n12."+ TestsLabels.responseDescribesHeader()[1]).append("\n");
-        ps.append("Request:\n");
-        String resource =
-                RestAssured.given()
-                        .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
-                        .when()
-                        .post(host).asString();
-        RestAssured.given()
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .when()
-                .get(resource + "/fcr:metadata")
-                .then()
-                .log().all()
-                .statusCode(200).header("Link", containsString("describes"));
+/**
+ * @param host
+ */
+@Test(priority = 12)
+@Parameters({"param1"})
+public void responseDescribesHeader(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n12." + TestsLabels.responseDescribesHeader()[1]).append("\n");
+    ps.append("Request:\n");
+    final String resource =
+            RestAssured.given()
+                    .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
+                    .when()
+                    .post(host).asString();
+    RestAssured.given()
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .get(resource + "/fcr:metadata")
+            .then()
+            .log().all()
+            .statusCode(200).header("Link", containsString("describes"));
 
-        ps.append("\n -Case End- \n").close();
-    }
+    ps.append("\n -Case End- \n").close();
+}
 
-    @Test(priority = 13)
-    @Parameters({"param1"})
-    public void responsePreferenceAppliedHeader(String host) throws FileNotFoundException {
-        PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n13."+ TestsLabels.responsePreferenceAppliedHeader()[1]).append("\n");
-        ps.append("Request:\n");
-        String resource =
-                RestAssured.given()
-                        .contentType("text/turtle")
-                        .when()
-                        .post(host).asString();
-        RestAssured.given()
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .header("Prefer", "return=minimal")
-                .when()
-                .get(resource)
-                .then()
-                .log().all()
-                .statusCode(200).header("preference-applied", containsString("return=minimal"));
+/**
+ * @param host
+ */
+@Test(priority = 13)
+@Parameters({"param1"})
+public void responsePreferenceAppliedHeader(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n13." + TestsLabels.responsePreferenceAppliedHeader()[1]).append("\n");
+    ps.append("Request:\n");
+    final String resource =
+            RestAssured.given()
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
+    RestAssured.given()
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Prefer", "return=minimal")
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("preference-applied", containsString("return=minimal"));
 
-        ps.append("\n -Case End- \n").close();
-    }
+    ps.append("\n -Case End- \n").close();
+}
+
+/**
+ * @param host
+ */
+@Test(priority = 14)
+@Parameters({"param1"})
+public void additionalValuesForPreferHeader(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n14." + TestsLabels.additionalValuesForPreferHeader()[1]).append("\n");
+    ps.append("Request:\n");
+    final String resource =
+            RestAssured.given()
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
+    RestAssured.given()
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Prefer", "return=representation; "
+            + "include=\"http://fedora.info/definitions/v4/repository#InboundReferences\"")
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("preference-applied",
+            containsString("http://fedora.info/definitions/v4/repository#InboundReferences"));
+
+    ps.append("\n -Case End- \n").close();
+}
 }

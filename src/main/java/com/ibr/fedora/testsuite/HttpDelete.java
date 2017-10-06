@@ -1,3 +1,6 @@
+/**
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -29,26 +32,29 @@ import java.io.PrintStream;
 
 public class HttpDelete {
 
-    @Test(priority = 16)
-    @Parameters({"param1"})
-    public void httpDelete(String host) throws FileNotFoundException {
-        PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n16."+ TestsLabels.httpDelete()[1]).append("\n");
-        ps.append("Request:\n");
-        String resource =
-                RestAssured.given()
-                        .contentType("text/turtle")
-                        .when()
-                        .post(host).asString();
-        RestAssured.given()
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .when()
-                .delete(resource)
-                .then()
-                .log().all()
-                .statusCode(204);
+/**
+ * @param host
+ */
+@Test(priority = 17)
+@Parameters({"param1"})
+public void httpDelete(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n17." + TestsLabels.httpDelete()[1]).append("\n");
+    ps.append("Request:\n");
+    final String resource =
+            RestAssured.given()
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
+    RestAssured.given()
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .delete(resource)
+            .then()
+            .log().all()
+            .statusCode(204);
 
-        ps.append("\n -Case End- \n").close();
-    }
+    ps.append("\n -Case End- \n").close();
+}
 }
