@@ -22,7 +22,7 @@ package com.ibr.fedora;
 
 public class TestsLabels {
 
-private TestsLabels() { }
+TestsLabels() { }
 
 /**
  * Basic information for described test

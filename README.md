@@ -6,6 +6,7 @@ https://maven.apache.org/install.html
 
 Standalone
 
+$ mvn install
 $ mvn package
 
 $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar http://localhost:8080/
