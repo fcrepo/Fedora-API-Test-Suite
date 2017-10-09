@@ -39,6 +39,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 
 public class HttpHead {
+public TestsLabels tl = new TestsLabels();
 
 /**
  * @param host
@@ -47,7 +48,7 @@ public class HttpHead {
 @Parameters({"param1"})
 public void httpHeadResponseNoBody(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n15." + TestsLabels.httpHeadResponseNoBody()[1]).append("\n");
+    ps.append("\n15." + tl.httpHeadResponseNoBody()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -73,7 +74,7 @@ public void httpHeadResponseNoBody(final String host) throws FileNotFoundExcepti
 @Parameters({"param1"})
 public void httpHeadResponseHeadersSameAsHttpGet(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n16." + TestsLabels.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
+    ps.append("\n16." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()

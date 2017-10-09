@@ -21,14 +21,17 @@
 package com.ibr.fedora;
 
 public class TestsLabels {
-
-TestsLabels() { }
+/**
+ * Constructor
+ * 
+ */
+public TestsLabels() { }
 
 /**
  * Basic information for described test
  * @return String[]
  */
-public static String[] httpPost() {
+public String[] httpPost() {
 return new String[] {
 "HttpPost",
 "Any LDPC must support POST ([LDP] 4.2.3 / 5.2.3).",
@@ -39,7 +42,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] constrainedByResponseHeader() {
+public String[] constrainedByResponseHeader() {
 return new String[] {
 "HttpPost-ConstrainByResponseHeader",
 "The default interaction model that will be assigned when there is no explicit Link "
@@ -53,7 +56,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] postNonRDFSource() {
+public String[] postNonRDFSource() {
 return new String[] {
 "NonRDFSource-PostNonRDFSource",
 "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes must).",
@@ -64,7 +67,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] postResourceAndCheckAssociatedResource() {
+public String[] postResourceAndCheckAssociatedResource() {
 return new String[] {
 "NonRDFSource-PostResourceAndCheckAssociatedResource",
 "On creation of an LDP-NR an implementation must create an associated LDP-RS describing"
@@ -76,7 +79,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] postDigestResponseHeaderAuthentication() {
+public String[] postDigestResponseHeaderAuthentication() {
 return new String[] {
 "NonRDFSource-PostDigestResponseHeaderAuthentication",
 "A HTTP POST request that would create a LDP-NR and includes a Digest header (as described"
@@ -89,7 +92,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] postDigestResponseHeaderVerification() {
+public String[] postDigestResponseHeaderVerification() {
 return new String[] {
 "NonRDFSource-PostDigestResponseHeaderVerification",
 "A HTTP POST request that includes an unsupported Digest type (as described in [RFC3230]), "
@@ -101,7 +104,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] httpPut() {
+public String[] httpPut() {
 return new String[] {
 "HttpPut",
 "When accepting a PUT request against an extant resource, an HTTP Link: rel=\"type\" header "
@@ -115,7 +118,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] httpPutNR() {
+public String[] httpPutNR() {
 return new String[] {
 "HttpPutNR",
 "Any LDP-NR must support PUT to replace the binary content of that resource.",
@@ -126,7 +129,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] putDigestResponseHeaderAuthentication() {
+public String[] putDigestResponseHeaderAuthentication() {
 return new String[] {
 "NonRDFSource-PutDigestResponseHeaderAuthentication",
 "A HTTP PUT request that includes a Digest header (as described in [RFC3230]) for which any "
@@ -139,7 +142,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] putDigestResponseHeaderVerification() {
+public String[] putDigestResponseHeaderVerification() {
 return new String[] {
 "NonRDFSource-PutDigestResponseHeaderVerification",
 "A HTTP PUT request that includes an unsupported Digest type (as described in [RFC3230]), should"
@@ -151,7 +154,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] httpPutExternalBody() {
+public String[] httpPutExternalBody() {
 return new String[] {
 "PutNonRDFSource-PutExternalBody",
 "Implementations may support Content-Type: message/external-body extensions for request bodies for"
@@ -166,7 +169,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] responseDescribesHeader() {
+public String[] responseDescribesHeader() {
 return new String[] {
 "HttpGet-LDPRS-ResponseDescribesHeader",
 "When the request is to the LDP-RS created to describe a LDP-NR, the response must include a Link: "
@@ -178,7 +181,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] additionalValuesForPreferHeader() {
+public String[] additionalValuesForPreferHeader() {
 return new String[] {
 "HttpGet-AdditionalValuesForPreferHeader",
 "In addition to the requirements of [LDP], an implementation may support the value "
@@ -192,7 +195,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] responsePreferenceAppliedHeader() {
+public String[] responsePreferenceAppliedHeader() {
 return new String[] {
 "HttpGet-LDPRS-ResponsePreferenceAppliedHeader",
 "Responses to GET requests that apply a Prefer request header to any LDP-RS must include the Preference-Applied"
@@ -204,7 +207,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] httpHeadResponseNoBody() {
+public String[] httpHeadResponseNoBody() {
 return new String[] {
 "HttpHead-ResponseNoBody",
 "The HEAD method is identical to GET except that the server must not return a message-body in the response, as "
@@ -216,7 +219,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] httpHeadResponseHeadersSameAsHttpGet() {
+public String[] httpHeadResponseHeadersSameAsHttpGet() {
 return new String[] {
 "HttpHead-ResponseHeadersSameAsHttpGet",
 "The server should send the same headers in response to a HEAD request as it would have sent if the request had "
@@ -228,7 +231,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] httpDelete() {
+public String[] httpDelete() {
 return new String[] {
 "HttpDelete",
 "The DELETE method is optional per [LDP] section 4.2.5 and this specification does not require Fedora servers to "
@@ -241,7 +244,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] postCreateExternalBinaryContent() {
+public String[] postCreateExternalBinaryContent() {
 return new String[] {
 "ExternalBinaryContent-PostCreate",
 "This specification describes the use of Content-Type: message/external-body values to signal, on POST or PUT, that"
@@ -254,7 +257,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] putCreateExternalBinaryContent() {
+public String[] putCreateExternalBinaryContent() {
 return new String[] {
 "ExternalBinaryContent-PutCreate",
 "This specification describes the use of Content-Type: message/external-body values to signal, on POST or PUT, that the"
@@ -267,7 +270,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] putUpdateExternalBinaryContent() {
+public String[] putUpdateExternalBinaryContent() {
 return new String[] {
 "ExternalBinaryContent-PutUpdate",
 "This specification describes the use of Content-Type: message/external-body values to signal, on POST or PUT, that"
@@ -280,7 +283,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] postCheckUnsupportedMediaType() {
+public String[] postCheckUnsupportedMediaType() {
 return new String[] {
 "ExternalBinaryContent-PostCheckUnsupportedMediaType",
 "Fedora servers receiving requests that would create or update a LDP-NR with a message/external-body with an "
@@ -292,7 +295,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] putCheckUnsupportedMediaType() {
+public String[] putCheckUnsupportedMediaType() {
 return new String[] {
 "ExternalBinaryContent-PutCheckUnsupportedMediaType",
 "Fedora servers receiving requests that would create or update a LDP-NR with a message/external-body with an "
@@ -304,7 +307,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] checkAcceptPostHeader() {
+public String[] checkAcceptPostHeader() {
 return new String[] {
 "ExternalBinaryContent-CheckAcceptPostHeader",
 "Fedora servers that support LDP-NR with message/external-body must advertise that support in the Accept-Post"
@@ -316,7 +319,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] getCheckContentLocationHeader() {
+public String[] getCheckContentLocationHeader() {
 return new String[] {
 "ExternalBinaryContent-HttpGetCheckContentLocationHeader",
 "LDP-NR GET and HEAD responses should include a Content-Location header with a URI representation of the "
@@ -328,7 +331,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] headCheckContentLocationHeader() {
+public String[] headCheckContentLocationHeader() {
 return new String[] {
 "ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
 "LDP-NR GET and HEAD responses should include a Content-Location header with a URI representation of the "
@@ -340,7 +343,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] supportPatch() {
+public String[] supportPatch() {
 return new String[] {
 "HttpPatch-SupportHttpPatch",
 "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). [sparql11-update] must be an accepted "
@@ -352,7 +355,7 @@ return new String[] {
  * Basic information for described test
  * @return String[]
  */
-public static String[] failedPatch() {
+public String[] failedPatch() {
 return new String[] {
 "HttpPatch-CheckPatch",
 "If an otherwise valid HTTP PATCH request is received that attempts to add statements to a resource that "

@@ -31,7 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 public class HttpPut {
-
+public TestsLabels tl = new TestsLabels();
 /**
  * @param host
  */
@@ -40,7 +40,7 @@ public class HttpPut {
 public void httpPut(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
 
-    ps.append("\n7." + TestsLabels.httpPut()[0] + "-" + TestsLabels.httpPut()[1]).append("\n");
+    ps.append("\n7." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -72,7 +72,7 @@ public void httpPut(final String host) throws FileNotFoundException {
 public void httpPutNR(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
 
-    ps.append("\n8." + TestsLabels.httpPutNR()[0] + "-" + TestsLabels.httpPutNR()[1]).append("\n");
+    ps.append("\n8." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -103,8 +103,8 @@ public void httpPutNR(final String host) throws FileNotFoundException {
 public void putDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
     final String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n9." + TestsLabels.putDigestResponseHeaderAuthentication()[0] + "-" +
-    TestsLabels.putDigestResponseHeaderAuthentication()[1]).append("\n");
+    ps.append("\n9." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
+    tl.putDigestResponseHeaderAuthentication()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -136,8 +136,8 @@ public void putDigestResponseHeaderAuthentication(final String host) throws File
 public void putDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
     final String checksum = "abc=abc";
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n10." + TestsLabels.putDigestResponseHeaderVerification()[0] + "-" +
-    TestsLabels.putDigestResponseHeaderVerification()[1]).append("\n");
+    ps.append("\n10." + tl.putDigestResponseHeaderVerification()[0] + "-" +
+    tl.putDigestResponseHeaderVerification()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -169,8 +169,8 @@ public void putDigestResponseHeaderVerification(final String host) throws FileNo
 public void httpPutExternalBody(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
 
-    ps.append("\n11." + TestsLabels.httpPutExternalBody()[0] + "- " +
-    TestsLabels.httpPutExternalBody()[1]).append("\n");
+    ps.append("\n11." + tl.httpPutExternalBody()[0] + "- " +
+    tl.httpPutExternalBody()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
