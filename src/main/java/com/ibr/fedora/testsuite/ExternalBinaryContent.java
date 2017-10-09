@@ -34,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 public class ExternalBinaryContent {
+public TestsLabels tl = new TestsLabels();
 
     public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
     public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737/"
@@ -46,7 +47,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n18." + TestsLabels.postCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n18." + tl.postCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -69,7 +70,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n19." + TestsLabels.putCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n19." + tl.putCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -92,7 +93,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n20." + TestsLabels.putUpdateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n20." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -120,7 +121,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void checkAcceptPostHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n21." + TestsLabels.checkAcceptPostHeader()[1]).append('\n');
+        ps.append("\n21." + tl.checkAcceptPostHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -165,7 +166,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n22." + TestsLabels.postCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n22." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -188,7 +189,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void putCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n23." + TestsLabels.putCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n23." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -211,7 +212,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void getCheckContentLocationHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n24." + TestsLabels.getCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n24." + tl.getCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -258,7 +259,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n25." + TestsLabels.headCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n25." + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =

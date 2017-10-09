@@ -31,7 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
 public class HttpDelete {
-
+public TestsLabels tl;
 /**
  * @param host
  */
@@ -39,7 +39,7 @@ public class HttpDelete {
 @Parameters({"param1"})
 public void httpDelete(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n17." + TestsLabels.httpDelete()[1]).append("\n");
+    ps.append("\n17." + tl.httpDelete()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()

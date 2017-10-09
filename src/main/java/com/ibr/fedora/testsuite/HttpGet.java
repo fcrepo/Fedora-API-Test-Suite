@@ -33,6 +33,7 @@ import java.io.PrintStream;
 import static org.hamcrest.Matchers.containsString;
 
 public class HttpGet {
+public TestsLabels tl = new TestsLabels();
 
 /**
  * @param host
@@ -41,7 +42,7 @@ public class HttpGet {
 @Parameters({"param1"})
 public void responseDescribesHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n12." + TestsLabels.responseDescribesHeader()[1]).append("\n");
+    ps.append("\n12." + tl.responseDescribesHeader()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -67,7 +68,7 @@ public void responseDescribesHeader(final String host) throws FileNotFoundExcept
 @Parameters({"param1"})
 public void responsePreferenceAppliedHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n13." + TestsLabels.responsePreferenceAppliedHeader()[1]).append("\n");
+    ps.append("\n13." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -94,7 +95,7 @@ public void responsePreferenceAppliedHeader(final String host) throws FileNotFou
 @Parameters({"param1"})
 public void additionalValuesForPreferHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n14." + TestsLabels.additionalValuesForPreferHeader()[1]).append("\n");
+    ps.append("\n14." + tl.additionalValuesForPreferHeader()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()

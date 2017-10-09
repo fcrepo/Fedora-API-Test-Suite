@@ -36,6 +36,7 @@ import static org.hamcrest.Matchers.containsString;
 
 @Listeners({com.ibr.fedora.report.HtmlReporter.class, com.ibr.fedora.report.EarlReporter.class})
 public class HttpPost {
+public TestsLabels tl = new TestsLabels();
 public String resource = "";
 
 /**
@@ -46,7 +47,7 @@ public String resource = "";
 public void httpPost(final String host) throws FileNotFoundException {
 TestSuiteGlobals.resetFile();
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n1." + TestsLabels.httpPost()[1]).append("\n");
+ps.append("\n1." + tl.httpPost()[1]).append("\n");
 ps.append("Request:\n");
 RestAssured.given()
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -67,7 +68,7 @@ ps.append("\n -Case End- \n").close();
 @Parameters({"param1"})
 public void constrainedByResponseHeader(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n2." + TestsLabels.constrainedByResponseHeader()[1]).append("\n");
+ps.append("\n2." + tl.constrainedByResponseHeader()[1]).append("\n");
 ps.append("Request:\n");
 
 final String resource =
@@ -97,7 +98,7 @@ ps.append("\n -Case End- \n").close();
 @Parameters({"param1"})
 public void postNonRDFSource(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n3." + TestsLabels.postNonRDFSource()[1]).append('\n');
+ps.append("\n3." + tl.postNonRDFSource()[1]).append('\n');
 ps.append("Request:\n");
 RestAssured.given()
         .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
@@ -118,7 +119,7 @@ ps.append("\n -Case End- \n").close();
 @Parameters({"param1"})
 public void postResourceAndCheckAssociatedResource(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n4." + TestsLabels.postResourceAndCheckAssociatedResource()[1]).append('\n');
+ps.append("\n4." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
 ps.append("Request:\n");
 RestAssured.given()
         .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
@@ -142,7 +143,7 @@ public void postDigestResponseHeaderAuthentication(final String host) throws Fil
 final String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
 if (!checksum.isEmpty()) {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n5." + TestsLabels.postDigestResponseHeaderAuthentication()[1]).append('\n');
+    ps.append("\n5." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -178,7 +179,7 @@ public void postDigestResponseHeaderVerification(final String host) throws FileN
 final String checksum = "abc=abc";
 if (!this.resource.isEmpty()) {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n6." + TestsLabels.postDigestResponseHeaderVerification()[1]).append('\n');
+    ps.append("\n6." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
     ps.append("Request:\n");
 
     RestAssured.given()
