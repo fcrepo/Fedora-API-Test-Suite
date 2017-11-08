@@ -33,9 +33,22 @@ public TestsLabels() { }
  */
 public String[] httpPost() {
 return new String[] {
-"HttpPost",
+"3.3 - HttpPost",
 "Any LDPC must support POST ([LDP] 4.2.3 / 5.2.3).",
-"http://fedora.info/2017/06/30/spec/#httpPOST"
+"https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+"MUST"
+};
+}
+/**
+ * Basic information for described test
+ * @return String[]
+ */
+public String[] httpPostCreateLDPC() {
+return new String[] {
+"3.1.2 - HttpPost-CreateLDPC",
+"Implementations must support the creation and management of [LDP] Containers.",
+"https://fcrepo.github.io/fcrepo-specification/#LDPC",
+"MUST"
 };
 }
 /**
@@ -44,12 +57,13 @@ return new String[] {
  */
 public String[] constrainedByResponseHeader() {
 return new String[] {
-"HttpPost-ConstrainByResponseHeader",
+"3.3-A - HttpPost-ConstrainByResponseHeader",
 "The default interaction model that will be assigned when there is no explicit Link "
 + "header in the request must be recorded in the constraints"
 + " document referenced in the Link: rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
 + "header ([LDP] 4.2.1.6 clarification).",
-"http://fedora.info/2017/06/30/spec/#httpPOST"
+"https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+"MUST"
 };
 }
 /**
@@ -58,9 +72,10 @@ return new String[] {
  */
 public String[] postNonRDFSource() {
 return new String[] {
-"NonRDFSource-PostNonRDFSource",
+"3.3-B - NonRDFSource-PostNonRDFSource",
 "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes must).",
-"http://fedora.info/2017/06/30/spec/#httpPOST"
+"https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+"MUST"
 };
 }
 /**
@@ -69,10 +84,11 @@ return new String[] {
  */
 public String[] postResourceAndCheckAssociatedResource() {
 return new String[] {
-"NonRDFSource-PostResourceAndCheckAssociatedResource",
+"3.3-C - NonRDFSource-PostResourceAndCheckAssociatedResource",
 "On creation of an LDP-NR an implementation must create an associated LDP-RS describing"
 + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
-"http://fedora.info/2017/06/30/spec/#httpPOST"
+"https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+"MUST"
 };
 }
 /**
@@ -81,11 +97,12 @@ return new String[] {
  */
 public String[] postDigestResponseHeaderAuthentication() {
 return new String[] {
-"NonRDFSource-PostDigestResponseHeaderAuthentication",
+"3.3.1 - NonRDFSource-PostDigestResponseHeaderAuthentication",
 "A HTTP POST request that would create a LDP-NR and includes a Digest header (as described"
 + " in [RFC3230]) for which the instance-digest in that header does not match that of the "
 + "new LDP-NR must be rejected with a 409 Conflict response.",
-"http://fedora.info/2017/06/30/spec/#httpPOSTLDPNR"
+"https://fcrepo.github.io/fcrepo-specification/#httpPOSTLDPNR",
+"MUST"
 };
 }
 /**
@@ -94,10 +111,11 @@ return new String[] {
  */
 public String[] postDigestResponseHeaderVerification() {
 return new String[] {
-"NonRDFSource-PostDigestResponseHeaderVerification",
+"3.3.1-A - NonRDFSource-PostDigestResponseHeaderVerification",
 "A HTTP POST request that includes an unsupported Digest type (as described in [RFC3230]), "
 + "should be rejected with a 400 Bad Request response.",
-"http://fedora.info/2017/06/30/spec/#httpPOSTLDPNR"
+"https://fcrepo.github.io/fcrepo-specification/#httpPOSTLDPNR",
+"SHOULD"
 };
 }
 /**
@@ -106,12 +124,13 @@ return new String[] {
  */
 public String[] httpPut() {
 return new String[] {
-"HttpPut",
+"3.4 - HttpPut",
 "When accepting a PUT request against an extant resource, an HTTP Link: rel=\"type\" header "
 + "may be included. If that type is a value in the LDP namespace and is not either a current "
 + "type of the resource or a subtype of a current type of the resource, the request must be "
 + "rejected with a 409 Conflict response.",
-"http://fedora.info/2017/06/30/spec/#httpPUT"
+"https://fcrepo.github.io/fcrepo-specification/#httpPUT",
+"MAY"
 };
 }
 /**
@@ -120,9 +139,10 @@ return new String[] {
  */
 public String[] httpPutNR() {
 return new String[] {
-"HttpPutNR",
+"3.4.2 - HttpPutNR",
 "Any LDP-NR must support PUT to replace the binary content of that resource.",
-"http://fedora.info/2017/06/30/spec/#httpPUTLDPNR"
+"https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
+"MUST"
 };
 }
 /**
@@ -131,11 +151,12 @@ return new String[] {
  */
 public String[] putDigestResponseHeaderAuthentication() {
 return new String[] {
-"NonRDFSource-PutDigestResponseHeaderAuthentication",
+"3.4.2-A - NonRDFSource-PutDigestResponseHeaderAuthentication",
 "A HTTP PUT request that includes a Digest header (as described in [RFC3230]) for which any "
 + "instance-digest in that header does not match the instance it describes, must be rejected "
 + "with a 409 Conflict response.",
-"http://fedora.info/2017/06/30/spec/#httpPUTLDPNR"
+"https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
+"MUST"
 };
 }
 /**
@@ -144,25 +165,27 @@ return new String[] {
  */
 public String[] putDigestResponseHeaderVerification() {
 return new String[] {
-"NonRDFSource-PutDigestResponseHeaderVerification",
+"3.4.2-B - NonRDFSource-PutDigestResponseHeaderVerification",
 "A HTTP PUT request that includes an unsupported Digest type (as described in [RFC3230]), should"
 + " be rejected with a 400 Bad Request response.",
-"http://fedora.info/2017/06/30/spec/#httpPUTLDPNR"
+"https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
+"SHOULD"
 };
 }
 /**
  * Basic information for described test
  * @return String[]
  */
-public String[] httpPutExternalBody() {
+public String[] putLDPRSConflict() {
 return new String[] {
-"PutNonRDFSource-PutExternalBody",
-"Implementations may support Content-Type: message/external-body extensions for request bodies for"
-+ " HTTP PUT that would create LDP-NRs. This content-type requires a complete Content-Type header "
-+ "that includes the location of the external body, e.g Content-Type: message/external-body; "
-+ "access-type=URL; URL=\"http://www.example.com/file\", as defined in [RFC2017]. Requirements for "
-+ "this interaction are detailed in External LDP-NR Content.",
-"http://fedora.info/2017/06/30/spec/#httpPUTLDPNR"
+"3.4.1 - HttpPut-PutLDPRS",
+"Any LDP-RS must support PUT to update statements that are not server-managed triples (as defined "
++ "in [LDP] 2). [LDP] 4.2.4.1 and 4.2.4.3 remain in effect. If an otherwise valid HTTP PUT request"
++ " is received that attempts to add statements to a resource that a server disallows (not ignores"
++ " per [LDP] 4.2.4.1), the server must fail the request by responding with a 4xx range status"
++ " code (e.g. 409 Conflict).",
+"https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPRS",
+"MUST"
 };
 }
 /**
@@ -171,10 +194,11 @@ return new String[] {
  */
 public String[] responseDescribesHeader() {
 return new String[] {
-"HttpGet-LDPRS-ResponseDescribesHeader",
+"3.5 - HttpGet-LDPRS-ResponseDescribesHeader",
 "When the request is to the LDP-RS created to describe a LDP-NR, the response must include a Link: "
 + "rel=\"describes\" header referencing the LDP-NR in question, as defined in [RFC6892].",
-"http://fedora.info/2017/06/30/spec/#httpGET"
+"http://fedora.info/2017/06/30/spec/#httpGET",
+"MUST"
 };
 }
 /**
@@ -183,12 +207,13 @@ return new String[] {
  */
 public String[] additionalValuesForPreferHeader() {
 return new String[] {
-"HttpGet-AdditionalValuesForPreferHeader",
+"3.5.1 - HttpGet-AdditionalValuesForPreferHeader",
 "In addition to the requirements of [LDP], an implementation may support the value "
 + "http://www.w3.org/ns/oa#PreferContainedDescriptions and should support the value "
 + "http://fedora.info/definitions/fcrepo#PreferInboundReferences for the Prefer header when making GET "
 + "requests on LDPC resources.",
-"http://fedora.info/2017/06/30/spec/#additionalPreferValues"
+"http://fedora.info/2017/06/30/spec/#additionalPreferValues",
+"MAY"
 };
 }
 /**
@@ -197,10 +222,11 @@ return new String[] {
  */
 public String[] responsePreferenceAppliedHeader() {
 return new String[] {
-"HttpGet-LDPRS-ResponsePreferenceAppliedHeader",
+"3.5.2 - HttpGet-LDPRS-ResponsePreferenceAppliedHeader",
 "Responses to GET requests that apply a Prefer request header to any LDP-RS must include the Preference-Applied"
 + " response header as defined in [RFC7240] section 3.",
-"http://fedora.info/2017/06/30/spec/#httpGETLDPRS"
+"http://fedora.info/2017/06/30/spec/#httpGETLDPRS",
+"MUST"
 };
 }
 /**
@@ -209,10 +235,12 @@ return new String[] {
  */
 public String[] httpHeadResponseNoBody() {
 return new String[] {
-"HttpHead-ResponseNoBody",
+"3.6 - HttpHead-ResponseNoBody",
 "The HEAD method is identical to GET except that the server must not return a message-body in the response, as "
-+ "specified in [RFC7231] section 4.3.2.",
-"http://fedora.info/2017/06/30/spec/#httpHEAD"
++ "specified in [RFC7231] section 4.3.2. The server must send the same Digest header in the response as it"
++ " would have sent if the request had been a GET (or omit it if it would have been omitted for a GET).",
+"https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
+"MUST NOT"
 };
 }
 /**
@@ -221,10 +249,11 @@ return new String[] {
  */
 public String[] httpHeadResponseHeadersSameAsHttpGet() {
 return new String[] {
-"HttpHead-ResponseHeadersSameAsHttpGet",
+"3.6-A - HttpHead-ResponseHeadersSameAsHttpGet",
 "The server should send the same headers in response to a HEAD request as it would have sent if the request had "
 + "been a GET, except that the payload headers (defined in [RFC7231] section 3.3) may be omitted.",
-"http://fedora.info/2017/06/30/spec/#httpHEAD"
+"https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
+"SHOULD"
 };
 }
 /**
@@ -233,11 +262,25 @@ return new String[] {
  */
 public String[] httpDelete() {
 return new String[] {
-"HttpDelete",
+"3.7 - HttpDelete",
 "The DELETE method is optional per [LDP] section 4.2.5 and this specification does not require Fedora servers to "
 + "implement it. When a Fedora server supports this method, in addition to the requirements imposed on LDPRs within"
 + " containers outlined in [LDP] section 5.2.5.",
-"http://fedora.info/2017/06/30/spec/#httpDELETE"
+"https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+"MAY"
+};
+}
+/**
+ * Basic information for described test
+ * @return String[]
+ */
+public String[] httpDeleteResource() {
+return new String[] {
+"4.2.2 - httpDeleteResource",
+"An implementation may support DELETE for LDPRms. If DELETE is supported,  "
++ "the server is responsible for all behaviors implied by the LDP-containment of the LDPRm.",
+"https://fcrepo.github.io/fcrepo-specification/#LDPRm-delete",
+"MAY"
 };
 }
 /**
@@ -246,11 +289,11 @@ return new String[] {
  */
 public String[] postCreateExternalBinaryContent() {
 return new String[] {
-"ExternalBinaryContent-PostCreate",
-"This specification describes the use of Content-Type: message/external-body values to signal, on POST or PUT, that"
-+ " the Fedora server should should not consider the request entity to be the LDP-NR's content, but that a Content-Type"
-+ " value will signal a name or address at which the content might be retreived.",
-"http://fedora.info/2017/06/30/spec/#external-content"
+"3.8 - ExternalBinaryContent-PostCreate",
+"Fedora servers should support the creation of LDP-NRs with Content-Type of message/external-body and"
++ " access-type parameter of url.",
+"https://fcrepo.github.io/fcrepo-specification/#external-content",
+"SHOULD"
 };
 }
 /**
@@ -259,11 +302,11 @@ return new String[] {
  */
 public String[] putCreateExternalBinaryContent() {
 return new String[] {
-"ExternalBinaryContent-PutCreate",
-"This specification describes the use of Content-Type: message/external-body values to signal, on POST or PUT, that the"
-+ "Fedora server should should not consider the request entity to be the LDP-NR's content, but that a Content-Type "
-+ "value will signal a name or address at which the content might be retreived.",
-"http://fedora.info/2017/06/30/spec/#external-content"
+"3.8 - ExternalBinaryContent-PutCreate",
+"Fedora servers should support the creation of LDP-NRs with Content-Type of message/external-body and"
++ " access-type parameter of url.",
+"https://fcrepo.github.io/fcrepo-specification/#external-content",
+"SHOULD"
 };
 }
 /**
@@ -272,11 +315,11 @@ return new String[] {
  */
 public String[] putUpdateExternalBinaryContent() {
 return new String[] {
-"ExternalBinaryContent-PutUpdate",
-"This specification describes the use of Content-Type: message/external-body values to signal, on POST or PUT, that"
-+ " the Fedora server should should not consider the request entity to be the LDP-NR's content, but that a Content-Type"
-+ " value will signal a name or address at which the content might be retreived.",
-"http://fedora.info/2017/06/30/spec/#external-content"
+"3.8 - ExternalBinaryContent-PutUpdate",
+"Fedora servers should support the creation of LDP-NRs with Content-Type of message/external-body and"
++ " access-type parameter of url.",
+"https://fcrepo.github.io/fcrepo-specification/#external-content",
+"SHOULD"
 };
 }
 /**
@@ -285,10 +328,13 @@ return new String[] {
  */
 public String[] postCheckUnsupportedMediaType() {
 return new String[] {
-"ExternalBinaryContent-PostCheckUnsupportedMediaType",
+"3.8-B - ExternalBinaryContent-PostCheckUnsupportedMediaType",
 "Fedora servers receiving requests that would create or update a LDP-NR with a message/external-body with an "
-+ "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE.",
-"http://fedora.info/2017/06/30/spec/#external-content"
++ "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE. In the case that a Fedora"
++ " server does not support external LDP-NR content, all message/external-body messages must be rejected"
++ " with HTTP 415.",
+"https://fcrepo.github.io/fcrepo-specification/#external-content",
+"MUST"
 };
 }
 /**
@@ -297,22 +343,13 @@ return new String[] {
  */
 public String[] putCheckUnsupportedMediaType() {
 return new String[] {
-"ExternalBinaryContent-PutCheckUnsupportedMediaType",
+"3.8-B - ExternalBinaryContent-PutCheckUnsupportedMediaType",
 "Fedora servers receiving requests that would create or update a LDP-NR with a message/external-body with an "
-+ "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE.",
-"http://fedora.info/2017/06/30/spec/#external-content"
-};
-}
-/**
- * Basic information for described test
- * @return String[]
- */
-public String[] checkAcceptPostHeader() {
-return new String[] {
-"ExternalBinaryContent-CheckAcceptPostHeader",
-"Fedora servers that support LDP-NR with message/external-body must advertise that support in the Accept-Post"
-+ " response header for each supported type parameter of supported Content-Type values.",
-"http://fedora.info/2017/06/30/spec/#external-content"
++ "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE. In the case that a Fedora"
++ " server does not support external LDP-NR content, all message/external-body messages must be rejected"
++ " with HTTP 415.",
+"https://fcrepo.github.io/fcrepo-specification/#external-content",
+"MUST"
 };
 }
 /**
@@ -321,10 +358,11 @@ return new String[] {
  */
 public String[] getCheckContentLocationHeader() {
 return new String[] {
-"ExternalBinaryContent-HttpGetCheckContentLocationHeader",
+"3.8-D - ExternalBinaryContent-HttpGetCheckContentLocationHeader",
 "LDP-NR GET and HEAD responses should include a Content-Location header with a URI representation of the "
 + "location of the external content if the Fedora server is proxying the content.",
-"http://fedora.info/2017/06/30/spec/#external-content"
+"https://fcrepo.github.io/fcrepo-specification/#external-content",
+"SHOULD"
 };
 }
 /**
@@ -333,10 +371,11 @@ return new String[] {
  */
 public String[] headCheckContentLocationHeader() {
 return new String[] {
-"ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
+"3.8-D - ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
 "LDP-NR GET and HEAD responses should include a Content-Location header with a URI representation of the "
 + "location of the external content if the Fedora server is proxying the content.",
-"http://fedora.info/2017/06/30/spec/#external-content"
+"https://fcrepo.github.io/fcrepo-specification/#external-content",
+"SHOULD"
 };
 }
 /**
@@ -345,27 +384,95 @@ return new String[] {
  */
 public String[] supportPatch() {
 return new String[] {
-"HttpPatch-SupportHttpPatch",
+"3.2 - HttpPatch-SupportHttpPatch",
 "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). [sparql11-update] must be an accepted "
-+ "content-type for PATCH. Other content-types (e.g. [ldpatch]) may be available.",
-"http://fedora.info/2017/06/30/spec/#httpPATCH"
++ "content-type for PATCH.",
+"https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+"MUST"
 };
 }
 /**
  * Basic information for described test
  * @return String[]
  */
-public String[] failedPatch() {
+public String[] ldpPatchSupport() {
 return new String[] {
-"HttpPatch-CheckPatch",
-"If an otherwise valid HTTP PATCH request is received that attempts to add statements to a resource that "
-+ "a server disallows (not ignores per [LDP] 4.2.4.1), the server must fail the request by responding "
-+ "with a 4xx range status code (e.g. 409 Conflict). The server must provide a corresponding response "
-+ "body containing information about which statements could not be persisted. ([LDP] 4.2.4.4 should "
-+ "becomes must). In that response the restrictions causing such a request to fail must be described in a "
-+ "resource indicated by a Link: rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
+"3.2-A - HttpPatch-LdpPatchSupport",
+"Content-type for PATCH. Other content-types (e.g. [ldpatch]) may be available.",
+"https://fcrepo.github.io/fcrepo-specification/#httpPATCH"
+};
+}
+/**
+ * Basic information for described test
+ * @return String[]
+ */
+public String[] serverManagedPropertiesModification() {
+return new String[] {
+"3.2-B - HttpPatch-ServerManagedPropertiesModification",
+"If an otherwise valid HTTP PATCH request is received that attempts to add "
++ "statements to a resource that a server disallows (not ignores per [LDP] "
++ "4.2.4.1), the server must fail the request by responding with a 4xx range"
++ " status code (e.g. 409 Conflict).",
+"https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+"MUST"
+};
+}
+/**
+ * Basic information for described test
+ * @return String[]
+ */
+public String[] statementNotPersistedResponseBody() {
+return new String[] {
+"3.2-C - HttpPatch-StatementNotPersistedResponseBody",
+"The server must provide a corresponding response body containing information"
++ " about which statements could not be persisted."
++ " ([LDP] 4.2.4.4 should becomes must).",
+"https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+"MUST"
+};
+}
+/**
+ * Basic information for described test
+ * @return String[]
+ */
+public String[] statementNotPersistedConstrainedBy() {
+return new String[] {
+"3.2-D - HttpPatch-StatementNotPersistedConstrainedByHeader",
+"In that response the restrictions causing such a request to fail must be"
++ " described in a resource indicated by a Link: "
++ "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
 + "response header per [LDP] 4.2.1.6.",
-"http://fedora.info/2017/06/30/spec/#httpPATCH"
+"https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+"MUST"
+};
+}
+/**
+ * Basic information for described test
+ * @return String[]
+ */
+public String[] successfulPatchStatusCode() {
+return new String[] {
+"3.2-E - HttpPatch-SuccessfulPatchStatusCode",
+"A successful PATCH request must respond with a 2xx status code; the "
++ "specific code in the 2xx range may vary according to the response "
++ "body or request state.",
+"https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+"MUST"
+};
+}
+/**
+ * Basic information for described test
+ * @return String[]
+ */
+public String[] disallowChangeResourceType() {
+return new String[] {
+"3.2.2 - HttpPatch-DisallowChangeResourceType",
+"The server must disallow a PATCH request that would change the LDP"
++ " interaction model of a resource to a type that is not a subtype"
++ " of the current resource type. That request must be rejected"
++ " with a 409 Conflict response.",
+"https://fcrepo.github.io/fcrepo-specification/#httpPATCH-ixn-models",
+"MUST"
 };
 }
 }

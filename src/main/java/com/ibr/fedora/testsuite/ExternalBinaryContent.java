@@ -43,11 +43,11 @@ public TestsLabels tl = new TestsLabels();
     /**
      * @param host
      */
-    @Test(priority = 18)
+    @Test(priority = 19)
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n18." + tl.postCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n19." + tl.postCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -66,11 +66,11 @@ public TestsLabels tl = new TestsLabels();
     /**
      * @param host
      */
-    @Test(priority = 19)
+    @Test(priority = 20)
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n19." + tl.putCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n20." + tl.putCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -89,11 +89,11 @@ public TestsLabels tl = new TestsLabels();
     /**
      * @param host
      */
-    @Test(priority = 20)
+    @Test(priority = 21)
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n20." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n21." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -117,51 +117,6 @@ public TestsLabels tl = new TestsLabels();
     /**
      * @param host
      */
-    @Test(priority = 21)
-    @Parameters({"param1"})
-    public void checkAcceptPostHeader(final String host) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n21." + tl.checkAcceptPostHeader()[1]).append('\n');
-        ps.append("Request:\n");
-
-        final String resource =
-                RestAssured.given()
-                        .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
-                        .when()
-                        .post(host).asString();
-
-        ps.append("Request method:\tPOST\n");
-        ps.append("Request URI:\t" + host);
-        ps.append("Headers:\tAccept=*/*\n");
-        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + binary + "\"\n\n");
-
-        final Headers headers =
-                RestAssured.given()
-                        .when()
-                        .get(resource).getHeaders();
-
-        if (resource.indexOf("http") == 0) {
-            boolean isPresent = false;
-            for (Header h : headers) {
-
-                if (h.getName().equals("Accept-Post")) {
-                    isPresent = true;
-                }
-            }
-
-            if (!isPresent) {
-                ps.append("Accept-Post Header was not sent in the response.");
-                ps.append("\n -Case End- \n").close();
-                throw new AssertionError("Accept-Post header was not set in the response.");
-            }
-        } else {
-            throw new SkipException("Skipping this exception");
-        }
-    }
-
-    /**
-     * @param host
-     */
     @Test(priority = 22)
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
@@ -170,7 +125,8 @@ public TestsLabels tl = new TestsLabels();
         ps.append("Request:\n");
 
         RestAssured.given()
-                .header("Content-Type", "abc/abc; access-type=URL; URL=\"" + binary + "\"")
+                .header("Content-Type", "message/external-body; access-type=ftp;"
++ " NAME=\"/some/file\"; site=\"example.com\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
@@ -193,7 +149,7 @@ public TestsLabels tl = new TestsLabels();
         ps.append("Request:\n");
 
         RestAssured.given()
-                .header("Content-Type", "abc/abc; access-type=URL; URL=\"" + binary + "\"")
+        .header("Content-Type", "message/external-body; access-type=ftp; NAME=\"/some/file\"; site=\"example.com\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
@@ -259,7 +215,7 @@ public TestsLabels tl = new TestsLabels();
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n25." + tl.headCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n26." + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =

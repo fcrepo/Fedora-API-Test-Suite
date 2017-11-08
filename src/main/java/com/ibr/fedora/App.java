@@ -20,15 +20,15 @@
  */
 package com.ibr.fedora;
 
-import org.testng.TestNG;
-import org.testng.xml.XmlClass;
-import org.testng.xml.XmlSuite;
-import org.testng.xml.XmlTest;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.testng.TestNG;
+import org.testng.xml.XmlClass;
+import org.testng.xml.XmlSuite;
+import org.testng.xml.XmlTest;
 
 public class App {
 private App() { }
@@ -60,6 +60,7 @@ classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
 classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
 classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
 classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
+classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
 
 test.setParameters(params);
 test.setXmlClasses(classes);

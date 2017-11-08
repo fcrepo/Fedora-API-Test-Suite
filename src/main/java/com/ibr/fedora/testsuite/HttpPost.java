@@ -38,16 +38,37 @@ import static org.hamcrest.Matchers.containsString;
 public class HttpPost {
 public TestsLabels tl = new TestsLabels();
 public String resource = "";
+public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
 
 /**
  * @param host
  */
 @Test(priority = 1)
 @Parameters({"param1"})
-public void httpPost(final String host) throws FileNotFoundException {
+public void httpPostCreateLDPC(final String host) throws FileNotFoundException {
 TestSuiteGlobals.resetFile();
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n1." + tl.httpPost()[1]).append("\n");
+ps.append("\n1." + tl.httpPostCreateLDPC()[1]).append("\n");
+ps.append("Request:\n");
+RestAssured.given()
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .contentType("text/turtle")
+        .log().all()
+        .when()
+        .post(host)
+        .then()
+        .log().all()
+        .statusCode(201);
+ps.append("\n -Case End- \n").close();
+}
+/**
+ * @param host
+ */
+@Test(priority = 2)
+@Parameters({"param1"})
+public void httpPost(final String host) throws FileNotFoundException {
+final PrintStream ps = TestSuiteGlobals.logFile();
+ps.append("\n2." + tl.httpPost()[1]).append("\n");
 ps.append("Request:\n");
 RestAssured.given()
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -64,11 +85,11 @@ ps.append("\n -Case End- \n").close();
 /**
  * @param host
  */
-@Test(priority = 2)
+@Test(priority = 3)
 @Parameters({"param1"})
 public void constrainedByResponseHeader(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n2." + tl.constrainedByResponseHeader()[1]).append("\n");
+ps.append("\n3." + tl.constrainedByResponseHeader()[1]).append("\n");
 ps.append("Request:\n");
 
 final String resource =
@@ -94,11 +115,11 @@ ps.append("\n -Case End- \n").close();
 /**
  * @param host
  */
-@Test(priority = 3)
+@Test(priority = 4)
 @Parameters({"param1"})
 public void postNonRDFSource(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n3." + tl.postNonRDFSource()[1]).append('\n');
+ps.append("\n4." + tl.postNonRDFSource()[1]).append('\n');
 ps.append("Request:\n");
 RestAssured.given()
         .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
@@ -115,11 +136,11 @@ ps.append("\n -Case End- \n").close();
 /**
  * @param host
  */
-@Test(priority = 4)
+@Test(priority = 5)
 @Parameters({"param1"})
 public void postResourceAndCheckAssociatedResource(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n4." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
+ps.append("\n5." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
 ps.append("Request:\n");
 RestAssured.given()
         .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
@@ -137,13 +158,13 @@ ps.append("\n -Case End- \n").close();
 /**
  * @param host
  */
-@Test(priority = 5)
+@Test(priority = 6)
 @Parameters({"param1"})
 public void postDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
 final String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
 if (!checksum.isEmpty()) {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n5." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
+    ps.append("\n6." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -173,13 +194,13 @@ if (!checksum.isEmpty()) {
 /**
  * @param host
  */
-@Test(priority = 6)
+@Test(priority = 7)
 @Parameters({"param1"})
 public void postDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
 final String checksum = "abc=abc";
 if (!this.resource.isEmpty()) {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n6." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
+    ps.append("\n7." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
     ps.append("Request:\n");
 
     RestAssured.given()
@@ -197,4 +218,6 @@ if (!this.resource.isEmpty()) {
     throw new SkipException("Skipping this exception");
 }
 }
+
+
 }

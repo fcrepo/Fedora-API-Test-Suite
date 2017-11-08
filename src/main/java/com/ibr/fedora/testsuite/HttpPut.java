@@ -35,12 +35,12 @@ public TestsLabels tl = new TestsLabels();
 /**
  * @param host
  */
-@Test(priority = 7)
+@Test(priority = 8)
 @Parameters({"param1"})
 public void httpPut(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
 
-    ps.append("\n7." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
+    ps.append("\n8." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -67,12 +67,12 @@ public void httpPut(final String host) throws FileNotFoundException {
 /**
  * @param host
  */
-@Test(priority = 8)
+@Test(priority = 9)
 @Parameters({"param1"})
 public void httpPutNR(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
 
-    ps.append("\n8." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
+    ps.append("\n9." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
@@ -98,12 +98,12 @@ public void httpPutNR(final String host) throws FileNotFoundException {
 /**
  * @param host
  */
-@Test(priority = 9)
+@Test(priority = 10)
 @Parameters({"param1"})
 public void putDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
     final String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n9." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
+    ps.append("\n10." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
     tl.putDigestResponseHeaderAuthentication()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
@@ -131,12 +131,12 @@ public void putDigestResponseHeaderAuthentication(final String host) throws File
 /**
  * @param host
  */
-@Test(priority = 10)
+@Test(priority = 11)
 @Parameters({"param1"})
 public void putDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
     final String checksum = "abc=abc";
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n10." + tl.putDigestResponseHeaderVerification()[0] + "-" +
+    ps.append("\n11." + tl.putDigestResponseHeaderVerification()[0] + "-" +
     tl.putDigestResponseHeaderVerification()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
@@ -161,36 +161,5 @@ public void putDigestResponseHeaderVerification(final String host) throws FileNo
     ps.append("\n -Case End- \n").close();
 }
 
-/**
- * @param host
- */
-@Test(priority = 11)
-@Parameters({"param1"})
-public void httpPutExternalBody(final String host) throws FileNotFoundException {
-    final PrintStream ps = TestSuiteGlobals.logFile();
 
-    ps.append("\n11." + tl.httpPutExternalBody()[0] + "- " +
-    tl.httpPutExternalBody()[1]).append("\n");
-    ps.append("Request:\n");
-    final String resource =
-            RestAssured.given()
-                    .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
-                    .body("TestString.")
-                    .when()
-                    .post(host).asString();
-
-    RestAssured.given()
-            .header("Content-Type",
-            "message/external-body; "
-            + "access-type=URL; URL=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\"")
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .when()
-            .put(resource)
-            .then()
-            .log().all()
-            .statusCode(204);
-
-    ps.append("\n -Case End- \n").close();
-}
 }

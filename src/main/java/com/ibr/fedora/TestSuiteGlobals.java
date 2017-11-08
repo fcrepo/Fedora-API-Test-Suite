@@ -20,11 +20,6 @@
  */
 package com.ibr.fedora;
 
-import org.testng.IResultMap;
-import org.testng.ITestNGMethod;
-import org.testng.ITestResult;
-import org.testng.internal.Utils;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +28,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.testng.IResultMap;
+import org.testng.ITestNGMethod;
+import org.testng.ITestResult;
+import org.testng.internal.Utils;
 
 public abstract class TestSuiteGlobals {
 public static String cssReport = "reportStyle.css";
@@ -82,9 +82,11 @@ public static String today(final String format) {
  * @throws FileNotFoundException
  */
 public static void resetFile() throws FileNotFoundException {
+final File dir = new File("report");
+dir.mkdirs();
 final File f = new File(TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
 if (f.exists()) {
-   f.delete();
+f.delete();
 }
 }
 /**

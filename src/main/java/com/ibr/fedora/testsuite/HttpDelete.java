@@ -20,18 +20,25 @@
  */
 package com.ibr.fedora.testsuite;
 
-import com.ibr.fedora.TestSuiteGlobals;
-import com.ibr.fedora.TestsLabels;
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
+//import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import com.ibr.fedora.TestSuiteGlobals;
+import com.ibr.fedora.TestsLabels;
+
+import io.restassured.RestAssured;
+import io.restassured.config.LogConfig;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
+
 public class HttpDelete {
-public TestsLabels tl;
+public TestsLabels tl = new TestsLabels();
 /**
  * @param host
  */
@@ -54,6 +61,107 @@ public void httpDelete(final String host) throws FileNotFoundException {
             .then()
             .log().all()
             .statusCode(204);
+
+    ps.append("\n -Case End- \n").close();
+}
+/**
+ * @param host
+ */
+@Test(priority = 18)
+@Parameters({"param1"})
+public void httpDeleteResource(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    boolean errDelete = false;
+    boolean errResources = false;
+    ps.append("\n18." + tl.httpDeleteResource()[1]).append("\n");
+    ps.append("Request:\n");
+
+final String resource =
+RestAssured.given()
+.contentType("text/turtle")
+.when()
+.post(host).asString();
+final String resourceSon =
+RestAssured.given()
+.contentType("text/turtle")
+.when()
+.post(resource).asString();
+final String rdf01 =
+RestAssured.given()
+.header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
+.body("TestString.")
+.when()
+.post(resource).asString();
+final String rdf02 =
+RestAssured.given()
+.header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
+.body("TestString.")
+.when()
+.post(resourceSon).asString();
+final String rdf03 =
+RestAssured.given()
+.header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
+.body("TestString.")
+.when()
+.post(resourceSon).asString();
+
+    ps.append("Request method:\tDELETE\n");
+    ps.append("Request URI:\t" + host + "\n");
+    ps.append("Headers:\tAccept=*/*\n");
+    ps.append("Body:\n");
+
+final Response response = RestAssured.given()
+.when()
+.delete(resource);
+
+final int statusDelete = response.getStatusCode();
+final Headers headers = response.getHeaders();
+
+ps.append("HTTP/1.1 " + statusDelete + "\n");
+    for (Header h : headers) {
+ps.append(h.getName() + ": " + h.getValue() + "\n");
+    }
+
+String str = "";
+    if (statusDelete == 200 || statusDelete == 202 || statusDelete == 204) {
+str = "\n" + response.asString();
+    } else {
+errDelete = true;
+str = "\nThe request does not return a success status, the fedora server may not support DELETE.\n\n";
+    }
+    ps.append(str);
+
+//GET deleted resources
+final Response resResource = RestAssured.given()
+.when()
+.get(resource);
+final Response resResourceSon = RestAssured.given()
+.when()
+.get(resourceSon);
+final Response resRdf01 = RestAssured.given()
+.when()
+.get(rdf01);
+final Response resRdf02 = RestAssured.given()
+.when()
+.get(rdf02);
+final Response resRdf03 = RestAssured.given()
+.when()
+.get(rdf03);
+
+if (resResource.getStatusCode() != 410 || resResourceSon.getStatusCode() != 410 ||
+resRdf01.getStatusCode() != 410 || resRdf02.getStatusCode() != 410 || resRdf03.getStatusCode() != 410) {
+errResources = true;
+}
+
+    if (errDelete) {
+ps.append("\n -Case End- \n").close();
+throw new AssertionError("\nThe request does not return a success status for the DELETE request, "
++ "the fedora server may not support DELETE.");
+    } else if (errResources) {
+ps.append("\n -Case End- \n").close();
+throw new AssertionError("\nThe request failed to delete the next resources: " + resource + ", "
++ resourceSon + ", " + rdf01 + ", " + rdf02 + ", " + rdf03 + ", the fedora server may not support DELETE.");
+    }
 
     ps.append("\n -Case End- \n").close();
 }
