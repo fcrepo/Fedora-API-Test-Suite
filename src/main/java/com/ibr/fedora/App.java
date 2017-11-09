@@ -46,13 +46,7 @@ suite.setName("ldptest");
 final XmlTest test = new XmlTest(suite);
 
 final Map<String, String> params = new HashMap<String, String>();
-
 final List<XmlClass> classes = new ArrayList<XmlClass>();
-
-int i = 0;
-for (String arg : args) {
-params.put("param" + ++i, arg);
-}
 
 classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
 classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
@@ -61,6 +55,13 @@ classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
 classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
 classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
 classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
+
+//Create the default container
+args[0] = TestSuiteGlobals.containerTestSuite(args[0]);
+int i = 0;
+for (String arg : args) {
+params.put("param" + ++i, arg);
+}
 
 test.setParameters(params);
 test.setXmlClasses(classes);

@@ -20,19 +20,21 @@
  */
 package com.ibr.fedora.testsuite;
 
-import com.ibr.fedora.TestSuiteGlobals;
-import com.ibr.fedora.TestsLabels;
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
+import static org.hamcrest.Matchers.containsString;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 import org.testng.SkipException;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import com.ibr.fedora.TestSuiteGlobals;
+import com.ibr.fedora.TestsLabels;
 
-import static org.hamcrest.Matchers.containsString;
+import io.restassured.RestAssured;
+import io.restassured.config.LogConfig;
 
 @Listeners({com.ibr.fedora.report.HtmlReporter.class, com.ibr.fedora.report.EarlReporter.class})
 public class HttpPost {
