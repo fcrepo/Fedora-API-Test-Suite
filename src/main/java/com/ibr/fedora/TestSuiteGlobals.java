@@ -34,6 +34,9 @@ import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.internal.Utils;
 
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+
 public abstract class TestSuiteGlobals {
 public static String cssReport = "reportStyle.css";
 public static String outputDirectory = "report";
@@ -43,6 +46,24 @@ public static String ldptNamespace = "http://fedora.info/2017/06/30/spec/#";
 public static String earlReportAssertor = "https://wiki.duraspace.org/display/FF";
 public static String resourcePointer;
 public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
+
+/**
+ * Get or create the default container for all tests resources to be created
+ * @param host
+ * @return containerUrl
+ */
+public static String containerTestSuite(final String host) {
+final String name = outputName + "container" + today();
+final String containerUrl = host + "/" + name.replaceAll("(?<!http:)//", "/");
+final Response res = RestAssured.given()
+.contentType("text/turtle")
+.header("slug", name).when().post(host);
+if (res.getStatusCode() == 201) {
+return containerUrl;
+} else {
+return host;
+}
+}
 
 /**
  * 
@@ -65,7 +86,7 @@ public static boolean checkPayloadHeader(final String header) {
  * @return date
  */
 public static String today() {
-    final String date = new SimpleDateFormat("MM-dd-yyyy HH-mm-ss").format(new Date());
+    final String date = new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
     return date;
 }
 /**
