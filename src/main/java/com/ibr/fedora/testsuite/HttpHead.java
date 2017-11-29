@@ -28,6 +28,8 @@ import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.specification.ResponseSpecification;
+
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -39,23 +41,40 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 
 public class HttpHead {
+public String username;
+public String password;
 public TestsLabels tl = new TestsLabels();
 
 /**
+ * Authentication
+ * @param username
+ * @param password
+ */
+@BeforeClass
+@Parameters({"param2", "param3"})
+public void auth(final String username, final String password) {
+this.username = username;
+this.password = password;
+}
+
+/**
+ * 3.6-A
  * @param host
  */
-@Test(priority = 15)
+@Test(priority = 31)
 @Parameters({"param1"})
 public void httpHeadResponseNoBody(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n15." + tl.httpHeadResponseNoBody()[1]).append("\n");
+    ps.append("\n31." + tl.httpHeadResponseNoBody()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
+.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
     RestAssured.given()
+.auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
@@ -68,22 +87,25 @@ public void httpHeadResponseNoBody(final String host) throws FileNotFoundExcepti
 }
 
 /**
+ * 3.6-B
  * @param host
  */
-@Test(priority = 16)
+@Test(priority = 32)
 @Parameters({"param1"})
 public void httpHeadResponseHeadersSameAsHttpGet(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n16." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
+    ps.append("\n32." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
+.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     final Headers headers =
             RestAssured.given()
+.auth().basic(this.username, this.password)
                     .when()
                     .get(resource).getHeaders();
     final List<Header> hl = new ArrayList<>();
@@ -100,6 +122,7 @@ public void httpHeadResponseHeadersSameAsHttpGet(final String host) throws FileN
     final ResponseSpecification rs = spec.build();
 
     RestAssured.given()
+.auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()

@@ -22,7 +22,7 @@
     <commons.lang3.version>3.3.2</commons.lang3.version>
     <commons.io.version>2.4</commons.io.version>
     <testng.version>6.8.8</testng.version>
-    <rest.assured.version>3.0.3</rest.assured.version>
+    <rest.assured.version>3.0.5</rest.assured.version>
     <sesame.model.version>4.1.0</sesame.model.version>
     <jena.arq.version>3.4.0</jena.arq.version>
     <rendersnake.version>1.8</rendersnake.version>
@@ -32,6 +32,7 @@
     <fcrepo-build-tools.version>4.4.2</fcrepo-build-tools.version>
     <project.copyrightYear>2017</project.copyrightYear>
     <license.plugin.version>2.11</license.plugin.version>
+    <javax.xml.version>1.4.5</javax.xml.version>
     <app.main.class>com.ibr.fedora.App</app.main.class>
   </properties>
 
@@ -241,16 +242,13 @@
       <artifactId>rendersnake</artifactId>
       <version>${rendersnake.version}</version>
     </dependency>
-
-    <!-- https://mvnrepository.com/artifact/org.w3/ldp-testsuite -->
-    <!--<dependency>
-      <groupId>org.w3</groupId>
-      <artifactId>ldp-testsuite</artifactId>
-      <version>0.2.0</version>
-      <scope>system</scope>
-      <systemPath>${basedir}/src/main/resources/ldp-testsuite-0.2.0-SNAPSHOT.jar</systemPath>
-    </dependency>-->
-
+    
+    <!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->
+	<!-- <dependency>
+	    <groupId>javax.xml.parsers</groupId>
+	    <artifactId>jaxp-api</artifactId>
+	    <version>${javax.xml.version}</version>
+	</dependency>-->
 
   </dependencies>
 </project>

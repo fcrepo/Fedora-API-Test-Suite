@@ -52,10 +52,12 @@ public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Tra
  * @param host
  * @return containerUrl
  */
-public static String containerTestSuite(final String host) {
+public static String containerTestSuite(final String host, final String user, final String pass) {
 final String name = outputName + "container" + today();
-final String containerUrl = host + "/" + name.replaceAll("(?<!http:)//", "/");
+String containerUrl = host + "/" + name;
+containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
 final Response res = RestAssured.given()
+.auth().basic(user, pass)
 .contentType("text/turtle")
 .header("slug", name).when().post(host);
 if (res.getStatusCode() == 201) {

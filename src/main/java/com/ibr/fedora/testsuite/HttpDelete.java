@@ -25,6 +25,7 @@ package com.ibr.fedora.testsuite;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -32,74 +33,69 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 
 import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 
 public class HttpDelete {
+public String username;
+public String password;
 public TestsLabels tl = new TestsLabels();
+
 /**
+ * Authentication
+ * @param username
+ * @param password
+ */
+@BeforeClass
+@Parameters({"param2", "param3"})
+public void auth(final String username, final String password) {
+this.username = username;
+this.password = password;
+}
+
+/**
+ * 4.2.2
  * @param host
  */
-@Test(priority = 17)
+@Test(priority = 33)
 @Parameters({"param1"})
 public void httpDelete(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n17." + tl.httpDelete()[1]).append("\n");
-    ps.append("Request:\n");
-    final String resource =
-            RestAssured.given()
-                    .contentType("text/turtle")
-                    .when()
-                    .post(host).asString();
-    RestAssured.given()
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .when()
-            .delete(resource)
-            .then()
-            .log().all()
-            .statusCode(204);
-
-    ps.append("\n -Case End- \n").close();
-}
-/**
- * @param host
- */
-@Test(priority = 18)
-@Parameters({"param1"})
-public void httpDeleteResource(final String host) throws FileNotFoundException {
-    final PrintStream ps = TestSuiteGlobals.logFile();
     boolean errDelete = false;
     boolean errResources = false;
-    ps.append("\n18." + tl.httpDeleteResource()[1]).append("\n");
+    ps.append("\n33." + tl.httpDeleteResource()[1]).append("\n");
     ps.append("Request:\n");
 
 final String resource =
 RestAssured.given()
+.auth().basic(this.username, this.password)
 .contentType("text/turtle")
 .when()
 .post(host).asString();
 final String resourceSon =
 RestAssured.given()
+.auth().basic(this.username, this.password)
 .contentType("text/turtle")
 .when()
 .post(resource).asString();
 final String rdf01 =
 RestAssured.given()
+.auth().basic(this.username, this.password)
 .header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
 .body("TestString.")
 .when()
 .post(resource).asString();
 final String rdf02 =
 RestAssured.given()
+.auth().basic(this.username, this.password)
 .header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
 .body("TestString.")
 .when()
 .post(resourceSon).asString();
 final String rdf03 =
 RestAssured.given()
+.auth().basic(this.username, this.password)
 .header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
 .body("TestString.")
 .when()
@@ -111,6 +107,7 @@ RestAssured.given()
     ps.append("Body:\n");
 
 final Response response = RestAssured.given()
+.auth().basic(this.username, this.password)
 .when()
 .delete(resource);
 
@@ -133,18 +130,23 @@ str = "\nThe request does not return a success status, the fedora server may not
 
 //GET deleted resources
 final Response resResource = RestAssured.given()
+.auth().basic(this.username, this.password)
 .when()
 .get(resource);
 final Response resResourceSon = RestAssured.given()
+.auth().basic(this.username, this.password)
 .when()
 .get(resourceSon);
 final Response resRdf01 = RestAssured.given()
+.auth().basic(this.username, this.password)
 .when()
 .get(rdf01);
 final Response resRdf02 = RestAssured.given()
+.auth().basic(this.username, this.password)
 .when()
 .get(rdf02);
 final Response resRdf03 = RestAssured.given()
+.auth().basic(this.username, this.password)
 .when()
 .get(rdf03);
 
@@ -165,4 +167,5 @@ throw new AssertionError("\nThe request failed to delete the next resources: " +
 
     ps.append("\n -Case End- \n").close();
 }
+
 }

@@ -24,6 +24,8 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
+
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -33,23 +35,40 @@ import java.io.PrintStream;
 import static org.hamcrest.Matchers.containsString;
 
 public class HttpGet {
+public String username;
+public String password;
 public TestsLabels tl = new TestsLabels();
 
 /**
+ * Authentication
+ * @param username
+ * @param password
+ */
+@BeforeClass
+@Parameters({"param2", "param3"})
+public void auth(final String username, final String password) {
+this.username = username;
+this.password = password;
+}
+
+/**
+ * 3.5
  * @param host
  */
-@Test(priority = 12)
+@Test(priority = 28)
 @Parameters({"param1"})
 public void responseDescribesHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n12." + tl.responseDescribesHeader()[1]).append("\n");
+    ps.append("\n28." + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
+.auth().basic(this.username, this.password)
                     .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
                     .when()
                     .post(host).asString();
     RestAssured.given()
+.auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
@@ -61,48 +80,25 @@ public void responseDescribesHeader(final String host) throws FileNotFoundExcept
     ps.append("\n -Case End- \n").close();
 }
 
-/**
- * @param host
- */
-@Test(priority = 13)
-@Parameters({"param1"})
-public void responsePreferenceAppliedHeader(final String host) throws FileNotFoundException {
-    final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n13." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
-    ps.append("Request:\n");
-    final String resource =
-            RestAssured.given()
-                    .contentType("text/turtle")
-                    .when()
-                    .post(host).asString();
-    RestAssured.given()
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .header("Prefer", "return=minimal")
-            .when()
-            .get(resource)
-            .then()
-            .log().all()
-            .statusCode(200).header("preference-applied", containsString("return=minimal"));
-
-    ps.append("\n -Case End- \n").close();
-}
 
 /**
+ * 3.5.1-A
  * @param host
  */
-@Test(priority = 14)
+@Test(priority = 29)
 @Parameters({"param1"})
 public void additionalValuesForPreferHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n14." + tl.additionalValuesForPreferHeader()[1]).append("\n");
+    ps.append("\n29." + tl.additionalValuesForPreferHeader()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
             RestAssured.given()
+.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
     RestAssured.given()
+.auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .header("Prefer", "return=representation; "
@@ -116,4 +112,36 @@ public void additionalValuesForPreferHeader(final String host) throws FileNotFou
 
     ps.append("\n -Case End- \n").close();
 }
+
+/**
+ * 3.5.2
+ * @param host
+ */
+@Test(priority = 30)
+@Parameters({"param1"})
+public void responsePreferenceAppliedHeader(final String host) throws FileNotFoundException {
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n30." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
+    ps.append("Request:\n");
+    final String resource =
+            RestAssured.given()
+.auth().basic(this.username, this.password)
+                    .contentType("text/turtle")
+                    .when()
+                    .post(host).asString();
+    RestAssured.given()
+.auth().basic(this.username, this.password)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Prefer", "return=minimal")
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("preference-applied", containsString("return=minimal"));
+
+    ps.append("\n -Case End- \n").close();
+}
+
+
 }
