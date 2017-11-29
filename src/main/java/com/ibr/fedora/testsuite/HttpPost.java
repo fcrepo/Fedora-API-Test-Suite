@@ -20,59 +20,54 @@
  */
 package com.ibr.fedora.testsuite;
 
-import static org.hamcrest.Matchers.containsString;
+import com.ibr.fedora.TestSuiteGlobals;
+import com.ibr.fedora.TestsLabels;
+import io.restassured.RestAssured;
+import io.restassured.config.LogConfig;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
-import org.testng.SkipException;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import com.ibr.fedora.TestSuiteGlobals;
-import com.ibr.fedora.TestsLabels;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
+import static org.hamcrest.Matchers.containsString;
 
 @Listeners({com.ibr.fedora.report.HtmlReporter.class, com.ibr.fedora.report.EarlReporter.class})
 public class HttpPost {
+public String username;
+public String password;
 public TestsLabels tl = new TestsLabels();
 public String resource = "";
 public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
 
 /**
- * @param host
+ * Authentication
+ * @param username
+ * @param password
  */
-@Test(priority = 1)
-@Parameters({"param1"})
-public void httpPostCreateLDPC(final String host) throws FileNotFoundException {
-TestSuiteGlobals.resetFile();
-final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n1." + tl.httpPostCreateLDPC()[1]).append("\n");
-ps.append("Request:\n");
-RestAssured.given()
-        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-        .contentType("text/turtle")
-        .log().all()
-        .when()
-        .post(host)
-        .then()
-        .log().all()
-        .statusCode(201);
-ps.append("\n -Case End- \n").close();
+@BeforeClass
+@Parameters({"param2", "param3"})
+public void auth(final String username, final String password) {
+this.username = username;
+this.password = password;
 }
+
 /**
+ * 3.3-A
  * @param host
  */
-@Test(priority = 2)
+@Test(priority = 14)
 @Parameters({"param1"})
 public void httpPost(final String host) throws FileNotFoundException {
+TestSuiteGlobals.resetFile();
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n2." + tl.httpPost()[1]).append("\n");
+ps.append("\n14." + tl.httpPost()[1]).append("\n");
 ps.append("Request:\n");
 RestAssured.given()
+.auth().basic(this.username, this.password)
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .contentType("text/turtle")
         .log().all()
@@ -85,23 +80,26 @@ ps.append("\n -Case End- \n").close();
 }
 
 /**
+ * 3.3-B
  * @param host
  */
-@Test(priority = 3)
+@Test(priority = 15)
 @Parameters({"param1"})
 public void constrainedByResponseHeader(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n3." + tl.constrainedByResponseHeader()[1]).append("\n");
+ps.append("\n15." + tl.constrainedByResponseHeader()[1]).append("\n");
 ps.append("Request:\n");
 
 final String resource =
         RestAssured.given()
+.auth().basic(this.username, this.password)
                 .header("Content-Disposition", "attachment; filename=\"constrainedByResponseHeader.txt\"")
                 .body("TestString.")
                 .when()
                 .post(host).asString();
 
 RestAssured.given()
+.auth().basic(this.username, this.password)
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .contentType("text/turtle")
         .log().all()
@@ -115,15 +113,17 @@ ps.append("\n -Case End- \n").close();
 }
 
 /**
+ * 3.3-C
  * @param host
  */
-@Test(priority = 4)
+@Test(priority = 16)
 @Parameters({"param1"})
 public void postNonRDFSource(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n4." + tl.postNonRDFSource()[1]).append('\n');
+ps.append("\n16." + tl.postNonRDFSource()[1]).append('\n');
 ps.append("Request:\n");
 RestAssured.given()
+.auth().basic(this.username, this.password)
         .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .log().all()
@@ -136,15 +136,17 @@ ps.append("\n -Case End- \n").close();
 }
 
 /**
+ * 3.3-D
  * @param host
  */
-@Test(priority = 5)
+@Test(priority = 17)
 @Parameters({"param1"})
 public void postResourceAndCheckAssociatedResource(final String host) throws FileNotFoundException {
 final PrintStream ps = TestSuiteGlobals.logFile();
-ps.append("\n5." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
+ps.append("\n17." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
 ps.append("Request:\n");
 RestAssured.given()
+.auth().basic(this.username, this.password)
         .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .log().all()
@@ -158,68 +160,57 @@ ps.append("\n -Case End- \n").close();
 }
 
 /**
+ * 3.3.1-A
  * @param host
  */
-@Test(priority = 6)
+@Test(priority = 18)
 @Parameters({"param1"})
 public void postDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
-final String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
-if (!checksum.isEmpty()) {
+    final String checksum = "sha1=372ea08cab33e71c02c651dbc83a474d32c676b";
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n6." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
+    ps.append("\n18." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
     ps.append("Request:\n");
-    final String resource =
-            RestAssured.given()
-                    .header("Content-Disposition",
-                    "attachment; filename=\"postDigestResponseHeaderAuthentication.txt\"")
-                    .when()
-                    .post(host).asString();
-
-    this.resource = resource;
-
     RestAssured.given()
-            .header("digest", checksum)
+.auth().basic(this.username, this.password)
+            .header("Content-Disposition",
+                    "attachment; filename=\"test1digesttext.txt\"","Digest", checksum)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .contentType("text/plane")
             .log().all()
             .when()
-            .post(resource)
+            .post(host)
             .then()
             .log().all()
             .statusCode(409);
 
     ps.append("-Case End- \n").close();
-} else {
-    throw new SkipException("Skipping this exception");
-}
 }
 
 /**
+ * 3.3.1-B
  * @param host
  */
-@Test(priority = 7)
+@Test(priority = 19)
 @Parameters({"param1"})
 public void postDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
-final String checksum = "abc=abc";
-if (!this.resource.isEmpty()) {
+    final String checksum = "abc=abc";
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n7." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
+    ps.append("\n19." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
     ps.append("Request:\n");
 
     RestAssured.given()
-            .header("digest", checksum)
+.auth().basic(this.username, this.password)
+            .header("Content-Disposition",
+                    "attachment; filename=\"test1digesttext.txt\"","Digest", checksum)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .contentType("text/plane")
             .log().all()
             .when()
-            .post(resource)
+            .post(host)
             .then()
             .log().all()
             .statusCode(400);
 
     ps.append("\n -Case End- \n").close();
-} else {
-    throw new SkipException("Skipping this exception");
 }
-}
-
-
 }

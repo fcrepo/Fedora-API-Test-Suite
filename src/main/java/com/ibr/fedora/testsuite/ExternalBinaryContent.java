@@ -20,37 +20,55 @@
  */
 package com.ibr.fedora.testsuite;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
+import org.testng.SkipException;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
 import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
+
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
-import org.testng.SkipException;
-import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
-
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
 public class ExternalBinaryContent {
 public TestsLabels tl = new TestsLabels();
-
+public String username;
+public String password;
     public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
     public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737/"
 + "atl.site.logo?version=3&modificationDate=1383695533307&api=v2";
 
+/**
+ * Authentication
+ * @param username
+ * @param password
+ */
+@BeforeClass
+@Parameters({"param2", "param3"})
+public void auth(final String username, final String password) {
+this.username = username;
+this.password = password;
+}
+
     /**
+     * 3.8-A
      * @param host
      */
-    @Test(priority = 19)
+    @Test(priority = 34)
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n19." + tl.postCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n34." + tl.postCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
+.auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -64,16 +82,18 @@ public TestsLabels tl = new TestsLabels();
     }
 
     /**
+     * 3.8-A
      * @param host
      */
-    @Test(priority = 20)
+    @Test(priority = 35)
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n20." + tl.putCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n35." + tl.putCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
+.auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -87,21 +107,24 @@ public TestsLabels tl = new TestsLabels();
     }
 
     /**
+     * 3.8-A
      * @param host
      */
-    @Test(priority = 21)
+    @Test(priority = 36)
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n21." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n36." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
                 RestAssured.given()
+.auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
                         .when()
                         .post(host).asString();
         RestAssured.given()
+.auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -115,16 +138,18 @@ public TestsLabels tl = new TestsLabels();
     }
 
     /**
+     * 3.8-C
      * @param host
      */
-    @Test(priority = 22)
+    @Test(priority = 37)
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n22." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n37." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
+.auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=ftp;"
 + " NAME=\"/some/file\"; site=\"example.com\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -139,16 +164,18 @@ public TestsLabels tl = new TestsLabels();
     }
 
     /**
+     * 3.8-C
      * @param host
      */
-    @Test(priority = 23)
+    @Test(priority = 38)
     @Parameters({"param1"})
     public void putCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n23." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n38." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
+.auth().basic(this.username, this.password)
         .header("Content-Type", "message/external-body; access-type=ftp; NAME=\"/some/file\"; site=\"example.com\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -162,17 +189,19 @@ public TestsLabels tl = new TestsLabels();
     }
 
     /**
+     * 3.8-E
      * @param host
      */
-    @Test(priority = 24)
+    @Test(priority = 39)
     @Parameters({"param1"})
     public void getCheckContentLocationHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n24." + tl.getCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n39." + tl.getCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
                 RestAssured.given()
+.auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                         .when()
                         .post(host).asString();
@@ -184,6 +213,7 @@ public TestsLabels tl = new TestsLabels();
 
         final Headers headers =
                 RestAssured.given()
+.auth().basic(this.username, this.password)
                         .when()
                         .get(resource).getHeaders();
 
@@ -209,17 +239,19 @@ public TestsLabels tl = new TestsLabels();
     }
 
     /**
+     * 3.8-E
      * @param host
      */
-    @Test(priority = 25)
+    @Test(priority = 40)
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n26." + tl.headCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n40." + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
                 RestAssured.given()
+.auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                         .when()
                         .post(host).asString();
@@ -231,6 +263,7 @@ public TestsLabels tl = new TestsLabels();
 
         final Headers headers =
                 RestAssured.given()
+.auth().basic(this.username, this.password)
                         .when()
                         .head(resource).getHeaders();
 

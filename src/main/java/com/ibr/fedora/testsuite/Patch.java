@@ -29,8 +29,6 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -40,9 +38,7 @@ import java.io.PrintStream;
 
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class HttpPatch {
-public String username;
-public String password;
+public class Patch {
 public TestsLabels tl = new TestsLabels();
 public String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
 + " INSERT {"
@@ -71,19 +67,6 @@ public String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#
 " WHERE { }";
 
 /**
- * Authentication
- * @param username
- * @param password
- */
-@BeforeClass
-@Parameters({"param2", "param3"})
-public void auth(final String username, final String password) {
-this.username = username;
-this.password = password;
-}
-
-/**
- * 3.2-A
  * @param host
  */
 @Test(priority = 6)
@@ -95,29 +78,27 @@ public void supportPatch(final String host) throws IOException {
 
     final String resource =
             RestAssured.given()
-.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
-.contentType("application/sparql-update")
-.config(RestAssured.config()
-.encoderConfig(new EncoderConfig().encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
-.logConfig(new LogConfig().defaultStream(ps)))
-.log().all()
-.when()
-.request().body(body)
-.patch(resource)
-.then()
-.log().all()
-.statusCode(204);
+            .contentType("application/sparql-update")
+            .config(RestAssured.config()
+            .encoderConfig(new EncoderConfig().encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
+            .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .request().body(body)
+            .patch(resource)
+            .then()
+            .log().all()
+            .statusCode(204);
 
     ps.append("\n -Case End- \n").close();
 }
+
 /**
- * 3.2-B
  * @param host
  */
 @Test(priority = 7)
@@ -129,29 +110,27 @@ public void ldpPatchContentTypeSupport(final String host) throws IOException {
 
     final String resource =
             RestAssured.given()
-.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
-.contentType("text/ldpatch")
-.config(RestAssured.config().encoderConfig(new EncoderConfig()
-.encodeContentTypeAs("text/ldpatch", ContentType.TEXT))
-.logConfig(new LogConfig().defaultStream(ps)))
-.log().all()
-.body(ldpatch)
-.when()
-.patch(resource)
-.then()
-.log().all()
-.statusCode(204);
+            .contentType("text/ldpatch")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+            .encodeContentTypeAs("text/ldpatch", ContentType.TEXT))
+            .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(ldpatch)
+            .when()
+            .patch(resource)
+            .then()
+            .log().all()
+            .statusCode(204);
 
     ps.append("\n -Case End- \n").close();
 }
+
 /**
- * 3.2-C
  * @param host
  */
 @Test(priority = 8)
@@ -163,29 +142,27 @@ public void serverManagedPropertiesModification(final String host) throws IOExce
 
     final String resource =
             RestAssured.given()
-.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
-.contentType("application/sparql-update")
-.config(RestAssured.config().encoderConfig(new EncoderConfig()
-.encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
-.logConfig(new LogConfig().defaultStream(ps)))
-.log().all()
-.body(serverProps)
-.when()
-.patch(resource)
-.then()
-.log().all()
-.statusCode(409);
+            .contentType("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+            .encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
+            .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(serverProps)
+            .when()
+            .patch(resource)
+            .then()
+            .log().all()
+            .statusCode(409);
 
     ps.append("\n -Case End- \n").close();
 }
+
 /**
- * 3.2-D
  * @param host
  */
 @Test(priority = 9)
@@ -197,29 +174,27 @@ public void statementNotPersistedResponseBody(final String host) throws IOExcept
 
     final String resource =
             RestAssured.given()
-.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
-.contentType("application/sparql-update")
-.config(RestAssured.config().encoderConfig(new EncoderConfig()
-.encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
-.logConfig(new LogConfig().defaultStream(ps)))
-.log().all()
-.body(serverProps)
-.when()
-.patch(resource)
-.then()
-.log().all()
-.statusCode(409).body(containsString("lastModified"));
+            .contentType("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+            .encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
+            .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(serverProps)
+            .when()
+            .patch(resource)
+            .then()
+            .log().all()
+            .statusCode(409).body(containsString("lastModified"));
 
     ps.append("\n -Case End- \n").close();
 }
+
 /**
- * 3.2-E
  * @param host
  */
 @Test(priority = 10)
@@ -231,29 +206,27 @@ public void statementNotPersistedConstrainedBy(final String host) throws IOExcep
 
     final String resource =
             RestAssured.given()
-.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
-.contentType("application/sparql-update")
-.config(RestAssured.config().encoderConfig(new EncoderConfig()
-.encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
-.logConfig(new LogConfig().defaultStream(ps)))
-.log().all()
-.body(serverProps)
-.when()
-.patch(resource)
-.then()
-.log().all()
-.statusCode(409).header("Link", containsString("constrainedBy"));
+            .contentType("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+            .encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
+            .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(serverProps)
+            .when()
+            .patch(resource)
+            .then()
+            .log().all()
+            .statusCode(409).header("Link", containsString("constrainedBy"));
 
     ps.append("\n -Case End- \n").close();
 }
+
 /**
- * 3.2-F
  * @param host
  */
 @Test(priority = 11)
@@ -265,7 +238,6 @@ public void successfulPatchStatusCode(final String host) throws IOException {
 
     final String resource =
             RestAssured.given()
-.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
@@ -278,41 +250,40 @@ public void successfulPatchStatusCode(final String host) throws IOException {
     ps.append(body + "\n");
 
     final Response response = RestAssured.given()
-.auth().basic(this.username, this.password)
-.contentType("application/sparql-update")
-.config(RestAssured.config().encoderConfig(new EncoderConfig()
-.encodeContentTypeAs("application/sparql-update", ContentType.TEXT)))
-.body(body)
-.when()
-.patch(resource);
+            .contentType("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+            .encodeContentTypeAs("application/sparql-update", ContentType.TEXT)))
+            .body(body)
+            .when()
+            .patch(resource);
     final int statusCode = response.getStatusCode();
     final Headers headers = response.getHeaders();
 
     ps.append("HTTP/1.1 " + statusCode + "\n");
     for (Header h : headers) {
-ps.append(h.getName() + ": " + h.getValue() + "\n");
+        ps.append(h.getName() + ": " + h.getValue() + "\n");
     }
 
     String str = "";
     boolean err = false;
     if (statusCode >= 200 && statusCode < 300) {
-str = "\n" + response.asString();
+        str = "\n" + response.asString();
     } else {
-err = true;
-str = "\nThe response status code is not a valid successful status code.\n\n";
-str += response.asString();
+        err = true;
+        str = "\nThe response status code is not a valid successful status code.\n\n";
+        str += response.asString();
     }
 
     ps.append(str);
     if (err) {
-ps.append("\n -Case End- \n").close();
-throw new AssertionError("\nThe response status code is not a valid successful status code for PATCH.");
+        ps.append("\n -Case End- \n").close();
+        throw new AssertionError("\nThe response status code is not a valid successful status code for PATCH.");
     }
 
     ps.append("\n -Case End- \n").close();
 }
+
 /**
- * 3.2.1
  * @param host
  */
 @Test(priority = 12)
@@ -324,19 +295,17 @@ public void disallowPatchContainmentTriples(final String host) throws FileNotFou
 
     final String container =
             RestAssured.given()
-.auth().basic(this.username, this.password)
+
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
             .post(container).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
             .contentType("application/sparql-update")
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                     .encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
@@ -353,7 +322,6 @@ public void disallowPatchContainmentTriples(final String host) throws FileNotFou
 }
 
 /**
- * 3.2.2
  * @param host
  */
 @Test(priority = 13)
@@ -365,13 +333,11 @@ public void disallowChangeResourceType(final String host) throws IOException {
 
     final String resource =
             RestAssured.given()
-.auth().basic(this.username, this.password)
                     .contentType("text/turtle")
                     .when()
                     .post(host).asString();
 
     RestAssured.given()
-.auth().basic(this.username, this.password)
             .contentType("application/sparql-update")
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
             .encodeContentTypeAs("application/sparql-update", ContentType.TEXT))
