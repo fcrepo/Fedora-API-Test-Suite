@@ -172,8 +172,8 @@ public class HtmlReporter implements IReporter {
     }
 
     private void makeMethodSummaryTable(final IResultMap passed, final IResultMap skipped, final IResultMap failed)
-throws IOException, NoSuchMethodException, IllegalAccessException,
-InstantiationException, InvocationTargetException {
+    throws IOException, NoSuchMethodException, IllegalAccessException,
+    InstantiationException, InvocationTargetException {
         html.table(class_("indented"));
         html.tr().th().content("Test");
         html.th().content("Result");

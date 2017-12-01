@@ -45,104 +45,105 @@ private IResultMap passedTests;
 private IResultMap failedTests;
 private IResultMap skippedTests;
 
-@Override
-public void generateReport(final List<XmlSuite> xmlSuites, final List<ISuite> suites, final String outputDirectory) {
-try {
-    createWriter(TestSuiteGlobals.outputDirectory);
-} catch (IOException e) {
-    e.printStackTrace(System.err);
-    System.exit(1);
-}
-createModel();
-try {
-    createAssertions(suites);
-} catch (NoSuchMethodException e) {
-    e.printStackTrace();
-} catch (InstantiationException e) {
-    e.printStackTrace();
-} catch (IllegalAccessException e) {
-    e.printStackTrace();
-} catch (InvocationTargetException e) {
-    e.printStackTrace();
-}
-write();
-try {
-    endWriter();
-} catch (IOException e) {
-    e.printStackTrace(System.err);
-    System.exit(1);
-}
-}
-
-private void createAssertions(final List<ISuite> suites) throws
-NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-for (ISuite suite : suites) {
-    // Make the Assertor Resource (the thing doing the testing)
-    final Resource assertorRes = model.createResource(TestSuiteGlobals.earlReportAssertor);
-    assertorRes.addProperty(RDF.type, Assertor);
-
-    final Map<String, ISuiteResult> tests = suite.getResults();
-    for (ISuiteResult results : tests.values()) {
-        final ITestContext testContext = results.getTestContext();
-        passedTests = testContext.getPassedTests();
-        failedTests = testContext.getFailedTests();
-        skippedTests = testContext.getSkippedTests();
+    @Override
+    public void generateReport(final List<XmlSuite> xmlSuites, final List<ISuite> suites,
+    final String outputDirectory) {
+    try {
+        createWriter(TestSuiteGlobals.outputDirectory);
+    } catch (IOException e) {
+        e.printStackTrace(System.err);
+        System.exit(1);
+    }
+    createModel();
+    try {
+        createAssertions(suites);
+    } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+    } catch (InstantiationException e) {
+        e.printStackTrace();
+    } catch (IllegalAccessException e) {
+        e.printStackTrace();
+    } catch (InvocationTargetException e) {
+        e.printStackTrace();
+    }
+    write();
+    try {
+        endWriter();
+    } catch (IOException e) {
+        e.printStackTrace(System.err);
+        System.exit(1);
+    }
     }
 
-    final String[][] r = TestSuiteGlobals.orderTestsResults(passedTests, skippedTests, failedTests);
-    getResultProperties(r);
-}
-}
+    private void createAssertions(final List<ISuite> suites) throws
+    NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    for (ISuite suite : suites) {
+        // Make the Assertor Resource (the thing doing the testing)
+        final Resource assertorRes = model.createResource(TestSuiteGlobals.earlReportAssertor);
+        assertorRes.addProperty(RDF.type, Assertor);
 
-private void getResultProperties(final String[][] tests) throws
-InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-for (String[] r : tests) {
-    makeResultResource(r);
-}
-}
+        final Map<String, ISuiteResult> tests = suite.getResults();
+        for (ISuiteResult results : tests.values()) {
+            final ITestContext testContext = results.getTestContext();
+            passedTests = testContext.getPassedTests();
+            failedTests = testContext.getFailedTests();
+            skippedTests = testContext.getSkippedTests();
+        }
 
-private void makeResultResource(final String[] result) throws
-NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-final Resource assertionResource = model.createResource(null, EarlCoreReporter.Assertion);
+        final String[][] r = TestSuiteGlobals.orderTestsResults(passedTests, skippedTests, failedTests);
+        getResultProperties(r);
+    }
+    }
 
-final  Resource resultResource = model.createResource(null, EarlCoreReporter.TestResult);
+    private void getResultProperties(final String[][] tests) throws
+    InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    for (String[] r : tests) {
+        makeResultResource(r);
+    }
+    }
 
-final Resource subjectResource = model.getResource(result[0]);
-final Resource assertorResource = model.getResource(TestSuiteGlobals.earlReportAssertor);
+    private void makeResultResource(final String[] result) throws
+    NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    final Resource assertionResource = model.createResource(null, EarlCoreReporter.Assertion);
 
-assertionResource.addProperty(EarlCoreReporter.testSubject, subjectResource);
+    final  Resource resultResource = model.createResource(null, EarlCoreReporter.TestResult);
 
-assertionResource.addProperty(EarlCoreReporter.test, model.getResource(result[3]));
+    final Resource subjectResource = model.getResource(result[0]);
+    final Resource assertorResource = model.getResource(TestSuiteGlobals.earlReportAssertor);
 
-switch (result[1]) {
-    case "FAIL":
-        resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.failed);
-        break;
-    case "PASS":
-        resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.passed);
-        break;
-    case "SKIPPED":
-        resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.untested);
-        break;
-    default:
-        break;
-}
+    assertionResource.addProperty(EarlCoreReporter.testSubject, subjectResource);
 
-if (!result[4].isEmpty()) {
-    createExceptionProperty(result[4], resultResource);
-}
+    assertionResource.addProperty(EarlCoreReporter.test, model.getResource(result[3]));
 
-assertionResource.addProperty(EarlCoreReporter.assertedBy, assertorResource);
+    switch (result[1]) {
+        case "FAIL":
+            resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.failed);
+            break;
+        case "PASS":
+            resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.passed);
+            break;
+        case "SKIPPED":
+            resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.untested);
+            break;
+        default:
+            break;
+    }
 
-resultResource.addProperty(DCTerms.date, model.createTypedLiteral(GregorianCalendar.getInstance()));
+    if (!result[4].isEmpty()) {
+        createExceptionProperty(result[4], resultResource);
+    }
 
-/*
- * Add the above resources to the Assertion Resource
- */
-assertionResource.addProperty(EarlCoreReporter.testResult, resultResource);
-}
+    assertionResource.addProperty(EarlCoreReporter.assertedBy, assertorResource);
 
-private void createExceptionProperty(final String stackTrace, final Resource resource) {
-resource.addProperty(DCTerms.description, stackTrace);
-}
-}
+    resultResource.addProperty(DCTerms.date, model.createTypedLiteral(GregorianCalendar.getInstance()));
+
+    /*
+     * Add the above resources to the Assertion Resource
+     */
+    assertionResource.addProperty(EarlCoreReporter.testResult, resultResource);
+    }
+
+    private void createExceptionProperty(final String stackTrace, final Resource resource) {
+    resource.addProperty(DCTerms.description, stackTrace);
+    }
+    }
