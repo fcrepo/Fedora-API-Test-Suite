@@ -36,84 +36,75 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 public class App {
-private App() { }
+     private App() { }
 
-/**
- * Main configuration and execution of test cases
- * 
- * @param args
- */
-public static void main(final String[] args) {
-final Options options = new Options();
+    /**
+     * Main configuration and execution of test cases
+     * 
+     * @param args
+     */
+    public static void main(final String[] args) {
+    final Options options = new Options();
+    final Option host = new Option("h", "host", true, "host address");
+    host .setRequired(true);
+    options.addOption(host);
+    final Option user = new Option("u", "user", true, "user login");
+    user.setRequired(false);
+    options.addOption(user);
+    final Option password = new Option("p", "password", true, "user's password");
+    password.setRequired(false);
+    options.addOption(password);
 
-final Option host = new Option("h", "host", true, "host address");
-host .setRequired(true);
-options.addOption(host);
+    final CommandLineParser parser = new BasicParser();
+    final HelpFormatter formatter = new HelpFormatter();
+    CommandLine cmd;
+    try {
+    cmd = parser.parse(options, args);
+    } catch (ParseException e) {
+        System.out.println(e.getMessage());
+        formatter.printHelp("Fedora Test Suite", options);
+        System.exit(1);
+        return;
+    }
 
-final Option user = new Option("u", "user", true, "user login");
-user.setRequired(false);
-options.addOption(user);
+    String inputHost = cmd.getOptionValue("host");
+    final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
+    final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
 
-final Option password = new Option("p", "password", true, "user's password");
-password.setRequired(false);
-options.addOption(password);
+    final TestNG testng = new TestNG();
+    final XmlSuite suite = new XmlSuite();
+    suite.setName("ldptest");
+    final XmlTest test = new XmlTest(suite);
+    final Map<String, String> params = new HashMap<String, String>();
+    final List<XmlClass> classes = new ArrayList<XmlClass>();
 
-final CommandLineParser parser = new BasicParser();
-final HelpFormatter formatter = new HelpFormatter();
-CommandLine cmd;
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.Ldpnr"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.Container"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
+    //Create the default container
+    inputHost = TestSuiteGlobals.containerTestSuite(inputHost, inputUser, inputPassword);
+    params.put("param1", inputHost);
+    params.put("param2", inputUser);
+    params.put("param3", inputPassword);
 
-try {
-cmd = parser.parse(options, args);
-} catch (ParseException e) {
-System.out.println(e.getMessage());
-formatter.printHelp("Fedora Test Suite", options);
-System.exit(1);
-return;
-}
+    test.setParameters(params);
+    test.setXmlClasses(classes);
 
-String inputHost = cmd.getOptionValue("host");
-final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
-final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
+    final List<XmlTest> tests = new ArrayList<XmlTest>();
+    tests.add(test);
 
-final TestNG testng = new TestNG();
-final XmlSuite suite = new XmlSuite();
-suite.setName("ldptest");
+    suite.setTests(tests);
 
-final XmlTest test = new XmlTest(suite);
+    final List<XmlSuite> suites = new ArrayList<XmlSuite>();
+    suites.add(suite);
 
-final Map<String, String> params = new HashMap<String, String>();
-final List<XmlClass> classes = new ArrayList<XmlClass>();
-
-classes.add(new XmlClass("com.ibr.fedora.testsuite.Ldpnr"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.Container"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
-classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
-
-//Create the default container
-inputHost = TestSuiteGlobals.containerTestSuite(inputHost, inputUser, inputPassword);
-params.put("param1", inputHost);
-params.put("param2", inputUser);
-params.put("param3", inputPassword);
-
-test.setParameters(params);
-test.setXmlClasses(classes);
-
-final List<XmlTest> tests = new ArrayList<XmlTest>();
-tests.add(test);
-
-suite.setTests(tests);
-
-final List<XmlSuite> suites = new ArrayList<XmlSuite>();
-suites.add(suite);
-
-testng.setXmlSuites(suites);
-testng.run();
-}
-}
+    testng.setXmlSuites(suites);
+    testng.run();    }
+    }

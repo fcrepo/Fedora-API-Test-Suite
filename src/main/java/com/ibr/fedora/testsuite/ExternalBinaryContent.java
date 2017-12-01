@@ -40,21 +40,21 @@ public class ExternalBinaryContent {
 public TestsLabels tl = new TestsLabels();
 public String username;
 public String password;
-    public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
-    public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737/"
+public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
+public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737/"
 + "atl.site.logo?version=3&modificationDate=1383695533307&api=v2";
 
 /**
- * Authentication
- * @param username
- * @param password
- */
-@BeforeClass
-@Parameters({"param2", "param3"})
-public void auth(final String username, final String password) {
-this.username = username;
-this.password = password;
-}
+* Authentication
+* @param username
+* @param password
+*/
+    @BeforeClass
+    @Parameters({"param2", "param3"})
+    public void auth(final String username, final String password) {
+    this.username = username;
+    this.password = password;
+    }
 
     /**
      * 3.8-A
@@ -68,7 +68,7 @@ this.password = password;
         ps.append("Request:\n");
 
         RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -93,7 +93,7 @@ this.password = password;
         ps.append("Request:\n");
 
         RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -119,12 +119,12 @@ this.password = password;
 
         final String resource =
                 RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
                         .when()
                         .post(host).asString();
         RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -149,9 +149,9 @@ this.password = password;
         ps.append("Request:\n");
 
         RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=ftp;"
-+ " NAME=\"/some/file\"; site=\"example.com\"")
+    + " NAME=\"/some/file\"; site=\"example.com\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
@@ -175,7 +175,7 @@ this.password = password;
         ps.append("Request:\n");
 
         RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
         .header("Content-Type", "message/external-body; access-type=ftp; NAME=\"/some/file\"; site=\"example.com\"")
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
@@ -201,7 +201,7 @@ this.password = password;
 
         final String resource =
                 RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                         .when()
                         .post(host).asString();
@@ -213,7 +213,7 @@ this.password = password;
 
         final Headers headers =
                 RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                         .when()
                         .get(resource).getHeaders();
 
@@ -251,7 +251,7 @@ this.password = password;
 
         final String resource =
                 RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                         .when()
                         .post(host).asString();
@@ -263,7 +263,7 @@ this.password = password;
 
         final Headers headers =
                 RestAssured.given()
-.auth().basic(this.username, this.password)
+    .auth().basic(this.username, this.password)
                         .when()
                         .head(resource).getHeaders();
 
