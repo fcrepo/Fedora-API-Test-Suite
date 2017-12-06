@@ -83,14 +83,14 @@ public class HttpPatch {
     }
 
     /**
-     * 3.2-A
+     * 3.7-A
      * @param host
      */
-    @Test(priority = 6)
+    @Test(priority = 32)
     @Parameters({"param1"})
     public void supportPatch(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n6." + tl.supportPatch()[1]).append('\n');
+        ps.append("\n32." + tl.supportPatch()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -117,14 +117,14 @@ public class HttpPatch {
         ps.append("\n -Case End- \n").close();
     }
     /**
-     * 3.2-B
+     * 3.7-B
      * @param host
      */
-    @Test(priority = 7)
+    @Test(priority = 33)
     @Parameters({"param1"})
     public void ldpPatchContentTypeSupport(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n7." + tl.ldpPatchContentTypeSupport()[1]).append('\n');
+        ps.append("\n33." + tl.ldpPatchContentTypeSupport()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -151,14 +151,14 @@ public class HttpPatch {
         ps.append("\n -Case End- \n").close();
     }
     /**
-     * 3.2-C
+     * 3.7-C
      * @param host
      */
-    @Test(priority = 8)
+    @Test(priority = 34)
     @Parameters({"param1"})
     public void serverManagedPropertiesModification(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n8." + tl.serverManagedPropertiesModification()[1]).append('\n');
+        ps.append("\n34." + tl.serverManagedPropertiesModification()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -185,14 +185,14 @@ public class HttpPatch {
         ps.append("\n -Case End- \n").close();
     }
     /**
-     * 3.2-D
+     * 3.7-D
      * @param host
      */
-    @Test(priority = 9)
+    @Test(priority = 35)
     @Parameters({"param1"})
     public void statementNotPersistedResponseBody(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n9." + tl.statementNotPersistedResponseBody()[1]).append('\n');
+        ps.append("\n35." + tl.statementNotPersistedResponseBody()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -219,14 +219,14 @@ public class HttpPatch {
         ps.append("\n -Case End- \n").close();
     }
     /**
-     * 3.2-E
+     * 3.7-E
      * @param host
      */
-    @Test(priority = 10)
+    @Test(priority = 36)
     @Parameters({"param1"})
     public void statementNotPersistedConstrainedBy(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n10." + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
+        ps.append("\n36." + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -253,14 +253,14 @@ public class HttpPatch {
         ps.append("\n -Case End- \n").close();
     }
     /**
-     * 3.2-F
+     * 3.7-F
      * @param host
      */
-    @Test(priority = 11)
+    @Test(priority = 37)
     @Parameters({"param1"})
     public void successfulPatchStatusCode(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n11." + tl.successfulPatchStatusCode()[1]).append('\n');
+        ps.append("\n37." + tl.successfulPatchStatusCode()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -312,14 +312,14 @@ public class HttpPatch {
         ps.append("\n -Case End- \n").close();
     }
     /**
-     * 3.2.1
+     * 3.7.1
      * @param host
      */
-    @Test(priority = 12)
+    @Test(priority = 38)
     @Parameters({"param1"})
     public void disallowPatchContainmentTriples(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n12." + tl.disallowPatchContainmentTriples()[1]).append('\n');
+        ps.append("\n38." + tl.disallowPatchContainmentTriples()[1]).append('\n');
         ps.append("Request:\n");
 
         final String container =
@@ -353,14 +353,14 @@ public class HttpPatch {
     }
 
     /**
-     * 3.2.2
+     * 3.7.2
      * @param host
      */
-    @Test(priority = 13)
+    @Test(priority = 39)
     @Parameters({"param1"})
     public void disallowChangeResourceType(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n13." + tl.disallowChangeResourceType()[1]).append('\n');
+        ps.append("\n39." + tl.disallowChangeResourceType()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -386,4 +386,4 @@ public class HttpPatch {
 
         ps.append("\n -Case End- \n").close();
        }
-    }
+}

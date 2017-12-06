@@ -37,18 +37,18 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 
 public class ExternalBinaryContent {
-public TestsLabels tl = new TestsLabels();
-public String username;
-public String password;
-public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
-public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737/"
-+ "atl.site.logo?version=3&modificationDate=1383695533307&api=v2";
+    public TestsLabels tl = new TestsLabels();
+    public String username;
+    public String password;
+    public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
+    public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737/"
+    + "atl.site.logo?version=3&modificationDate=1383695533307&api=v2";
 
-/**
-* Authentication
-* @param username
-* @param password
-*/
+    /**
+    * Authentication
+    * @param username
+    * @param password
+    */
     @BeforeClass
     @Parameters({"param2", "param3"})
     public void auth(final String username, final String password) {
@@ -60,11 +60,11 @@ public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737
      * 3.8-A
      * @param host
      */
-    @Test(priority = 34)
+    @Test(priority = 41)
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n34." + tl.postCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n41." + tl.postCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -85,11 +85,11 @@ public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737
      * 3.8-A
      * @param host
      */
-    @Test(priority = 35)
+    @Test(priority = 42)
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n35." + tl.putCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n42." + tl.putCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -110,11 +110,11 @@ public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737
      * 3.8-A
      * @param host
      */
-    @Test(priority = 36)
+    @Test(priority = 43)
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n36." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n43." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -141,11 +141,11 @@ public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737
      * 3.8-C
      * @param host
      */
-    @Test(priority = 37)
+    @Test(priority = 44)
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n37." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n44." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -167,11 +167,11 @@ public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737
      * 3.8-C
      * @param host
      */
-    @Test(priority = 38)
+    @Test(priority = 45)
     @Parameters({"param1"})
     public void putCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n38." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n45." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -192,11 +192,11 @@ public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737
      * 3.8-E
      * @param host
      */
-    @Test(priority = 39)
+    @Test(priority = 46)
     @Parameters({"param1"})
     public void getCheckContentLocationHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n39." + tl.getCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n46." + tl.getCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
@@ -242,11 +242,11 @@ public String binary2 = "https://wiki.duraspace.org/download/attachments/4980737
      * 3.8-E
      * @param host
      */
-    @Test(priority = 40)
+    @Test(priority = 47)
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n40." + tl.headCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n47." + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =

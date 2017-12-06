@@ -38,12 +38,12 @@ import java.util.List;
 import java.util.Map;
 
 public class EarlReporter extends EarlCoreReporter implements IReporter {
-private static final String PASS = "TEST PASSED";
-private static final String FAIL = "TEST FAILED";
-private static final String SKIP = "TEST SKIPPED";
-private IResultMap passedTests;
-private IResultMap failedTests;
-private IResultMap skippedTests;
+    private static final String PASS = "TEST PASSED";
+    private static final String FAIL = "TEST FAILED";
+    private static final String SKIP = "TEST SKIPPED";
+    private IResultMap passedTests;
+    private IResultMap failedTests;
+    private IResultMap skippedTests;
 
     @Override
     public void generateReport(final List<XmlSuite> xmlSuites, final List<ISuite> suites,

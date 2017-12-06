@@ -79,13 +79,14 @@ public class App {
     final Map<String, String> params = new HashMap<String, String>();
     final List<XmlClass> classes = new ArrayList<XmlClass>();
 
-    classes.add(new XmlClass("com.ibr.fedora.testsuite.Ldpnr"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.Container"));
-    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
-    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
-    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.Ldpnr"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpOptions"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
     //Create the default container
