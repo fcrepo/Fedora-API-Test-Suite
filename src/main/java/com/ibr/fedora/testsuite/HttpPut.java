@@ -52,15 +52,15 @@ public class HttpPut {
     }
 
     /**
-     * 3.4-A
+     * 3.6-A
      * @param host
      */
-    @Test(priority = 20)
+    @Test(priority = 24)
     @Parameters({"param1"})
     public void httpPut(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
-        ps.append("\n20." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
+        ps.append("\n24." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
                 RestAssured.given()
@@ -87,15 +87,15 @@ public class HttpPut {
     }
 
     /**
-     * 3.4.1-A
+     * 3.6.1-A
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 21)
+    @Test(priority = 25)
     @Parameters({"param1"})
     public void updateTriples(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n21." + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
+    ps.append("\n25." + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
     ps.append("Request:\n");
 
     final String resource =
@@ -126,15 +126,15 @@ public class HttpPut {
     }
 
     /**
-     * 3.4.1-B
+     * 3.6.1-B
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 22)
+    @Test(priority = 26)
     @Parameters({"param1"})
     public void updateDisallowedTriples(final String host) throws FileNotFoundException {
-final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n22." + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
+    final PrintStream ps = TestSuiteGlobals.logFile();
+    ps.append("\n26." + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
     ps.append("Request:\n");
 
     final String resource =
@@ -165,15 +165,15 @@ final PrintStream ps = TestSuiteGlobals.logFile();
     }
 
     /**
-     * 3.4.1-C
+     * 3.6.1-C
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 23)
+    @Test(priority = 27)
     @Parameters({"param1"})
     public void updateDisallowedTriplesResponse(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n23." + tl.updateDisallowedTriplesResponse()[0] + "-"
+    ps.append("\n27." + tl.updateDisallowedTriplesResponse()[0] + "-"
     + tl.updateDisallowedTriplesResponse()[1]).append("\n");
     ps.append("Request:\n");
 
@@ -205,15 +205,15 @@ final PrintStream ps = TestSuiteGlobals.logFile();
     }
 
     /**
-     * 3.4.1-D
+     * 3.6.1-D
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 24)
+    @Test(priority = 28)
     @Parameters({"param1"})
     public void updateDisallowedTriplesConstrainedByHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n24." + tl.updateDisallowedTriplesConstrainedByHeader()[0] + "-"
+    ps.append("\n28." + tl.updateDisallowedTriplesConstrainedByHeader()[0] + "-"
     + tl.updateDisallowedTriplesConstrainedByHeader()[1]).append("\n");
     ps.append("Request:\n");
 
@@ -245,15 +245,15 @@ final PrintStream ps = TestSuiteGlobals.logFile();
     }
 
     /**
-     * 3.4.2-A
+     * 3.6.2-A
      * @param host
      */
-    @Test(priority = 25)
+    @Test(priority = 29)
     @Parameters({"param1"})
     public void httpPutNR(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
-        ps.append("\n25." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
+        ps.append("\n29." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
                 RestAssured.given()
@@ -279,15 +279,15 @@ final PrintStream ps = TestSuiteGlobals.logFile();
     }
 
     /**
-     * 3.4.2-B
+     * 3.6.2-B
      * @param host
      */
-    @Test(priority = 26)
+    @Test(priority = 30)
     @Parameters({"param1"})
     public void putDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
         final String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n26." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
+        ps.append("\n30." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
         tl.putDigestResponseHeaderAuthentication()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
@@ -315,15 +315,15 @@ final PrintStream ps = TestSuiteGlobals.logFile();
     }
 
     /**
-     * 3.4.2-C
+     * 3.6.2-C
      * @param host
      */
-    @Test(priority = 27)
+    @Test(priority = 31)
     @Parameters({"param1"})
     public void putDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
         final String checksum = "abc=abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n27." + tl.putDigestResponseHeaderVerification()[0] + "-" +
+        ps.append("\n31." + tl.putDigestResponseHeaderVerification()[0] + "-" +
         tl.putDigestResponseHeaderVerification()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =

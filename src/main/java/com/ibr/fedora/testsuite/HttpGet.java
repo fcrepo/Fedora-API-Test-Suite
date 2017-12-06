@@ -52,14 +52,14 @@ public class HttpGet {
     }
 
     /**
-     * 3.5
+     * 3.2
      * @param host
      */
-    @Test(priority = 28)
+    @Test(priority = 6)
     @Parameters({"param1"})
     public void responseDescribesHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n28." + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
+        ps.append("\n6." + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
             RestAssured.given()
@@ -81,14 +81,14 @@ public class HttpGet {
     }
 
     /**
-     * 3.5.1-A
+     * 3.2.1-A
      * @param host
      */
-    @Test(priority = 29)
+    @Test(priority = 7)
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n29." + tl.additionalValuesForPreferHeader()[1]).append("\n");
+        ps.append("\n7." + tl.additionalValuesForPreferHeader()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
             RestAssured.given()
@@ -113,14 +113,14 @@ public class HttpGet {
     }
 
     /**
-     * 3.5.2
+     * 3.2.2
      * @param host
      */
-    @Test(priority = 30)
+    @Test(priority = 8)
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n30." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
+    ps.append("\n8." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
     ps.append("Request:\n");
     final String resource =
         RestAssured.given()
@@ -141,5 +141,181 @@ public class HttpGet {
 
     ps.append("\n -Case End- \n").close();
       }
+
+    /**
+     * 3.2.3-A
+     * @param host
+     */
+    @Test(priority = 9)
+    @Parameters({"param1"})
+    public void respondWantDigest(final String host) throws FileNotFoundException {
+        final String checksum = "md5";
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n9." + tl.respondWantDigest()[1]).append('\n');
+        ps.append("Request:\n");
+
+    final String resource =
+            RestAssured.given()
+            .auth().basic(this.username, this.password)
+                    .header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
+                    .body("TestString.")
+                    .when()
+                    .post(host).asString();
+
+        RestAssured.given()
+        .auth().basic(this.username, this.password)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Want-Digest",checksum)
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("Digest", containsString("md5"));
+
+
+           ps.append("-Case End- \n").close();
+       }
+
+    /**
+     * 3.2.3-B
+     * @param host
+     */
+    @Test(priority = 10)
+    @Parameters({"param1"})
+    public void respondWantDigestTwoSupported(final String host) throws FileNotFoundException {
+        final String checksum = "md5,sha1";
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n10." + tl.respondWantDigestTwoSupported()[1]).append('\n');
+        ps.append("Request:\n");
+
+    final String resource =
+            RestAssured.given()
+            .auth().basic(this.username, this.password)
+                    .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
+                    .body("TestString.")
+                    .when()
+                    .post(host).asString();
+
+        RestAssured.given()
+        .auth().basic(this.username, this.password)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Want-Digest",checksum)
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
+
+
+           ps.append("-Case End- \n").close();
+       }
+
+    /**
+     * 3.2.3-C
+     * @param host
+     */
+    @Test(priority = 11)
+    @Parameters({"param1"})
+    public void respondWantDigestTwoSupportedQvalueNonZero(final String host) throws FileNotFoundException {
+        final String checksum = "md5;q=0.3,sha1;q=1";
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n11." + tl.respondWantDigestTwoSupportedQvalueNonZero()[1]).append('\n');
+        ps.append("Request:\n");
+
+    final String resource =
+            RestAssured.given()
+            .auth().basic(this.username, this.password)
+                    .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero.txt\"")
+                    .body("TestString.")
+                    .when()
+                    .post(host).asString();
+
+        RestAssured.given()
+        .auth().basic(this.username, this.password)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Want-Digest",checksum)
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
+
+
+           ps.append("-Case End- \n").close();
+       }
+
+    /**
+     * 3.2.3-D
+     * @param host
+     */
+    @Test(priority = 12)
+    @Parameters({"param1"})
+    public void respondWantDigestTwoSupportedQvalueZero(final String host) throws FileNotFoundException {
+        final String checksum = "md5;q=0.3,sha1;q=0";
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n12." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
+        ps.append("Request:\n");
+
+    final String resource =
+            RestAssured.given()
+            .auth().basic(this.username, this.password)
+                    .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
+                    .body("TestString.")
+                    .when()
+                    .post(host).asString();
+
+        RestAssured.given()
+        .auth().basic(this.username, this.password)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Want-Digest",checksum)
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("Digest", containsString("md5"));
+
+
+           ps.append("-Case End- \n").close();
+       }
+
+    /**
+     * 3.2.3-E
+     * @param host
+     */
+    @Test(priority = 13)
+    @Parameters({"param1"})
+    public void respondWantDigestNonSupported(final String host) throws FileNotFoundException {
+        final String checksum = "md5,abc";
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n13." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
+        ps.append("Request:\n");
+
+    final String resource =
+            RestAssured.given()
+            .auth().basic(this.username, this.password)
+                    .header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
+                    .body("TestString.")
+                    .when()
+                    .post(host).asString();
+
+        RestAssured.given()
+        .auth().basic(this.username, this.password)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .header("Want-Digest",checksum)
+            .when()
+            .get(resource)
+            .then()
+            .log().all()
+            .statusCode(200).header("Digest", containsString("md5"));
+
+
+           ps.append("-Case End- \n").close();
+       }
+
 
     }

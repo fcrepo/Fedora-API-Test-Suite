@@ -58,14 +58,14 @@ public class HttpHead {
     }
 
     /**
-     * 3.6-A
+     * 3.3-A
      * @param host
      */
-    @Test(priority = 31)
+    @Test(priority = 14)
     @Parameters({"param1"})
     public void httpHeadResponseNoBody(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n31." + tl.httpHeadResponseNoBody()[1]).append("\n");
+        ps.append("\n14." + tl.httpHeadResponseNoBody()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
                 RestAssured.given()
@@ -87,14 +87,14 @@ public class HttpHead {
     }
 
     /**
-     * 3.6-B
+     * 3.3-B
      * @param host
      */
-    @Test(priority = 32)
+    @Test(priority = 15)
     @Parameters({"param1"})
     public void httpHeadResponseHeadersSameAsHttpGet(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n32." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
+        ps.append("\n15." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
                 RestAssured.given()

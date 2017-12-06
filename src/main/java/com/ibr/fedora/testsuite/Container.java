@@ -69,14 +69,14 @@ public class Container {
     }
 
     /**
-     * 3.1.2-A
+     * 3.1.1-A
      * @param host
      */
-    @Test(priority = 3)
+    @Test(priority = 1)
     @Parameters({"param1"})
     public void createLDPC(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n3." + tl.createLDPC()[1]).append("\n");
+        ps.append("\n1." + tl.createLDPC()[1]).append("\n");
         ps.append("Request:\n");
         RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -92,14 +92,14 @@ public class Container {
         }
 
     /**
-     * 3.1.2-B
+     * 3.1.1-B
      * @param host
      */
-    @Test(priority = 4)
+    @Test(priority = 2)
     @Parameters({"param1"})
     public void ldpcContainmentTriples(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n4." + tl.ldpcContainmentTriples()[1]).append("\n");
+    ps.append("\n2." + tl.ldpcContainmentTriples()[1]).append("\n");
     ps.append("Request:\n");
 
     final String container = RestAssured.given()
@@ -127,14 +127,14 @@ public class Container {
     }
 
     /**
-     * 3.1.2-C
+     * 3.1.1-C
      * @param host
      */
-    @Test(priority = 5)
+    @Test(priority = 3)
     @Parameters({"param1"})
     public void ldpcMembership(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n5." + tl.ldpcMembership()[1]).append("\n");
+        ps.append("\n3." + tl.ldpcMembership()[1]).append("\n");
         ps.append("Request:\n");
 
         final String pythagoras =
