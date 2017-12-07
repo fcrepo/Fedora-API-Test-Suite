@@ -52,39 +52,10 @@ public class HttpGet {
     }
 
     /**
-     * 3.2
-     * @param host
-     */
-    @Test(priority = 6)
-    @Parameters({"param1"})
-    public void responseDescribesHeader(final String host) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n6." + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
-        ps.append("Request:\n");
-        final String resource =
-            RestAssured.given()
-    .auth().basic(this.username, this.password)
-                .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
-                .when()
-                .post(host).asString();
-        RestAssured.given()
-    .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .when()
-            .get(resource + "/fcr:metadata")
-            .then()
-            .log().all()
-            .statusCode(200).header("Link", containsString("describes"));
-
-        ps.append("\n -Case End- \n").close();
-    }
-
-    /**
      * 3.2.1-A
      * @param host
      */
-    @Test(priority = 7)
+    @Test(priority = 6)
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -113,10 +84,10 @@ public class HttpGet {
     }
 
     /**
-     * 3.2.2
+     * 3.2.2-A
      * @param host
      */
-    @Test(priority = 8)
+    @Test(priority = 7)
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
@@ -141,7 +112,34 @@ public class HttpGet {
 
     ps.append("\n -Case End- \n").close();
       }
+    /**
+     * 3.2.2-B
+     * @param host
+     */
+    @Test(priority = 8)
+    @Parameters({"param1"})
+    public void responseDescribesHeader(final String host) throws FileNotFoundException {
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n6." + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
+        ps.append("Request:\n");
+        final String resource =
+            RestAssured.given()
+    .auth().basic(this.username, this.password)
+                .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
+                .when()
+                .post(host).asString();
+        RestAssured.given()
+    .auth().basic(this.username, this.password)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .get(resource + "/fcr:metadata")
+            .then()
+            .log().all()
+            .statusCode(200).header("Link", containsString("describes"));
 
+        ps.append("\n -Case End- \n").close();
+    }
     /**
      * 3.2.3-A
      * @param host

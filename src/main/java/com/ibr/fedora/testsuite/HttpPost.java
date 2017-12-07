@@ -58,11 +58,11 @@ public class HttpPost {
      * 3.5-A
      * @param host
      */
-    @Test(priority = 18)
+    @Test(priority = 19)
     @Parameters({"param1"})
     public void httpPost(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n18." + tl.httpPost()[1]).append("\n");
+    ps.append("\n19." + tl.httpPost()[1]).append("\n");
     ps.append("Request:\n");
     RestAssured.given()
     .auth().basic(this.username, this.password)
@@ -81,11 +81,11 @@ public class HttpPost {
      * 3.5-B
      * @param host
      */
-    @Test(priority = 19)
+    @Test(priority = 20)
     @Parameters({"param1"})
     public void constrainedByResponseHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n19." + tl.constrainedByResponseHeader()[1]).append("\n");
+    ps.append("\n20." + tl.constrainedByResponseHeader()[1]).append("\n");
     ps.append("Request:\n");
 
     final String resource =
@@ -114,11 +114,11 @@ public class HttpPost {
      * 3.5-C
      * @param host
      */
-    @Test(priority = 20)
+    @Test(priority = 21)
     @Parameters({"param1"})
     public void postNonRDFSource(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n20." + tl.postNonRDFSource()[1]).append('\n');
+    ps.append("\n21." + tl.postNonRDFSource()[1]).append('\n');
     ps.append("Request:\n");
     RestAssured.given()
     .auth().basic(this.username, this.password)
@@ -137,11 +137,11 @@ public class HttpPost {
      * 3.5-D
      * @param host
      */
-    @Test(priority = 21)
+    @Test(priority = 22)
     @Parameters({"param1"})
     public void postResourceAndCheckAssociatedResource(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n21." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
+    ps.append("\n22." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
     ps.append("Request:\n");
     RestAssured.given()
     .auth().basic(this.username, this.password)
@@ -161,12 +161,12 @@ public class HttpPost {
      * 3.5.1-A
      * @param host
      */
-    @Test(priority = 22)
+    @Test(priority = 23)
     @Parameters({"param1"})
     public void postDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
         final String checksum = "sha1=372ea08cab33e71c02c651dbc83a474d32c676b";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n22." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
+        ps.append("\n23." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
         ps.append("Request:\n");
         RestAssured.given()
     .auth().basic(this.username, this.password)
@@ -188,12 +188,12 @@ public class HttpPost {
      * 3.5.1-B
      * @param host
      */
-    @Test(priority = 23)
+    @Test(priority = 24)
     @Parameters({"param1"})
     public void postDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
         final String checksum = "abc=abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n23." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
+        ps.append("\n24." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
