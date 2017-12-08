@@ -27,8 +27,10 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
+import io.restassured.response.Response;
 import io.restassured.specification.ResponseSpecification;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -53,8 +55,8 @@ public class HttpHead {
     @BeforeClass
     @Parameters({"param2", "param3"})
     public void auth(final String username, final String password) {
-    this.username = username;
-    this.password = password;
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -85,16 +87,84 @@ public class HttpHead {
 
         ps.append("\n -Case End- \n").close();
     }
-
     /**
      * 3.3-B
      * @param host
      */
     @Test(priority = 15)
     @Parameters({"param1"})
+    public void httpHeadResponseDigest(final String host) throws FileNotFoundException {
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n15." + tl.httpHeadResponseDigest()[1]).append("\n");
+        ps.append("Request:\n");
+        final String resource =
+        RestAssured.given()
+                .auth().basic(this.username, this.password)
+                .header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
+                .body("TestString.")
+                .when()
+                .post(host).asString();
+
+
+         final Response resget =
+         RestAssured.given()
+                 .auth().basic(this.username, this.password)
+                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                 .log().all()
+                 .when()
+                 .get(resource);
+
+                 ps.append(resget.getStatusLine().toString() + "\n");
+                 final Headers heade = resget.getHeaders();
+                 for (Header h : heade) {
+                      ps.append(h.getName().toString() + ": ");
+                      ps.append(h.getValue().toString() + "\n");
+                }
+
+        final Response reshead =
+        RestAssured.given()
+                .auth().basic(this.username, this.password)
+                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                .log().all()
+                .when()
+                .head(resource);
+                ps.append(reshead.getStatusLine().toString() + "\n");
+                final Headers headers = reshead.getHeaders();
+                for (Header h : headers) {
+                     ps.append(h.getName().toString() + ": ");
+                     ps.append(h.getValue().toString() + "\n");
+                }
+
+        ps.append("\n -Case End- \n").close();
+
+        if (resget.getStatusCode() == 200 && reshead.getStatusCode() == 200) {
+
+            if (resget.getHeader("Digest") == null) {
+                if (reshead.getHeader("Digest") == null) {
+                    Assert.assertTrue(true, "OK");
+                } else {
+                    Assert.assertTrue(false, "FAIL");
+                }
+            } else {
+                if (reshead.getHeader("Digest") == null) {
+                    Assert.assertTrue(false, "FAIL");
+                } else {
+                    Assert.assertTrue(true, "OK");
+                }
+            }
+        } else {
+           Assert.assertTrue(false, "FAIL");
+        }
+    }
+    /**
+     * 3.3-C
+     * @param host
+     */
+    @Test(priority = 16)
+    @Parameters({"param1"})
     public void httpHeadResponseHeadersSameAsHttpGet(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n15." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
+        ps.append("\n16." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
                 RestAssured.given()

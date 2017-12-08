@@ -115,7 +115,7 @@ public TestsLabels() { }
     public String[] ldpPatchContentTypeSupport() {
     return new String[] {
     "3.7-B - HttpPatch-LDPPatchContentTypeSupport",
-    "Content-type for PATCH. Other content-types (e.g. [ldpatch]) may be available.",
+    "Other content-types (e.g. [ldpatch]) may be available.",
     "https://fcrepo.github.io/fcrepo-specification/#httpPATCH"
     };
     }
@@ -126,7 +126,7 @@ public TestsLabels() { }
     public String[] serverManagedPropertiesModification() {
     return new String[] {
     "3.7-C - HttpPatch-ServerManagedPropertiesModification",
-    "If an otherwise valid HTTP PATCH request is received that attempts to add "
+    "If an otherwise valid HTTP PATCH request is received that attempts to modify "
     + "statements to a resource that a server disallows (not ignores per [LDP] "
     + "4.2.4.1), the server must fail the request by responding with a 4xx range"
     + " status code (e.g. 409 Conflict).",
@@ -213,7 +213,8 @@ public TestsLabels() { }
      public String[] respondWantDigest() {
      return new String[] {
      "3.2.3-A - HttpGet-RespondWantDigest",
-     "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+     "Testing for supported digest "
+     + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
      + "header defined in [RFC3230]",
      "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
      "MUST"
@@ -226,7 +227,7 @@ public TestsLabels() { }
     public String[] httpPost() {
     return new String[] {
     "3.5-A - HttpPost",
-    "Any LDPC must support POST ([LDP] 4.2.3 / 5.2.3).",
+    "Any LDPC (except Version Containers (LDPCv)) must support POST ([LDP] 4.2.3 / 5.2.3). ",
     "https://fcrepo.github.io/fcrepo-specification/#httpPOST",
     "MUST"
     };
@@ -302,9 +303,25 @@ public TestsLabels() { }
      * Basic information for described test
      * @return String[]
      */
+    public String[] httpPutSubtype() {
+    return new String[] {
+    "3.6-A - httpPutSubtype",
+    "When accepting a PUT request against an existant resource, an HTTP Link: rel=\"type\" header "
+    + "may be included. If the type in the Link header is a subtype of a current type of the resource, "
+    + "and has an interaction model assigned to it by [LDP],hen the resource must be assigned the new "
+    + "type and the interaction model of the resource must be changed to the interaction model assigned "
+    + "to the new type by [LDP].",
+    "https://fcrepo.github.io/fcrepo-specification/#httpPUT",
+    "MAY"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
     public String[] httpPut() {
     return new String[] {
-    "3.6-A - HttpPut",
+    "3.6-B - HttpPut",
     "When accepting a PUT request against an existant resource, an HTTP Link: rel=\"type\" header "
     + "may be included. If that type is a value in the LDP namespace and is not either a current "
     + "type of the resource or a subtype of a current type of the resource, the request must be "
@@ -385,7 +402,7 @@ public TestsLabels() { }
     public String[] putDigestResponseHeaderAuthentication() {
     return new String[] {
     "3.6.2-B - NonRDFSource-PutDigestResponseHeaderAuthentication",
-    "A HTTP PUT request that includes a Digest header (as described in [RFC3230]) for which any "
+    "An HTTP PUT request that includes a Digest header (as described in [RFC3230]) for which any "
     + "instance-digest in that header does not match the instance it describes, must be rejected "
     + "with a 409 Conflict response.",
     "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
@@ -399,8 +416,8 @@ public TestsLabels() { }
     public String[] putDigestResponseHeaderVerification() {
     return new String[] {
     "3.6.2-C - NonRDFSource-PutDigestResponseHeaderVerification",
-    "A HTTP PUT request that includes an unsupported Digest type (as described in [RFC3230]), should"
-    + " be rejected with a 400 Bad Request response.",
+    "An HTTP PUT request that includes an unsupported Digest type (as described in [RFC3230]), should"
+    + " be rejected with a 400 (Bad Request) response.",
     "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
     "SHOULD"
     };
@@ -411,9 +428,10 @@ public TestsLabels() { }
      */
     public String[] responseDescribesHeader() {
     return new String[] {
-    "3.2 - HttpGet-LDPRS-ResponseDescribesHeader",
-    "When the request is to the LDP-RS created to describe a LDP-NR, the response must include a Link: "
-    + "rel=\"describes\" header referencing the LDP-NR in question, as defined in [RFC6892].",
+    "3.2.2-B - HttpGet-LDPRS-ResponseDescribesHeader",
+    "When a GET request is made to an LDP-RS that describes an associated LDP-NR (3.5 HTTP POST and [LDP]5.2.3.12),"
+    + "the response must include a Link: rel=\"describes\" header referencing the LDP-NR "
+    + "in question, as defined in [RFC6892].",
     "http://fedora.info/2017/06/30/spec/#httpGET",
     "MUST"
     };
@@ -439,7 +457,7 @@ public TestsLabels() { }
      */
     public String[] responsePreferenceAppliedHeader() {
     return new String[] {
-    "3.2.2 - HttpGet-LDPRS-ResponsePreferenceAppliedHeader",
+    "3.2.2-A - HttpGet-LDPRS-ResponsePreferenceAppliedHeader",
     "Responses to GET requests that apply a Prefer request header to any LDP-RS must include the Preference-Applied"
     + " response header as defined in [RFC7240] section 3.",
     "http://fedora.info/2017/06/30/spec/#httpGETLDPRS",
@@ -454,7 +472,19 @@ public TestsLabels() { }
     return new String[] {
     "3.3-A - HttpHead-ResponseNoBody",
     "The HEAD method is identical to GET except that the server must not return a message-body in the response, as "
-    + "specified in [RFC7231] section 4.3.2. The server must send the same Digest header in the response as it"
+    + "specified in [RFC7231] section 4.3.2.",
+    "https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
+    "MUST NOT"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
+    public String[] httpHeadResponseDigest() {
+    return new String[] {
+    "3.3-B - HttpHead-ResponseDigest",
+    "The server must send the same Digest header in the response as it"
     + " would have sent if the request had been a GET (or omit it if it would have been omitted for a GET).",
     "https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
     "MUST NOT"
@@ -466,8 +496,9 @@ public TestsLabels() { }
      */
     public String[] httpHeadResponseHeadersSameAsHttpGet() {
     return new String[] {
-    "3.3-B - HttpHead-ResponseHeadersSameAsHttpGet",
-    "The server should send the same headers in response to a HEAD request as it would have sent if the request had "
+    "3.3-C - HttpHead-ResponseHeadersSameAsHttpGet",
+    "In other cases, The server should send the same headers in response to a HEAD request "
+    + "as it would have sent if the request had "
     + "been a GET, except that the payload headers (defined in [RFC7231] section 3.3) may be omitted.",
     "https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
     "SHOULD"
@@ -617,7 +648,7 @@ public TestsLabels() { }
     "3.4-B - HttpOptions-HttpOptionsSupportAllow",
     "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
     + "LDP servers must indicate their support for HTTP Methods by responding to a"
-    + "HTTP OPTIONS request on the LDPR’s URL with the HTTP Method tokens in the HTTP response header Allow.",
+    + " HTTP OPTIONS request on the LDPR’s URL with the HTTP Method tokens in the HTTP response header Allow.",
     "https://fcrepo.github.io/fcrepo-specification/#http-options",
     "MUST"
      };
@@ -629,7 +660,8 @@ public TestsLabels() { }
      public String[] respondWantDigestTwoSupported() {
      return new String[] {
      "3.2.3-B - HttpGet-RespondWantDigestTwoSupported",
-     "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+     "Testing for two supported digests with no weights"
+     + " GET requests to any LDP-NR must correctly respond to the Want-Digest "
      + "header defined in [RFC3230]",
      "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
      "MUST"
@@ -642,7 +674,8 @@ public TestsLabels() { }
      public String[] respondWantDigestTwoSupportedQvalueNonZero() {
       return new String[] {
       "3.2.3-C - HttpGet-RespondWantDigestTwoSupportedQvalueNonZero",
-      "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+      "Testing for two supported digests with different weights"
+      + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
       + "header defined in [RFC3230]",
       "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
        "MUST"
@@ -655,8 +688,9 @@ public TestsLabels() { }
      public String[] respondWantDigestTwoSupportedQvalueZero() {
        return new String[] {
        "3.2.3-D - HttpGet-RespondWantDigestTwoSupportedQvalueZero",
-       "GET requests to any LDP-NR must correctly respond to the Want-Digest "
-       + "header defined in [RFC3230]",
+       "Testing for two supported digests with different weights q=0.3,q=0"
+       + " GET requests to any LDP-NR must correctly respond to the Want-Digest"
+       + " header defined in [RFC3230]",
        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
         "MUST"
        };
@@ -668,7 +702,8 @@ public TestsLabels() { }
      public String[] respondWantDigestNonSupported() {
        return new String[] {
        "3.2.3-E - HttpGet-RespondWantDigestNonSupported",
-       "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+       "Testing for one supported digest and one unsupported digest."
+       + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
        + "header defined in [RFC3230]",
        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
         "MUST"
