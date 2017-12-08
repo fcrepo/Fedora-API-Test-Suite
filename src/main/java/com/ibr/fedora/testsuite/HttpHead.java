@@ -94,7 +94,6 @@ public class HttpHead {
     @Test(priority = 15)
     @Parameters({"param1"})
     public void httpHeadResponseDigest(final String host) throws FileNotFoundException {
-        //final String checksum = "md5";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n15." + tl.httpHeadResponseDigest()[1]).append("\n");
         ps.append("Request:\n");
@@ -110,7 +109,6 @@ public class HttpHead {
          final Response resget =
          RestAssured.given()
                  .auth().basic(this.username, this.password)
-                 //.header("Want-Digest",checksum)
                  .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                  .log().all()
                  .when()
@@ -126,7 +124,6 @@ public class HttpHead {
         final Response reshead =
         RestAssured.given()
                 .auth().basic(this.username, this.password)
-                //.header("Want-Digest",checksum)
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()

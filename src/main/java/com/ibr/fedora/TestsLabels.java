@@ -213,7 +213,7 @@ public TestsLabels() { }
      public String[] respondWantDigest() {
      return new String[] {
      "3.2.3-A - HttpGet-RespondWantDigest",
-     "Testing for supported digest"
+     "Testing for supported digest "
      + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
      + "header defined in [RFC3230]",
      "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
