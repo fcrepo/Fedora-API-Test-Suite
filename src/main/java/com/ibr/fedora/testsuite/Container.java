@@ -75,6 +75,7 @@ public class Container {
     @Test(priority = 1)
     @Parameters({"param1"})
     public void createLDPC(final String host) throws FileNotFoundException {
+        TestSuiteGlobals.resetFile();
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n1." + tl.createLDPC()[1]).append("\n");
         ps.append("Request:\n");

@@ -59,7 +59,6 @@ public class Ldpnr {
     @Test(priority = 4)
     @Parameters({"param1"})
     public void ldpnrCreationLinkType(final String host) throws FileNotFoundException {
-        TestSuiteGlobals.resetFile();
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n4." + tl.ldpnrCreationLinkType()[1]).append("\n");
         ps.append("Request:\n");
