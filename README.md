@@ -12,5 +12,5 @@ Standalone
 $ mvn install
 $ mvn package
 
-$ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar http://localhost:8080/
+$ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --host http://localhost:8080/
 ```
