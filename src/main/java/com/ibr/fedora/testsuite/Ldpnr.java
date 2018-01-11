@@ -27,14 +27,12 @@ import io.restassured.http.Header;
 import io.restassured.response.Response;
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Listeners;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-@Listeners({com.ibr.fedora.report.HtmlReporter.class, com.ibr.fedora.report.EarlReporter.class})
 public class Ldpnr {
     public TestsLabels tl = new TestsLabels();
     public String username;

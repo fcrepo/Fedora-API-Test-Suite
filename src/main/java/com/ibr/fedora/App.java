@@ -79,6 +79,7 @@ public class App {
     final Map<String, String> params = new HashMap<String, String>();
     final List<XmlClass> classes = new ArrayList<XmlClass>();
 
+    classes.add(new XmlClass("com.ibr.fedora.testsuite.SetUpSuite"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.Container"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.Ldpnr"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
