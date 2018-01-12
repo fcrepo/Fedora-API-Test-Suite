@@ -132,9 +132,9 @@ public class Container {
      */
     @Test(priority = 3)
     @Parameters({"param1"})
-    public void ldpcMembership(final String host) throws FileNotFoundException {
+    public void ldpcMembershipTriples(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n3." + tl.ldpcMembership()[1]).append("\n");
+        ps.append("\n3." + tl.ldpcMembershipTriples()[1]).append("\n");
         ps.append("Request:\n");
 
         final String pythagoras =
