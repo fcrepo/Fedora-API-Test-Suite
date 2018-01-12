@@ -75,9 +75,8 @@ public TestsLabels() { }
      */
     public String[] ldpcContainmentTriples() {
     return new String[] {
-    "3.1.1-B - Container-LDPCContainmentTriples",
-    "LDP Containers must distinguish [containment triples] from [membership] and "
-    + "[minimal-container] triples.",
+    "3.1.1-B - Container-ldpcContainmentTriples",
+    "LDP Containers must distinguish [containment triples]",
     "https://fcrepo.github.io/fcrepo-specification/#LDPC",
     "MUST"
     };
@@ -86,11 +85,22 @@ public TestsLabels() { }
      * Basic information for described test
      * @return String[]
      */
-    public String[] ldpcMembership() {
+    public String[] ldpcMembershipTriples() {
     return new String[] {
-    "3.1.1-C - Container-LDPCMembership",
-    "LDP Containers must distinguish [containment triples] from [membership] and "
-    + "[minimal-container] triples.",
+    "3.1.1-C - Container-ldpcMembershipTriples",
+    "LDP Containers must distinguish [membership] triples.",
+    "https://fcrepo.github.io/fcrepo-specification/#LDPC",
+    "MUST"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
+    public String[] ldpcMinimalContainerTriples() {
+    return new String[] {
+    "3.1.1-D - Container-ldpcMinimalContainerTriples",
+    "LDP Containers must distinguish [minimal-container] triples.",
     "https://fcrepo.github.io/fcrepo-specification/#LDPC",
     "MUST"
     };
@@ -487,7 +497,7 @@ public TestsLabels() { }
     "The server must send the same Digest header in the response as it"
     + " would have sent if the request had been a GET (or omit it if it would have been omitted for a GET).",
     "https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
-    "MUST NOT"
+    "MUST"
     };
     }
     /**
@@ -516,6 +526,45 @@ public TestsLabels() { }
     + " containers outlined in [LDP] section 5.2.5.",
     "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
     "MAY"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
+    public String[] httpDeleteOptionsCheck() {
+    return new String[] {
+    "3.8.1-A - httpDeleteOptionsCheck",
+    "An implementation that cannot recurse should not advertise DELETE in response to OPTIONS "
+    + "requests for containers with contained resources.",
+    "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+    "SHOULD NOT"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
+    public String[] httpDeleteStatusCheck() {
+    return new String[] {
+    "3.8.1-C - httpDeleteStatusCheck",
+    "An implementation must not return a 200 (OK) or 204 (No Content) response "
+    + "unless the entire operation successfully completed.",
+    "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+    "MUST NOT"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
+    public String[] httpDeleteStatusCheckTwo() {
+    return new String[] {
+    "3.8.1-D - httpDeleteStatusCheckTwo",
+    "An implementation must not emit a message that implies the successful DELETE of a resource until "
+    + "the resource has been successfully removed.",
+    "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+    "MUST NOT"
     };
     }
     /**
@@ -574,6 +623,19 @@ public TestsLabels() { }
      * Basic information for described test
      * @return String[]
      */
+    public String[] createExternalBinaryContentCheckAccesType() {
+    return new String[] {
+    "3.9-B - ExternalBinaryContent-createExternalBinaryContentCheckAccesType",
+    "Fedora servers must advertise support in the Accept-Post response header for each supported access-type "
+    + " parameter value of Content-Type: message/external-body.",
+    "https://fcrepo.github.io/fcrepo-specification/#external-content",
+    "MUST"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
     public String[] postCheckUnsupportedMediaType() {
     return new String[] {
     "3.9-C - ExternalBinaryContent-PostCheckUnsupportedMediaType",
@@ -604,11 +666,52 @@ public TestsLabels() { }
      * Basic information for described test
      * @return String[]
      */
+    public String[] checkUnsupportedMediaType() {
+    return new String[] {
+    "3.9-D - ExternalBinaryContent-checkUnsupportedMediaType",
+    "In the case that a Fedora server does not support external LDP-NR content, "
+    + "all message/external-body messages must be rejected with 415 (Unsupported Media Type).",
+    "https://fcrepo.github.io/fcrepo-specification/#external-content",
+    "MUST"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
+    public String[] postCheckHeaders() {
+    return new String[] {
+    "3.9-E - ExternalBinaryContent-postCheckHeaders",
+    "Fedora servers receiving requests that would create or update an LDP-NR with Content-Type: "
+    + "message/external-body must not accept the request if it cannot guarantee all. "
+    + "of the response headers required by the LDP-NR interaction model in this specification.",
+    "https://fcrepo.github.io/fcrepo-specification/#external-content",
+    "MUST NOT"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
+    public String[] putUpdateCheckHeaders() {
+    return new String[] {
+    "3.9-E - ExternalBinaryContent-putUpdateCheckHeaders",
+    "Fedora servers receiving requests that would create or update an LDP-NR with Content-Type: "
+    + "message/external-body must not accept the request if it cannot guarantee all. "
+    + "of the response headers required by the LDP-NR interaction model in this specification.",
+    "https://fcrepo.github.io/fcrepo-specification/#external-content",
+    "MUST NOT"
+    };
+    }
+    /**
+     * Basic information for described test
+     * @return String[]
+     */
     public String[] getCheckContentLocationHeader() {
     return new String[] {
-    "3.9-E - ExternalBinaryContent-HttpGetCheckContentLocationHeader",
-    "LDP-NR GET and HEAD responses should include a Content-Location header with a URI representation of the "
-    + "location of the external content if the Fedora server is proxying the content.",
+    "3.9-F - ExternalBinaryContent-HttpGetCheckContentLocationHeader",
+    "GET and HEAD responses for any external LDP-NR should include a Content-Location header with a URI  "
+    + "representation of the location of the external content if the Fedora server is proxying the content.",
     "https://fcrepo.github.io/fcrepo-specification/#external-content",
     "SHOULD"
     };
@@ -619,9 +722,9 @@ public TestsLabels() { }
      */
     public String[] headCheckContentLocationHeader() {
     return new String[] {
-    "3.9-E - ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
-    "LDP-NR GET and HEAD responses should include a Content-Location header with a URI representation of the "
-    + "location of the external content if the Fedora server is proxying the content.",
+    "3.9-G - ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
+    "GET and HEAD responses for any external LDP-NR should include a Content-Location header with a URI  "
+    + "representation of the location of the external content if the Fedora server is proxying the content.",
     "https://fcrepo.github.io/fcrepo-specification/#external-content",
     "SHOULD"
     };
@@ -709,5 +812,82 @@ public TestsLabels() { }
         "MUST"
        };
        }
-
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] respondWantDigestTwoSupportedExternalBinaryContent() {
+     return new String[] {
+     "3.9-H - ExternalBinaryContent-respondWantDigestTwoSupportedExternalBinaryContent",
+     "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+     + "Want-Digest header defined in [RFC3230].",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MUST"
+     };
+     }
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent() {
+     return new String[] {
+     "3.9-H - ExternalBinaryContent-respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent",
+     "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+     + "Want-Digest header defined in [RFC3230].",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MUST"
+     };
+     }
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] respondWantDigestTwoSupportedQvalueZeroExternalBinaryContent() {
+     return new String[] {
+     "3.9-H - ExternalBinaryContent-respondWantDigestTwoSupportedQvalueZeroExternalBinaryContent",
+     "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+     + "Want-Digest header defined in [RFC3230].",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MUST"
+     };
+     }
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] respondWantDigestNonSupportedExternalBinaryContent() {
+     return new String[] {
+     "3.9-H - ExternalBinaryContent-respondWantDigestNonSupportedExternalBinaryContent",
+     "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+     + "Want-Digest header defined in [RFC3230].",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MUST"
+     };
+     }
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] respondWantDigestExternalBinaryContent() {
+     return new String[] {
+     "3.9-H - ExternalBinaryContent-respondWantDigestExternalBinaryContent",
+     "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+     + "Want-Digest header defined in [RFC3230].",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MUST"
+     };
+     }
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] checkExpirationParameterDate() {
+     return new String[] {
+     "3.9-2-A - ExternalBinaryContent-checkExpirationParameterDate",
+     "Per [RFC2046] section 5.2.3, all Content-Type: message/external-body values "
+     + "may include an expiration parameter.",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MAY"
+     };
+     }
     }
