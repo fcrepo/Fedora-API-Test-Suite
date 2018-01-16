@@ -55,12 +55,12 @@ public class HttpPut {
      * 3.6-A
      * @param host
      */
-    @Test(priority = 25)
+    @Test(priority = 26)
     @Parameters({"param1"})
     public void httpPut(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
-        ps.append("\n25." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
+        ps.append("\n26." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
                 RestAssured.given()
@@ -91,11 +91,11 @@ public class HttpPut {
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 26)
+    @Test(priority = 27)
     @Parameters({"param1"})
     public void updateTriples(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n26." + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
+    ps.append("\n27." + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
     ps.append("Request:\n");
 
     final String resource =
@@ -130,11 +130,11 @@ public class HttpPut {
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 27)
+    @Test(priority = 28)
     @Parameters({"param1"})
     public void updateDisallowedTriples(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n27." + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
+    ps.append("\n28." + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
     ps.append("Request:\n");
 
     final String resource =
@@ -169,11 +169,11 @@ public class HttpPut {
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 28)
+    @Test(priority = 29)
     @Parameters({"param1"})
     public void updateDisallowedTriplesResponse(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n28." + tl.updateDisallowedTriplesResponse()[0] + "-"
+    ps.append("\n29." + tl.updateDisallowedTriplesResponse()[0] + "-"
     + tl.updateDisallowedTriplesResponse()[1]).append("\n");
     ps.append("Request:\n");
 
@@ -209,11 +209,11 @@ public class HttpPut {
      * @param host
      * @throws FileNotFoundException
      */
-    @Test(priority = 29)
+    @Test(priority = 30)
     @Parameters({"param1"})
     public void updateDisallowedTriplesConstrainedByHeader(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n29." + tl.updateDisallowedTriplesConstrainedByHeader()[0] + "-"
+    ps.append("\n30." + tl.updateDisallowedTriplesConstrainedByHeader()[0] + "-"
     + tl.updateDisallowedTriplesConstrainedByHeader()[1]).append("\n");
     ps.append("Request:\n");
 
@@ -248,12 +248,12 @@ public class HttpPut {
      * 3.6.2-A
      * @param host
      */
-    @Test(priority = 30)
+    @Test(priority = 31)
     @Parameters({"param1"})
     public void httpPutNR(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
-        ps.append("\n30." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
+        ps.append("\n31." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
                 RestAssured.given()
@@ -282,12 +282,12 @@ public class HttpPut {
      * 3.6.2-B
      * @param host
      */
-    @Test(priority = 31)
+    @Test(priority = 32)
     @Parameters({"param1"})
     public void putDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
         final String checksum = "sha1=cb1a576f22e8e3e110611b616e3e2f5ce9bdb941";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n31." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
+        ps.append("\n32." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
         tl.putDigestResponseHeaderAuthentication()[1]).append("\n");
         ps.append("Request:\n");
         final String resource =
@@ -318,7 +318,7 @@ public class HttpPut {
      * 3.6.2-C
      * @param host
      */
-    @Test(priority = 32)
+    @Test(priority = 33)
     @Parameters({"param1"})
     public void putDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
         final String checksum = "abc=abc";

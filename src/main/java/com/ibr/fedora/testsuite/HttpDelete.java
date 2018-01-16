@@ -58,7 +58,7 @@ import io.restassured.response.Response;
      * 4.2.6
      * @param host
      */
-    @Test(priority = 41)
+    @Test(priority = 42)
     @Parameters({"param1"})
     public void httpDelete(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

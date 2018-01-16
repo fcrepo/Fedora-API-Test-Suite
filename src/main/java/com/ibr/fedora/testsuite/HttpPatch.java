@@ -86,7 +86,7 @@ public class HttpPatch {
      * 3.7-A
      * @param host
      */
-    @Test(priority = 33)
+    @Test(priority = 34)
     @Parameters({"param1"})
     public void supportPatch(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -120,7 +120,7 @@ public class HttpPatch {
      * 3.7-B
      * @param host
      */
-    @Test(priority = 34)
+    @Test(priority = 35)
     @Parameters({"param1"})
     public void ldpPatchContentTypeSupport(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -154,7 +154,7 @@ public class HttpPatch {
      * 3.7-C
      * @param host
      */
-    @Test(priority = 35)
+    @Test(priority = 36)
     @Parameters({"param1"})
     public void serverManagedPropertiesModification(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -188,7 +188,7 @@ public class HttpPatch {
      * 3.7-D
      * @param host
      */
-    @Test(priority = 36)
+    @Test(priority = 37)
     @Parameters({"param1"})
     public void statementNotPersistedResponseBody(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -222,7 +222,7 @@ public class HttpPatch {
      * 3.7-E
      * @param host
      */
-    @Test(priority = 37)
+    @Test(priority = 38)
     @Parameters({"param1"})
     public void statementNotPersistedConstrainedBy(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -256,7 +256,7 @@ public class HttpPatch {
      * 3.7-F
      * @param host
      */
-    @Test(priority = 38)
+    @Test(priority = 39)
     @Parameters({"param1"})
     public void successfulPatchStatusCode(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -315,7 +315,7 @@ public class HttpPatch {
      * 3.7.1
      * @param host
      */
-    @Test(priority = 39)
+    @Test(priority = 40)
     @Parameters({"param1"})
     public void disallowPatchContainmentTriples(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -356,11 +356,11 @@ public class HttpPatch {
      * 3.7.2
      * @param host
      */
-    @Test(priority = 40)
+    @Test(priority = 41)
     @Parameters({"param1"})
     public void disallowChangeResourceType(final String host) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n40." + tl.disallowChangeResourceType()[1]).append('\n');
+        ps.append("\n41." + tl.disallowChangeResourceType()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource =
