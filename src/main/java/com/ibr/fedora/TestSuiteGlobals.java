@@ -46,7 +46,8 @@ public abstract class TestSuiteGlobals {
     public static String earlReportAssertor = "https://wiki.duraspace.org/display/FF";
     public static String resourcePointer;
     public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
-
+    public static String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
+    "insertedContentRelation"};
     /**
      * Get or create the default container for all tests resources to be created
      * @param host
@@ -83,6 +84,20 @@ public abstract class TestSuiteGlobals {
         return isPayloadHeader;
     }
 
+     /**
+     * 
+     * @param body
+     * @return isMembershipTriple
+     */
+    public static boolean checkMembershipTriple(final String body) {
+        boolean isMembershipTriple = false;
+        for (String h : membershipTriples) {
+            if (body.contains(h)) {
+                isMembershipTriple = true;
+            }
+        }
+        return isMembershipTriple;
+    }
     /**
      * 
      * @return date

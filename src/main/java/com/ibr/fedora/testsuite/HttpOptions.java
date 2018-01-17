@@ -56,11 +56,11 @@ public class HttpOptions {
      * 3.4-A
      * @param host
      */
-    @Test(priority = 17)
+    @Test(priority = 18)
     @Parameters({"param1"})
     public void httpOptionsSupport(final String host) throws FileNotFoundException {
          final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n17." + tl.httpOptionsSupport()[1]).append("\n");
+    ps.append("\n18." + tl.httpOptionsSupport()[1]).append("\n");
     ps.append("Request:\n");
 
     RestAssured.given()
@@ -80,11 +80,11 @@ public class HttpOptions {
      * 3.4-B
      * @param host
      */
-    @Test(priority = 18)
+    @Test(priority = 19)
     @Parameters({"param1"})
     public void httpOptionsSupportAllow(final String host) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n18." + tl.httpOptionsSupportAllow()[1]).append("\n");
+    ps.append("\n19." + tl.httpOptionsSupportAllow()[1]).append("\n");
     ps.append("Request:\n");
 
     RestAssured.given()

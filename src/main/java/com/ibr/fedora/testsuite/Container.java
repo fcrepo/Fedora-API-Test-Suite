@@ -24,7 +24,11 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -32,7 +36,6 @@ import org.testng.annotations.Test;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-import static org.hamcrest.CoreMatchers.containsString;
 
 public class Container {
     public String username;
@@ -90,7 +93,6 @@ public class Container {
         .statusCode(201);
         ps.append("\n -Case End- \n").close();
         }
-
     /**
      * 3.1.1-B
      * @param host
@@ -98,50 +100,14 @@ public class Container {
     @Test(priority = 2)
     @Parameters({"param1"})
     public void ldpcContainmentTriples(final String host) throws FileNotFoundException {
-    final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n2." + tl.ldpcContainmentTriples()[1]).append("\n");
-    ps.append("Request:\n");
-
-    final String container = RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .contentType("text/turtle")
-    .when()
-    .post(host).asString();
-
-    RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .contentType("text/turtle")
-    .when()
-    .post(container).asString();
-
-    RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-    .log().all()
-    .when()
-    .get(container)
-    .then()
-    .log().all()
-    .body(containsString("ldp:contains"));
-    ps.append("\n -Case End- \n").close();
-    }
-
-    /**
-     * 3.1.1-C
-     * @param host
-     */
-    @Test(priority = 3)
-    @Parameters({"param1"})
-    public void ldpcMembershipTriples(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n3." + tl.ldpcMembershipTriples()[1]).append("\n");
+        ps.append("\n2." + tl.ldpcContainmentTriples()[1]).append("\n");
         ps.append("Request:\n");
-
         final String pythagoras =
         RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
-        .header("slug", "pythagoras")
+        .header("slug", "pythagoras-3.1.1-B")
         .when()
         .body(pythagorasContainer)
         .post(host).asString();
@@ -162,23 +128,175 @@ public class Container {
         .body(portraitContainer.replace("%person%", person))
         .post(pythagoras).asString();
 
-        final String portrait = RestAssured.given()
+         RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("image/jpeg")
         .header("slug", "JpgPortrait")
         .when()
         .post(portraits).asString();
 
-        RestAssured.given()
+        final Response resP = RestAssured.given()
         .auth().basic(this.username, this.password)
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .log().all()
+        .header("Prefer","return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\"")
         .when()
-        .get(person)
-        .then()
-        .log().all()
-        .body(containsString(portrait));
+        .get(portraits);
 
-        ps.append("\n -Case End- \n").close();
+        ps.append(resP.getStatusLine().toString() + "\n");
+        final Headers headers = resP.getHeaders();
+        for (Header h : headers) {
+             ps.append(h.getName().toString() + ": ");
+             ps.append(h.getValue().toString() + "\n");
         }
+        final String body = resP.getBody().asString();
+        ps.append(body);
+        ps.append("\n -Case End- \n").close();
+
+       final boolean triple = TestSuiteGlobals.checkMembershipTriple(body);
+
+         if (triple) {
+                    Assert.assertTrue(false, "FAIL");
+                } else {
+                    if (body.contains("ldp:contains")) {
+                        Assert.assertTrue(true, "OK");
+                    }
+               }
+        }
+    /**
+     * 3.1.1-C
+     * @param host
+     */
+    @Test(priority = 3)
+    @Parameters({"param1"})
+    public void ldpcMembershipTriples(final String host) throws FileNotFoundException {
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n3." + tl.ldpcMembershipTriples()[1]).append("\n");
+        ps.append("Request:\n");
+        final String pythagoras =
+        RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("text/turtle")
+        .header("slug", "pythagoras-3.1.1-C")
+        .when()
+        .body(pythagorasContainer)
+        .post(host).asString();
+
+        final String person = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("text/turtle")
+        .header("slug", "person")
+        .when()
+        .body(personBody)
+        .post(pythagoras).asString();
+
+        final String portraits = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("text/turtle")
+        .header("slug", "portraits")
+        .when()
+        .body(portraitContainer.replace("%person%", person))
+        .post(pythagoras).asString();
+
+         RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("image/jpeg")
+        .header("slug", "JpgPortrait")
+        .when()
+        .post(portraits).asString();
+
+        final Response resP = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .log().all()
+        .header("Prefer","return=representation; include=\"http://www.w3.org/ns/ldp#PreferMembership\"")
+        .when()
+        .get(portraits);
+
+        ps.append(resP.getStatusLine().toString() + "\n");
+        final Headers headers = resP.getHeaders();
+        for (Header h : headers) {
+             ps.append(h.getName().toString() + ": ");
+             ps.append(h.getValue().toString() + "\n");
+        }
+        final String body = resP.getBody().asString();
+        ps.append(body);
+        ps.append("\n -Case End- \n").close();
+
+         if (body.contains("hasMemberRelation") && body.contains("membershipResource") &&
+             !body.contains("ldp:contains") ) {
+                    Assert.assertTrue(true, "OK");
+                } else {
+                    Assert.assertTrue(false, "FAIL");
+               }
+        }
+    /**
+     * 3.1.1-D
+     * @param host
+     */
+    @Test(priority = 4)
+    @Parameters({"param1"})
+    public void ldpcMinimalContainerTriples(final String host) throws FileNotFoundException {
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n4." + tl.ldpcMinimalContainerTriples()[1]).append("\n");
+        ps.append("Request:\n");
+        final String pythagoras =
+        RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("text/turtle")
+        .header("slug", "pythagoras-3.1.1-D")
+        .when()
+        .body(pythagorasContainer)
+        .post(host).asString();
+
+        final String person = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("text/turtle")
+        .header("slug", "person")
+        .when()
+        .body(personBody)
+        .post(pythagoras).asString();
+
+        final String portraits = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("text/turtle")
+        .header("slug", "portraits")
+        .when()
+        .body(portraitContainer.replace("%person%", person))
+        .post(pythagoras).asString();
+
+         RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .contentType("image/jpeg")
+        .header("slug", "JpgPortrait")
+        .when()
+        .post(portraits).asString();
+
+        final Response resP = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .log().all()
+        .header("Prefer","return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"")
+        .when()
+        .get(portraits);
+
+        ps.append(resP.getStatusLine().toString() + "\n");
+        final Headers headers = resP.getHeaders();
+        for (Header h : headers) {
+             ps.append(h.getName().toString() + ": ");
+             ps.append(h.getValue().toString() + "\n");
+        }
+        final String body = resP.getBody().asString();
+        ps.append(body);
+        ps.append("\n -Case End- \n").close();
+
+       final boolean triple = TestSuiteGlobals.checkMembershipTriple(body);
+
+         if (!triple && !body.contains("ldp:contains")) {
+                      Assert.assertTrue(true, "OK");
+                } else {
+                      Assert.assertTrue(false, "FAIL");
+               }
+        }
+
     }
