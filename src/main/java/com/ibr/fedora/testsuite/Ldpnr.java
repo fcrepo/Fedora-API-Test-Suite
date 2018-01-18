@@ -89,10 +89,6 @@ public class Ldpnr {
 
         for (Header h : nonr.getHeaders()) {
             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
-						 
-			  
-				
-						
         }
         ps.append("\n" + nonr.asString() + "\n");
         boolean header = false;
