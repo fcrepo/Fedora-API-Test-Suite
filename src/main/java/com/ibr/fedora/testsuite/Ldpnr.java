@@ -25,11 +25,12 @@ import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
+import io.restassured.config.LogConfig;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
+import org.testng.Assert;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
@@ -67,39 +68,53 @@ public class Ldpnr {
         .header("Link", "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\"")
         .when()
         .post(host);
+
         ps.append("Request method:\tPOST\n");
         ps.append("Request URI:\t" + host + "\n");
-        ps.append("Headers:\tAccept=*/*\n");
+
         ps.append("Body:\n");
         ps.append("HTTP/1.1 " + res.getStatusCode() + "\n");
         for (Header h : res.getHeaders()) {
-        ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
         }
         ps.append("\n" + res.asString() + "\n");
 
         if (res.getStatusCode() == 201) {
         final Response nonr = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .log().all()
         .when()
         .get(res.asString());
-        boolean noHeader = false;
-        for (Header h : nonr.getHeaders()) {
-        if (h.getName().equals("Link") && h.getValue().contains("NonRDFSource")) {
-        noHeader = false;
-        break;
-        } else {
-        noHeader = true;
-        }
-    }
 
-    if (noHeader) {
-    ps.append("\nExpected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.\n");
-    ps.append("\n -Case End- \n").close();
-    throw new AssertionError("Expected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.");
-    }
-    } else {
-    ps.append("\nExpected response with a 2xx range status code.\n");
-    ps.append("\n -Case End- \n").close();
-    throw new AssertionError("Expected response with a 2xx range status code.");
+        for (Header h : nonr.getHeaders()) {
+            ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+						 
+			  
+				
+						
+        }
+        ps.append("\n" + nonr.asString() + "\n");
+        boolean header = false;
+
+                    for (Header h : nonr.getHeaders()) {
+                        if (h.getName().equals("Link") && h.getValue().contains("NonRDFSource")) {
+                            header = true;
+                        }
+                }
+
+                    if (header) {
+                        Assert.assertTrue(true, "OK");
+                    } else {
+                        ps.append("\nExpected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.\n");
+                        ps.append("\n -Case End- \n").close();
+                 throw new AssertionError("Expected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.");
+                    }
+
+   } else {
+        ps.append("\nExpected response with a 2xx range status code.\n");
+        ps.append("\n -Case End- \n").close();
+        throw new AssertionError("Expected response with a 2xx range status code.");
     }
 
     ps.append("\n -Case End- \n").close();
