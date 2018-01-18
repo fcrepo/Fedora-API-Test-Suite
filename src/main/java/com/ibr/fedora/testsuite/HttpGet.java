@@ -72,13 +72,13 @@ public class HttpGet {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .header("Prefer", "return=representation; "
-            + "include=\"http://fedora.info/definitions/v4/repository#InboundReferences\"")
+            + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
             .when()
             .get(resource)
             .then()
             .log().all()
             .statusCode(200).header("preference-applied",
-            containsString("http://fedora.info/definitions/v4/repository#InboundReferences"));
+            containsString("http://fedora.info/definitions/fcrepo#PreferInboundReferences"));
 
         ps.append("\n -Case End- \n").close();
     }
