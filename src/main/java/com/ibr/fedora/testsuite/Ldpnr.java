@@ -93,19 +93,19 @@ public class Ldpnr {
         ps.append("\n" + nonr.asString() + "\n");
         boolean header = false;
 
-                    for (Header h : nonr.getHeaders()) {
-                        if (h.getName().equals("Link") && h.getValue().contains("NonRDFSource")) {
-                            header = true;
-                        }
-                }
+        for (Header h : nonr.getHeaders()) {
+            if (h.getName().equals("Link") && h.getValue().contains("NonRDFSource")) {
+                header = true;
+            }
+        }
 
-                    if (header) {
-                        Assert.assertTrue(true, "OK");
-                    } else {
-                        ps.append("\nExpected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.\n");
-                        ps.append("\n -Case End- \n").close();
-                 throw new AssertionError("Expected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.");
-                    }
+        if (header) {
+            Assert.assertTrue(true, "OK");
+        } else {
+            ps.append("\nExpected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.\n");
+            ps.append("\n -Case End- \n").close();
+            throw new AssertionError("Expected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.");
+        }
 
    } else {
         ps.append("\nExpected response with a 2xx range status code.\n");
