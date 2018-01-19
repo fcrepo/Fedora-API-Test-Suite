@@ -4,13 +4,16 @@
 
 A Standalone testing suite that exercises the requirements in the Fedora API Specification indicating the degree of the server’s compliance with the specification.
 
-Requires Maven to generate .jar file
-https://maven.apache.org/install.html
 
-Standalone
+Building the test suite:
 ```
 $ mvn install
-$ mvn package
+```
 
+Running the test suite:
+```
 $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --host http://localhost:8080/
 ```
+
+ Test results are available at:
+ > report/testsuite-execution-report.html
