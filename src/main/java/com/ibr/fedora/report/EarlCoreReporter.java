@@ -68,11 +68,10 @@ public abstract class EarlCoreReporter {
     protected void createWriter(final String directory) throws IOException {
         final File dir = new File(directory);
         dir.mkdirs();
-        System.out.println("Writing EARL results:");
+
         final String fileName = TestSuiteGlobals.outputName + "-execution-report-earl.ttl";
         final File file = new File(dir, fileName);
         writer = new BufferedWriter(new FileWriter(file));
-        System.out.println("\t" + file.getAbsolutePath());
     }
 
     protected void write() {

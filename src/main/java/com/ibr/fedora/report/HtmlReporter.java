@@ -117,12 +117,16 @@ public class HtmlReporter implements IReporter {
 
     private void createWriter(final String output) {
         BufferedWriter writer = null;
-        //String date = TestSuiteGlobals.today();
-        new File(TestSuiteGlobals.outputDirectory).mkdirs();
+        final File dir = new File(TestSuiteGlobals.outputDirectory);
+        dir.mkdirs();
+
+        final String fileName = TestSuiteGlobals.outputName + "-execution-report.html";
+        System.out.println("Writing HTML results:");
         try {
-            writer = new BufferedWriter(new FileWriter(TestSuiteGlobals.outputDirectory + "/" +
-        TestSuiteGlobals.outputName + "-execution-report.html"));
+            final File file = new File(dir, fileName);
+            writer = new BufferedWriter(new FileWriter(file));
             writer.write(output);
+            System.out.println("\t" + file.getAbsolutePath());
 
         } catch (IOException e) {
         } finally {
