@@ -23,12 +23,11 @@ package com.ibr.fedora.testsuite;
 import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
-import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-import io.restassured.specification.ResponseSpecification;
+
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
@@ -115,8 +114,8 @@ public class HttpHead {
                  .get(resource);
 
                  ps.append(resget.getStatusLine().toString() + "\n");
-                 final Headers heade = resget.getHeaders();
-                 for (Header h : heade) {
+                 final Headers headersGet = resget.getHeaders();
+                 for (Header h : headersGet) {
                       ps.append(h.getName().toString() + ": ");
                       ps.append(h.getValue().toString() + "\n");
                 }
@@ -166,41 +165,56 @@ public class HttpHead {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n17." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
         ps.append("Request:\n");
-        final String resource =
-                RestAssured.given()
-    .auth().basic(this.username, this.password)
-                        .contentType("text/turtle")
-                        .when()
-                        .post(host).asString();
+        final String resource = RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .contentType("text/turtle")
+            .when()
+            .post(host).asString();
 
-        final Headers headers =
-                RestAssured.given()
-    .auth().basic(this.username, this.password)
-                        .when()
-                        .get(resource).getHeaders();
-        final List<Header> hl = new ArrayList<>();
-        for (Header h : headers) {
+        final Response resget = RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .when()
+            .get(resource);
+
+        ps.append(resget.getStatusLine().toString() + "\n");
+        final Headers headersGet = resget.getHeaders();
+        for (Header h : headersGet) {
+            ps.append(h.getName().toString() + ": ");
+            ps.append(h.getValue().toString() + "\n");
+        }
+
+        final List<Header> h1 = new ArrayList<>();
+        for (Header h : headersGet) {
             if (!TestSuiteGlobals.checkPayloadHeader(h.getName())) {
-                hl.add(h);
+                h1.add(h);
             }
         }
 
-        final ResponseSpecBuilder spec = new ResponseSpecBuilder();
-        for (Header h : hl) {
-            spec.expectHeader(h.getName(), h.getValue());
+     final Response reshead = RestAssured.given()
+                        .auth().basic(this.username, this.password)
+                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                        .log().all()
+                        .when()
+                        .head(resource);
+
+        ps.append(reshead.getStatusLine().toString() + "\n");
+        final Headers headershead = reshead.getHeaders();
+              for (Header h : headershead) {
+                 ps.append(h.getName().toString() + ": ");
+                 ps.append(h.getValue().toString() + "\n");
+               }
+       final List<Header> h2 = new ArrayList<>();
+              for (Header h : headershead) {
+                  if (!TestSuiteGlobals.checkPayloadHeader(h.getName())) {
+                      h2.add(h);
+                  }
         }
-        final ResponseSpecification rs = spec.build();
-
-        RestAssured.given()
-    .auth().basic(this.username, this.password)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .when()
-                .head(resource)
-                .then()
-                .spec(rs)
-                .log().all();
-
+        // Compares if both lists have the same size
+        if (h2.equals(h1)) {
+            Assert.assertTrue(true, "OK");
+        } else {
+             Assert.assertTrue(false, "FAIL");
+        }
         ps.append("\n -Case End- \n").close();
      }
 
