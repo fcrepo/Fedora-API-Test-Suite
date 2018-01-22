@@ -88,25 +88,16 @@ public class HttpPost {
     ps.append("\n21." + tl.constrainedByResponseHeader()[1]).append("\n");
     ps.append("Request:\n");
 
-    final String resource =
-            RestAssured.given()
-    .auth().basic(this.username, this.password)
-                    .header("Content-Disposition", "attachment; filename=\"constrainedByResponseHeader.txt\"")
-                    .body("TestString.")
-                    .when()
-                    .post(host).asString();
-
     RestAssured.given()
     .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .contentType("text/turtle")
             .log().all()
             .when()
-            .post(resource)
+            .post(host)
             .then()
             .log().all()
-            .statusCode(409).header("Link", containsString("constrainedBy"));
-
+            .statusCode(201).header("Link", containsString("constrainedBy"));
     ps.append("\n -Case End- \n").close();
     }
 
@@ -164,22 +155,24 @@ public class HttpPost {
     @Test(priority = 24)
     @Parameters({"param1"})
     public void postDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
-        final String checksum = "sha1=372ea08cab33e71c02c651dbc83a474d32c676b";
+        final String checksum = "md5=1234";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n24." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
         ps.append("Request:\n");
+
         RestAssured.given()
-    .auth().basic(this.username, this.password)
-                .header("Content-Disposition",
-                        "attachment; filename=\"test1digesttext.txt\"","Digest", checksum)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .contentType("text/plane")
-                .log().all()
-                .when()
-                .post(host)
-                .then()
-                .log().all()
-                .statusCode(409);
+            .auth().basic(this.username, this.password)
+            .header("Content-Disposition",
+                "attachment; filename=\"test1digesttext.txt\"")
+            .header("Digest", checksum)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .contentType("text/plane")
+            .log().all()
+            .when()
+            .post(host)
+            .then()
+            .log().all()
+            .statusCode(409);
 
         ps.append("-Case End- \n").close();
     }
@@ -197,17 +190,18 @@ public class HttpPost {
         ps.append("Request:\n");
 
         RestAssured.given()
-    .auth().basic(this.username, this.password)
-                .header("Content-Disposition",
-                        "attachment; filename=\"test1digesttext.txt\"","Digest", checksum)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .contentType("text/plane")
-                .log().all()
-                .when()
-                .post(host)
-                .then()
-                .log().all()
-                .statusCode(400);
+            .auth().basic(this.username, this.password)
+            .header("Content-Disposition",
+                "attachment; filename=\"test1digesttext2.txt\"")
+            .header("Digest", checksum)
+            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+            .contentType("text/plane")
+            .log().all()
+            .when()
+            .post(host)
+            .then()
+            .log().all()
+            .statusCode(400);
 
         ps.append("\n -Case End- \n").close();
       }
