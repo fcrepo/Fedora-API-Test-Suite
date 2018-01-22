@@ -20,11 +20,10 @@
  */
 package com.ibr.fedora.testsuite;
 
-//import static org.hamcrest.Matchers.containsString;
-
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -33,6 +32,7 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 
 import io.restassured.RestAssured;
+import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -55,89 +55,93 @@ import io.restassured.response.Response;
     }
 
     /**
-     * 4.2.6
+     * 3.8.1-A
      * @param host
      */
     @Test(priority = 42)
     @Parameters({"param1"})
-    public void httpDelete(final String host) throws FileNotFoundException {
+    public void httpDeleteOptionsCheck(final String host) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        boolean errDelete = false;
-        boolean errResources = false;
-        ps.append("\n40." + tl.httpDeleteResource()[1]).append("\n");
+        ps.append("\n42." + tl.httpDeleteOptionsCheck()[1]).append("\n");
         ps.append("Request:\n");
 
-    final String resource =
+    final String resourceOp =
     RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .contentType("text/turtle")
-    .when()
-    .post(host).asString();
+           .auth().basic(this.username, this.password)
+           .contentType("text/turtle")
+           .when()
+           .post(host).asString();
 
-    final String resourceSon =
+    final String resourceSonOp =
     RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .contentType("text/turtle")
-    .when()
-    .post(resource).asString();
+           .auth().basic(this.username, this.password)
+           .contentType("text/turtle")
+           .when()
+           .post(resourceOp).asString();
 
     final String rdf01 =
     RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
-    .body("TestString.")
-    .when()
-    .post(resource).asString();
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
+           .body("TestString.")
+           .when()
+           .post(resourceOp).asString();
 
     final String rdf02 =
     RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
-    .body("TestString.")
-    .when()
-    .post(resourceSon).asString();
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
+           .body("TestString.")
+           .when()
+           .post(resourceSonOp).asString();
 
     final String rdf03 =
     RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
-    .body("TestString.")
-    .when()
-    .post(resourceSon).asString();
-        ps.append("Request method:\tDELETE\n");
-        ps.append("Request URI:\t" + host + "\n");
-        ps.append("Headers:\tAccept=*/*\n");
-        ps.append("Body:\n");
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
+           .body("TestString.")
+           .when()
+           .post(resourceSonOp).asString();
 
-     final Response response = RestAssured.given()
-    .auth().basic(this.username, this.password)
-    .when()
-    .delete(resource);
+    ps.append("Request method:\tDELETE\n");
+    ps.append("Request URI:\t" + host + "\n");
+    ps.append("Headers:\tAccept=*/*\n");
+    ps.append("Body:\n");
 
-    final int statusDelete = response.getStatusCode();
+    // Options to resourceOp
+    final Response responseOptions = RestAssured.given()
+        .auth().basic(this.username, this.password)
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        .log().all()
+        .when()
+        .options(resourceOp);
+
+    final String allowHeader = responseOptions.getHeader("Allow");
+
+    // Delete to resourceOp
+    final Response response = RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .when()
+           .delete(resourceOp);
+
+   // Print headers and status
     final Headers headers = response.getHeaders();
-    ps.append("HTTP/1.1 " + statusDelete + "\n");
+    ps.append(response.getStatusLine().toString());
+
     for (Header h : headers) {
-    ps.append(h.getName() + ": " + h.getValue() + "\n");
+         ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
     }
-    String str = "";
-    if (statusDelete == 200 || statusDelete == 202 || statusDelete == 204) {
-    str = "\n" + response.asString();
-    } else {
-    errDelete = true;
-    str = "\nThe request does not return a success status, the fedora server may not support DELETE.\n\n";
-        }
-        ps.append(str);
+
     //GET deleted resources
     final Response resResource = RestAssured.given()
     .auth().basic(this.username, this.password)
     .when()
-    .get(resource);
+    .get(resourceOp);
 
     final Response resResourceSon = RestAssured.given()
     .auth().basic(this.username, this.password)
     .when()
-    .get(resourceSon);
+          .get(resourceSonOp);
 
     final Response resRdf01 = RestAssured.given()
     .auth().basic(this.username, this.password)
@@ -153,20 +157,257 @@ import io.restassured.response.Response;
     .auth().basic(this.username, this.password)
     .when()
     .get(rdf03);
-    if (resResource.getStatusCode() != 410 || resResourceSon.getStatusCode() != 410 || resRdf01.getStatusCode() != 410
-    || resRdf02.getStatusCode() != 410 || resRdf03.getStatusCode() != 410) {
-    errResources = true;
-    }
-    if (errDelete) {
-    ps.append("\n -Case End- \n").close();
-    throw new AssertionError("\nThe request does not return a success status for the DELETE request, "
-    + "the fedora server may not support DELETE.");
-        } else if (errResources) {
-    ps.append("\n -Case End- \n").close();
-    throw new AssertionError("\nThe request failed to delete the next resources: " + resource + ", "
-    + resourceSon + ", " + rdf01 + ", " + rdf02 + ", " + rdf03 + ", the fedora server may not support DELETE.");
+
+
+    if (allowHeader.contains("OPTIONS")) {
+        if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
+            resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
+            resRdf03.getStatusCode() == 410) {
+            Assert.assertTrue(true, "OK");
+        } else {
+            Assert.assertTrue(false, "FAIL");
         }
+    } else {
+        if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
+            resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
+            resRdf03.getStatusCode() == 410) {
+                       Assert.assertTrue(false, "FAIL");
+            } else {
+                      Assert.assertTrue(true, "OK");
+                   }
+
+    }
+
         ps.append("\n -Case End- \n").close();
+    }
+    /**
+     * 3.8.1-C
+     * @param host
+     */
+    @Test(priority = 43)
+    @Parameters({"param1"})
+    public void httpDeleteStatusCheck(final String host) throws FileNotFoundException {
+           final PrintStream ps = TestSuiteGlobals.logFile();
+           ps.append("\n43." + tl.httpDeleteStatusCheck()[1]).append("\n");
+           ps.append("Request:\n");
+
+    // Create resources
+    final String rootres =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .contentType("text/turtle")
+           .when()
+           .post(host).asString();
+
+    final String resourceSon =
+    RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .contentType("text/turtle")
+            .when()
+            .post(rootres).asString();
+
+    final String nrdf01 =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
+           .body("TestString.")
+           .when()
+           .post(rootres).asString();
+
+    final String nrdf02 =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
+           .body("TestString.")
+           .when()
+           .post(resourceSon).asString();
+
+    final String nrdf03 =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
+           .body("TestString.")
+           .when()
+           .post(resourceSon).asString();
+
+    ps.append("Request method:\tDELETE\n");
+    ps.append("Request URI:\t" + host + "\n");
+    ps.append("Headers:\tAccept=*/*\n");
+    ps.append("Body:\n");
+
+    // Delete root folder
+    final Response response = RestAssured.given()
+          .auth().basic(this.username, this.password)
+          .when()
+          .delete(rootres);
+
+    // Print headers and status
+    final int statusDelete = response.getStatusCode();
+    final Headers headers = response.getHeaders();
+    ps.append(response.getStatusLine().toString());
+
+    for (Header h : headers) {
+         ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+    }
+
+    //GET deleted resources
+    final Response resResource = RestAssured.given()
+          .auth().basic(this.username, this.password)
+          .when()
+          .get(rootres);
+
+    final Response resResourceSon = RestAssured.given()
+          .auth().basic(this.username, this.password)
+          .when()
+          .get(resourceSon);
+
+    final Response resRdf01 = RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .when()
+           .get(nrdf01);
+
+    final Response resRdf02 = RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .when()
+           .get(nrdf02);
+
+    final Response resRdf03 = RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .when()
+           .get(nrdf03);
+
+    if (statusDelete == 200 || statusDelete == 204) {
+        if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
+            resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
+            resRdf03.getStatusCode() == 410) {
+                     Assert.assertTrue(true, "OK");
+         } else {
+           Assert.assertTrue(false, "FAIL");
+         }
+    } else {
+           if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
+               resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
+               resRdf03.getStatusCode() == 410) {
+                      Assert.assertTrue(false, "FAIL");
+           } else {
+                     Assert.assertTrue(true, "OK");
+                  }
+           }
+    }
+    /**
+     * 3.8.1-D
+     * @param host
+     */
+    @Test(priority = 44)
+    @Parameters({"param1"})
+    public void httpDeleteStatusCheckTwo(final String host) throws FileNotFoundException {
+           final PrintStream ps = TestSuiteGlobals.logFile();
+           ps.append("\n44." + tl.httpDeleteStatusCheckTwo()[1]).append("\n");
+           ps.append("Request:\n");
+
+    // Create resources
+    final String rootres =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .contentType("text/turtle")
+           .when()
+           .post(host).asString();
+
+    final String resourceSon =
+    RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .contentType("text/turtle")
+            .when()
+            .post(rootres).asString();
+
+    final String nrdf01 =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
+           .body("TestString.")
+           .when()
+           .post(rootres).asString();
+
+    final String nrdf02 =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
+           .body("TestString.")
+           .when()
+           .post(resourceSon).asString();
+
+    final String nrdf03 =
+    RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
+           .body("TestString.")
+           .when()
+           .post(resourceSon).asString();
+
+    ps.append("Request method:\tDELETE\n");
+    ps.append("Request URI:\t" + host + "\n");
+    ps.append("Headers:\tAccept=*/*\n");
+    ps.append("Body:\n");
+
+    // Delete root folder
+    final Response response = RestAssured.given()
+          .auth().basic(this.username, this.password)
+          .when()
+          .delete(rootres);
+
+    // Print headers and status
+    final int statusDelete = response.getStatusCode();
+    final Headers headers = response.getHeaders();
+    ps.append(response.getStatusLine().toString());
+
+    for (Header h : headers) {
+        ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+    }
+
+    //GET deleted resources
+    final Response resResource = RestAssured.given()
+          .auth().basic(this.username, this.password)
+          .when()
+          .get(rootres);
+
+    final Response resResourceSon = RestAssured.given()
+          .auth().basic(this.username, this.password)
+          .when()
+          .get(resourceSon);
+
+    final Response resRdf01 = RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .when()
+           .get(nrdf01);
+
+    final Response resRdf02 = RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .when()
+           .get(nrdf02);
+
+    final Response resRdf03 = RestAssured.given()
+           .auth().basic(this.username, this.password)
+           .when()
+           .get(nrdf03);
+
+    final String statusdeletestring = String.valueOf(statusDelete);
+    if (statusdeletestring.charAt(0) == '2') {
+        if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
+            resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
+            resRdf03.getStatusCode() == 410) {
+                     Assert.assertTrue(true, "OK");
+         } else {
+           Assert.assertTrue(false, "FAIL");
+         }
+    } else {
+        if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
+            resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
+            resRdf03.getStatusCode() == 410) {
+                Assert.assertTrue(false, "FAIL");
+           } else {
+               Assert.assertTrue(true, "OK");
+           }
+        }
     }
 
 }
