@@ -722,7 +722,7 @@ public TestsLabels() { }
      */
     public String[] headCheckContentLocationHeader() {
     return new String[] {
-    "3.9-G - ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
+    "3.9-F - ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
     "GET and HEAD responses for any external LDP-NR should include a Content-Location header with a URI  "
     + "representation of the location of the external content if the Fedora server is proxying the content.",
     "https://fcrepo.github.io/fcrepo-specification/#external-content",
@@ -820,7 +820,20 @@ public TestsLabels() { }
      return new String[] {
      "3.9-H - ExternalBinaryContent-respondWantDigestTwoSupportedExternalBinaryContent",
      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-     + "Want-Digest header defined in [RFC3230].",
+     + "Want-Digest header defined in [RFC3230]. With two supported digests.",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MUST"
+     };
+     }
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] respondWantDigestTwoSupportedExternalBinaryContentHead() {
+     return new String[] {
+     "3.9-H - ExternalBinaryContent-respondWantDigestTwoSupportedExternalBinaryContent",
+     "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+     + "Want-Digest header defined in [RFC3230]. With two supported digests.",
      "https://fcrepo.github.io/fcrepo-specification/#external-content",
      "MUST"
      };
@@ -831,9 +844,9 @@ public TestsLabels() { }
       */
      public String[] respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent() {
      return new String[] {
-     "3.9-H - ExternalBinaryContent-respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent",
+     "3.9-I - ExternalBinaryContent-respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent",
      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-     + "Want-Digest header defined in [RFC3230].",
+     + "Want-Digest header defined in [RFC3230]. Two digests with different weights, q values.",
      "https://fcrepo.github.io/fcrepo-specification/#external-content",
      "MUST"
      };
@@ -844,9 +857,9 @@ public TestsLabels() { }
       */
      public String[] respondWantDigestTwoSupportedQvalueZeroExternalBinaryContent() {
      return new String[] {
-     "3.9-H - ExternalBinaryContent-respondWantDigestTwoSupportedQvalueZeroExternalBinaryContent",
+     "3.9-I - ExternalBinaryContent-respondWantDigestTwoSupportedQvalueZeroExternalBinaryContent",
      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-     + "Want-Digest header defined in [RFC3230].",
+     + "Want-Digest header defined in [RFC3230]. Two digests with different weights, q values.",
      "https://fcrepo.github.io/fcrepo-specification/#external-content",
      "MUST"
      };
@@ -857,9 +870,9 @@ public TestsLabels() { }
       */
      public String[] respondWantDigestNonSupportedExternalBinaryContent() {
      return new String[] {
-     "3.9-H - ExternalBinaryContent-respondWantDigestNonSupportedExternalBinaryContent",
+     "3.9-J - ExternalBinaryContent-respondWantDigestNonSupportedExternalBinaryContent",
      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-     + "Want-Digest header defined in [RFC3230].",
+     + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
      "https://fcrepo.github.io/fcrepo-specification/#external-content",
      "MUST"
      };
@@ -870,7 +883,20 @@ public TestsLabels() { }
       */
      public String[] respondWantDigestExternalBinaryContent() {
      return new String[] {
-     "3.9-H - ExternalBinaryContent-respondWantDigestExternalBinaryContent",
+     "3.9-G - ExternalBinaryContent-respondWantDigestExternalBinaryContent",
+     "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+     + "Want-Digest header defined in [RFC3230].",
+     "https://fcrepo.github.io/fcrepo-specification/#external-content",
+     "MUST"
+     };
+     }
+     /**
+      * Basic information for described test
+      * @return String[]
+      */
+     public String[] respondWantDigestExternalBinaryContentHead() {
+     return new String[] {
+     "3.9-G - ExternalBinaryContent-respondWantDigestExternalBinaryContent",
      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
      + "Want-Digest header defined in [RFC3230].",
      "https://fcrepo.github.io/fcrepo-specification/#external-content",
