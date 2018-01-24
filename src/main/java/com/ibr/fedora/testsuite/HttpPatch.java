@@ -84,11 +84,11 @@ public class HttpPatch {
 
     /**
      * 3.7-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 34)
     @Parameters({"param1"})
-    public void supportPatch(final String host) throws IOException {
+    public void supportPatch(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n34." + tl.supportPatch()[1]).append('\n');
         ps.append("Request:\n");
@@ -97,7 +97,7 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -117,11 +117,11 @@ public class HttpPatch {
     }
     /**
      * 3.7-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 35)
     @Parameters({"param1"})
-    public void ldpPatchContentTypeSupport(final String host) throws IOException {
+    public void ldpPatchContentTypeSupport(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n35." + tl.ldpPatchContentTypeSupport()[1]).append('\n');
         ps.append("Request:\n");
@@ -131,7 +131,7 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -151,11 +151,11 @@ public class HttpPatch {
     }
     /**
      * 3.7-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 36)
     @Parameters({"param1"})
-    public void serverManagedPropertiesModification(final String host) throws IOException {
+    public void serverManagedPropertiesModification(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n36." + tl.serverManagedPropertiesModification()[1]).append('\n');
         ps.append("Request:\n");
@@ -164,7 +164,7 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -184,11 +184,11 @@ public class HttpPatch {
     }
     /**
      * 3.7-D
-     * @param host
+     * @param uri
      */
     @Test(priority = 37)
     @Parameters({"param1"})
-    public void statementNotPersistedResponseBody(final String host) throws IOException {
+    public void statementNotPersistedResponseBody(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n37." + tl.statementNotPersistedResponseBody()[1]).append('\n');
         ps.append("Request:\n");
@@ -197,7 +197,7 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -217,11 +217,11 @@ public class HttpPatch {
     }
     /**
      * 3.7-E
-     * @param host
+     * @param uri
      */
     @Test(priority = 38)
     @Parameters({"param1"})
-    public void statementNotPersistedConstrainedBy(final String host) throws IOException {
+    public void statementNotPersistedConstrainedBy(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n38." + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
         ps.append("Request:\n");
@@ -230,7 +230,7 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -250,11 +250,11 @@ public class HttpPatch {
     }
     /**
      * 3.7-F
-     * @param host
+     * @param uri
      */
     @Test(priority = 39)
     @Parameters({"param1"})
-    public void successfulPatchStatusCode(final String host) throws IOException {
+    public void successfulPatchStatusCode(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n39." + tl.successfulPatchStatusCode()[1]).append('\n');
         ps.append("Request:\n");
@@ -263,10 +263,10 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         ps.append("Request method:\tPATCH\n");
-        ps.append("Request URI:\t" + host);
+        ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=application/sparql-update; charset=ISO-8859-1\n");
         ps.append("Body:\n");
@@ -309,11 +309,11 @@ public class HttpPatch {
     }
     /**
      * 3.7.1
-     * @param host
+     * @param uri
      */
     @Test(priority = 40)
     @Parameters({"param1"})
-    public void disallowPatchContainmentTriples(final String host) throws FileNotFoundException {
+    public void disallowPatchContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n40." + tl.disallowPatchContainmentTriples()[1]).append('\n');
         ps.append("Request:\n");
@@ -322,7 +322,7 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -349,11 +349,11 @@ public class HttpPatch {
 
     /**
      * 3.7.2
-     * @param host
+     * @param uri
      */
     @Test(priority = 41)
     @Parameters({"param1"})
-    public void disallowChangeResourceType(final String host) throws IOException {
+    public void disallowChangeResourceType(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n41." + tl.disallowChangeResourceType()[1]).append('\n');
         ps.append("Request:\n");
@@ -362,7 +362,7 @@ public class HttpPatch {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)

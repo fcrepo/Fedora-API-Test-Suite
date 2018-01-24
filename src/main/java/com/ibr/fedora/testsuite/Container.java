@@ -73,11 +73,11 @@ public class Container {
 
     /**
      * 3.1.1-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 1)
     @Parameters({"param1"})
-    public void createLDPC(final String host) throws FileNotFoundException {
+    public void createLDPC(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n1." + tl.createLDPC()[1]).append("\n");
         ps.append("Request:\n");
@@ -87,7 +87,7 @@ public class Container {
         .contentType("text/turtle")
         .log().all()
         .when()
-        .post(host)
+        .post(uri)
         .then()
         .log().all()
         .statusCode(201);
@@ -95,11 +95,11 @@ public class Container {
         }
     /**
      * 3.1.1-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 2)
     @Parameters({"param1"})
-    public void ldpcContainmentTriples(final String host) throws FileNotFoundException {
+    public void ldpcContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n2." + tl.ldpcContainmentTriples()[1]).append("\n");
         ps.append("Request:\n");
@@ -110,7 +110,7 @@ public class Container {
         .header("slug", "pythagoras-3.1.1-B")
         .when()
         .body(pythagorasContainer)
-        .post(host).asString();
+        .post(uri).asString();
 
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -165,11 +165,11 @@ public class Container {
         }
     /**
      * 3.1.1-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 3)
     @Parameters({"param1"})
-    public void ldpcMembershipTriples(final String host) throws FileNotFoundException {
+    public void ldpcMembershipTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n3." + tl.ldpcMembershipTriples()[1]).append("\n");
         ps.append("Request:\n");
@@ -180,7 +180,7 @@ public class Container {
         .header("slug", "pythagoras-3.1.1-C")
         .when()
         .body(pythagorasContainer)
-        .post(host).asString();
+        .post(uri).asString();
 
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -232,11 +232,11 @@ public class Container {
         }
     /**
      * 3.1.1-D
-     * @param host
+     * @param uri
      */
     @Test(priority = 4)
     @Parameters({"param1"})
-    public void ldpcMinimalContainerTriples(final String host) throws FileNotFoundException {
+    public void ldpcMinimalContainerTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n4." + tl.ldpcMinimalContainerTriples()[1]).append("\n");
         ps.append("Request:\n");
@@ -247,7 +247,7 @@ public class Container {
         .header("slug", "pythagoras-3.1.1-D")
         .when()
         .body(pythagorasContainer)
-        .post(host).asString();
+        .post(uri).asString();
 
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)

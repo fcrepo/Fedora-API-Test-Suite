@@ -53,11 +53,11 @@ public class HttpGet {
 
     /**
      * 3.2.1-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 7)
     @Parameters({"param1"})
-    public void additionalValuesForPreferHeader(final String host) throws FileNotFoundException {
+    public void additionalValuesForPreferHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n7." + tl.additionalValuesForPreferHeader()[1]).append("\n");
         ps.append("Request:\n");
@@ -66,7 +66,7 @@ public class HttpGet {
     .auth().basic(this.username, this.password)
                 .contentType("text/turtle")
                 .when()
-                .post(host).asString();
+                .post(uri).asString();
         RestAssured.given()
     .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -85,11 +85,11 @@ public class HttpGet {
 
     /**
      * 3.2.2-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 8)
     @Parameters({"param1"})
-    public void responsePreferenceAppliedHeader(final String host) throws FileNotFoundException {
+    public void responsePreferenceAppliedHeader(final String uri) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n8." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
     ps.append("Request:\n");
@@ -98,7 +98,7 @@ public class HttpGet {
     .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
     RestAssured.given()
     .auth().basic(this.username, this.password)
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -114,11 +114,11 @@ public class HttpGet {
       }
     /**
      * 3.2.2-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 9)
     @Parameters({"param1"})
-    public void responseDescribesHeader(final String host) throws FileNotFoundException {
+    public void responseDescribesHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n9." + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
         ps.append("Request:\n");
@@ -127,7 +127,7 @@ public class HttpGet {
     .auth().basic(this.username, this.password)
                 .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
                 .when()
-                .post(host).asString();
+                .post(uri).asString();
         RestAssured.given()
     .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -142,11 +142,11 @@ public class HttpGet {
     }
     /**
      * 3.2.3-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 10)
     @Parameters({"param1"})
-    public void respondWantDigest(final String host) throws FileNotFoundException {
+    public void respondWantDigest(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n10." + tl.respondWantDigest()[1]).append('\n');
@@ -158,7 +158,7 @@ public class HttpGet {
                     .header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
                     .body("TestString.")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
         RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -177,11 +177,11 @@ public class HttpGet {
 
     /**
      * 3.2.3-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 11)
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupported(final String host) throws FileNotFoundException {
+    public void respondWantDigestTwoSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha1";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n11." + tl.respondWantDigestTwoSupported()[1]).append('\n');
@@ -193,7 +193,7 @@ public class HttpGet {
                     .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
                     .body("TestString.")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
         RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -212,11 +212,11 @@ public class HttpGet {
 
     /**
      * 3.2.3-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 12)
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZero(final String host) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha1;q=1";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n12." + tl.respondWantDigestTwoSupportedQvalueNonZero()[1]).append('\n');
@@ -228,7 +228,7 @@ public class HttpGet {
                     .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero.txt\"")
                     .body("TestString.")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
         RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -247,11 +247,11 @@ public class HttpGet {
 
     /**
      * 3.2.3-D
-     * @param host
+     * @param uri
      */
     @Test(priority = 13)
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueZero(final String host) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedQvalueZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha1;q=0";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n13." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
@@ -263,7 +263,7 @@ public class HttpGet {
                     .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
                     .body("TestString.")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
         RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -282,11 +282,11 @@ public class HttpGet {
 
     /**
      * 3.2.3-E
-     * @param host
+     * @param uri
      */
     @Test(priority = 14)
     @Parameters({"param1"})
-    public void respondWantDigestNonSupported(final String host) throws FileNotFoundException {
+    public void respondWantDigestNonSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n14." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
@@ -298,7 +298,7 @@ public class HttpGet {
                     .header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
                     .body("TestString.")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
         RestAssured.given()
         .auth().basic(this.username, this.password)

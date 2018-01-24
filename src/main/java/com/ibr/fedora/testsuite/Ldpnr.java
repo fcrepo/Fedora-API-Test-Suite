@@ -53,11 +53,11 @@ public class Ldpnr {
 
     /**
      * 3.1.2.-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 5)
     @Parameters({"param1"})
-    public void ldpnrCreationLinkType(final String host) throws FileNotFoundException {
+    public void ldpnrCreationLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n5." + tl.ldpnrCreationLinkType()[1]).append("\n");
         ps.append("Request:\n");
@@ -67,10 +67,10 @@ public class Ldpnr {
         .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
         .header("Link", "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\"")
         .when()
-        .post(host);
+        .post(uri);
 
         ps.append("Request method:\tPOST\n");
-        ps.append("Request URI:\t" + host + "\n");
+        ps.append("Request URI:\t" + uri + "\n");
 
         ps.append("Body:\n");
         ps.append("HTTP/1.1 " + res.getStatusCode() + "\n");
@@ -118,11 +118,11 @@ public class Ldpnr {
 
     /**
      * 3.1.2.-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 6)
     @Parameters({"param1"})
-    public void ldpnrCreationWrongLinkType(final String host) throws FileNotFoundException {
+    public void ldpnrCreationWrongLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n6." + tl.ldpnrCreationWrongLinkType()[1]).append("\n");
         ps.append("Request:\n");
@@ -132,10 +132,10 @@ public class Ldpnr {
         .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
         .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
         .when()
-        .post(host);
+        .post(uri);
 
         ps.append("Request method:\tPOST\n");
-        ps.append("Request URI:\t" + host + "\n");
+        ps.append("Request URI:\t" + uri + "\n");
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
