@@ -67,11 +67,11 @@ public String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#
 " WHERE { }";
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 6)
 @Parameters({"param1"})
-public void supportPatch(final String host) throws IOException {
+public void supportPatch(final String uri) throws IOException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n6." + tl.supportPatch()[1]).append('\n');
     ps.append("Request:\n");
@@ -80,7 +80,7 @@ public void supportPatch(final String host) throws IOException {
             RestAssured.given()
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     RestAssured.given()
             .contentType("application/sparql-update")
@@ -99,11 +99,11 @@ public void supportPatch(final String host) throws IOException {
 }
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 7)
 @Parameters({"param1"})
-public void ldpPatchContentTypeSupport(final String host) throws IOException {
+public void ldpPatchContentTypeSupport(final String uri) throws IOException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n7." + tl.ldpPatchContentTypeSupport()[1]).append('\n');
     ps.append("Request:\n");
@@ -112,7 +112,7 @@ public void ldpPatchContentTypeSupport(final String host) throws IOException {
             RestAssured.given()
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     RestAssured.given()
             .contentType("text/ldpatch")
@@ -131,11 +131,11 @@ public void ldpPatchContentTypeSupport(final String host) throws IOException {
 }
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 8)
 @Parameters({"param1"})
-public void serverManagedPropertiesModification(final String host) throws IOException {
+public void serverManagedPropertiesModification(final String uri) throws IOException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n8." + tl.serverManagedPropertiesModification()[1]).append('\n');
     ps.append("Request:\n");
@@ -144,7 +144,7 @@ public void serverManagedPropertiesModification(final String host) throws IOExce
             RestAssured.given()
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     RestAssured.given()
             .contentType("application/sparql-update")
@@ -163,11 +163,11 @@ public void serverManagedPropertiesModification(final String host) throws IOExce
 }
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 9)
 @Parameters({"param1"})
-public void statementNotPersistedResponseBody(final String host) throws IOException {
+public void statementNotPersistedResponseBody(final String uri) throws IOException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n9." + tl.statementNotPersistedResponseBody()[1]).append('\n');
     ps.append("Request:\n");
@@ -176,7 +176,7 @@ public void statementNotPersistedResponseBody(final String host) throws IOExcept
             RestAssured.given()
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     RestAssured.given()
             .contentType("application/sparql-update")
@@ -195,11 +195,11 @@ public void statementNotPersistedResponseBody(final String host) throws IOExcept
 }
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 10)
 @Parameters({"param1"})
-public void statementNotPersistedConstrainedBy(final String host) throws IOException {
+public void statementNotPersistedConstrainedBy(final String uri) throws IOException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n10." + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
     ps.append("Request:\n");
@@ -208,7 +208,7 @@ public void statementNotPersistedConstrainedBy(final String host) throws IOExcep
             RestAssured.given()
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     RestAssured.given()
             .contentType("application/sparql-update")
@@ -227,11 +227,11 @@ public void statementNotPersistedConstrainedBy(final String host) throws IOExcep
 }
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 11)
 @Parameters({"param1"})
-public void successfulPatchStatusCode(final String host) throws IOException {
+public void successfulPatchStatusCode(final String uri) throws IOException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n11." + tl.successfulPatchStatusCode()[1]).append('\n');
     ps.append("Request:\n");
@@ -240,10 +240,10 @@ public void successfulPatchStatusCode(final String host) throws IOException {
             RestAssured.given()
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     ps.append("Request method:\tPATCH\n");
-    ps.append("Request URI:\t" + host);
+    ps.append("Request URI:\t" + uri);
     ps.append("Headers:\tAccept=*/*\n");
     ps.append("\t\t\t\tContent-Type=application/sparql-update; charset=ISO-8859-1\n");
     ps.append("Body:\n");
@@ -284,11 +284,11 @@ public void successfulPatchStatusCode(final String host) throws IOException {
 }
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 12)
 @Parameters({"param1"})
-public void disallowPatchContainmentTriples(final String host) throws FileNotFoundException {
+public void disallowPatchContainmentTriples(final String uri) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n12." + tl.disallowPatchContainmentTriples()[1]).append('\n');
     ps.append("Request:\n");
@@ -298,7 +298,7 @@ public void disallowPatchContainmentTriples(final String host) throws FileNotFou
 
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     RestAssured.given()
             .contentType("text/turtle")
@@ -322,11 +322,11 @@ public void disallowPatchContainmentTriples(final String host) throws FileNotFou
 }
 
 /**
- * @param host
+ * @param uri
  */
 @Test(priority = 13)
 @Parameters({"param1"})
-public void disallowChangeResourceType(final String host) throws IOException {
+public void disallowChangeResourceType(final String uri) throws IOException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n13." + tl.disallowChangeResourceType()[1]).append('\n');
     ps.append("Request:\n");
@@ -335,7 +335,7 @@ public void disallowChangeResourceType(final String host) throws IOException {
             RestAssured.given()
                     .contentType("text/turtle")
                     .when()
-                    .post(host).asString();
+                    .post(uri).asString();
 
     RestAssured.given()
             .contentType("application/sparql-update")

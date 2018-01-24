@@ -56,11 +56,11 @@ import io.restassured.response.Response;
 
     /**
      * 3.8.1-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 42)
     @Parameters({"param1"})
-    public void httpDeleteOptionsCheck(final String host) throws FileNotFoundException {
+    public void httpDeleteOptionsCheck(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n42." + tl.httpDeleteOptionsCheck()[1]).append("\n");
         ps.append("Request:\n");
@@ -70,7 +70,7 @@ import io.restassured.response.Response;
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
            .when()
-           .post(host).asString();
+           .post(uri).asString();
 
     final String resourceSonOp =
     RestAssured.given()
@@ -104,7 +104,7 @@ import io.restassured.response.Response;
            .post(resourceSonOp).asString();
 
     ps.append("Request method:\tDELETE\n");
-    ps.append("Request URI:\t" + host + "\n");
+    ps.append("Request URI:\t" + uri + "\n");
     ps.append("Headers:\tAccept=*/*\n");
     ps.append("Body:\n");
 
@@ -182,11 +182,11 @@ import io.restassured.response.Response;
     }
     /**
      * 3.8.1-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 43)
     @Parameters({"param1"})
-    public void httpDeleteStatusCheck(final String host) throws FileNotFoundException {
+    public void httpDeleteStatusCheck(final String uri) throws FileNotFoundException {
            final PrintStream ps = TestSuiteGlobals.logFile();
            ps.append("\n43." + tl.httpDeleteStatusCheck()[1]).append("\n");
            ps.append("Request:\n");
@@ -197,7 +197,7 @@ import io.restassured.response.Response;
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
            .when()
-           .post(host).asString();
+           .post(uri).asString();
 
     final String resourceSon =
     RestAssured.given()
@@ -231,7 +231,7 @@ import io.restassured.response.Response;
            .post(resourceSon).asString();
 
     ps.append("Request method:\tDELETE\n");
-    ps.append("Request URI:\t" + host + "\n");
+    ps.append("Request URI:\t" + uri + "\n");
     ps.append("Headers:\tAccept=*/*\n");
     ps.append("Body:\n");
 
@@ -296,11 +296,11 @@ import io.restassured.response.Response;
     }
     /**
      * 3.8.1-D
-     * @param host
+     * @param uri
      */
     @Test(priority = 44)
     @Parameters({"param1"})
-    public void httpDeleteStatusCheckTwo(final String host) throws FileNotFoundException {
+    public void httpDeleteStatusCheckTwo(final String uri) throws FileNotFoundException {
            final PrintStream ps = TestSuiteGlobals.logFile();
            ps.append("\n44." + tl.httpDeleteStatusCheckTwo()[1]).append("\n");
            ps.append("Request:\n");
@@ -311,7 +311,7 @@ import io.restassured.response.Response;
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
            .when()
-           .post(host).asString();
+           .post(uri).asString();
 
     final String resourceSon =
     RestAssured.given()
@@ -345,7 +345,7 @@ import io.restassured.response.Response;
            .post(resourceSon).asString();
 
     ps.append("Request method:\tDELETE\n");
-    ps.append("Request URI:\t" + host + "\n");
+    ps.append("Request URI:\t" + uri + "\n");
     ps.append("Headers:\tAccept=*/*\n");
     ps.append("Body:\n");
 

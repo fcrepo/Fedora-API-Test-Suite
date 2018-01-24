@@ -56,11 +56,11 @@ public class HttpPost {
 
     /**
      * 3.5-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 20)
     @Parameters({"param1"})
-    public void httpPost(final String host) throws FileNotFoundException {
+    public void httpPost(final String uri) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n20." + tl.httpPost()[1]).append("\n");
     ps.append("Request:\n");
@@ -70,7 +70,7 @@ public class HttpPost {
             .contentType("text/turtle")
             .log().all()
             .when()
-            .post(host)
+            .post(uri)
             .then()
             .log().all()
             .statusCode(201);
@@ -79,11 +79,11 @@ public class HttpPost {
 
     /**
      * 3.5-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 21)
     @Parameters({"param1"})
-    public void constrainedByResponseHeader(final String host) throws FileNotFoundException {
+    public void constrainedByResponseHeader(final String uri) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n21." + tl.constrainedByResponseHeader()[1]).append("\n");
     ps.append("Request:\n");
@@ -94,7 +94,7 @@ public class HttpPost {
             .contentType("text/turtle")
             .log().all()
             .when()
-            .post(host)
+            .post(uri)
             .then()
             .log().all()
             .statusCode(201).header("Link", containsString("constrainedBy"));
@@ -103,11 +103,11 @@ public class HttpPost {
 
     /**
      * 3.5-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 22)
     @Parameters({"param1"})
-    public void postNonRDFSource(final String host) throws FileNotFoundException {
+    public void postNonRDFSource(final String uri) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n22." + tl.postNonRDFSource()[1]).append('\n');
     ps.append("Request:\n");
@@ -117,7 +117,7 @@ public class HttpPost {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .post(host)
+            .post(uri)
             .then()
             .log().all()
             .statusCode(201);
@@ -126,11 +126,11 @@ public class HttpPost {
 
     /**
      * 3.5-D
-     * @param host
+     * @param uri
      */
     @Test(priority = 23)
     @Parameters({"param1"})
-    public void postResourceAndCheckAssociatedResource(final String host) throws FileNotFoundException {
+    public void postResourceAndCheckAssociatedResource(final String uri) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n23." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
     ps.append("Request:\n");
@@ -140,7 +140,7 @@ public class HttpPost {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .post(host)
+            .post(uri)
             .then()
             .log().all()
             .statusCode(201).header("Link", containsString("describedby"));
@@ -150,11 +150,11 @@ public class HttpPost {
 
     /**
      * 3.5.1-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 24)
     @Parameters({"param1"})
-    public void postDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
+    public void postDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "md5=1234";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n24." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
@@ -169,7 +169,7 @@ public class HttpPost {
             .contentType("text/plane")
             .log().all()
             .when()
-            .post(host)
+            .post(uri)
             .then()
             .log().all()
             .statusCode(409);
@@ -179,11 +179,11 @@ public class HttpPost {
 
     /**
      * 3.5.1-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 25)
     @Parameters({"param1"})
-    public void postDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
+    public void postDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n25." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
@@ -198,7 +198,7 @@ public class HttpPost {
             .contentType("text/plane")
             .log().all()
             .when()
-            .post(host)
+            .post(uri)
             .then()
             .log().all()
             .statusCode(400);

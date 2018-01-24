@@ -54,11 +54,11 @@ public class HttpOptions {
 
     /**
      * 3.4-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 18)
     @Parameters({"param1"})
-    public void httpOptionsSupport(final String host) throws FileNotFoundException {
+    public void httpOptionsSupport(final String uri) throws FileNotFoundException {
          final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n18." + tl.httpOptionsSupport()[1]).append("\n");
     ps.append("Request:\n");
@@ -68,7 +68,7 @@ public class HttpOptions {
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
-           .options(host)
+           .options(uri)
            .then()
            .log().all()
            .statusCode(200);
@@ -78,11 +78,11 @@ public class HttpOptions {
 
     /**
      * 3.4-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 19)
     @Parameters({"param1"})
-    public void httpOptionsSupportAllow(final String host) throws FileNotFoundException {
+    public void httpOptionsSupportAllow(final String uri) throws FileNotFoundException {
     final PrintStream ps = TestSuiteGlobals.logFile();
     ps.append("\n19." + tl.httpOptionsSupportAllow()[1]).append("\n");
     ps.append("Request:\n");
@@ -92,7 +92,7 @@ public class HttpOptions {
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
-           .options(host)
+           .options(uri)
            .then()
            .log().all()
            .statusCode(200).header("Allow", containsString("GET"));

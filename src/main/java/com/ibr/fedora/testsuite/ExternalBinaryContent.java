@@ -58,11 +58,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.8-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 45)
     @Parameters({"param1"})
-    public void postCreateExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void postCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n45." + tl.postCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
@@ -73,7 +73,7 @@ public class ExternalBinaryContent {
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
-                .post(host)
+                .post(uri)
                 .then()
                 .log().all()
                 .statusCode(201);
@@ -83,11 +83,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.8-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 46)
     @Parameters({"param1"})
-    public void putCreateExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void putCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n46." + tl.putCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
@@ -98,7 +98,7 @@ public class ExternalBinaryContent {
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
-                .put(host)
+                .put(uri)
                 .then()
                 .log().all()
                 .statusCode(201);
@@ -108,11 +108,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.8-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 47)
     @Parameters({"param1"})
-    public void putUpdateExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void putUpdateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n47." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
@@ -122,7 +122,7 @@ public class ExternalBinaryContent {
     .auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary + "\"")
                         .when()
-                        .post(host).asString();
+                        .post(uri).asString();
         RestAssured.given()
     .auth().basic(this.username, this.password)
                 .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
@@ -139,11 +139,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.8-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 48)
     @Parameters({"param1"})
-    public void postCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
+    public void postCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n48." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
@@ -155,7 +155,7 @@ public class ExternalBinaryContent {
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
-                .post(host)
+                .post(uri)
                 .then()
                 .log().all()
                 .statusCode(415);
@@ -165,11 +165,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.8-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 49)
     @Parameters({"param1"})
-    public void putCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
+    public void putCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n49." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
@@ -180,7 +180,7 @@ public class ExternalBinaryContent {
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
-                .put(host)
+                .put(uri)
                 .then()
                 .log().all()
                 .statusCode(415);
@@ -190,11 +190,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.8-E
-     * @param host
+     * @param uri
      */
     @Test(priority = 50)
     @Parameters({"param1"})
-    public void getCheckContentLocationHeader(final String host) throws FileNotFoundException {
+    public void getCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n50." + tl.getCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
@@ -204,10 +204,10 @@ public class ExternalBinaryContent {
     .auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                         .when()
-                        .post(host).asString();
+                        .post(uri).asString();
 
         ps.append("Request method:\tGET\n");
-        ps.append("Request URI:\t" + host);
+        ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + binary2 + "\"\n\n");
 
@@ -240,11 +240,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.8-E
-     * @param host
+     * @param uri
      */
     @Test(priority = 51)
     @Parameters({"param1"})
-    public void headCheckContentLocationHeader(final String host) throws FileNotFoundException {
+    public void headCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n51." + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
@@ -254,10 +254,10 @@ public class ExternalBinaryContent {
     .auth().basic(this.username, this.password)
                         .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + binary2 + "\"")
                         .when()
-                        .post(host).asString();
+                        .post(uri).asString();
 
         ps.append("Request method:\tHEAD\n");
-        ps.append("Request URI:\t" + host);
+        ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + binary2 + "\"\n\n");
 

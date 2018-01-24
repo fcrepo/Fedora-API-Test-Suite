@@ -50,21 +50,21 @@ public abstract class TestSuiteGlobals {
     "insertedContentRelation"};
     /**
      * Get or create the default container for all tests resources to be created
-     * @param host
+     * @param baseurl
      * @return containerUrl
      */
-    public static String containerTestSuite(final String host, final String user, final String pass) {
+    public static String containerTestSuite(final String baseurl, final String user, final String pass) {
         final String name = outputName + "container" + today();
-        String containerUrl = host + "/" + name;
+        String containerUrl = baseurl + "/" + name;
         containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
         final Response res = RestAssured.given()
         .auth().basic(user, pass)
         .contentType("text/turtle")
-        .header("slug", name).when().post(host);
+        .header("slug", name).when().post(baseurl);
         if (res.getStatusCode() == 201) {
         return containerUrl;
         } else {
-        return host;
+        return baseurl;
       }
     }
 
