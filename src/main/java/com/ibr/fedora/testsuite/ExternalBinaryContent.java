@@ -64,7 +64,7 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-A PostCreate
-     * @param host
+     * @param uri
      */
     @Test(priority = 45)
     @Parameters({"param1"})
@@ -77,7 +77,7 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentpostcreate.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -85,7 +85,7 @@ public class ExternalBinaryContent {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .post(host)
+            .post(uri)
             .then()
             .log().all()
             .statusCode(201);
@@ -95,7 +95,7 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-A PutCreate
-     * @param host
+     * @param uri
      */
     @Test(priority = 46)
     @Parameters({"param1"})
@@ -108,7 +108,7 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentputcreate.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -116,7 +116,7 @@ public class ExternalBinaryContent {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(host)
+            .put(uri)
             .then()
             .log().all()
             .statusCode(201);
@@ -126,7 +126,7 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-A PutUpdate
-     * @param host
+     * @param uri
      */
     @Test(priority = 47)
     @Parameters({"param1"})
@@ -140,20 +140,20 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
             .body("TestString1.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource2 = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
             .body("TestString2.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource1 + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -170,11 +170,11 @@ public class ExternalBinaryContent {
     }
     /**
      * 3.9-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 48)
     @Parameters({"param1"})
-    public void createExternalBinaryContentCheckAccesType(final String host) throws FileNotFoundException {
+    public void createExternalBinaryContentCheckAccesType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n48." + tl.createExternalBinaryContentCheckAccesType()[1]).append('\n');
         ps.append("Request:\n");
@@ -183,7 +183,7 @@ public class ExternalBinaryContent {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -199,11 +199,11 @@ public class ExternalBinaryContent {
     }
     /**
      * 3.9-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 49)
     @Parameters({"param1"})
-    public void postCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
+    public void postCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n49." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
@@ -215,7 +215,7 @@ public class ExternalBinaryContent {
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
-           .post(host)
+           .post(uri)
            .then()
            .log().all()
            .statusCode(415);
@@ -225,7 +225,7 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 50)
     @Parameters({"param1"})
@@ -240,7 +240,7 @@ public class ExternalBinaryContent {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(host)
+            .put(uri)
             .then()
             .log().all()
             .statusCode(415);
@@ -249,11 +249,11 @@ public class ExternalBinaryContent {
     }
     /**
      * 3.9-D
-     * @param host
+     * @param uri
      */
     @Test(priority = 51)
     @Parameters({"param1"})
-    public void checkUnsupportedMediaType(final String host) throws FileNotFoundException {
+    public void checkUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n51." + tl.checkUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
@@ -263,7 +263,7 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"checkUnsupportedMediaType.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
        final Response res = RestAssured.given()
            .auth().basic(this.username, this.password)
@@ -271,7 +271,7 @@ public class ExternalBinaryContent {
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
-           .post(host);
+           .post(uri);
 
         ps.append(res.getStatusLine().toString() + "\n");
         final Headers headers = res.getHeaders();
@@ -295,11 +295,11 @@ public class ExternalBinaryContent {
     }
     /**
      * 3.9-E
-     * @param host
+     * @param uri
      */
     @Test(priority = 52)
     @Parameters({"param1"})
-    public void postCheckHeaders(final String host) throws FileNotFoundException {
+    public void postCheckHeaders(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n52." + tl.postCheckHeaders()[1]).append('\n');
         ps.append("Request:\n");
@@ -310,7 +310,7 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"testExamtxtpost.txt\"")
             .body("TestString.")
             .when()
-            .post(host);
+            .post(uri);
 
         ps.append(resource.getStatusLine().toString() + "\n");
         final Headers headers = resource.getHeaders();
@@ -327,7 +327,7 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"postCheckHeaders.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final Response res = RestAssured.given()
            .auth().basic(this.username, this.password)
@@ -335,7 +335,7 @@ public class ExternalBinaryContent {
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
-           .post(host);
+           .post(uri);
 
         ps.append(res.getStatusLine().toString() + "\n");
         final Headers headersext = res.getHeaders();
@@ -363,11 +363,11 @@ public class ExternalBinaryContent {
     }
     /**
      * 3.9-E
-     * @param host
+     * @param uri
      */
     @Test(priority = 53)
     @Parameters({"param1"})
-    public void putUpdateCheckHeaders(final String host) throws FileNotFoundException {
+    public void putUpdateCheckHeaders(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n53." + tl.putUpdateCheckHeaders()[1]).append('\n');
         ps.append("Request:\n");
@@ -377,7 +377,7 @@ public class ExternalBinaryContent {
            .header("Content-Disposition", "attachment; filename=\"testExamtxt.txt\"")
            .body("TestString.")
            .when()
-           .post(host).asString();
+           .post(uri).asString();
 
        final Response putup = RestAssured.given()
            .auth().basic(this.username, this.password)
@@ -403,20 +403,20 @@ public class ExternalBinaryContent {
            .header("Content-Disposition", "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
            .body("TestString1.")
            .when()
-           .post(host).asString();
+           .post(uri).asString();
 
        final String exbcresource2 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
            .body("TestString2.")
            .when()
-           .post(host).asString();
+           .post(uri).asString();
 
        final String resourceext = RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource1 + "\"")
            .when()
-           .post(host).asString();
+           .post(uri).asString();
 
        final Response resext = RestAssured.given()
            .auth().basic(this.username, this.password)
@@ -451,7 +451,7 @@ public class ExternalBinaryContent {
     }
     /**
      * 3.9-F
-     * @param host
+     * @param uri
      */
     @Test(priority = 54)
     @Parameters({"param1"})
@@ -465,13 +465,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"getCheckContentLocationHeader.txt\"")
             .body("TestString1.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
         ps.append("Request method:\tGET\n");
         ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
@@ -509,7 +509,7 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-F
-     * @param host
+     * @param uri
      */
     @Test(priority = 55)
     @Parameters({"param1"})
@@ -523,13 +523,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"headCheckContentLocationHeader.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         ps.append("Request method:\tHEAD\n");
         ps.append("Request URI:\t" + uri);
@@ -567,11 +567,11 @@ public class ExternalBinaryContent {
     }
     /**
      * 3.9-G
-     * @param host
+     * @param uri
      */
     @Test(priority = 56)
     @Parameters({"param1"})
-    public void respondWantDigestExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void respondWantDigestExternalBinaryContent(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n56." + tl.respondWantDigestExternalBinaryContent()[1]).append('\n');
@@ -582,13 +582,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigest.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -605,11 +605,11 @@ public class ExternalBinaryContent {
        }
     /**
      * 3.9-G
-     * @param host
+     * @param uri
      */
     @Test(priority = 57)
     @Parameters({"param1"})
-    public void respondWantDigestExternalBinaryContentHead(final String host) throws FileNotFoundException {
+    public void respondWantDigestExternalBinaryContentHead(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n57." + tl.respondWantDigestExternalBinaryContentHead()[1]).append('\n');
@@ -620,13 +620,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestHead.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -644,11 +644,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-H
-     * @param host
+     * @param uri
      */
     @Test(priority = 58)
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedExternalBinaryContent(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha1";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n58." + tl.respondWantDigestTwoSupportedExternalBinaryContent()[1]).append('\n');
@@ -659,13 +659,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupported.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -683,11 +683,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-H
-     * @param host
+     * @param uri
      */
     @Test(priority = 59)
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String host) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha1";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n59." + tl.respondWantDigestTwoSupportedExternalBinaryContentHead()[1]).append('\n');
@@ -698,13 +698,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupportedHead.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -722,11 +722,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-I
-     * @param host
+     * @param uri
      */
     @Test(priority = 60)
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent(final String host)
+    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent(final String uri)
         throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha1;q=1";
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -738,13 +738,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -762,11 +762,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-I
-     * @param host
+     * @param uri
      */
     @Test(priority = 61)
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead(final String host)
+    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead(final String uri)
         throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha1;q=0";
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -778,13 +778,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -802,11 +802,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-J
-     * @param host
+     * @param uri
      */
     @Test(priority = 62)
     @Parameters({"param1"})
-    public void respondWantDigestNonSupportedExternalBinaryContent(final String host)
+    public void respondWantDigestNonSupportedExternalBinaryContent(final String uri)
         throws FileNotFoundException {
         final String checksum = "md5,abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -818,13 +818,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestNonSupported.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -842,11 +842,11 @@ public class ExternalBinaryContent {
 
     /**
      * 3.9-J
-     * @param host
+     * @param uri
      */
     @Test(priority = 63)
     @Parameters({"param1"})
-    public void respondWantDigestNonSupportedExternalBinaryContentHead(final String host)
+    public void respondWantDigestNonSupportedExternalBinaryContentHead(final String uri)
         throws FileNotFoundException {
         final String checksum = "md5,abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -858,13 +858,13 @@ public class ExternalBinaryContent {
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestNonSupportedHead.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
