@@ -60,11 +60,11 @@ public class HttpHead {
 
     /**
      * 3.3-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 15)
     @Parameters({"param1"})
-    public void httpHeadResponseNoBody(final String host) throws FileNotFoundException {
+    public void httpHeadResponseNoBody(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n15." + tl.httpHeadResponseNoBody()[1]).append("\n");
         ps.append("Request:\n");
@@ -73,7 +73,7 @@ public class HttpHead {
     .auth().basic(this.username, this.password)
                         .contentType("text/turtle")
                         .when()
-                        .post(host).asString();
+                        .post(uri).asString();
         RestAssured.given()
     .auth().basic(this.username, this.password)
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -88,11 +88,11 @@ public class HttpHead {
     }
     /**
      * 3.3-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 16)
     @Parameters({"param1"})
-    public void httpHeadResponseDigest(final String host) throws FileNotFoundException {
+    public void httpHeadResponseDigest(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n16." + tl.httpHeadResponseDigest()[1]).append("\n");
         ps.append("Request:\n");
@@ -102,7 +102,7 @@ public class HttpHead {
                 .header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
                 .body("TestString.")
                 .when()
-                .post(host).asString();
+                .post(uri).asString();
 
 
          final Response resget =
@@ -157,11 +157,11 @@ public class HttpHead {
     }
     /**
      * 3.3-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 17)
     @Parameters({"param1"})
-    public void httpHeadResponseHeadersSameAsHttpGet(final String host) throws FileNotFoundException {
+    public void httpHeadResponseHeadersSameAsHttpGet(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n17." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
         ps.append("Request:\n");
@@ -169,7 +169,7 @@ public class HttpHead {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         final Response resget = RestAssured.given()
             .auth().basic(this.username, this.password)

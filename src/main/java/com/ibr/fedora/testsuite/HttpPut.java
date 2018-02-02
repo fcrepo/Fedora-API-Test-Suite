@@ -53,11 +53,11 @@ public class HttpPut {
 
     /**
      * 3.6-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 26)
     @Parameters({"param1"})
-    public void httpPut(final String host) throws FileNotFoundException {
+    public void httpPut(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
         ps.append("\n26." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
@@ -67,7 +67,7 @@ public class HttpPut {
             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given().auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
@@ -86,12 +86,12 @@ public class HttpPut {
 
     /**
      * 3.6.1-A
-     * @param host
+     * @param uri
      * @throws FileNotFoundException
      */
     @Test(priority = 27)
     @Parameters({"param1"})
-    public void updateTriples(final String host) throws FileNotFoundException {
+    public void updateTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n27." + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
         ps.append("Request:\n");
@@ -100,7 +100,7 @@ public class HttpPut {
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
         .when()
-        .post(host).asString();
+        .post(uri).asString();
 
         String body = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -125,12 +125,12 @@ public class HttpPut {
 
     /**
      * 3.6.1-B
-     * @param host
+     * @param uri
      * @throws FileNotFoundException
      */
     @Test(priority = 28)
     @Parameters({"param1"})
-    public void updateDisallowedTriples(final String host) throws FileNotFoundException {
+    public void updateDisallowedTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n28." + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
         ps.append("Request:\n");
@@ -139,7 +139,7 @@ public class HttpPut {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         String body = RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -164,12 +164,12 @@ public class HttpPut {
 
     /**
      * 3.6.1-C
-     * @param host
+     * @param uri
      * @throws FileNotFoundException
      */
     @Test(priority = 29)
     @Parameters({"param1"})
-    public void updateDisallowedTriplesResponse(final String host) throws FileNotFoundException {
+    public void updateDisallowedTriplesResponse(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n29." + tl.updateDisallowedTriplesResponse()[0] + "-"
         + tl.updateDisallowedTriplesResponse()[1]).append("\n");
@@ -179,7 +179,7 @@ public class HttpPut {
              .auth().basic(this.username, this.password)
              .contentType("text/turtle")
              .when()
-             .post(host).asString();
+             .post(uri).asString();
         String body = RestAssured.given()
              .auth().basic(this.username, this.password)
              .when()
@@ -203,12 +203,12 @@ public class HttpPut {
 
     /**
      * 3.6.1-D
-     * @param host
+     * @param uri
      * @throws FileNotFoundException
      */
     @Test(priority = 30)
     @Parameters({"param1"})
-    public void updateDisallowedTriplesConstrainedByHeader(final String host) throws FileNotFoundException {
+    public void updateDisallowedTriplesConstrainedByHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n30." + tl.updateDisallowedTriplesConstrainedByHeader()[0] + "-"
         + tl.updateDisallowedTriplesConstrainedByHeader()[1]).append("\n");
@@ -218,7 +218,7 @@ public class HttpPut {
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
         String body = RestAssured.given()
             .auth().basic(this.username, this.password)
             .when()
@@ -242,11 +242,11 @@ public class HttpPut {
 
     /**
      * 3.6.2-A
-     * @param host
+     * @param uri
      */
     @Test(priority = 31)
     @Parameters({"param1"})
-    public void httpPutNR(final String host) throws FileNotFoundException {
+    public void httpPutNR(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
         ps.append("\n31." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
@@ -256,7 +256,7 @@ public class HttpPut {
             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -275,11 +275,11 @@ public class HttpPut {
 
     /**
      * 3.6.2-B
-     * @param host
+     * @param uri
      */
     @Test(priority = 32)
     @Parameters({"param1"})
-    public void putDigestResponseHeaderAuthentication(final String host) throws FileNotFoundException {
+    public void putDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n32." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
@@ -291,7 +291,7 @@ public class HttpPut {
             .header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -311,11 +311,11 @@ public class HttpPut {
 
     /**
      * 3.6.2-C
-     * @param host
+     * @param uri
      */
     @Test(priority = 33)
     @Parameters({"param1"})
-    public void putDigestResponseHeaderVerification(final String host) throws FileNotFoundException {
+    public void putDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n33." + tl.putDigestResponseHeaderVerification()[0] + "-" +
@@ -327,7 +327,7 @@ public class HttpPut {
             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
             .body("TestString.")
             .when()
-            .post(host).asString();
+            .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)

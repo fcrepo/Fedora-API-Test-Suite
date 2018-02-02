@@ -68,7 +68,7 @@ public class ExternalBinaryContent {
      */
     @Test(priority = 45)
     @Parameters({"param1"})
-    public void postCreateExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void postCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n45." + tl.postCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
@@ -99,7 +99,7 @@ public class ExternalBinaryContent {
      */
     @Test(priority = 46)
     @Parameters({"param1"})
-    public void putCreateExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void putCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n46." + tl.putCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
@@ -130,7 +130,7 @@ public class ExternalBinaryContent {
      */
     @Test(priority = 47)
     @Parameters({"param1"})
-    public void putUpdateExternalBinaryContent(final String host) throws FileNotFoundException {
+    public void putUpdateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n47." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
@@ -229,7 +229,7 @@ public class ExternalBinaryContent {
      */
     @Test(priority = 50)
     @Parameters({"param1"})
-    public void putCheckUnsupportedMediaType(final String host) throws FileNotFoundException {
+    public void putCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n50." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
@@ -455,7 +455,7 @@ public class ExternalBinaryContent {
      */
     @Test(priority = 54)
     @Parameters({"param1"})
-    public void getCheckContentLocationHeader(final String host) throws FileNotFoundException {
+    public void getCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n54." + tl.getCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
@@ -472,9 +472,8 @@ public class ExternalBinaryContent {
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
             .when()
             .post(host).asString();
-
         ps.append("Request method:\tGET\n");
-        ps.append("Request URI:\t" + host);
+        ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + exbcresource + "\"\n\n");
 
@@ -514,7 +513,7 @@ public class ExternalBinaryContent {
      */
     @Test(priority = 55)
     @Parameters({"param1"})
-    public void headCheckContentLocationHeader(final String host) throws FileNotFoundException {
+    public void headCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n55." + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
@@ -533,7 +532,7 @@ public class ExternalBinaryContent {
             .post(host).asString();
 
         ps.append("Request method:\tHEAD\n");
-        ps.append("Request URI:\t" + host);
+        ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + exbcresource + "\"\n\n");
 

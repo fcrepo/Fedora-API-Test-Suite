@@ -46,9 +46,9 @@ public class App {
      */
     public static void main(final String[] args) {
     final Options options = new Options();
-    final Option host = new Option("h", "host", true, "host address");
-    host .setRequired(true);
-    options.addOption(host);
+    final Option baseurl = new Option("b", "baseurl", true, "base url");
+    baseurl.setRequired(true);
+    options.addOption(baseurl);
     final Option user = new Option("u", "user", true, "user login");
     user.setRequired(false);
     options.addOption(user);
@@ -68,7 +68,7 @@ public class App {
         return;
     }
 
-    String inputHost = cmd.getOptionValue("host");
+    final String inputUrl = cmd.getOptionValue("baseurl");
     final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
     final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
 
@@ -91,8 +91,7 @@ public class App {
     classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
     classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
     //Create the default container
-    inputHost = TestSuiteGlobals.containerTestSuite(inputHost, inputUser, inputPassword);
-    params.put("param1", inputHost);
+    params.put("param1", TestSuiteGlobals.containerTestSuite(inputUrl, inputUser, inputPassword));
     params.put("param2", inputUser);
     params.put("param3", inputPassword);
 
