@@ -38,6 +38,12 @@ public class Ldpnr {
     public TestsLabels tl = new TestsLabels();
     public String username;
     public String password;
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+    + "<> a ldp:Container, ldp:BasicContainer;"
+    + "dcterms:title 'Ldpnr class Container' ;"
+    + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
+
 
     /**
      * Authentication

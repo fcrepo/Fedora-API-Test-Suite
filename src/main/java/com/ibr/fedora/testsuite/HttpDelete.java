@@ -41,6 +41,11 @@ import io.restassured.response.Response;
     public String username;
     public String password;
     public TestsLabels tl = new TestsLabels();
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+    + "<> a ldp:Container, ldp:BasicContainer;"
+    + "dcterms:title 'Delete class Container' ;"
+    + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
@@ -69,6 +74,9 @@ import io.restassured.response.Response;
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
+           .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+           .header("slug", "Delete-3.8.1-A")
+           .body(body)
            .when()
            .post(uri).asString();
 
@@ -76,6 +84,9 @@ import io.restassured.response.Response;
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
+           .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+           .header("slug", "Delete-3.8.1-A")
+           .body(body)
            .when()
            .post(resourceOp).asString();
 
@@ -196,6 +207,9 @@ import io.restassured.response.Response;
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
+           .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+           .header("slug", "Delete-3.8.1-C")
+           .body(body)
            .when()
            .post(uri).asString();
 
@@ -203,6 +217,9 @@ import io.restassured.response.Response;
     RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Delete-3.8.1-C")
+            .body(body)
             .when()
             .post(rootres).asString();
 
@@ -310,6 +327,9 @@ import io.restassured.response.Response;
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
+           .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+           .header("slug", "Delete-3.8.1-D")
+           .body(body)
            .when()
            .post(uri).asString();
 
@@ -317,6 +337,9 @@ import io.restassured.response.Response;
     RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Delete-3.8.1-D")
+            .body(body)
             .when()
             .post(rootres).asString();
 

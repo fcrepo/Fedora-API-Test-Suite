@@ -69,6 +69,11 @@ public class HttpPatch {
     "  <> ldp:contains \"some-url\" .\n" +
     "}\n" +
     " WHERE { }";
+    public static String body2 = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+    + "<> a ldp:Container, ldp:BasicContainer;"
+    + "dcterms:title 'Patch class Container' ;"
+    + "dcterms:description 'This is a test container for the Fedora API Test Suite' . ";
 
     /**
      * Authentication
@@ -96,6 +101,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-A")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -130,6 +138,9 @@ public class HttpPatch {
             RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-B")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -163,6 +174,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-C")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -196,6 +210,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-D")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -229,6 +246,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-E")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -262,6 +282,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-F")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -321,12 +344,18 @@ public class HttpPatch {
         final String container = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7.1")
+            .body(body2)
             .when()
             .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7.1")
+            .body(body2)
             .when()
             .post(container).asString();
 
@@ -361,6 +390,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7.2")
+            .body(body2)
             .when()
             .post(uri).asString();
 

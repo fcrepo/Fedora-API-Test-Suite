@@ -48,6 +48,11 @@ public abstract class TestSuiteGlobals {
     public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
     public static String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
     "insertedContentRelation"};
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+    + "<> a ldp:Container, ldp:BasicContainer;"
+    + "dcterms:title 'Base Container' ;"
+    + "dcterms:description 'This container is the base container for the Fedora API Test Suite.' . ";
     /**
      * Get or create the default container for all tests resources to be created
      * @param baseurl
@@ -60,7 +65,11 @@ public abstract class TestSuiteGlobals {
         final Response res = RestAssured.given()
         .auth().basic(user, pass)
         .contentType("text/turtle")
-        .header("slug", name).when().post(baseurl);
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+        .header("slug", name)
+        .body(body)
+        .when()
+        .post(baseurl);
         if (res.getStatusCode() == 201) {
         return containerUrl;
         } else {

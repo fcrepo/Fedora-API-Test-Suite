@@ -38,6 +38,11 @@ public class HttpGet {
     public String username;
     public String password;
     public TestsLabels tl = new TestsLabels();
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+    + "<> a ldp:Container, ldp:BasicContainer;"
+    + "dcterms:title 'Get class Container' ;"
+    + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
@@ -65,6 +70,9 @@ public class HttpGet {
             RestAssured.given()
     .auth().basic(this.username, this.password)
                 .contentType("text/turtle")
+                .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                .header("slug", "Get-3.2.1-A")
+                .body(body)
                 .when()
                 .post(uri).asString();
         RestAssured.given()
@@ -97,6 +105,9 @@ public class HttpGet {
         RestAssured.given()
     .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Get-3.2.2-A")
+            .body(body)
             .when()
             .post(uri).asString();
     RestAssured.given()
