@@ -42,27 +42,27 @@ public class Container {
     public String password;
     public TestsLabels tl = new TestsLabels();
     public String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
-    + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-    + "<> dc:title 'Pythagoras Collection'; "
-    + "dc:abstract 'A collection of materials and facts about Pythagoras' .";
+        + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+        + "<> dc:title 'Pythagoras Collection'; "
+        + "dc:abstract 'A collection of materials and facts about Pythagoras' .";
     public String personBody = "@prefix dc: <http://purl.org/dc/terms/> . "
-    + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-    + "<> a foaf:Person; "
-    + "foaf:name \"Pythagoras\" ; "
-    + "foaf:based_near \"Croton\" ; "
-    + "foaf:interest [ dc:title \"Geometry\" ] .";
+        + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+        + "<> a foaf:Person; "
+        + "foaf:name \"Pythagoras\" ; "
+        + "foaf:based_near \"Croton\" ; "
+        + "foaf:interest [ dc:title \"Geometry\" ] .";
     public String portraitContainer = "@prefix ldp: <http://www.w3.org/ns/ldp#> . "
-    + "@prefix dcterms: <http://purl.org/dc/terms/> . "
-    + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-    + "<> a ldp:DirectContainer; "
-    + "ldp:membershipResource <%person%>; "
-    + "ldp:hasMemberRelation foaf:depiction; "
-    + "dcterms:title \"Portraits of Pythagoras\" .";
+        + "@prefix dcterms: <http://purl.org/dc/terms/> . "
+        + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+        + "<> a ldp:DirectContainer; "
+        + "ldp:membershipResource <%person%>; "
+        + "ldp:hasMemberRelation foaf:depiction; "
+        + "dcterms:title \"Portraits of Pythagoras\" .";
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-    + "<> a ldp:Container, ldp:BasicContainer;"
-    + "dcterms:title 'Container class Container' ;"
-    + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Container class Container' ;"
+        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
