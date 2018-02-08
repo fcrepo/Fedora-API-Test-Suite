@@ -42,10 +42,10 @@ public class HttpPost {
     public String resource = "";
     public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-    + "<> a ldp:Container, ldp:BasicContainer;"
-    + "dcterms:title 'Post class Container' ;"
-    + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Post class Container' ;"
+        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication

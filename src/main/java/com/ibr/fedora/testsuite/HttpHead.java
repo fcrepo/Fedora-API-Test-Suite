@@ -46,10 +46,10 @@ public class HttpHead {
     public String password;
     public TestsLabels tl = new TestsLabels();
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-    + "<> a ldp:Container, ldp:BasicContainer;"
-    + "dcterms:title 'Head class Container' ;"
-    + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Head class Container' ;"
+        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
