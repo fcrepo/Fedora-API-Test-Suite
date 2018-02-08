@@ -47,12 +47,14 @@ public abstract class TestSuiteGlobals {
     public static String resourcePointer;
     public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
     public static String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
-    "insertedContentRelation"};
+        "insertedContentRelation"};
+
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-    + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-    + "<> a ldp:Container, ldp:BasicContainer;"
-    + "dcterms:title 'Base Container' ;"
-    + "dcterms:description 'This container is the base container for the Fedora API Test Suite.' . ";
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Base Container' ;"
+        + "dcterms:description 'This container is the base container for the Fedora API Test Suite.' . ";
+
     /**
      * Get or create the default container for all tests resources to be created
      * @param baseurl
