@@ -42,22 +42,27 @@ public class Container {
     public String password;
     public TestsLabels tl = new TestsLabels();
     public String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
-    + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-    + "<> dc:title 'Pythagoras Collection'; "
-    + "dc:abstract 'A collection of materials and facts about Pythagoras' .";
+        + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+        + "<> dc:title 'Pythagoras Collection'; "
+        + "dc:abstract 'A collection of materials and facts about Pythagoras' .";
     public String personBody = "@prefix dc: <http://purl.org/dc/terms/> . "
-    + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-    + "<> a foaf:Person; "
-    + "foaf:name \"Pythagoras\" ; "
-    + "foaf:based_near \"Croton\" ; "
-    + "foaf:interest [ dc:title \"Geometry\" ] .";
+        + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+        + "<> a foaf:Person; "
+        + "foaf:name \"Pythagoras\" ; "
+        + "foaf:based_near \"Croton\" ; "
+        + "foaf:interest [ dc:title \"Geometry\" ] .";
     public String portraitContainer = "@prefix ldp: <http://www.w3.org/ns/ldp#> . "
-    + "@prefix dcterms: <http://purl.org/dc/terms/> . "
-    + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-    + "<> a ldp:DirectContainer; "
-    + "ldp:membershipResource <%person%>; "
-    + "ldp:hasMemberRelation foaf:depiction; "
-    + "dcterms:title \"Portraits of Pythagoras\" .";
+        + "@prefix dcterms: <http://purl.org/dc/terms/> . "
+        + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+        + "<> a ldp:DirectContainer; "
+        + "ldp:membershipResource <%person%>; "
+        + "ldp:hasMemberRelation foaf:depiction; "
+        + "dcterms:title \"Portraits of Pythagoras\" .";
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Container class Container' ;"
+        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
@@ -85,6 +90,9 @@ public class Container {
         .auth().basic(this.username, this.password)
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+        .header("slug", "Container-3.1.1-A")
+        .body(body)
         .log().all()
         .when()
         .post(uri)
@@ -108,6 +116,7 @@ public class Container {
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
         .header("slug", "pythagoras-3.1.1-B")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .when()
         .body(pythagorasContainer)
         .post(uri).asString();
@@ -115,6 +124,7 @@ public class Container {
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "person")
         .when()
         .body(personBody)
@@ -122,6 +132,7 @@ public class Container {
 
         final String portraits = RestAssured.given()
         .auth().basic(this.username, this.password)
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .contentType("text/turtle")
         .header("slug", "portraits")
         .when()
@@ -177,6 +188,7 @@ public class Container {
         RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "pythagoras-3.1.1-C")
         .when()
         .body(pythagorasContainer)
@@ -185,6 +197,7 @@ public class Container {
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "person")
         .when()
         .body(personBody)
@@ -193,6 +206,7 @@ public class Container {
         final String portraits = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "portraits")
         .when()
         .body(portraitContainer.replace("%person%", person))
@@ -244,6 +258,7 @@ public class Container {
         RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "pythagoras-3.1.1-D")
         .when()
         .body(pythagorasContainer)
@@ -252,6 +267,7 @@ public class Container {
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "person")
         .when()
         .body(personBody)
@@ -260,6 +276,7 @@ public class Container {
         final String portraits = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "portraits")
         .when()
         .body(portraitContainer.replace("%person%", person))

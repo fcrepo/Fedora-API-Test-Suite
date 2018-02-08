@@ -41,6 +41,11 @@ public class HttpPost {
     public TestsLabels tl = new TestsLabels();
     public String resource = "";
     public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Post class Container' ;"
+        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
@@ -68,6 +73,9 @@ public class HttpPost {
     .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Post-3.5-A")
+            .body(body)
             .log().all()
             .when()
             .post(uri)
@@ -92,6 +100,9 @@ public class HttpPost {
     .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Post-3.5-B")
+            .body(body)
             .log().all()
             .when()
             .post(uri)

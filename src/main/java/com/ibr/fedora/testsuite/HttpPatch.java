@@ -45,30 +45,35 @@ public class HttpPatch {
     public String password;
     public TestsLabels tl = new TestsLabels();
     public String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
-    + " INSERT {"
-    + " <> dcterms:description \"Patch Updated Description\" ."
-    + "}"
-    + " WHERE { }";
+        + " INSERT {"
+        + " <> dcterms:description \"Patch Updated Description\" ."
+        + "}"
+        + " WHERE { }";
     public String ldpatch = "@prefix dcterms: <http://purl.org/dc/terms/>"
-    + "Add {"
-    + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
-    + "} .";
+        + "Add {"
+        + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
+        + "} .";
     public String serverProps = "PREFIX fedora: <http://fedora.info/definitions/v4/repository#>"
-    + " INSERT {"
-    + " <> fedora:lastModifiedBy \"User\" ."
-    + "}"
-    + " WHERE { }";
+        + " INSERT {"
+        + " <> fedora:lastModifiedBy \"User\" ."
+        + "}"
+        + " WHERE { }";
     public String resourceType = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-    + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
-    + " INSERT {"
-    + " <> rdf:type ldp:NonRDFSource ."
-    + "}"
-    + " WHERE { }";
-    public String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#>\n" +
-    " INSERT {   \n" +
-    "  <> ldp:contains \"some-url\" .\n" +
-    "}\n" +
-    " WHERE { }";
+        + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
+        + " INSERT {"
+        + " <> rdf:type ldp:NonRDFSource ."
+        + "}"
+        + " WHERE { }";
+    public String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#>\n"
+        + " INSERT {   \n"
+        + "  <> ldp:contains \"some-url\" .\n"
+        + "}\n"
+        + " WHERE { }";
+    public static String body2 = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Patch class Container' ;"
+        + "dcterms:description 'This is a test container for the Fedora API Test Suite' . ";
 
     /**
      * Authentication
@@ -96,6 +101,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-A")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -130,6 +138,9 @@ public class HttpPatch {
             RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-B")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -163,6 +174,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-C")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -196,6 +210,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-D")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -229,6 +246,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-E")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -262,6 +282,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7-F")
+            .body(body2)
             .when()
             .post(uri).asString();
 
@@ -321,12 +344,18 @@ public class HttpPatch {
         final String container = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7.1")
+            .body(body2)
             .when()
             .post(uri).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7.1")
+            .body(body2)
             .when()
             .post(container).asString();
 
@@ -361,6 +390,9 @@ public class HttpPatch {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Patch-3.7.2")
+            .body(body2)
             .when()
             .post(uri).asString();
 

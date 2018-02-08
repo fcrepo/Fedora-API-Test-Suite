@@ -38,6 +38,11 @@ public class HttpPut {
     public String username;
     public String password;
     public TestsLabels tl = new TestsLabels();
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Put class Container' ;"
+        + "dcterms:description 'This is a  test container  for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
@@ -99,6 +104,9 @@ public class HttpPut {
         final String resource = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
+        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+        .header("slug", "Put-3.6.1-A")
+        .body(body)
         .when()
         .post(uri).asString();
 
@@ -138,6 +146,9 @@ public class HttpPut {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Put-3.6.1-B")
+            .body(body)
             .when()
             .post(uri).asString();
 
@@ -178,6 +189,9 @@ public class HttpPut {
         final String resource = RestAssured.given()
              .auth().basic(this.username, this.password)
              .contentType("text/turtle")
+             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+             .header("slug", "Put-3.6.1-C")
+             .body(body)
              .when()
              .post(uri).asString();
         String body = RestAssured.given()
@@ -217,6 +231,9 @@ public class HttpPut {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Put-3.6.1-D")
+            .body(body)
             .when()
             .post(uri).asString();
         String body = RestAssured.given()

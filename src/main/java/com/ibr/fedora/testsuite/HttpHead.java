@@ -45,6 +45,11 @@ public class HttpHead {
     public String username;
     public String password;
     public TestsLabels tl = new TestsLabels();
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+        + "<> a ldp:Container, ldp:BasicContainer;"
+        + "dcterms:title 'Head class Container' ;"
+        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
@@ -72,6 +77,8 @@ public class HttpHead {
                 RestAssured.given()
     .auth().basic(this.username, this.password)
                         .contentType("text/turtle")
+                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                        .body(body)
                         .when()
                         .post(uri).asString();
         RestAssured.given()
@@ -168,6 +175,9 @@ public class HttpHead {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "Head-3.3-C")
+            .body(body)
             .when()
             .post(uri).asString();
 
