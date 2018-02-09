@@ -73,20 +73,23 @@ public class HttpHead {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n15." + tl.httpHeadResponseNoBody()[1]).append("\n");
         ps.append("Request:\n");
-        final String resource =
+        final Response resource =
                 RestAssured.given()
     .auth().basic(this.username, this.password)
+                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                         .contentType("text/turtle")
                         .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                        .header("slug", "Head-3.3-A")
                         .body(body)
                         .when()
-                        .post(uri).asString();
+                        .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
     .auth().basic(this.username, this.password)
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
-                .head(resource)
+                .head(locationHeader)
                 .then()
                 .log().all()
                 .statusCode(200).assertThat().body(equalTo(""));
@@ -103,22 +106,24 @@ public class HttpHead {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n16." + tl.httpHeadResponseDigest()[1]).append("\n");
         ps.append("Request:\n");
-        final String resource =
+        final Response resource =
         RestAssured.given()
                 .auth().basic(this.username, this.password)
+                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
+                .header("slug", "HEAD-3.3-B")
                 .body("TestString.")
                 .when()
-                .post(uri).asString();
+                .post(uri);
 
-
+         final String locationHeader = resource.getHeader("Location");
          final Response resget =
          RestAssured.given()
                  .auth().basic(this.username, this.password)
                  .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                  .log().all()
                  .when()
-                 .get(resource);
+                 .get(locationHeader);
 
                  ps.append(resget.getStatusLine().toString() + "\n");
                  final Headers headersGet = resget.getHeaders();
@@ -133,7 +138,7 @@ public class HttpHead {
                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                 .log().all()
                 .when()
-                .head(resource);
+                .head(locationHeader);
                 ps.append(reshead.getStatusLine().toString() + "\n");
                 final Headers headers = reshead.getHeaders();
                 for (Header h : headers) {
@@ -172,19 +177,19 @@ public class HttpHead {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n17." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
         ps.append("Request:\n");
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Head-3.3-C")
             .body(body)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         final Response resget = RestAssured.given()
             .auth().basic(this.username, this.password)
             .when()
-            .get(resource);
+            .get(locationHeader);
 
         ps.append(resget.getStatusLine().toString() + "\n");
         final Headers headersGet = resget.getHeaders();
@@ -205,7 +210,7 @@ public class HttpHead {
                         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                         .log().all()
                         .when()
-                        .head(resource);
+                        .head(locationHeader);
 
         ps.append(reshead.getStatusLine().toString() + "\n");
         final Headers headershead = reshead.getHeaders();

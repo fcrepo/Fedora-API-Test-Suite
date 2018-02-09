@@ -98,15 +98,15 @@ public class HttpPatch {
         ps.append("\n34." + tl.supportPatch()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Patch-3.7-A")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("application/sparql-update")
@@ -116,7 +116,7 @@ public class HttpPatch {
             .log().all()
             .when()
             .request().body(body)
-            .patch(resource)
+            .patch(locationHeader)
             .then()
             .log().all()
             .statusCode(204);
@@ -134,7 +134,7 @@ public class HttpPatch {
         ps.append("\n35." + tl.ldpPatchContentTypeSupport()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource =
+        final Response resource =
             RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
@@ -142,8 +142,8 @@ public class HttpPatch {
             .header("slug", "Patch-3.7-B")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/ldpatch")
@@ -153,7 +153,7 @@ public class HttpPatch {
             .log().all()
             .body(ldpatch)
             .when()
-            .patch(resource)
+            .patch(locationHeader)
             .then()
             .log().all()
             .statusCode(204);
@@ -171,15 +171,15 @@ public class HttpPatch {
         ps.append("\n36." + tl.serverManagedPropertiesModification()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Patch-3.7-C")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("application/sparql-update")
@@ -189,7 +189,7 @@ public class HttpPatch {
             .log().all()
             .body(serverProps)
             .when()
-            .patch(resource)
+            .patch(locationHeader)
             .then()
             .log().all()
             .statusCode(409);
@@ -207,15 +207,15 @@ public class HttpPatch {
         ps.append("\n37." + tl.statementNotPersistedResponseBody()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Patch-3.7-D")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("application/sparql-update")
@@ -225,7 +225,7 @@ public class HttpPatch {
             .log().all()
             .body(serverProps)
             .when()
-            .patch(resource)
+            .patch(locationHeader)
             .then()
             .log().all()
             .statusCode(409).body(containsString("lastModified"));
@@ -243,15 +243,15 @@ public class HttpPatch {
         ps.append("\n38." + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Patch-3.7-E")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("application/sparql-update")
@@ -261,7 +261,7 @@ public class HttpPatch {
             .log().all()
             .body(serverProps)
             .when()
-            .patch(resource)
+            .patch(locationHeader)
             .then()
             .log().all()
             .statusCode(409).header("Link", containsString("constrainedBy"));
@@ -279,15 +279,15 @@ public class HttpPatch {
         ps.append("\n39." + tl.successfulPatchStatusCode()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Patch-3.7-F")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         ps.append("Request method:\tPATCH\n");
         ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
@@ -302,7 +302,7 @@ public class HttpPatch {
             .encodeContentTypeAs("application/sparql-update", ContentType.TEXT)))
             .body(body)
             .when()
-            .patch(resource);
+            .patch(locationHeader);
 
         final int statusCode = response.getStatusCode();
         final Headers headers = response.getHeaders();
@@ -341,15 +341,15 @@ public class HttpPatch {
         ps.append("\n40." + tl.disallowPatchContainmentTriples()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String container = RestAssured.given()
+        final Response container = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Patch-3.7.1")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = container.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
@@ -357,7 +357,7 @@ public class HttpPatch {
             .header("slug", "Patch-3.7.1")
             .body(body2)
             .when()
-            .post(container).asString();
+            .post(locationHeader).asString();
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -368,7 +368,7 @@ public class HttpPatch {
             .log().all()
             .body(updateContainmentTriples)
             .when()
-            .patch(container)
+            .patch(locationHeader)
             .then()
             .log().all()
             .statusCode(409);
@@ -387,15 +387,15 @@ public class HttpPatch {
         ps.append("\n41." + tl.disallowChangeResourceType()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Patch-3.7.2")
             .body(body2)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("application/sparql-update")
@@ -405,7 +405,7 @@ public class HttpPatch {
             .log().all()
             .body(resourceType)
             .when()
-            .patch(resource)
+            .patch(locationHeader)
             .then()
             .log().all()
             .statusCode(409);

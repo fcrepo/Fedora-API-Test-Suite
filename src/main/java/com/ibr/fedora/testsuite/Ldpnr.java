@@ -70,8 +70,11 @@ public class Ldpnr {
 
         final Response res = RestAssured.given()
         .auth().basic(this.username, this.password)
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
         .header("Link", "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\"")
+        .header("slug", "LDPNR-3.1.2.-A")
+        .body("TestString")
         .when()
         .post(uri);
 
@@ -83,7 +86,9 @@ public class Ldpnr {
         for (Header h : res.getHeaders()) {
             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
         }
+
         ps.append("\n" + res.asString() + "\n");
+        final String locationHeader = res.getHeader("Location");
 
         if (res.getStatusCode() == 201) {
         final Response nonr = RestAssured.given()
@@ -91,7 +96,7 @@ public class Ldpnr {
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .log().all()
         .when()
-        .get(res.asString());
+        .get(locationHeader);
 
         for (Header h : nonr.getHeaders()) {
             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
@@ -135,11 +140,13 @@ public class Ldpnr {
 
         final Response res = RestAssured.given()
         .auth().basic(this.username, this.password)
+        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
         .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
+        .header("slug", "LDPNR-3.1.2.-B")
+        .body("TestString")
         .when()
         .post(uri);
-
         ps.append("Request method:\tPOST\n");
         ps.append("Request URI:\t" + uri + "\n");
         ps.append("Headers:\tAccept=*/*\n");

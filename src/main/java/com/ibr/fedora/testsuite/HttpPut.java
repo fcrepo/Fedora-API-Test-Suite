@@ -24,6 +24,7 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
+import io.restassured.response.Response;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -67,13 +68,14 @@ public class HttpPut {
 
         ps.append("\n26." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
         ps.append("Request:\n");
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+            .header("slug", "Put-3.6-B")
             .body("TestString.")
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given().auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
             .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
@@ -81,7 +83,7 @@ public class HttpPut {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(409);
@@ -101,29 +103,32 @@ public class HttpPut {
         ps.append("\n27." + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
         .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "Put-3.6.1-A")
         .body(body)
         .when()
-        .post(uri).asString();
+        .post(uri);
+        final String locationHeader = resource.getHeader("Location");
 
-        String body = RestAssured.given()
+       final String body2 = RestAssured.given()
         .auth().basic(this.username, this.password)
         .when()
-        .get(resource).asString();
-        body += " <> dc:title \"some-title\" .";
+        .get(locationHeader).asString();
 
+        final String newBody = body2.replace("Put class Container", "some-title");
+
+        ps.append(newBody);
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
-            .body(body)
+            .body(newBody)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(204);
@@ -143,29 +148,40 @@ public class HttpPut {
         ps.append("\n28." + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Put-3.6.1-B")
             .body(body)
             .when()
-            .post(uri).asString();
+            .post(uri);
 
-        String body = RestAssured.given()
+        final String locationHeader = resource.getHeader("Location");
+        RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "containedFolderSlug")
+            .body(body)
+            .when()
+            .post(locationHeader);
+
+        final String body2 = RestAssured.given()
             .auth().basic(this.username, this.password)
             .when()
-            .get(resource).asString();
-        body += " <> fedora:createdBy \"user\" .";
+            .get(locationHeader).asString();
+
+        final String newBody = body2.replace("containedFolderSlug", "some-name");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
-            .body(body)
+            .body(newBody)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(409);
@@ -186,31 +202,44 @@ public class HttpPut {
         + tl.updateDisallowedTriplesResponse()[1]).append("\n");
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
              .auth().basic(this.username, this.password)
              .contentType("text/turtle")
              .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
              .header("slug", "Put-3.6.1-C")
              .body(body)
              .when()
-             .post(uri).asString();
-        String body = RestAssured.given()
+             .post(uri);
+        final String locationHeader = resource.getHeader("Location");
+
+        RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "containedFolderSlug")
+            .body(body)
+            .when()
+            .post(locationHeader);
+
+        final String body2 = RestAssured.given()
              .auth().basic(this.username, this.password)
              .when()
-             .get(resource).asString();
-        body += " <> fedora:createdBy \"user\" .";
+             .get(locationHeader).asString();
 
+        final String newBody = body2.replace("containedFolderSlug", "some-name");
+
+        ps.append("PUT Request: \n");
         RestAssured.given()
              .auth().basic(this.username, this.password)
              .contentType("text/turtle")
-             .body(body)
+             .body(newBody)
              .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
              .log().all()
              .when()
-             .put(resource)
+             .put(locationHeader)
              .then()
              .log().all()
-             .statusCode(409).body(containsString("createdBy"));
+             .statusCode(409).body(containsString("ldp#contains"));
 
         ps.append("\n -Case End- \n").close();
     }
@@ -228,28 +257,41 @@ public class HttpPut {
         + tl.updateDisallowedTriplesConstrainedByHeader()[1]).append("\n");
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "Put-3.6.1-D")
             .body(body)
             .when()
-            .post(uri).asString();
-        String body = RestAssured.given()
-            .auth().basic(this.username, this.password)
-            .when()
-            .get(resource).asString();
-        body += " <> fedora:createdBy \"user\" .";
+            .post(uri);
+
+        final String locationHeader = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
+            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+            .header("slug", "containedFolderSlug")
             .body(body)
+            .when()
+            .post(locationHeader);
+
+        final String body2 = RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .when()
+            .get(locationHeader).asString();
+
+        final String newBody = body2.replace("containedFolderSlug", "some-name");
+
+        RestAssured.given()
+            .auth().basic(this.username, this.password)
+            .contentType("text/turtle")
+            .body(newBody)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(409).header("Link", containsString("constrainedBy"));
@@ -268,13 +310,14 @@ public class HttpPut {
 
         ps.append("\n31." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
         ps.append("Request:\n");
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+            .header("slug", "Put-3.6.2-A")
             .body("TestString.")
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
@@ -282,7 +325,7 @@ public class HttpPut {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(204);
@@ -303,13 +346,14 @@ public class HttpPut {
         tl.putDigestResponseHeaderAuthentication()[1]).append("\n");
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
+            .header("slug", "Put-3.6.2-B")
             .body("TestString.")
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("digest", checksum)
@@ -318,7 +362,7 @@ public class HttpPut {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(409);
@@ -339,13 +383,14 @@ public class HttpPut {
         tl.putDigestResponseHeaderVerification()[1]).append("\n");
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+            .header("slug", "Put-3.6.2-C")
             .body("TestString.")
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("digest", checksum)
@@ -354,7 +399,7 @@ public class HttpPut {
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(400);

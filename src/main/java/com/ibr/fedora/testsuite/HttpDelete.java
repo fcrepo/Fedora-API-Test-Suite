@@ -70,7 +70,7 @@ import io.restassured.response.Response;
         ps.append("\n42." + tl.httpDeleteOptionsCheck()[1]).append("\n");
         ps.append("Request:\n");
 
-    final String resourceOp =
+    final Response resourceOp =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
@@ -78,9 +78,9 @@ import io.restassured.response.Response;
            .header("slug", "Delete-3.8.1-A")
            .body(body)
            .when()
-           .post(uri).asString();
-
-    final String resourceSonOp =
+           .post(uri);
+    final String locationHeader = resourceOp.getHeader("Location");
+    final Response resourceSonOp =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
@@ -88,31 +88,40 @@ import io.restassured.response.Response;
            .header("slug", "Delete-3.8.1-A")
            .body(body)
            .when()
-           .post(resourceOp).asString();
+           .post(locationHeader);
 
-    final String rdf01 =
+    final Response rdf01 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
+           .header("slug", "Delete1-3.8.1-A")
            .body("TestString.")
            .when()
-           .post(resourceOp).asString();
+           .post(locationHeader);
 
-    final String rdf02 =
+    final String locationHeader2 = resourceSonOp.getHeader("Location");
+
+    final Response rdf02 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
+           .header("slug", "Delete2-3.8.1-A")
            .body("TestString.")
            .when()
-           .post(resourceSonOp).asString();
+           .post(locationHeader2);
 
-    final String rdf03 =
+    final Response rdf03 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
+           .header("slug", "Delete3-3.8.1-A")
            .body("TestString.")
            .when()
-           .post(resourceSonOp).asString();
+           .post(locationHeader2);
+
+    final String rlocationHeader1 = rdf01.getHeader("Location");
+    final String rlocationHeader2 = rdf02.getHeader("Location");
+    final String rlocationHeader3 = rdf03.getHeader("Location");
 
     ps.append("Request method:\tDELETE\n");
     ps.append("Request URI:\t" + uri + "\n");
@@ -125,7 +134,7 @@ import io.restassured.response.Response;
         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
         .log().all()
         .when()
-        .options(resourceOp);
+        .options(locationHeader);
 
     final String allowHeader = responseOptions.getHeader("Allow");
 
@@ -133,7 +142,7 @@ import io.restassured.response.Response;
     final Response response = RestAssured.given()
            .auth().basic(this.username, this.password)
            .when()
-           .delete(resourceOp);
+           .delete(locationHeader);
 
    // Print headers and status
     final Headers headers = response.getHeaders();
@@ -147,27 +156,27 @@ import io.restassured.response.Response;
     final Response resResource = RestAssured.given()
     .auth().basic(this.username, this.password)
     .when()
-    .get(resourceOp);
+    .get(locationHeader);
 
     final Response resResourceSon = RestAssured.given()
     .auth().basic(this.username, this.password)
     .when()
-          .get(resourceSonOp);
+    .get(locationHeader2);
 
     final Response resRdf01 = RestAssured.given()
     .auth().basic(this.username, this.password)
     .when()
-    .get(rdf01);
+    .get(rlocationHeader1);
 
     final Response resRdf02 = RestAssured.given()
     .auth().basic(this.username, this.password)
     .when()
-    .get(rdf02);
+    .get(rlocationHeader2);
 
     final Response resRdf03 = RestAssured.given()
     .auth().basic(this.username, this.password)
     .when()
-    .get(rdf03);
+    .get(rlocationHeader3);
 
 
     if (allowHeader.contains("OPTIONS")) {
@@ -203,7 +212,7 @@ import io.restassured.response.Response;
            ps.append("Request:\n");
 
     // Create resources
-    final String rootres =
+    final Response rootres =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
@@ -211,9 +220,9 @@ import io.restassured.response.Response;
            .header("slug", "Delete-3.8.1-C")
            .body(body)
            .when()
-           .post(uri).asString();
-
-    final String resourceSon =
+           .post(uri);
+    final String locationHeader = rootres.getHeader("Location");
+    final Response resourceSon =
     RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
@@ -221,31 +230,37 @@ import io.restassured.response.Response;
             .header("slug", "Delete-3.8.1-C")
             .body(body)
             .when()
-            .post(rootres).asString();
-
-    final String nrdf01 =
+            .post(locationHeader);
+    final String locationHeader2 = resourceSon.getHeader("Location");
+    final Response nrdf01 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
+           .header("slug", "Delete1-3.8.1-C")
            .body("TestString.")
            .when()
-           .post(rootres).asString();
+           .post(locationHeader);
 
-    final String nrdf02 =
+    final Response nrdf02 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
+           .header("slug", "Delete2-3.8.1-C")
            .body("TestString.")
            .when()
-           .post(resourceSon).asString();
+           .post(locationHeader2);
 
-    final String nrdf03 =
+    final Response nrdf03 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
+           .header("slug", "Delete3-3.8.1-C")
            .body("TestString.")
            .when()
-           .post(resourceSon).asString();
+           .post(locationHeader2);
+    final String rlocationHeader1 = nrdf01.getHeader("Location");
+    final String rlocationHeader2 = nrdf02.getHeader("Location");
+    final String rlocationHeader3 = nrdf03.getHeader("Location");
 
     ps.append("Request method:\tDELETE\n");
     ps.append("Request URI:\t" + uri + "\n");
@@ -256,7 +271,7 @@ import io.restassured.response.Response;
     final Response response = RestAssured.given()
           .auth().basic(this.username, this.password)
           .when()
-          .delete(rootres);
+          .delete(locationHeader);
 
     // Print headers and status
     final int statusDelete = response.getStatusCode();
@@ -271,27 +286,27 @@ import io.restassured.response.Response;
     final Response resResource = RestAssured.given()
           .auth().basic(this.username, this.password)
           .when()
-          .get(rootres);
+          .get(locationHeader);
 
     final Response resResourceSon = RestAssured.given()
           .auth().basic(this.username, this.password)
           .when()
-          .get(resourceSon);
+          .get(locationHeader2);
 
     final Response resRdf01 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .when()
-           .get(nrdf01);
+           .get(rlocationHeader1);
 
     final Response resRdf02 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .when()
-           .get(nrdf02);
+           .get(rlocationHeader2);
 
     final Response resRdf03 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .when()
-           .get(nrdf03);
+           .get(rlocationHeader3);
 
     if (statusDelete == 200 || statusDelete == 204) {
         if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
@@ -323,7 +338,7 @@ import io.restassured.response.Response;
            ps.append("Request:\n");
 
     // Create resources
-    final String rootres =
+    final Response rootres =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .contentType("text/turtle")
@@ -331,9 +346,9 @@ import io.restassured.response.Response;
            .header("slug", "Delete-3.8.1-D")
            .body(body)
            .when()
-           .post(uri).asString();
-
-    final String resourceSon =
+           .post(uri);
+    final String locationHeader = rootres.getHeader("Location");
+    final Response resourceSon =
     RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
@@ -341,31 +356,38 @@ import io.restassured.response.Response;
             .header("slug", "Delete-3.8.1-D")
             .body(body)
             .when()
-            .post(rootres).asString();
-
-    final String nrdf01 =
+            .post(locationHeader);
+    final String locationHeader2 = resourceSon.getHeader("Location");
+    final Response nrdf01 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
+           .header("slug", "Delete1-3.8.1-D")
            .body("TestString.")
            .when()
-           .post(rootres).asString();
+           .post(locationHeader);
 
-    final String nrdf02 =
+    final Response nrdf02 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
+           .header("slug", "Delete2-3.8.1-D")
            .body("TestString.")
            .when()
-           .post(resourceSon).asString();
+           .post(locationHeader2);
 
-    final String nrdf03 =
+    final Response nrdf03 =
     RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
+           .header("slug", "Delete3-3.8.1-D")
            .body("TestString.")
            .when()
-           .post(resourceSon).asString();
+           .post(locationHeader2);
+
+    final String rlocationHeader1 = nrdf01.getHeader("Location");
+    final String rlocationHeader2 = nrdf02.getHeader("Location");
+    final String rlocationHeader3 = nrdf03.getHeader("Location");
 
     ps.append("Request method:\tDELETE\n");
     ps.append("Request URI:\t" + uri + "\n");
@@ -376,7 +398,7 @@ import io.restassured.response.Response;
     final Response response = RestAssured.given()
           .auth().basic(this.username, this.password)
           .when()
-          .delete(rootres);
+          .delete(locationHeader);
 
     // Print headers and status
     final int statusDelete = response.getStatusCode();
@@ -391,27 +413,27 @@ import io.restassured.response.Response;
     final Response resResource = RestAssured.given()
           .auth().basic(this.username, this.password)
           .when()
-          .get(rootres);
+          .get(locationHeader);
 
     final Response resResourceSon = RestAssured.given()
           .auth().basic(this.username, this.password)
           .when()
-          .get(resourceSon);
+          .get(locationHeader2);
 
     final Response resRdf01 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .when()
-           .get(nrdf01);
+           .get(rlocationHeader1);
 
     final Response resRdf02 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .when()
-           .get(nrdf02);
+           .get(rlocationHeader2);
 
     final Response resRdf03 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .when()
-           .get(nrdf03);
+           .get(rlocationHeader3);
 
     final String statusdeletestring = String.valueOf(statusDelete);
     if (statusdeletestring.charAt(0) == '2') {

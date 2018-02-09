@@ -80,6 +80,7 @@ public class ExternalBinaryContent {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentpostcreate.txt\"")
+            .header("slug", "External-Binary-Content-3.9-A-PostCreate")
             .body("TestString.")
             .when()
             .post(uri).asString();
@@ -111,6 +112,7 @@ public class ExternalBinaryContent {
         final String resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentputcreate.txt\"")
+            .header("slug", "External-Binary-Content-3.9-A-PutCreate")
             .body("TestString.")
             .when()
             .post(uri).asString();
@@ -143,6 +145,7 @@ public class ExternalBinaryContent {
         final String resource1 = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
+            .header("slug", "External-Binary-Content-3.9-A-PutUpdate1")
             .body("TestString1.")
             .when()
             .post(uri).asString();
@@ -150,23 +153,25 @@ public class ExternalBinaryContent {
         final String resource2 = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
+            .header("slug", "External-Binary-Content-3.9-A-PutUpdate2")
             .body("TestString2.")
             .when()
             .post(uri).asString();
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource1 + "\"")
+            .header("slug", "External-Binary-Content-3.9-A-PutUpdate3")
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource2 + "\"")
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .put(resource)
+            .put(locationHeader)
             .then()
             .log().all()
             .statusCode(204);
@@ -184,21 +189,21 @@ public class ExternalBinaryContent {
         ps.append("\n48." + tl.createExternalBinaryContentCheckAccesType()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .contentType("text/turtle")
             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
             .header("slug", "External-Binary-Content-3.9-B")
             .body(body)
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
             .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .when()
-            .get(resource)
+            .get(locationHeader)
             .then()
             .log().all()
             .statusCode(200).header("Accept-Post",containsString("access-type=URL"));
@@ -266,16 +271,17 @@ public class ExternalBinaryContent {
         ps.append("\n51." + tl.checkUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"checkUnsupportedMediaType.txt\"")
+            .header("slug", "External-Binary-Content-3.9-D")
             .body("TestString.")
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+       final String locationHeader = resource.getHeader("Location");
        final Response res = RestAssured.given()
            .auth().basic(this.username, this.password)
-           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource + "\"")
+           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader + "\"")
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
@@ -316,6 +322,7 @@ public class ExternalBinaryContent {
             .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .header("Content-Disposition", "attachment; filename=\"testExamtxtpost.txt\"")
+            .header("slug", "External-Binary-Content-3.9-E1")
             .body("TestString.")
             .when()
             .post(uri);
@@ -330,16 +337,17 @@ public class ExternalBinaryContent {
               for (Header h : headers) {
                       h1.add(h.getName().toString());
               }
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"postCheckHeaders.txt\"")
+            .header("slug", "External-Binary-Content-3.9-E2")
             .body("TestString.")
             .when()
-            .post(uri).asString();
-
+            .post(uri);
+        final String locationHeader = exbcresource.getHeader("Location");
         final Response res = RestAssured.given()
            .auth().basic(this.username, this.password)
-           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader + "\"")
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
@@ -380,20 +388,21 @@ public class ExternalBinaryContent {
         ps.append("\n53." + tl.putUpdateCheckHeaders()[1]).append('\n');
         ps.append("Request:\n");
 
-       final String resource = RestAssured.given()
+       final Response resource = RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"testExamtxt.txt\"")
+           .header("slug", "External-Binary-Content-3.9-E")
            .body("TestString.")
            .when()
-           .post(uri).asString();
-
+           .post(uri);
+       final String locationHeader = resource.getHeader("Location");
        final Response putup = RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"putUpdatetext.txt\"")
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
-           .put(resource);
+           .put(locationHeader);
 
        ps.append(putup.getStatusLine().toString() + "\n");
        final Headers headers = putup.getHeaders();
@@ -406,33 +415,38 @@ public class ExternalBinaryContent {
            h1.add(h.getName().toString());
        }
 
-       final String exbcresource1 = RestAssured.given()
+       final Response exbcresource1 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
+           .header("slug", "External-Binary-Content-3.9-E")
            .body("TestString1.")
            .when()
-           .post(uri).asString();
+           .post(uri);
 
-       final String exbcresource2 = RestAssured.given()
+       final Response exbcresource2 = RestAssured.given()
            .auth().basic(this.username, this.password)
            .header("Content-Disposition", "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
+           .header("slug", "External-Binary-Content-3.9-E")
            .body("TestString2.")
            .when()
-           .post(uri).asString();
+           .post(uri);
 
-       final String resourceext = RestAssured.given()
+       final String locationHeader1 = exbcresource1.getHeader("Location");
+       final String locationHeader2 = exbcresource2.getHeader("Location");
+
+       final Response resourceext = RestAssured.given()
            .auth().basic(this.username, this.password)
-           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource1 + "\"")
+           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
            .when()
-           .post(uri).asString();
-
+           .post(uri);
+       final String locationHeader3 = resourceext.getHeader("Location");
        final Response resext = RestAssured.given()
            .auth().basic(this.username, this.password)
-           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource2 + "\"")
+           .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader2 + "\"")
            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
            .log().all()
            .when()
-           .put(resourceext);
+           .put(locationHeader3);
 
         ps.append(resext.getStatusLine().toString() + "\n");
         final Headers headersext = resext.getHeaders();
@@ -468,37 +482,41 @@ public class ExternalBinaryContent {
         ps.append("\n54." + tl.getCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"getCheckContentLocationHeader.txt\"")
+            .header("slug", "External-Binary-Content1-3.9-F")
             .body("TestString1.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
+
         ps.append("Request method:\tGET\n");
         ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
-        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + exbcresource + "\"\n\n");
+        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"\n\n");
 
         final Headers headers = RestAssured.given()
             .auth().basic(this.username, this.password)
             .when()
-            .get(resource).getHeaders();
+            .get(locationHeader2).getHeaders();
 
         for (Header h : headers) {
             ps.append(h.getName().toString() + ": ");
             ps.append(h.getValue().toString() + "\n");
         }
 
-        if (resource.indexOf("http") == 0) {
+        if (locationHeader2.indexOf("http") == 0) {
             boolean isValid = false;
             for (Header h : headers) {
-                if ( h.getName().equals("Content-Location") && h.getValue() != " ") {
+                if ( h.getName().equals("Content-location") && h.getValue() != " ") {
                     isValid = true;
                 }
             }
@@ -526,35 +544,38 @@ public class ExternalBinaryContent {
         ps.append("\n55." + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"headCheckContentLocationHeader.txt\"")
+            .header("slug", "External-Binary-Content2-3.9-F")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         ps.append("Request method:\tHEAD\n");
         ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
-        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + exbcresource + "\"\n\n");
+        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"\n\n");
 
         final Headers headers = RestAssured.given()
             .auth().basic(this.username, this.password)
             .when()
-            .head(resource).getHeaders();
+            .head(locationHeader2).getHeaders();
 
         for (Header h : headers) {
             ps.append(h.getName().toString() + ": ");
             ps.append(h.getValue().toString() + "\n");
         }
 
-        if (resource.indexOf("http") == 0) {
+        if (locationHeader2.indexOf("http") == 0) {
             boolean isValid = false;
             for (Header h : headers) {
                 if (h.getName().equals("Content-Location") && h.getValue() != " ") {
@@ -585,18 +606,21 @@ public class ExternalBinaryContent {
         ps.append("\n56." + tl.respondWantDigestExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigest.txt\"")
+            .header("slug", "External-Binary-Content1-3.9-G")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -604,7 +628,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .get(resource)
+            .get(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5"));
@@ -623,18 +647,21 @@ public class ExternalBinaryContent {
         ps.append("\n57." + tl.respondWantDigestExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestHead.txt\"")
+            .header("slug", "External-Binary-Content2-3.9-G")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -642,7 +669,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .head(resource)
+            .head(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5"));
@@ -662,18 +689,21 @@ public class ExternalBinaryContent {
         ps.append("\n58." + tl.respondWantDigestTwoSupportedExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupported.txt\"")
+            .header("slug", "External-Binary-Content1-3.9-H")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -681,7 +711,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .get(resource)
+            .get(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
@@ -701,18 +731,21 @@ public class ExternalBinaryContent {
         ps.append("\n59." + tl.respondWantDigestTwoSupportedExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupportedHead.txt\"")
+            .header("slug", "External-Binary-Content2-3.9-H")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -720,7 +753,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .head(resource)
+            .head(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
@@ -741,18 +774,21 @@ public class ExternalBinaryContent {
         ps.append("\n60." + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
+            .header("slug", "External-Binary-Content1-3.9-I")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -760,7 +796,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .get(resource)
+            .get(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
@@ -781,18 +817,21 @@ public class ExternalBinaryContent {
         ps.append("\n61." + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
+            .header("slug", "External-Binary-Content2-3.9-I")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -800,7 +839,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .head(resource)
+            .head(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
@@ -821,18 +860,21 @@ public class ExternalBinaryContent {
         ps.append("\n62." + tl.respondWantDigestNonSupportedExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestNonSupported.txt\"")
+            .header("slug", "External-Binary-Content1-3.9-J")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -840,7 +882,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .get(resource)
+            .get(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5"));
@@ -861,18 +903,21 @@ public class ExternalBinaryContent {
         ps.append("\n62." + tl.respondWantDigestNonSupportedExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
-        final String exbcresource = RestAssured.given()
+        final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"respondWantDigestNonSupportedHead.txt\"")
+            .header("slug", "External-Binary-Content2-3.9-J")
             .body("TestString.")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final String resource = RestAssured.given()
+        final Response resource = RestAssured.given()
             .auth().basic(this.username, this.password)
-            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + exbcresource + "\"")
+            .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"")
             .when()
-            .post(uri).asString();
+            .post(uri);
+        final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -880,7 +925,7 @@ public class ExternalBinaryContent {
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .head(resource)
+            .head(locationHeader2)
             .then()
             .log().all()
             .statusCode(200).header("Digest", containsString("md5"));
