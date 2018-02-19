@@ -111,7 +111,7 @@ public class Container {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n2." + tl.ldpcContainmentTriples()[1]).append("\n");
         ps.append("Request:\n");
-        final String pythagoras =
+        final Response pythagoras =
         RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
@@ -119,7 +119,8 @@ public class Container {
         .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .when()
         .body(pythagorasContainer)
-        .post(uri).asString();
+        .post(uri);
+        final String pythagorasLocationHeader = pythagoras.getHeader("Location");
 
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -128,23 +129,24 @@ public class Container {
         .header("slug", "person")
         .when()
         .body(personBody)
-        .post(pythagoras).asString();
+        .post(pythagorasLocationHeader).asString();
 
-        final String portraits = RestAssured.given()
+        final Response portraits = RestAssured.given()
         .auth().basic(this.username, this.password)
         .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .contentType("text/turtle")
         .header("slug", "portraits")
         .when()
         .body(portraitContainer.replace("%person%", person))
-        .post(pythagoras).asString();
+        .post(pythagorasLocationHeader);
+        final String portraitsLocationHeader = portraits.getHeader("Location");
 
          RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("image/jpeg")
         .header("slug", "JpgPortrait")
         .when()
-        .post(portraits).asString();
+        .post(portraitsLocationHeader).asString();
 
         final Response resP = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -152,7 +154,7 @@ public class Container {
         .log().all()
         .header("Prefer","return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\"")
         .when()
-        .get(portraits);
+        .get(portraitsLocationHeader);
 
         ps.append(resP.getStatusLine().toString() + "\n");
         final Headers headers = resP.getHeaders();
@@ -184,7 +186,7 @@ public class Container {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n3." + tl.ldpcMembershipTriples()[1]).append("\n");
         ps.append("Request:\n");
-        final String pythagoras =
+        final Response pythagoras =
         RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
@@ -192,7 +194,8 @@ public class Container {
         .header("slug", "pythagoras-3.1.1-C")
         .when()
         .body(pythagorasContainer)
-        .post(uri).asString();
+        .post(uri);
+        final String pythagorasLocationHeader = pythagoras.getHeader("Location");
 
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -201,23 +204,24 @@ public class Container {
         .header("slug", "person")
         .when()
         .body(personBody)
-        .post(pythagoras).asString();
+        .post(pythagorasLocationHeader).asString();
 
-        final String portraits = RestAssured.given()
+        final Response portraits = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
         .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "portraits")
         .when()
         .body(portraitContainer.replace("%person%", person))
-        .post(pythagoras).asString();
+        .post(pythagorasLocationHeader);
+         final String portraitsLocationHeader = portraits.getHeader("Location");
 
          RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("image/jpeg")
         .header("slug", "JpgPortrait")
         .when()
-        .post(portraits).asString();
+        .post(portraitsLocationHeader).asString();
 
         final Response resP = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -225,7 +229,7 @@ public class Container {
         .log().all()
         .header("Prefer","return=representation; include=\"http://www.w3.org/ns/ldp#PreferMembership\"")
         .when()
-        .get(portraits);
+        .get(portraitsLocationHeader);
 
         ps.append(resP.getStatusLine().toString() + "\n");
         final Headers headers = resP.getHeaders();
@@ -254,7 +258,7 @@ public class Container {
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n4." + tl.ldpcMinimalContainerTriples()[1]).append("\n");
         ps.append("Request:\n");
-        final String pythagoras =
+        final Response pythagoras =
         RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
@@ -262,7 +266,8 @@ public class Container {
         .header("slug", "pythagoras-3.1.1-D")
         .when()
         .body(pythagorasContainer)
-        .post(uri).asString();
+        .post(uri);
+        final String pythagorasLocationHeader = pythagoras.getHeader("Location");
 
         final String person = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -271,23 +276,24 @@ public class Container {
         .header("slug", "person")
         .when()
         .body(personBody)
-        .post(pythagoras).asString();
+        .post(pythagorasLocationHeader).asString();
 
-        final String portraits = RestAssured.given()
+        final Response portraits = RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("text/turtle")
         .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
         .header("slug", "portraits")
         .when()
         .body(portraitContainer.replace("%person%", person))
-        .post(pythagoras).asString();
+        .post(pythagorasLocationHeader);
+        final String portraitsLocationHeader = portraits.getHeader("Location");
 
          RestAssured.given()
         .auth().basic(this.username, this.password)
         .contentType("image/jpeg")
         .header("slug", "JpgPortrait")
         .when()
-        .post(portraits).asString();
+        .post(portraitsLocationHeader).asString();
 
         final Response resP = RestAssured.given()
         .auth().basic(this.username, this.password)
@@ -295,7 +301,7 @@ public class Container {
         .log().all()
         .header("Prefer","return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"")
         .when()
-        .get(portraits);
+        .get(portraitsLocationHeader);
 
         ps.append(resP.getStatusLine().toString() + "\n");
         final Headers headers = resP.getHeaders();
