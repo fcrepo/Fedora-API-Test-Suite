@@ -71,9 +71,9 @@ public class HtmlReporter implements IReporter {
                 html.html().head();
 
                 writeCss();
-                html.title().content("LDP Test Suite Report")._head()
+                html.title().content("Fedora API Test Suite Report")._head()
                         .body();
-                html.h1().content("LDP Test Suite Summary");
+                html.h1().content("Fedora API Test Suite Summary");
 
                 // Getting the results for the said suite
                 final Map<String, ISuiteResult> suiteResults = suite.getResults();
