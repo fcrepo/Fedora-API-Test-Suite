@@ -65,7 +65,7 @@ public TestsLabels() { }
         return new String[] {
             "3.1.1-A - Container-CreateLDPC",
             "Implementations must support the creation and management of [LDP] Containers.",
-            "https://fcrepo.github.io/fcrepo-specification/#LDPC",
+            "https://fcrepo.github.io/fcrepo-specification/#ldpc",
             "MUST"
         };
     }
@@ -77,7 +77,7 @@ public TestsLabels() { }
         return new String[] {
             "3.1.1-B - Container-ldpcContainmentTriples",
             "LDP Containers must distinguish [containment triples]",
-            "https://fcrepo.github.io/fcrepo-specification/#LDPC",
+            "https://fcrepo.github.io/fcrepo-specification/#ldpc",
             "MUST"
         };
     }
@@ -89,7 +89,7 @@ public TestsLabels() { }
         return new String[] {
             "3.1.1-C - Container-ldpcMembershipTriples",
             "LDP Containers must distinguish [membership] triples.",
-            "https://fcrepo.github.io/fcrepo-specification/#LDPC",
+            "https://fcrepo.github.io/fcrepo-specification/#ldpc",
             "MUST"
         };
     }
@@ -101,7 +101,7 @@ public TestsLabels() { }
         return new String[] {
             "3.1.1-D - Container-ldpcMinimalContainerTriples",
             "LDP Containers must distinguish [minimal-container] triples.",
-            "https://fcrepo.github.io/fcrepo-specification/#LDPC",
+            "https://fcrepo.github.io/fcrepo-specification/#ldpc",
             "MUST"
         };
     }
@@ -114,7 +114,7 @@ public TestsLabels() { }
             "3.7-A - HttpPatch-SupportHttpPatch",
             "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). [sparql11-update] must be an accepted "
             + "content-type for PATCH.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch",
             "MUST"
         };
     }
@@ -126,7 +126,7 @@ public TestsLabels() { }
         return new String[] {
             "3.7-B - HttpPatch-LDPPatchContentTypeSupport",
             "Other content-types (e.g. [ldpatch]) may be available.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH"
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch"
         };
     }
     /**
@@ -140,7 +140,7 @@ public TestsLabels() { }
             + "statements to a resource that a server disallows (not ignores per [LDP] "
             + "4.2.4.1), the server must fail the request by responding with a 4xx range"
             + " status code (e.g. 409 Conflict).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch",
             "MUST"
         };
     }
@@ -154,7 +154,7 @@ public TestsLabels() { }
             "The server must provide a corresponding response body containing information"
             + " about which statements could not be persisted."
             + " ([LDP] 4.2.4.4 should becomes must).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch",
             "MUST"
         };
     }
@@ -169,7 +169,7 @@ public TestsLabels() { }
             + " described in a resource indicated by a Link: "
             + "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
             + "response header per [LDP] 4.2.1.6.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch",
             "MUST"
         };
     }
@@ -183,7 +183,7 @@ public TestsLabels() { }
             "A successful PATCH request must respond with a 2xx status code; the "
             + "specific code in the 2xx range may vary according to the response "
             + "body or request state.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH",
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch",
             "MUST"
         };
     }
@@ -197,7 +197,7 @@ public TestsLabels() { }
             "The server should not allow HTTP PATCH to update an LDPC’s containment triples; if"
             + " the server receives such a request, it should respond with a"
             + " 409 (Conflict) status code.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH-containment-triples",
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch-containment-triples",
             "MUST"
         };
     }
@@ -212,7 +212,7 @@ public TestsLabels() { }
             + " interaction model of a resource to a type that is not a subtype"
             + " of the current resource type. That request must be rejected"
             + " with a 409 Conflict response.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPATCH-ixn-models",
+            "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models",
             "MUST"
         };
     }
@@ -238,7 +238,7 @@ public TestsLabels() { }
         return new String[] {
             "3.5-A - HttpPost",
             "Any LDPC (except Version Containers (LDPCv)) must support POST ([LDP] 4.2.3 / 5.2.3). ",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+            "https://fcrepo.github.io/fcrepo-specification/#http-post",
             "MUST"
         };
     }
@@ -253,7 +253,7 @@ public TestsLabels() { }
             + "header in the request must be recorded in the constraints"
             + " document referenced in the Link: rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
             + "header ([LDP] 4.2.1.6 clarification).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+            "https://fcrepo.github.io/fcrepo-specification/#http-post",
             "MUST"
         };
     }
@@ -265,7 +265,7 @@ public TestsLabels() { }
         return new String[] {
             "3.5-C - NonRDFSource-PostNonRDFSource",
             "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes must).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+            "https://fcrepo.github.io/fcrepo-specification/#http-post",
             "MUST"
         };
     }
@@ -278,7 +278,7 @@ public TestsLabels() { }
             "3.5-D - NonRDFSource-PostResourceAndCheckAssociatedResource",
             "On creation of an LDP-NR, an implementation must create an associated LDP-RS describing"
             + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPOST",
+            "https://fcrepo.github.io/fcrepo-specification/#http-post",
             "MUST"
         };
     }
@@ -292,7 +292,7 @@ public TestsLabels() { }
             "An HTTP POST request that would create an LDP-NR and includes a Digest header (as described"
             + " in [RFC3230]) for which the instance-digest in that header does not match that of the "
             + "new LDP-NR must be rejected with a 409 Conflict response.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPOSTLDPNR",
+            "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr",
             "MUST"
         };
     }
@@ -305,7 +305,7 @@ public TestsLabels() { }
             "3.5.1-B - NonRDFSource-PostDigestResponseHeaderVerification",
             "An HTTP POST request that includes an unsupported Digest type (as described in [RFC3230]), "
             + "should be rejected with a 400 Bad Request response.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPOSTLDPNR",
+            "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr",
             "SHOULD"
         };
     }
@@ -321,7 +321,7 @@ public TestsLabels() { }
             + "and has an interaction model assigned to it by [LDP],hen the resource must be assigned the new "
             + "type and the interaction model of the resource must be changed to the interaction model assigned "
             + "to the new type by [LDP].",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUT",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put",
             "MAY"
         };
     }
@@ -336,7 +336,7 @@ public TestsLabels() { }
             + "may be included. If that type is a value in the LDP namespace and is not either a current "
             + "type of the resource or a subtype of a current type of the resource, the request must be "
             + "rejected with a 409 Conflict response.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUT",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put",
             "MAY"
         };
     }
@@ -349,7 +349,7 @@ public TestsLabels() { }
             "3.6.1-A - HttpPut-UpdateTriples",
             "Any LDP-RS must support PUT to update statements that are not server-managed triples (as defined "
             + "in [LDP] 2). [LDP] 4.2.4.1 and 4.2.4.3 remain in effect.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPRS",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs",
             "MUST"
         };
     }
@@ -365,7 +365,7 @@ public TestsLabels() { }
             + " disallows (not ignores per [LDP] 4.2.4.1), the server must fail the request by "
             + "responding with a 4xx "
             + "range status code (e.g. 409 Conflict).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPRS",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs",
             "MUST"
         };
     }
@@ -379,7 +379,7 @@ public TestsLabels() { }
             "The server must provide a corresponding response body containing information "
             + "about which statements could"
             + " not be persisted. ([LDP] 4.2.4.4 shouldbecomes must).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPRS",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs",
             "MUST"
         };
     }
@@ -393,7 +393,7 @@ public TestsLabels() { }
             "In that response, the restrictions causing such a request to fail must be "
             + "described in a resource indicated"
             + " by a Link: rel=\"http://www.w3.org/ns/ldp#constrainedBy\" response header per [LDP] 4.2.1.6.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPRS",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs",
             "MUST"
         };
     }
@@ -405,7 +405,7 @@ public TestsLabels() { }
         return new String[] {
             "3.6.2-A - HttpPutNR",
             "Any LDP-NR must support PUT to replace the binary content of that resource.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr",
             "MUST"
         };
     }
@@ -419,7 +419,7 @@ public TestsLabels() { }
             "An HTTP PUT request that includes a Digest header (as described in [RFC3230]) for which any "
             + "instance-digest in that header does not match the instance it describes, must be rejected "
             + "with a 409 Conflict response.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr",
             "MUST"
         };
     }
@@ -432,7 +432,7 @@ public TestsLabels() { }
             "3.6.2-C - NonRDFSource-PutDigestResponseHeaderVerification",
             "An HTTP PUT request that includes an unsupported Digest type (as described in [RFC3230]), should"
             + " be rejected with a 400 (Bad Request) response.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpPUTLDPNR",
+            "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr",
             "SHOULD"
         };
     }
@@ -447,7 +447,7 @@ public TestsLabels() { }
             + "(3.5 HTTP POST and [LDP]5.2.3.12),"
             + "the response must include a Link: rel=\"describes\" header referencing the LDP-NR "
             + "in question, as defined in [RFC6892].",
-            "http://fedora.info/2017/06/30/spec/#httpGET",
+            "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
             "MUST"
         };
     }
@@ -462,7 +462,7 @@ public TestsLabels() { }
             + "http://www.w3.org/ns/oa#PreferContainedDescriptions and should support the value "
             + "http://fedora.info/definitions/fcrepo#PreferInboundReferences for the Prefer header when making GET "
             + "requests on LDPC resources.",
-            "http://fedora.info/2017/06/30/spec/#additionalPreferValues",
+            "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
             "MAY"
         };
     }
@@ -476,7 +476,7 @@ public TestsLabels() { }
             "Responses to GET requests that apply a Prefer request header to any LDP-RS must "
             + "include the Preference-Applied"
             + " response header as defined in [RFC7240] section 3.",
-            "http://fedora.info/2017/06/30/spec/#httpGETLDPRS",
+            "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
             "MUST"
         };
     }
@@ -490,7 +490,7 @@ public TestsLabels() { }
             "The HEAD method is identical to GET except that the server must not return a "
             + "message-body in the response, as "
             + "specified in [RFC7231] section 4.3.2.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
+            "https://fcrepo.github.io/fcrepo-specification/#http-head",
             "MUST NOT"
         };
     }
@@ -503,7 +503,7 @@ public TestsLabels() { }
             "3.3-B - HttpHead-ResponseDigest",
             "The server must send the same Digest header in the response as it"
             + " would have sent if the request had been a GET (or omit it if it would have been omitted for a GET).",
-            "https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
+            "https://fcrepo.github.io/fcrepo-specification/#http-head",
             "MUST"
         };
     }
@@ -517,7 +517,7 @@ public TestsLabels() { }
             "In other cases, The server should send the same headers in response to a HEAD request "
             + "as it would have sent if the request had "
             + "been a GET, except that the payload headers (defined in [RFC7231] section 3.3) may be omitted.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpHEAD",
+            "https://fcrepo.github.io/fcrepo-specification/#http-head",
             "SHOULD"
         };
     }
@@ -533,7 +533,7 @@ public TestsLabels() { }
             + "implement it. When a Fedora server supports this method, in addition to the "
             + "requirements imposed on LDPRs within"
             + " containers outlined in [LDP] section 5.2.5.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+            "https://fcrepo.github.io/fcrepo-specification/#http-delete",
             "MAY"
         };
     }
@@ -546,7 +546,7 @@ public TestsLabels() { }
             "3.8.1-A - httpDeleteOptionsCheck",
             "An implementation that cannot recurse should not advertise DELETE in response to OPTIONS "
             + "requests for containers with contained resources.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+            "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
             "SHOULD NOT"
         };
     }
@@ -559,7 +559,7 @@ public TestsLabels() { }
             "3.8.1-C - httpDeleteStatusCheck",
             "An implementation must not return a 200 (OK) or 204 (No Content) response "
             + "unless the entire operation successfully completed.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+            "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
             "MUST NOT"
         };
     }
@@ -572,7 +572,7 @@ public TestsLabels() { }
             "3.8.1-D - httpDeleteStatusCheckTwo",
             "An implementation must not emit a message that implies the successful DELETE of a resource until "
             + "the resource has been successfully removed.",
-            "https://fcrepo.github.io/fcrepo-specification/#httpDELETE",
+            "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
             "MUST NOT"
         };
     }
