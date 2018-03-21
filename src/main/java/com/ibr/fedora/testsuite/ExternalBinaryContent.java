@@ -287,11 +287,11 @@ public class ExternalBinaryContent {
            .when()
            .post(uri);
 
-        ps.append(res.getStatusLine().toString() + "\n");
+        ps.append(res.getStatusLine() + "\n");
         final Headers headers = res.getHeaders();
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName() + ": ");
+            ps.append(h.getValue() + "\n");
         }
         ps.append("\n -Case End- \n").close();
 
@@ -327,15 +327,15 @@ public class ExternalBinaryContent {
             .when()
             .post(uri);
 
-        ps.append(resource.getStatusLine().toString() + "\n");
+        ps.append(resource.getStatusLine() + "\n");
         final Headers headers = resource.getHeaders();
               for (Header h : headers) {
-                  ps.append(h.getName().toString() + ": ");
-                  ps.append(h.getValue().toString() + "\n");
+                  ps.append(h.getName() + ": ");
+                  ps.append(h.getValue() + "\n");
               }
         final List<String> h1 = new ArrayList<>();
               for (Header h : headers) {
-                      h1.add(h.getName().toString());
+                      h1.add(h.getName());
               }
         final Response exbcresource = RestAssured.given()
             .auth().basic(this.username, this.password)
@@ -353,17 +353,17 @@ public class ExternalBinaryContent {
            .when()
            .post(uri);
 
-        ps.append(res.getStatusLine().toString() + "\n");
+        ps.append(res.getStatusLine() + "\n");
         final Headers headersext = res.getHeaders();
         for (Header h : headersext) {
-             ps.append(h.getName().toString() + ": ");
-             ps.append(h.getValue().toString() + "\n");
+             ps.append(h.getName() + ": ");
+             ps.append(h.getValue() + "\n");
         }
 
 
         final List<String> h2 = new ArrayList<>();
         for (Header h : headersext) {
-            h2.add(h.getName().toString());
+            h2.add(h.getName());
         }
 
         final Set set1 = new HashSet(Arrays.asList(h1));
@@ -404,15 +404,15 @@ public class ExternalBinaryContent {
            .when()
            .put(locationHeader);
 
-       ps.append(putup.getStatusLine().toString() + "\n");
+       ps.append(putup.getStatusLine() + "\n");
        final Headers headers = putup.getHeaders();
        for (Header h : headers) {
-           ps.append(h.getName().toString() + ": ");
-           ps.append(h.getValue().toString() + "\n");
+           ps.append(h.getName() + ": ");
+           ps.append(h.getValue() + "\n");
        }
        final List<String> h1 = new ArrayList<>();
        for (Header h : headers) {
-           h1.add(h.getName().toString());
+           h1.add(h.getName());
        }
 
        final Response exbcresource1 = RestAssured.given()
@@ -448,16 +448,16 @@ public class ExternalBinaryContent {
            .when()
            .put(locationHeader3);
 
-        ps.append(resext.getStatusLine().toString() + "\n");
+        ps.append(resext.getStatusLine() + "\n");
         final Headers headersext = resext.getHeaders();
         for (Header h : headersext) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName() + ": ");
+            ps.append(h.getValue() + "\n");
         }
 
         final List<String> h2 = new ArrayList<>();
         for (Header h : headersext) {
-            h2.add(h.getName().toString());
+            h2.add(h.getName());
         }
 
        final Set set1 = new HashSet(Arrays.asList(h1));
@@ -509,8 +509,8 @@ public class ExternalBinaryContent {
             .get(locationHeader2).getHeaders();
 
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName() + ": ");
+            ps.append(h.getValue() + "\n");
         }
 
         if (locationHeader2.indexOf("http") == 0) {
@@ -571,8 +571,8 @@ public class ExternalBinaryContent {
             .head(locationHeader2).getHeaders();
 
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName() + ": ");
+            ps.append(h.getValue() + "\n");
         }
 
         if (locationHeader2.indexOf("http") == 0) {
@@ -714,10 +714,10 @@ public class ExternalBinaryContent {
             .get(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine().toString());
+        ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
@@ -763,10 +763,10 @@ public class ExternalBinaryContent {
             .head(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine().toString());
+        ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
@@ -813,10 +813,10 @@ public class ExternalBinaryContent {
             .get(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine().toString());
+        ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
@@ -863,10 +863,10 @@ public class ExternalBinaryContent {
             .head(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine().toString());
+        ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||

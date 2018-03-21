@@ -232,10 +232,10 @@ public class HttpGet {
             .get(locationHeader);
 
     final Headers headers = wantDigestResponse.getHeaders();
-    ps.append(wantDigestResponse.getStatusLine().toString());
+    ps.append(wantDigestResponse.getStatusLine());
 
     for (Header h : headers) {
-         ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+         ps.append(h.getName() + ": " + h.getValue() + "\n");
     }
 
     Assert.assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
@@ -274,10 +274,10 @@ public class HttpGet {
             .get(locationHeader);
 
         final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine().toString());
+        ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-             ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
      Assert.assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
