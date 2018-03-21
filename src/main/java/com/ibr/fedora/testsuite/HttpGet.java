@@ -24,8 +24,11 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -204,7 +207,7 @@ public class HttpGet {
     @Test(priority = 11)
     @Parameters({"param1"})
     public void respondWantDigestTwoSupported(final String uri) throws FileNotFoundException {
-        final String checksum = "md5,sha1";
+        final String checksum = "md5,sha";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n11." + tl.respondWantDigestTwoSupported()[1]).append('\n');
         ps.append("Request:\n");
@@ -219,20 +222,26 @@ public class HttpGet {
                     .when()
                     .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
+
+    final Response wantDigestResponse = RestAssured.given()
         .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .get(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
+            .get(locationHeader);
 
+    final Headers headers = wantDigestResponse.getHeaders();
+    ps.append(wantDigestResponse.getStatusLine());
 
-           ps.append("-Case End- \n").close();
-       }
+    for (Header h : headers) {
+         ps.append(h.getName() + ": " + h.getValue() + "\n");
+    }
+
+    Assert.assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
+
+    ps.append("-Case End- \n").close();
+    }
 
     /**
      * 3.2.3-C
@@ -241,7 +250,7 @@ public class HttpGet {
     @Test(priority = 12)
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) throws FileNotFoundException {
-        final String checksum = "md5;q=0.3,sha1;q=1";
+        final String checksum = "md5;q=0.3,sha;q=1";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n12." + tl.respondWantDigestTwoSupportedQvalueNonZero()[1]).append('\n');
         ps.append("Request:\n");
@@ -256,19 +265,24 @@ public class HttpGet {
                     .when()
                     .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
+        final Response wantDigestResponse = RestAssured.given()
         .auth().basic(this.username, this.password)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
             .header("Want-Digest",checksum)
             .when()
-            .get(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(200).header("Digest", containsString("md5")).and().header("Digest", containsString("sha1"));
+            .get(locationHeader);
 
+        final Headers headers = wantDigestResponse.getHeaders();
+        ps.append(wantDigestResponse.getStatusLine());
 
-           ps.append("-Case End- \n").close();
+        for (Header h : headers) {
+             ps.append(h.getName() + ": " + h.getValue() + "\n");
+        }
+
+     Assert.assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
+
+        ps.append("-Case End- \n").close();
        }
 
     /**
@@ -278,7 +292,7 @@ public class HttpGet {
     @Test(priority = 13)
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueZero(final String uri) throws FileNotFoundException {
-        final String checksum = "md5;q=0.3,sha1;q=0";
+        final String checksum = "md5;q=0.3,sha;q=0";
         final PrintStream ps = TestSuiteGlobals.logFile();
         ps.append("\n13." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
         ps.append("Request:\n");
