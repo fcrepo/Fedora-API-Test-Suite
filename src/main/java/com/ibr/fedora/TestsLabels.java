@@ -263,7 +263,7 @@ public TestsLabels() { }
     */
     public String[] postNonRDFSource() {
         return new String[] {
-            "3.5-C - NonRDFSource-PostNonRDFSource",
+            "3.5.1-A - NonRDFSource-PostNonRDFSource",
             "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes must).",
             "https://fcrepo.github.io/fcrepo-specification/#http-post",
             "MUST"
@@ -275,7 +275,7 @@ public TestsLabels() { }
     */
     public String[] postResourceAndCheckAssociatedResource() {
         return new String[] {
-            "3.5-D - NonRDFSource-PostResourceAndCheckAssociatedResource",
+            "3.5.1-B - NonRDFSource-PostResourceAndCheckAssociatedResource",
             "On creation of an LDP-NR, an implementation must create an associated LDP-RS describing"
             + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
             "https://fcrepo.github.io/fcrepo-specification/#http-post",
@@ -288,7 +288,7 @@ public TestsLabels() { }
     */
     public String[] postDigestResponseHeaderAuthentication() {
         return new String[] {
-            "3.5.1-A - NonRDFSource-PostDigestResponseHeaderAuthentication",
+            "3.5.1-C - NonRDFSource-PostDigestResponseHeaderAuthentication",
             "An HTTP POST request that would create an LDP-NR and includes a Digest header (as described"
             + " in [RFC3230]) for which the instance-digest in that header does not match that of the "
             + "new LDP-NR must be rejected with a 409 Conflict response.",
@@ -302,7 +302,7 @@ public TestsLabels() { }
     */
     public String[] postDigestResponseHeaderVerification() {
         return new String[] {
-            "3.5.1-B - NonRDFSource-PostDigestResponseHeaderVerification",
+            "3.5.1-D - NonRDFSource-PostDigestResponseHeaderVerification",
             "An HTTP POST request that includes an unsupported Digest type (as described in [RFC3230]), "
             + "should be rejected with a 400 Bad Request response.",
             "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr",

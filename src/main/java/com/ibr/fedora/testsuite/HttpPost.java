@@ -113,7 +113,7 @@ public class HttpPost {
     }
 
     /**
-     * 3.5-C
+     * 3.5.1-A
      * @param uri
      */
     @Test(priority = 22)
@@ -125,7 +125,7 @@ public class HttpPost {
     RestAssured.given()
     .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
-            .header("slug", "Post-3.5-C")
+            .header("slug", "Post-3.5.1-A")
             .body("TestString.")
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
@@ -138,7 +138,7 @@ public class HttpPost {
     }
 
     /**
-     * 3.5-D
+     * 3.5.1-B
      * @param uri
      */
     @Test(priority = 23)
@@ -150,7 +150,7 @@ public class HttpPost {
     RestAssured.given()
     .auth().basic(this.username, this.password)
             .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
-            .header("slug", "Post-3.5-D")
+            .header("slug", "Post-3.5.1-B")
             .body("TestString.")
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
@@ -164,7 +164,7 @@ public class HttpPost {
     }
 
     /**
-     * 3.5.1-A
+     * 3.5.1-C
      * @param uri
      */
     @Test(priority = 24)
@@ -179,7 +179,7 @@ public class HttpPost {
             .auth().basic(this.username, this.password)
             .header("Content-Disposition",
                 "attachment; filename=\"test1digesttext.txt\"")
-            .header("slug", "Post-3.5.1-A")
+            .header("slug", "Post-3.5.1-C")
             .body("TestString.")
             .header("Digest", checksum)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -194,7 +194,7 @@ public class HttpPost {
     }
 
     /**
-     * 3.5.1-B
+     * 3.5.1-D
      * @param uri
      */
     @Test(priority = 25)
@@ -209,7 +209,7 @@ public class HttpPost {
             .auth().basic(this.username, this.password)
             .header("Content-Disposition",
                 "attachment; filename=\"test1digesttext2.txt\"")
-            .header("slug", "Post-3.5.1-B")
+            .header("slug", "Post-3.5.1-D")
             .body("TestString.")
             .header("Digest", checksum)
             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
