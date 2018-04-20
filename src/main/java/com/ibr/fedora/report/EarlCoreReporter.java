@@ -20,15 +20,6 @@
  */
 package com.ibr.fedora.report;
 
-import com.ibr.fedora.TestSuiteGlobals;
-
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
-import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
-import org.openrdf.model.vocabulary.EARL;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -36,17 +27,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public abstract class EarlCoreReporter {
-    protected BufferedWriter writer;
-    protected Model model;
-    protected static final HashMap<String, String> prefixes = new HashMap<String, String>();
+import com.ibr.fedora.TestSuiteGlobals;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.openrdf.model.vocabulary.EARL;
 
+public abstract class EarlCoreReporter {
     //Earl resources
     public final static Resource Assertion = ResourceFactory.createResource(EARL.ASSERTION.toString());
     public final static Resource Assertor = ResourceFactory.createResource(EARL.ASSERTOR.toString());
     public final static Resource TestSubject = ResourceFactory.createResource(EARL.TEST_SUBJECT.toString());
     public final static Resource TestResult = ResourceFactory.createResource(EARL.TESTRESULT.toString());
-
     //Earl properties
     public final static Property testResult = ResourceFactory.createProperty(EARL.RESULT.toString());
     public final static Property testSubject = ResourceFactory.createProperty(EARL.SUBJECT.toString());
@@ -56,6 +50,7 @@ public abstract class EarlCoreReporter {
     public final static Property passed = ResourceFactory.createProperty(EARL.NAMESPACE + "passed");
     public final static Property failed = ResourceFactory.createProperty(EARL.NAMESPACE + "failed");
     public final static Property untested = ResourceFactory.createProperty(EARL.NAMESPACE + "untested");
+    protected static final HashMap<String, String> prefixes = new HashMap<String, String>();
 
     static {
         prefixes.put("earl", "http://www.w3.org/ns/earl#");
@@ -64,6 +59,9 @@ public abstract class EarlCoreReporter {
         prefixes.put("dcterms", "http://purl.org/dc/terms/");
         prefixes.put("ldpt", TestSuiteGlobals.ldptNamespace);
     }
+
+    protected BufferedWriter writer;
+    protected Model model;
 
     protected void createWriter(final String directory) throws IOException {
         final File dir = new File(directory);
@@ -90,6 +88,7 @@ public abstract class EarlCoreReporter {
 
     /**
      * Write RDF prefixes
+     *
      * @param model
      */
     public void writePrefixes(final Model model) {
@@ -97,4 +96,4 @@ public abstract class EarlCoreReporter {
             model.setNsPrefix(prefix.getKey(), prefix.getValue());
         }
     }
-    }
+}

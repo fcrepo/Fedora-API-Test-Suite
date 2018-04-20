@@ -22,16 +22,14 @@ package com.ibr.fedora.testsuite;
 
 import java.io.FileNotFoundException;
 
+import com.ibr.fedora.TestSuiteGlobals;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
-
-import com.ibr.fedora.TestSuiteGlobals;
 
 @Listeners({com.ibr.fedora.report.HtmlReporter.class, com.ibr.fedora.report.EarlReporter.class})
 public class SetUpSuite {
 
     /**
-     * 
      * @throws FileNotFoundException
      */
     @BeforeSuite

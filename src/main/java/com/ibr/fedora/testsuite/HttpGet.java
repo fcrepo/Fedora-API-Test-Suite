@@ -20,6 +20,11 @@
  */
 package com.ibr.fedora.testsuite;
 
+import static org.hamcrest.Matchers.containsString;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
@@ -27,41 +32,37 @@ import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-
-import static org.hamcrest.Matchers.containsString;
-
 public class HttpGet {
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+                                + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+                                + "<> a ldp:Container, ldp:BasicContainer;"
+                                + "dcterms:title 'Get class Container' ;"
+                                + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
     public TestsLabels tl = new TestsLabels();
-    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-        + "<> a ldp:Container, ldp:BasicContainer;"
-        + "dcterms:title 'Get class Container' ;"
-        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
+     *
      * @param username
      * @param password
      */
     @BeforeClass
     @Parameters({"param2", "param3"})
     public void auth(final String username, final String password) {
-    this.username = username;
-    this.password = password;
+        this.username = username;
+        this.password = password;
     }
 
     /**
      * 3.2.1-A
+     *
      * @param uri
      */
     @Test(priority = 7)
@@ -72,67 +73,71 @@ public class HttpGet {
         ps.append("Request:\n");
         final Response resource =
             RestAssured.given()
-    .auth().basic(this.username, this.password)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .contentType("text/turtle")
-                .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                .header("slug", "Get-3.2.1-A")
-                .body(body)
-                .when()
-                .post(uri);
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .contentType("text/turtle")
+                       .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                       .header("slug", "Get-3.2.1-A")
+                       .body(body)
+                       .when()
+                       .post(uri);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
-    .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .header("Prefer", "return=representation; "
-            + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
-            .when()
-            .get(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(200).header("preference-applied",
-            containsString("http://fedora.info/definitions/fcrepo#PreferInboundReferences"));
+                   .auth().basic(this.username, this.password)
+                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                   .log().all()
+                   .header("Prefer", "return=representation; "
+                                     + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
+                   .when()
+                   .get(locationHeader)
+                   .then()
+                   .log().all()
+                   .statusCode(200).header("preference-applied",
+                                           containsString(
+                                               "http://fedora.info/definitions/fcrepo#PreferInboundReferences"));
 
         ps.append("\n -Case End- \n").close();
     }
 
     /**
      * 3.2.2-A
+     *
      * @param uri
      */
     @Test(priority = 8)
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String uri) throws FileNotFoundException {
-    final PrintStream ps = TestSuiteGlobals.logFile();
-    ps.append("\n8." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
-    ps.append("Request:\n");
-    final Response resource =
+        final PrintStream ps = TestSuiteGlobals.logFile();
+        ps.append("\n8." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
+        ps.append("Request:\n");
+        final Response resource =
+            RestAssured.given()
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .contentType("text/turtle")
+                       .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                       .header("slug", "Get-3.2.2-A")
+                       .body(body)
+                       .when()
+                       .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
-    .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .contentType("text/turtle")
-            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-            .header("slug", "Get-3.2.2-A")
-            .body(body)
-            .when()
-            .post(uri);
-    final String locationHeader = resource.getHeader("Location");
-    RestAssured.given()
-    .auth().basic(this.username, this.password)
-        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-        .log().all()
-        .header("Prefer", "return=minimal")
-        .when()
-        .get(locationHeader)
-        .then()
-        .log().all()
-        .statusCode(200).header("preference-applied", containsString("return=minimal"));
+                   .auth().basic(this.username, this.password)
+                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                   .log().all()
+                   .header("Prefer", "return=minimal")
+                   .when()
+                   .get(locationHeader)
+                   .then()
+                   .log().all()
+                   .statusCode(200).header("preference-applied", containsString("return=minimal"));
 
-    ps.append("\n -Case End- \n").close();
-      }
+        ps.append("\n -Case End- \n").close();
+    }
+
     /**
      * 3.2.2-B
+     *
      * @param uri
      */
     @Test(priority = 9)
@@ -143,28 +148,30 @@ public class HttpGet {
         ps.append("Request:\n");
         final Response resource =
             RestAssured.given()
-    .auth().basic(this.username, this.password)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
-                .header("slug", "Get-3.2.2-B")
-                .body("TestString")
-                .when()
-                .post(uri);
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
+                       .header("slug", "Get-3.2.2-B")
+                       .body("TestString")
+                       .when()
+                       .post(uri);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
-    .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .when()
-            .get(locationHeader + "/fcr:metadata")
-            .then()
-            .log().all()
-            .statusCode(200).header("Link", containsString("describes"));
+                   .auth().basic(this.username, this.password)
+                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                   .log().all()
+                   .when()
+                   .get(locationHeader + "/fcr:metadata")
+                   .then()
+                   .log().all()
+                   .statusCode(200).header("Link", containsString("describes"));
 
         ps.append("\n -Case End- \n").close();
     }
+
     /**
      * 3.2.3-A
+     *
      * @param uri
      */
     @Test(priority = 10)
@@ -175,33 +182,34 @@ public class HttpGet {
         ps.append("\n10." + tl.respondWantDigest()[1]).append('\n');
         ps.append("Request:\n");
 
-    final Response resource =
+        final Response resource =
             RestAssured.given()
-            .auth().basic(this.username, this.password)
-                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                    .header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
-                    .header("slug", "Get-3.2.3-A")
-                    .body("TestString")
-                    .when()
-                    .post(uri);
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
+                       .header("slug", "Get-3.2.3-A")
+                       .body("TestString")
+                       .when()
+                       .post(uri);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
-        .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .header("Want-Digest",checksum)
-            .when()
-            .get(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(200).header("Digest", containsString("md5"));
+                   .auth().basic(this.username, this.password)
+                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                   .log().all()
+                   .header("Want-Digest", checksum)
+                   .when()
+                   .get(locationHeader)
+                   .then()
+                   .log().all()
+                   .statusCode(200).header("Digest", containsString("md5"));
 
 
-           ps.append("-Case End- \n").close();
-       }
+        ps.append("-Case End- \n").close();
+    }
 
     /**
      * 3.2.3-B
+     *
      * @param uri
      */
     @Test(priority = 11)
@@ -212,39 +220,42 @@ public class HttpGet {
         ps.append("\n11." + tl.respondWantDigestTwoSupported()[1]).append('\n');
         ps.append("Request:\n");
 
-    final Response resource =
+        final Response resource =
             RestAssured.given()
-            .auth().basic(this.username, this.password)
-                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                    .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
-                    .header("slug", "Get-3.2.3-B")
-                    .body("TestString")
-                    .when()
-                    .post(uri);
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
+                       .header("slug", "Get-3.2.3-B")
+                       .body("TestString")
+                       .when()
+                       .post(uri);
         final String locationHeader = resource.getHeader("Location");
 
-    final Response wantDigestResponse = RestAssured.given()
-        .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .header("Want-Digest",checksum)
-            .when()
-            .get(locationHeader);
+        final Response wantDigestResponse = RestAssured.given()
+                                                       .auth().basic(this.username, this.password)
+                                                       .config(RestAssured.config()
+                                                                          .logConfig(new LogConfig().defaultStream(ps)))
+                                                       .log().all()
+                                                       .header("Want-Digest", checksum)
+                                                       .when()
+                                                       .get(locationHeader);
 
-    final Headers headers = wantDigestResponse.getHeaders();
-    ps.append(wantDigestResponse.getStatusLine());
+        final Headers headers = wantDigestResponse.getHeaders();
+        ps.append(wantDigestResponse.getStatusLine());
 
-    for (Header h : headers) {
-         ps.append(h.getName() + ": " + h.getValue() + "\n");
-    }
+        for (Header h : headers) {
+            ps.append(h.getName() + ": " + h.getValue() + "\n");
+        }
 
-    Assert.assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
+        Assert
+            .assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
 
-    ps.append("-Case End- \n").close();
+        ps.append("-Case End- \n").close();
     }
 
     /**
      * 3.2.3-C
+     *
      * @param uri
      */
     @Test(priority = 12)
@@ -255,38 +266,42 @@ public class HttpGet {
         ps.append("\n12." + tl.respondWantDigestTwoSupportedQvalueNonZero()[1]).append('\n');
         ps.append("Request:\n");
 
-    final Response resource =
+        final Response resource =
             RestAssured.given()
-            .auth().basic(this.username, this.password)
-                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                    .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero.txt\"")
-                    .header("slug", "Get-3.2.3-C")
-                    .body("TestString")
-                    .when()
-                    .post(uri);
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .header("Content-Disposition",
+                               "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero.txt\"")
+                       .header("slug", "Get-3.2.3-C")
+                       .body("TestString")
+                       .when()
+                       .post(uri);
         final String locationHeader = resource.getHeader("Location");
         final Response wantDigestResponse = RestAssured.given()
-        .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .header("Want-Digest",checksum)
-            .when()
-            .get(locationHeader);
+                                                       .auth().basic(this.username, this.password)
+                                                       .config(RestAssured.config()
+                                                                          .logConfig(new LogConfig().defaultStream(ps)))
+                                                       .log().all()
+                                                       .header("Want-Digest", checksum)
+                                                       .when()
+                                                       .get(locationHeader);
 
         final Headers headers = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-             ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
-     Assert.assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
+        Assert
+            .assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
 
         ps.append("-Case End- \n").close();
-       }
+    }
 
     /**
      * 3.2.3-D
+     *
      * @param uri
      */
     @Test(priority = 13)
@@ -297,33 +312,34 @@ public class HttpGet {
         ps.append("\n13." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
         ps.append("Request:\n");
 
-    final Response resource =
+        final Response resource =
             RestAssured.given()
-            .auth().basic(this.username, this.password)
-                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                    .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
-                    .header("slug", "Get-3.2.3-D")
-                    .body("TestString")
-                    .when()
-                    .post(uri);
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
+                       .header("slug", "Get-3.2.3-D")
+                       .body("TestString")
+                       .when()
+                       .post(uri);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
-        .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .header("Want-Digest",checksum)
-            .when()
-            .get(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(200).header("Digest", containsString("md5"));
+                   .auth().basic(this.username, this.password)
+                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                   .log().all()
+                   .header("Want-Digest", checksum)
+                   .when()
+                   .get(locationHeader)
+                   .then()
+                   .log().all()
+                   .statusCode(200).header("Digest", containsString("md5"));
 
 
-           ps.append("-Case End- \n").close();
-       }
+        ps.append("-Case End- \n").close();
+    }
 
     /**
      * 3.2.3-E
+     *
      * @param uri
      */
     @Test(priority = 14)
@@ -334,30 +350,30 @@ public class HttpGet {
         ps.append("\n14." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
         ps.append("Request:\n");
 
-    final Response resource =
+        final Response resource =
             RestAssured.given()
-            .auth().basic(this.username, this.password)
-                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                    .header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
-                    .header("slug", "Get-3.2.3-E")
-                    .body("TestString")
-                    .when()
-                    .post(uri);
-       final String locationHeader = resource.getHeader("Location");
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
+                       .header("slug", "Get-3.2.3-E")
+                       .body("TestString")
+                       .when()
+                       .post(uri);
+        final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
-        .auth().basic(this.username, this.password)
-            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .header("Want-Digest",checksum)
-            .when()
-            .get(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(200).header("Digest", containsString("md5"));
+                   .auth().basic(this.username, this.password)
+                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                   .log().all()
+                   .header("Want-Digest", checksum)
+                   .when()
+                   .get(locationHeader)
+                   .then()
+                   .log().all()
+                   .statusCode(200).header("Digest", containsString("md5"));
 
 
-           ps.append("-Case End- \n").close();
-       }
-
-
+        ps.append("-Case End- \n").close();
     }
+
+
+}

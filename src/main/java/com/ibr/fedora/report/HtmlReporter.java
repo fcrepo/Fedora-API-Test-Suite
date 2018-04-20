@@ -20,16 +20,9 @@
  */
 package com.ibr.fedora.report;
 
-import com.ibr.fedora.TestSuiteGlobals;
-import org.rendersnake.HtmlCanvas;
-import org.rendersnake.StringResource;
-import org.testng.IReporter;
-import org.testng.IResultMap;
-import org.testng.ISuite;
-import org.testng.ISuiteResult;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.xml.XmlSuite;
+import static org.rendersnake.HtmlAttributesFactory.NO_ESCAPE;
+import static org.rendersnake.HtmlAttributesFactory.class_;
+import static org.rendersnake.HtmlAttributesFactory.href;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -41,30 +34,36 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.rendersnake.HtmlAttributesFactory.NO_ESCAPE;
-import static org.rendersnake.HtmlAttributesFactory.class_;
-import static org.rendersnake.HtmlAttributesFactory.href;
+import com.ibr.fedora.TestSuiteGlobals;
+import org.rendersnake.HtmlCanvas;
+import org.rendersnake.StringResource;
+import org.testng.IReporter;
+import org.testng.IResultMap;
+import org.testng.ISuite;
+import org.testng.ISuiteResult;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.xml.XmlSuite;
 
 public class HtmlReporter implements IReporter {
-
-    private IResultMap passedTests;
-    private IResultMap failedTests;
-    private IResultMap skippedTests;
 
     HashMap<String, Integer> passClasses;
     HashMap<String, Integer> failClasses;
     HashMap<String, Integer> skipClasses;
-
+    private IResultMap passedTests;
+    private IResultMap failedTests;
+    private IResultMap skippedTests;
     private HtmlCanvas html;
 
     /**
      * Generate HTML report main method
+     *
      * @param xmlSuites
      * @param suites
      * @param outputDirectory
      */
     public void generateReport(final List<XmlSuite> xmlSuites,
-    final List<ISuite> suites, final String outputDirectory) {
+                               final List<ISuite> suites, final String outputDirectory) {
         try {
             for (ISuite suite : suites) {
                 html = new HtmlCanvas();
@@ -72,7 +71,7 @@ public class HtmlReporter implements IReporter {
 
                 writeCss();
                 html.title().content("Fedora API Test Suite Report")._head()
-                        .body();
+                    .body();
                 html.h1().content("Fedora API Test Suite Summary");
 
                 // Getting the results for the said suite
@@ -112,7 +111,7 @@ public class HtmlReporter implements IReporter {
     private void writeCss() throws IOException {
 
         html.style().write(StringResource.get(TestSuiteGlobals.cssReport), NO_ESCAPE)
-                ._style();
+            ._style();
     }
 
     private void createWriter(final String output) {
@@ -156,7 +155,7 @@ public class HtmlReporter implements IReporter {
     }
 
     private void displayMethodsSummary(final List<ISuite> suites) throws
-    IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         for (ISuite suite : suites) {
             final Map<String, ISuiteResult> r = suite.getResults();
             for (ISuiteResult r2 : r.values()) {
@@ -167,7 +166,7 @@ public class HtmlReporter implements IReporter {
     }
 
     private void makeMethodsList(final ITestContext testContext) throws
-    IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         final IResultMap failed = testContext.getFailedTests();
         final IResultMap passed = testContext.getPassedTests();
         final IResultMap skipped = testContext.getSkippedTests();
@@ -176,8 +175,8 @@ public class HtmlReporter implements IReporter {
     }
 
     private void makeMethodSummaryTable(final IResultMap passed, final IResultMap skipped, final IResultMap failed)
-    throws IOException, NoSuchMethodException, IllegalAccessException,
-    InstantiationException, InvocationTargetException {
+        throws IOException, NoSuchMethodException, IllegalAccessException,
+        InstantiationException, InvocationTargetException {
         html.table(class_("indented"));
         html.tr().th().content("Test");
         html.th().content("Result");
