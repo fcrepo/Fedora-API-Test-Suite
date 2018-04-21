@@ -21,16 +21,17 @@
 package com.ibr.fedora;
 
 public class TestsLabels {
-/**
- * Constructor
- * 
- */
-public TestsLabels() { }
+    /**
+     * Constructor
+     */
+    public TestsLabels() {
+    }
 
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] ldpnrCreationLinkType() {
         return new String[] {
             "3.1.2.-A - LDPNR-LDPNRCreationLinkType",
@@ -42,10 +43,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] ldpnrCreationWrongLinkType() {
         return new String[] {
             "3.1.2.-B - LDPNR-LDPNRCreationWrongLinkType",
@@ -57,10 +60,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] createLDPC() {
         return new String[] {
             "3.1.1-A - Container-CreateLDPC",
@@ -69,10 +74,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] ldpcContainmentTriples() {
         return new String[] {
             "3.1.1-B - Container-ldpcContainmentTriples",
@@ -81,10 +88,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] ldpcMembershipTriples() {
         return new String[] {
             "3.1.1-C - Container-ldpcMembershipTriples",
@@ -93,10 +102,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] ldpcMinimalContainerTriples() {
         return new String[] {
             "3.1.1-D - Container-ldpcMinimalContainerTriples",
@@ -105,10 +116,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] supportPatch() {
         return new String[] {
             "3.7-A - HttpPatch-SupportHttpPatch",
@@ -118,10 +131,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] ldpPatchContentTypeSupport() {
         return new String[] {
             "3.7-B - HttpPatch-LDPPatchContentTypeSupport",
@@ -129,10 +144,12 @@ public TestsLabels() { }
             "https://fcrepo.github.io/fcrepo-specification/#http-patch"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] serverManagedPropertiesModification() {
         return new String[] {
             "3.7-C - HttpPatch-ServerManagedPropertiesModification",
@@ -144,10 +161,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] statementNotPersistedResponseBody() {
         return new String[] {
             "3.7-D - HttpPatch-StatementNotPersistedResponseBody",
@@ -158,10 +177,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] statementNotPersistedConstrainedBy() {
         return new String[] {
             "3.7-E - HttpPatch-StatementNotPersistedConstrainedByHeader",
@@ -173,10 +194,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] successfulPatchStatusCode() {
         return new String[] {
             "3.7-F - HttpPatch-SuccessfulPatchStatusCode",
@@ -187,10 +210,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] disallowPatchContainmentTriples() {
         return new String[] {
             "3.7.1 - HttpPatch-DisallowPatchContainmentTriples",
@@ -201,10 +226,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] disallowChangeResourceType() {
         return new String[] {
             "3.7.2 - HttpPatch-DisallowChangeResourceType",
@@ -216,10 +243,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] respondWantDigest() {
         return new String[] {
             "3.2.3-A - HttpGet-RespondWantDigest",
@@ -230,10 +259,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpPost() {
         return new String[] {
             "3.5-A - HttpPost",
@@ -242,10 +273,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] constrainedByResponseHeader() {
         return new String[] {
             "3.5-B - HttpPost-ConstrainByResponseHeader",
@@ -257,10 +290,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] postNonRDFSource() {
         return new String[] {
             "3.5.1-A - NonRDFSource-PostNonRDFSource",
@@ -269,10 +304,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] postResourceAndCheckAssociatedResource() {
         return new String[] {
             "3.5.1-B - NonRDFSource-PostResourceAndCheckAssociatedResource",
@@ -282,10 +319,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] postDigestResponseHeaderAuthentication() {
         return new String[] {
             "3.5.1-C - NonRDFSource-PostDigestResponseHeaderAuthentication",
@@ -296,10 +335,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] postDigestResponseHeaderVerification() {
         return new String[] {
             "3.5.1-D - NonRDFSource-PostDigestResponseHeaderVerification",
@@ -309,10 +350,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpPutSubtype() {
         return new String[] {
             "3.6-A - httpPutSubtype",
@@ -325,10 +368,12 @@ public TestsLabels() { }
             "MAY"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpPut() {
         return new String[] {
             "3.6-B - HttpPut",
@@ -340,10 +385,12 @@ public TestsLabels() { }
             "MAY"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] updateTriples() {
         return new String[] {
             "3.6.1-A - HttpPut-UpdateTriples",
@@ -353,10 +400,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] updateDisallowedTriples() {
         return new String[] {
             "3.6.1-B - HttpPut-UpdateDisallowedTriples",
@@ -369,10 +418,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] updateDisallowedTriplesResponse() {
         return new String[] {
             "3.6.1-C - HttpPut-UpdateDisallowedTriplesResponse",
@@ -383,10 +434,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] updateDisallowedTriplesConstrainedByHeader() {
         return new String[] {
             "3.6.1-D - HttpPut-UpdateDisallowedTriplesConstrainedByHeader",
@@ -397,10 +450,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpPutNR() {
         return new String[] {
             "3.6.2-A - HttpPutNR",
@@ -409,10 +464,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] putDigestResponseHeaderAuthentication() {
         return new String[] {
             "3.6.2-B - NonRDFSource-PutDigestResponseHeaderAuthentication",
@@ -423,10 +480,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] putDigestResponseHeaderVerification() {
         return new String[] {
             "3.6.2-C - NonRDFSource-PutDigestResponseHeaderVerification",
@@ -436,10 +495,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] responseDescribesHeader() {
         return new String[] {
             "3.2.2-B - HttpGet-LDPRS-ResponseDescribesHeader",
@@ -451,10 +512,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] additionalValuesForPreferHeader() {
         return new String[] {
             "3.2.1-A - HttpGet-AdditionalValuesForPreferHeader",
@@ -466,10 +529,12 @@ public TestsLabels() { }
             "MAY"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] responsePreferenceAppliedHeader() {
         return new String[] {
             "3.2.2-A - HttpGet-LDPRS-ResponsePreferenceAppliedHeader",
@@ -480,10 +545,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpHeadResponseNoBody() {
         return new String[] {
             "3.3-A - HttpHead-ResponseNoBody",
@@ -494,10 +561,12 @@ public TestsLabels() { }
             "MUST NOT"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpHeadResponseDigest() {
         return new String[] {
             "3.3-B - HttpHead-ResponseDigest",
@@ -507,10 +576,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpHeadResponseHeadersSameAsHttpGet() {
         return new String[] {
             "3.3-C - HttpHead-ResponseHeadersSameAsHttpGet",
@@ -521,10 +592,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpDelete() {
         return new String[] {
             "3.8 - HttpDelete",
@@ -537,10 +610,12 @@ public TestsLabels() { }
             "MAY"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpDeleteOptionsCheck() {
         return new String[] {
             "3.8.1-A - httpDeleteOptionsCheck",
@@ -550,10 +625,12 @@ public TestsLabels() { }
             "SHOULD NOT"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpDeleteStatusCheck() {
         return new String[] {
             "3.8.1-C - httpDeleteStatusCheck",
@@ -563,10 +640,12 @@ public TestsLabels() { }
             "MUST NOT"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpDeleteStatusCheckTwo() {
         return new String[] {
             "3.8.1-D - httpDeleteStatusCheckTwo",
@@ -576,10 +655,12 @@ public TestsLabels() { }
             "MUST NOT"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpDeleteResource() {
         return new String[] {
             "4.2.6 - httpDeleteResource",
@@ -589,10 +670,12 @@ public TestsLabels() { }
             "MAY"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] postCreateExternalBinaryContent() {
         return new String[] {
             "3.9-A - ExternalBinaryContent-PostCreate",
@@ -603,10 +686,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] putCreateExternalBinaryContent() {
         return new String[] {
             "3.9-A - ExternalBinaryContent-PutCreate",
@@ -617,10 +702,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] putUpdateExternalBinaryContent() {
         return new String[] {
             "3.9-A - ExternalBinaryContent-PutUpdate",
@@ -631,10 +718,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] createExternalBinaryContentCheckAccesType() {
         return new String[] {
             "3.9-B - ExternalBinaryContent-createExternalBinaryContentCheckAccesType",
@@ -644,10 +733,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] postCheckUnsupportedMediaType() {
         return new String[] {
             "3.9-C - ExternalBinaryContent-PostCheckUnsupportedMediaType",
@@ -661,10 +752,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] putCheckUnsupportedMediaType() {
         return new String[] {
             "3.9-C - ExternalBinaryContent-PutCheckUnsupportedMediaType",
@@ -677,10 +770,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] checkUnsupportedMediaType() {
         return new String[] {
             "3.9-D - ExternalBinaryContent-checkUnsupportedMediaType",
@@ -690,10 +785,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] postCheckHeaders() {
         return new String[] {
             "3.9-E - ExternalBinaryContent-postCheckHeaders",
@@ -704,10 +801,12 @@ public TestsLabels() { }
             "MUST NOT"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] putUpdateCheckHeaders() {
         return new String[] {
             "3.9-E - ExternalBinaryContent-putUpdateCheckHeaders",
@@ -718,10 +817,12 @@ public TestsLabels() { }
             "MUST NOT"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] getCheckContentLocationHeader() {
         return new String[] {
             "3.9-F - ExternalBinaryContent-HttpGetCheckContentLocationHeader",
@@ -731,10 +832,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] headCheckContentLocationHeader() {
         return new String[] {
             "3.9-F - ExternalBinaryContent-HttpHeadCheckContentLocationHeader",
@@ -744,10 +847,12 @@ public TestsLabels() { }
             "SHOULD"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpOptionsSupport() {
         return new String[] {
             "3.4-A - HttpOptions-HttpOptionsSupport",
@@ -757,10 +862,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] httpOptionsSupportAllow() {
         return new String[] {
             "3.4-B - HttpOptions-HttpOptionsSupportAllow",
@@ -771,10 +878,12 @@ public TestsLabels() { }
             "MUST"
         };
     }
+
     /**
-    * Basic information for described test
-    * @return String[]
-    */
+     * Basic information for described test
+     *
+     * @return String[]
+     */
     public String[] respondWantDigestTwoSupported() {
         return new String[] {
             "3.2.3-B - HttpGet-RespondWantDigestTwoSupported",
@@ -785,50 +894,58 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestTwoSupportedQvalueNonZero() {
-         return new String[] {
-             "3.2.3-C - HttpGet-RespondWantDigestTwoSupportedQvalueNonZero",
-             "Testing for two supported digests with different weights"
-             + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
-             + "header defined in [RFC3230]",
-             "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
-              "MUST"
+        return new String[] {
+            "3.2.3-C - HttpGet-RespondWantDigestTwoSupportedQvalueNonZero",
+            "Testing for two supported digests with different weights"
+            + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+            + "header defined in [RFC3230]",
+            "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+            "MUST"
         };
-     }
-     /**
+    }
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestTwoSupportedQvalueZero() {
-          return new String[] {
-              "3.2.3-D - HttpGet-RespondWantDigestTwoSupportedQvalueZero",
-              "Testing for two supported digests with different weights q=0.3,q=0"
-              + " GET requests to any LDP-NR must correctly respond to the Want-Digest"
-              + " header defined in [RFC3230]",
-              "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
-               "MUST"
-         };
-      }
-     /**
+        return new String[] {
+            "3.2.3-D - HttpGet-RespondWantDigestTwoSupportedQvalueZero",
+            "Testing for two supported digests with different weights q=0.3,q=0"
+            + " GET requests to any LDP-NR must correctly respond to the Want-Digest"
+            + " header defined in [RFC3230]",
+            "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+            "MUST"
+        };
+    }
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestNonSupported() {
-          return new String[] {
-              "3.2.3-E - HttpGet-RespondWantDigestNonSupported",
-              "Testing for one supported digest and one unsupported digest."
-              + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
-              + "header defined in [RFC3230]",
-              "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
-               "MUST"
-         };
-      }
-     /**
+        return new String[] {
+            "3.2.3-E - HttpGet-RespondWantDigestNonSupported",
+            "Testing for one supported digest and one unsupported digest."
+            + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+            + "header defined in [RFC3230]",
+            "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+            "MUST"
+        };
+    }
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestTwoSupportedExternalBinaryContent() {
@@ -840,8 +957,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestTwoSupportedExternalBinaryContentHead() {
@@ -853,8 +972,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent() {
@@ -866,8 +987,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead() {
@@ -879,8 +1002,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestNonSupportedExternalBinaryContent() {
@@ -892,8 +1017,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestNonSupportedExternalBinaryContentHead() {
@@ -905,8 +1032,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestExternalBinaryContent() {
@@ -918,8 +1047,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] respondWantDigestExternalBinaryContentHead() {
@@ -931,8 +1062,10 @@ public TestsLabels() { }
             "MUST"
         };
     }
-     /**
+
+    /**
      * Basic information for described test
+     *
      * @return String[]
      */
     public String[] checkExpirationParameterDate() {

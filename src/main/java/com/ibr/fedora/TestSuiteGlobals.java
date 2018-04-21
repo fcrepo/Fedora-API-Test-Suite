@@ -29,13 +29,12 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import org.testng.IResultMap;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.internal.Utils;
-
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
 
 public abstract class TestSuiteGlobals {
     public static String cssReport = "reportStyle.css";
@@ -47,16 +46,18 @@ public abstract class TestSuiteGlobals {
     public static String resourcePointer;
     public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
     public static String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
-        "insertedContentRelation"};
+                                                "insertedContentRelation"};
 
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-        + "<> a ldp:Container, ldp:BasicContainer;"
-        + "dcterms:title 'Base Container' ;"
-        + "dcterms:description 'This container is the base container for the Fedora API Test Suite.' . ";
+                                + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+                                + "<> a ldp:Container, ldp:BasicContainer;"
+                                + "dcterms:title 'Base Container' ;"
+                                + "dcterms:description 'This container is the base container for the Fedora API Test " +
+                                "Suite.' . ";
 
     /**
      * Get or create the default container for all tests resources to be created
+     *
      * @param baseurl
      * @return containerUrl
      */
@@ -65,22 +66,21 @@ public abstract class TestSuiteGlobals {
         String containerUrl = baseurl + "/" + name;
         containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
         final Response res = RestAssured.given()
-        .auth().basic(user, pass)
-        .contentType("text/turtle")
-        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-        .header("slug", name)
-        .body(body)
-        .when()
-        .post(baseurl);
+                                        .auth().basic(user, pass)
+                                        .contentType("text/turtle")
+                                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                                        .header("slug", name)
+                                        .body(body)
+                                        .when()
+                                        .post(baseurl);
         if (res.getStatusCode() == 201) {
-        return containerUrl;
+            return containerUrl;
         } else {
-        return baseurl;
-      }
+            return baseurl;
+        }
     }
 
     /**
-     * 
      * @param header
      * @return isPayloadHeader
      */
@@ -95,8 +95,7 @@ public abstract class TestSuiteGlobals {
         return isPayloadHeader;
     }
 
-     /**
-     * 
+    /**
      * @param body
      * @return isMembershipTriple
      */
@@ -109,16 +108,16 @@ public abstract class TestSuiteGlobals {
         }
         return isMembershipTriple;
     }
+
     /**
-     * 
      * @return date
      */
     public static String today() {
         final String date = new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
         return date;
     }
+
     /**
-     * 
      * @param format
      * @return date
      */
@@ -126,32 +125,33 @@ public abstract class TestSuiteGlobals {
         final String date = new SimpleDateFormat(format).format(new Date());
         return date;
     }
+
     /**
-     * 
      * @throws FileNotFoundException
      */
     public static void resetFile() throws FileNotFoundException {
-       final File dir = new File("report");
-       dir.mkdirs();
-       final File f = new File(TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
-       if (f.exists()) {
-       f.delete();
-     }
+        final File dir = new File("report");
+        dir.mkdirs();
+        final File f = new File(
+            TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
+        if (f.exists()) {
+            f.delete();
+        }
     }
+
     /**
-     * 
      * @return ps
      * @throws FileNotFoundException
      */
     public static PrintStream logFile() throws FileNotFoundException {
-    final FileOutputStream fos = new FileOutputStream(new File(TestSuiteGlobals.outputDirectory + "/" +
-    TestSuiteGlobals.outputName + "-execution.log"), true);
-    final PrintStream ps = new PrintStream(fos);
-    return ps;
+        final FileOutputStream fos = new FileOutputStream(new File(TestSuiteGlobals.outputDirectory + "/" +
+                                                                   TestSuiteGlobals.outputName + "-execution.log"),
+                                                          true);
+        final PrintStream ps = new PrintStream(fos);
+        return ps;
     }
 
     /**
-     * 
      * @param passed
      * @param skipped
      * @param failed
@@ -162,8 +162,8 @@ public abstract class TestSuiteGlobals {
      * @throws InvocationTargetException
      */
     public static String[][] orderTestsResults(final IResultMap passed,
-    final IResultMap skipped, final IResultMap failed)
-    throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+                                               final IResultMap skipped, final IResultMap failed)
+        throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         final int size = passed.size() + skipped.size() + failed.size();
         final String[][] results = new String[size][5];//second value according the total tests
         for (ITestResult result : passed.getAllResults()) {
@@ -210,7 +210,6 @@ public abstract class TestSuiteGlobals {
     }
 
     /**
-     * 
      * @param thrown
      * @return msg
      */
@@ -225,5 +224,5 @@ public abstract class TestSuiteGlobals {
         }
 
         return msg;
-      }
     }
+}

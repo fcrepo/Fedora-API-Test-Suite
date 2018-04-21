@@ -20,6 +20,13 @@
  */
 package com.ibr.fedora.testsuite;
 
+import static org.hamcrest.Matchers.equalTo;
+
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
@@ -27,32 +34,24 @@ import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.Matchers.equalTo;
-
 public class HttpHead {
+    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+                                + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+                                + "<> a ldp:Container, ldp:BasicContainer;"
+                                + "dcterms:title 'Head class Container' ;"
+                                + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
     public TestsLabels tl = new TestsLabels();
-    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-        + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-        + "<> a ldp:Container, ldp:BasicContainer;"
-        + "dcterms:title 'Head class Container' ;"
-        + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
+     *
      * @param username
      * @param password
      */
@@ -65,6 +64,7 @@ public class HttpHead {
 
     /**
      * 3.3-A
+     *
      * @param uri
      */
     @Test(priority = 15)
@@ -74,30 +74,32 @@ public class HttpHead {
         ps.append("\n15." + tl.httpHeadResponseNoBody()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource =
-                RestAssured.given()
-    .auth().basic(this.username, this.password)
-                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                        .contentType("text/turtle")
-                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                        .header("slug", "Head-3.3-A")
-                        .body(body)
-                        .when()
-                        .post(uri);
+            RestAssured.given()
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .contentType("text/turtle")
+                       .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                       .header("slug", "Head-3.3-A")
+                       .body(body)
+                       .when()
+                       .post(uri);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
-    .auth().basic(this.username, this.password)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .when()
-                .head(locationHeader)
-                .then()
-                .log().all()
-                .statusCode(200).assertThat().body(equalTo(""));
+                   .auth().basic(this.username, this.password)
+                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                   .log().all()
+                   .when()
+                   .head(locationHeader)
+                   .then()
+                   .log().all()
+                   .statusCode(200).assertThat().body(equalTo(""));
 
         ps.append("\n -Case End- \n").close();
     }
+
     /**
      * 3.3-B
+     *
      * @param uri
      */
     @Test(priority = 16)
@@ -107,44 +109,44 @@ public class HttpHead {
         ps.append("\n16." + tl.httpHeadResponseDigest()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource =
-        RestAssured.given()
-                .auth().basic(this.username, this.password)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
-                .header("slug", "HEAD-3.3-B")
-                .body("TestString.")
-                .when()
-                .post(uri);
+            RestAssured.given()
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
+                       .header("slug", "HEAD-3.3-B")
+                       .body("TestString.")
+                       .when()
+                       .post(uri);
 
-         final String locationHeader = resource.getHeader("Location");
-         final Response resget =
-         RestAssured.given()
-                 .auth().basic(this.username, this.password)
-                 .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                 .log().all()
-                 .when()
-                 .get(locationHeader);
+        final String locationHeader = resource.getHeader("Location");
+        final Response resget =
+            RestAssured.given()
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .log().all()
+                       .when()
+                       .get(locationHeader);
 
-                 ps.append(resget.getStatusLine().toString() + "\n");
-                 final Headers headersGet = resget.getHeaders();
-                 for (Header h : headersGet) {
-                      ps.append(h.getName().toString() + ": ");
-                      ps.append(h.getValue().toString() + "\n");
-                }
+        ps.append(resget.getStatusLine().toString() + "\n");
+        final Headers headersGet = resget.getHeaders();
+        for (Header h : headersGet) {
+            ps.append(h.getName().toString() + ": ");
+            ps.append(h.getValue().toString() + "\n");
+        }
 
         final Response reshead =
-        RestAssured.given()
-                .auth().basic(this.username, this.password)
-                .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                .log().all()
-                .when()
-                .head(locationHeader);
-                ps.append(reshead.getStatusLine().toString() + "\n");
-                final Headers headers = reshead.getHeaders();
-                for (Header h : headers) {
-                     ps.append(h.getName().toString() + ": ");
-                     ps.append(h.getValue().toString() + "\n");
-                }
+            RestAssured.given()
+                       .auth().basic(this.username, this.password)
+                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                       .log().all()
+                       .when()
+                       .head(locationHeader);
+        ps.append(reshead.getStatusLine().toString() + "\n");
+        final Headers headers = reshead.getHeaders();
+        for (Header h : headers) {
+            ps.append(h.getName().toString() + ": ");
+            ps.append(h.getValue().toString() + "\n");
+        }
 
         ps.append("\n -Case End- \n").close();
 
@@ -164,11 +166,13 @@ public class HttpHead {
                 }
             }
         } else {
-           Assert.assertTrue(false, "FAIL");
+            Assert.assertTrue(false, "FAIL");
         }
     }
+
     /**
      * 3.3-C
+     *
      * @param uri
      */
     @Test(priority = 17)
@@ -178,18 +182,18 @@ public class HttpHead {
         ps.append("\n17." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource = RestAssured.given()
-            .auth().basic(this.username, this.password)
-            .contentType("text/turtle")
-            .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-            .header("slug", "Head-3.3-C")
-            .body(body)
-            .when()
-            .post(uri);
+                                             .auth().basic(this.username, this.password)
+                                             .contentType("text/turtle")
+                                             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                                             .header("slug", "Head-3.3-C")
+                                             .body(body)
+                                             .when()
+                                             .post(uri);
         final String locationHeader = resource.getHeader("Location");
         final Response resget = RestAssured.given()
-            .auth().basic(this.username, this.password)
-            .when()
-            .get(locationHeader);
+                                           .auth().basic(this.username, this.password)
+                                           .when()
+                                           .get(locationHeader);
 
         ps.append(resget.getStatusLine().toString() + "\n");
         final Headers headersGet = resget.getHeaders();
@@ -205,32 +209,32 @@ public class HttpHead {
             }
         }
 
-     final Response reshead = RestAssured.given()
-                        .auth().basic(this.username, this.password)
-                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                        .log().all()
-                        .when()
-                        .head(locationHeader);
+        final Response reshead = RestAssured.given()
+                                            .auth().basic(this.username, this.password)
+                                            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                                            .log().all()
+                                            .when()
+                                            .head(locationHeader);
 
         ps.append(reshead.getStatusLine().toString() + "\n");
         final Headers headershead = reshead.getHeaders();
-              for (Header h : headershead) {
-                 ps.append(h.getName().toString() + ": ");
-                 ps.append(h.getValue().toString() + "\n");
-               }
-       final List<Header> h2 = new ArrayList<>();
-              for (Header h : headershead) {
-                  if (!TestSuiteGlobals.checkPayloadHeader(h.getName())) {
-                      h2.add(h);
-                  }
+        for (Header h : headershead) {
+            ps.append(h.getName().toString() + ": ");
+            ps.append(h.getValue().toString() + "\n");
+        }
+        final List<Header> h2 = new ArrayList<>();
+        for (Header h : headershead) {
+            if (!TestSuiteGlobals.checkPayloadHeader(h.getName())) {
+                h2.add(h);
+            }
         }
         // Compares if both lists have the same size
         if (h2.equals(h1)) {
             Assert.assertTrue(true, "OK");
         } else {
-             Assert.assertTrue(false, "FAIL");
+            Assert.assertTrue(false, "FAIL");
         }
         ps.append("\n -Case End- \n").close();
-     }
-
     }
+
+}
