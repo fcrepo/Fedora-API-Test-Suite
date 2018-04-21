@@ -19,6 +19,8 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --baseurl http://localhost:
 * `baseurl` The repository base URL, e.g., `http://localhost:8080/rest/`
 * `user` (optional) The username to connect to the repository with
 * `password` (optional) The password to connect to the repository with
+* `testngxml` (optional) The custom testng.xml configuration ([documentation](http://testng.org/doc/documentation-main.html#testng-xml))
+  * See example [testng.xml](https://github.com/fcrepo4-labs/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)
 
  Test results are available at:
  > report/testsuite-execution-report.html

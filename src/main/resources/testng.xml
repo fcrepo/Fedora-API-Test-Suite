@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="W3C Linked Data Platform Test Suite">
-  <listeners>
-    <listener class-name='com.ibr.fedora.report.HtmlReport'/>
-  </listeners>
+<suite name="Fedora API Specification Test Suite">
 
   <test name="All Tests">
     <groups>
@@ -17,4 +14,5 @@
       <package name="com.ibr.fedora.testsuite"/>
     </packages>
   </test>
+
 </suite>
