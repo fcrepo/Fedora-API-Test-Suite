@@ -1,24 +1,18 @@
+/*
+ *
+ *  * The contents of this file are subject to the license and copyright
+ *  * detailed in the LICENSE and NOTICE files at the root of the source
+ *  * tree and available online at
+ *  *
+ *  *     http://duracloud.org/license/
+ *
+ */
+
 /**
  * @author Jorge Abrego, Fernando Cardoza
  */
-/*
- * Licensed to DuraSpace under one or more contributor license agreements.
- * See the NOTICE file distributed with this work for additional information
- * regarding copyright ownership.
- *
- * DuraSpace licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except in
- * compliance with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.ibr.fedora;
+
+package org.fcrepo.spec.testsuite;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,17 +75,17 @@ public class App {
         final Map<String, String> params = new HashMap<String, String>();
         final List<XmlClass> classes = new ArrayList<XmlClass>();
 
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.SetUpSuite"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.Container"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.Ldpnr"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpOptions"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
+        classes.add(new XmlClass("SetUpSuite"));
+        classes.add(new XmlClass("Container"));
+        classes.add(new XmlClass("Ldpnr"));
+        classes.add(new XmlClass("HttpGet"));
+        classes.add(new XmlClass("HttpHead"));
+        classes.add(new XmlClass("HttpOptions"));
+        classes.add(new XmlClass("HttpPost"));
+        classes.add(new XmlClass("HttpPut"));
+        classes.add(new XmlClass("HttpPatch"));
+        classes.add(new XmlClass("HttpDelete"));
+        classes.add(new XmlClass("ExternalBinaryContent"));
         //Create the default container
         params.put("param1", TestSuiteGlobals.containerTestSuite(inputUrl, inputUser, inputPassword));
         params.put("param2", inputUser);
