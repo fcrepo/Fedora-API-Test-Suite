@@ -29,7 +29,6 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -44,9 +43,8 @@ public class HttpOptions {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public HttpOptions(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -56,7 +54,7 @@ public class HttpOptions {
      *
      * @param uri
      */
-    @Test(priority = 18)
+    @Test(priority = 18, groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupport(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -81,7 +79,7 @@ public class HttpOptions {
      *
      * @param uri
      */
-    @Test(priority = 19)
+    @Test(priority = 19, groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupportAllow(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

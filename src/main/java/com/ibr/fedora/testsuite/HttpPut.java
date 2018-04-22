@@ -30,7 +30,6 @@ import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.response.Response;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -50,9 +49,8 @@ public class HttpPut {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public HttpPut(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -62,7 +60,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 26)
+    @Test(priority = 26, groups = {"MAY"})
     @Parameters({"param1"})
     public void httpPut(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -98,7 +96,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 27)
+    @Test(priority = 27, groups = {"MUST"})
     @Parameters({"param1"})
     public void updateTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -144,7 +142,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 28)
+    @Test(priority = 28, groups = {"MUST"})
     @Parameters({"param1"})
     public void updateDisallowedTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -198,7 +196,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 29)
+    @Test(priority = 29, groups = {"MUST"})
     @Parameters({"param1"})
     public void updateDisallowedTriplesResponse(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -254,7 +252,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 30)
+    @Test(priority = 30, groups = {"MUST"})
     @Parameters({"param1"})
     public void updateDisallowedTriplesConstrainedByHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -309,7 +307,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 31)
+    @Test(priority = 31, groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutNR(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -344,7 +342,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 32)
+    @Test(priority = 32, groups = {"MUST"})
     @Parameters({"param1"})
     public void putDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
@@ -382,7 +380,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 33)
+    @Test(priority = 33, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";

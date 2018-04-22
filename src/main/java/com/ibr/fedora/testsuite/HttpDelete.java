@@ -31,7 +31,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -51,9 +50,8 @@ public class HttpDelete {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public HttpDelete(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -63,7 +61,7 @@ public class HttpDelete {
      *
      * @param uri
      */
-    @Test(priority = 42)
+    @Test(priority = 42, groups = {"SHOULD NOT"})
     @Parameters({"param1"})
     public void httpDeleteOptionsCheck(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -207,7 +205,7 @@ public class HttpDelete {
      *
      * @param uri
      */
-    @Test(priority = 43)
+    @Test(priority = 43, groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheck(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -335,7 +333,7 @@ public class HttpDelete {
      *
      * @param uri
      */
-    @Test(priority = 44)
+    @Test(priority = 44, groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheckTwo(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

@@ -31,7 +31,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -69,9 +68,8 @@ public class Container {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public Container(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -81,7 +79,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 1)
+    @Test(priority = 1, groups = {"MUST"})
     @Parameters({"param1"})
     public void createLDPC(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -108,7 +106,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 2)
+    @Test(priority = 2, groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -187,7 +185,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 3)
+    @Test(priority = 3, groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMembershipTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -263,7 +261,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 4)
+    @Test(priority = 4, groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMinimalContainerTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

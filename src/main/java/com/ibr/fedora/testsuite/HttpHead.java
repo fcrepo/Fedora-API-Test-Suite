@@ -35,7 +35,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -55,9 +54,8 @@ public class HttpHead {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public HttpHead(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -67,7 +65,7 @@ public class HttpHead {
      *
      * @param uri
      */
-    @Test(priority = 15)
+    @Test(priority = 15, groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpHeadResponseNoBody(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -102,7 +100,7 @@ public class HttpHead {
      *
      * @param uri
      */
-    @Test(priority = 16)
+    @Test(priority = 16, groups = {"MUST"})
     @Parameters({"param1"})
     public void httpHeadResponseDigest(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -175,7 +173,7 @@ public class HttpHead {
      *
      * @param uri
      */
-    @Test(priority = 17)
+    @Test(priority = 17, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void httpHeadResponseHeadersSameAsHttpGet(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

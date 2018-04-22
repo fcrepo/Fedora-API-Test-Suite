@@ -29,7 +29,6 @@ import com.ibr.fedora.TestSuiteGlobals;
 import com.ibr.fedora.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -52,9 +51,8 @@ public class HttpPost {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public HttpPost(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -64,7 +62,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 20)
+    @Test(priority = 20, groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPost(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -91,7 +89,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 21)
+    @Test(priority = 21, groups = {"MUST"})
     @Parameters({"param1"})
     public void constrainedByResponseHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -119,7 +117,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 22)
+    @Test(priority = 22, groups = {"MUST"})
     @Parameters({"param1"})
     public void postNonRDFSource(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -145,7 +143,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 23)
+    @Test(priority = 23, groups = {"MUST"})
     @Parameters({"param1"})
     public void postResourceAndCheckAssociatedResource(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -172,7 +170,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 24)
+    @Test(priority = 24, groups = {"MUST"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "md5=1234";
@@ -203,7 +201,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 25)
+    @Test(priority = 25, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";

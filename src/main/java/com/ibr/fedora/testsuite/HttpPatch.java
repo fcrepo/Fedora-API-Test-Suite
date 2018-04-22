@@ -35,7 +35,6 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -80,9 +79,8 @@ public class HttpPatch {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public HttpPatch(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -92,7 +90,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 34)
+    @Test(priority = 34, groups = {"MUST"})
     @Parameters({"param1"})
     public void supportPatch(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -133,7 +131,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 35)
+    @Test(priority = 35, groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpPatchContentTypeSupport(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -173,7 +171,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 36)
+    @Test(priority = 36, groups = {"MUST"})
     @Parameters({"param1"})
     public void serverManagedPropertiesModification(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -214,7 +212,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 37)
+    @Test(priority = 37, groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedResponseBody(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -255,7 +253,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 38)
+    @Test(priority = 38, groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedConstrainedBy(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -296,7 +294,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 39)
+    @Test(priority = 39, groups = {"MUST"})
     @Parameters({"param1"})
     public void successfulPatchStatusCode(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -363,7 +361,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 40)
+    @Test(priority = 40, groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowPatchContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -413,7 +411,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 41)
+    @Test(priority = 41, groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowChangeResourceType(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
