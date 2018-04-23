@@ -28,6 +28,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -161,11 +163,10 @@ public abstract class TestSuiteGlobals {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
      */
-    public static String[][] orderTestsResults(final IResultMap passed,
-                                               final IResultMap skipped, final IResultMap failed)
+    public static Map<String, String[]> orderTestsResults(final IResultMap passed,
+                                                          final IResultMap skipped, final IResultMap failed)
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        final int size = passed.size() + skipped.size() + failed.size();
-        final String[][] results = new String[size][5];//second value according the total tests
+        final TreeMap<String, String[]> results = new TreeMap<>();
         for (ITestResult result : passed.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
 
@@ -173,11 +174,13 @@ public abstract class TestSuiteGlobals {
             final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
             final Object[] normalizedName = (Object[]) m.invoke(o);
 
-            results[(method.getPriority() - 1)][0] = normalizedName[2].toString();
-            results[(method.getPriority() - 1)][1] = "PASS";
-            results[(method.getPriority() - 1)][2] = normalizedName[1].toString();
-            results[(method.getPriority() - 1)][3] = normalizedName[0].toString();
-            results[(method.getPriority() - 1)][4] = getStackTrace(result.getThrowable());
+            final String[] details = new String[5];
+            details[0] = normalizedName[2].toString();
+            details[1] = "PASS";
+            details[2] = normalizedName[1].toString();
+            details[3] = normalizedName[0].toString();
+            details[4] = getStackTrace(result.getThrowable());
+            results.put(details[3], details);
         }
         for (ITestResult result : skipped.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
@@ -186,11 +189,13 @@ public abstract class TestSuiteGlobals {
             final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
             final Object[] normalizedName = (Object[]) m.invoke(o);
 
-            results[(method.getPriority() - 1)][0] = normalizedName[2].toString();
-            results[(method.getPriority() - 1)][1] = "SKIPPED";
-            results[(method.getPriority() - 1)][2] = normalizedName[1].toString();
-            results[(method.getPriority() - 1)][3] = normalizedName[0].toString();
-            results[(method.getPriority() - 1)][4] = getStackTrace(result.getThrowable());
+            final String[] details = new String[5];
+            details[0] = normalizedName[2].toString();
+            details[1] = "SKIPPED";
+            details[2] = normalizedName[1].toString();
+            details[3] = normalizedName[0].toString();
+            details[4] = getStackTrace(result.getThrowable());
+            results.put(details[3], details);
         }
         for (ITestResult result : failed.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
@@ -199,11 +204,13 @@ public abstract class TestSuiteGlobals {
             final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
             final Object[] normalizedName = (Object[]) m.invoke(o);
 
-            results[(method.getPriority() - 1)][0] = normalizedName[2].toString();
-            results[(method.getPriority() - 1)][1] = "FAIL";
-            results[(method.getPriority() - 1)][2] = normalizedName[1].toString();
-            results[(method.getPriority() - 1)][3] = normalizedName[0].toString();
-            results[(method.getPriority() - 1)][4] = getStackTrace(result.getThrowable());
+            final String[] details = new String[5];
+            details[0] = normalizedName[2].toString();
+            details[1] = "FAIL";
+            details[2] = normalizedName[1].toString();
+            details[3] = normalizedName[0].toString();
+            details[4] = getStackTrace(result.getThrowable());
+            results.put(details[3], details);
         }
 
         return results;
