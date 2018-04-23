@@ -33,7 +33,7 @@
     <project.copyrightYear>2017</project.copyrightYear>
     <license.plugin.version>2.11</license.plugin.version>
     <javax.xml.version>1.4.5</javax.xml.version>
-    <app.main.class>com.ibr.fedora.App</app.main.class>
+    <app.main.class>org.fcrepo.spec.testsuite.App</app.main.class>
   </properties>
 
   <build>
