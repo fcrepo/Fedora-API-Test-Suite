@@ -20,9 +20,10 @@
  */
 package com.ibr.fedora;
 
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.cli.BasicParser;
@@ -33,9 +34,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.testng.TestNG;
-import org.testng.xml.XmlClass;
+import org.testng.xml.SuiteXmlParser;
 import org.testng.xml.XmlSuite;
-import org.testng.xml.XmlTest;
 
 public class App {
     private App() {
@@ -57,6 +57,9 @@ public class App {
         final Option password = new Option("p", "password", true, "user's password");
         password.setRequired(false);
         options.addOption(password);
+        final Option testngxml = new Option("x", "testngxml", true, "TestNG XML file");
+        testngxml.setRequired(false);
+        options.addOption(testngxml);
 
         final CommandLineParser parser = new BasicParser();
         final HelpFormatter formatter = new HelpFormatter();
@@ -73,42 +76,34 @@ public class App {
         final String inputUrl = cmd.getOptionValue("baseurl");
         final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
         final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
+        final String inputXml = cmd.getOptionValue("testngxml");
 
-        final TestNG testng = new TestNG();
-        final XmlSuite suite = new XmlSuite();
-        suite.setName("ldptest");
-        final XmlTest test = new XmlTest(suite);
-        final Map<String, String> params = new HashMap<String, String>();
-        final List<XmlClass> classes = new ArrayList<XmlClass>();
-
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.SetUpSuite"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.Container"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.Ldpnr"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpGet"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpHead"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpOptions"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPost"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPut"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpPatch"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.HttpDelete"));
-        classes.add(new XmlClass("com.ibr.fedora.testsuite.ExternalBinaryContent"));
         //Create the default container
+        final Map<String, String> params = new HashMap<>();
         params.put("param1", TestSuiteGlobals.containerTestSuite(inputUrl, inputUser, inputPassword));
         params.put("param2", inputUser);
         params.put("param3", inputPassword);
 
-        test.setParameters(params);
-        test.setXmlClasses(classes);
+        InputStream inputStream = null;
+        if (inputXml == null) {
+            inputStream = ClassLoader.getSystemResourceAsStream("testng.xml");
+        } else {
+            try {
+                inputStream = new FileInputStream(inputXml);
+            } catch (FileNotFoundException e) {
+                System.err.println("Unable to open '" + inputXml + "'." + e.getMessage());
+                System.exit(1);
+            }
+        }
 
-        final List<XmlTest> tests = new ArrayList<XmlTest>();
-        tests.add(test);
+        final String testFilename = inputXml == null ? "Default testng.xml" : inputXml;
+        final SuiteXmlParser xmlParser = new SuiteXmlParser();
+        final XmlSuite xmlSuite = xmlParser.parse(testFilename, inputStream, true);
+        xmlSuite.setParameters(params);
 
-        suite.setTests(tests);
+        final TestNG testng = new TestNG();
+        testng.setCommandLineSuite(xmlSuite);
 
-        final List<XmlSuite> suites = new ArrayList<XmlSuite>();
-        suites.add(suite);
-
-        testng.setXmlSuites(suites);
         testng.run();
     }
 }
