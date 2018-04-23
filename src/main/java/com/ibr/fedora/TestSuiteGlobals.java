@@ -88,7 +88,7 @@ public abstract class TestSuiteGlobals {
      */
     public static boolean checkPayloadHeader(final String header) {
         boolean isPayloadHeader = false;
-        for (String h : payloadHeaders) {
+        for (final String h : payloadHeaders) {
             if (h.equals(header)) {
                 isPayloadHeader = true;
                 break;
@@ -103,7 +103,7 @@ public abstract class TestSuiteGlobals {
      */
     public static boolean checkMembershipTriple(final String body) {
         boolean isMembershipTriple = false;
-        for (String h : membershipTriples) {
+        for (final String h : membershipTriples) {
             if (body.contains(h)) {
                 isMembershipTriple = true;
             }
@@ -167,10 +167,10 @@ public abstract class TestSuiteGlobals {
                                                           final IResultMap skipped, final IResultMap failed)
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         final TreeMap<String, String[]> results = new TreeMap<>();
-        for (ITestResult result : passed.getAllResults()) {
+        final Object o = TestsLabels.class.newInstance();
+        for (final ITestResult result : passed.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
 
-            final Object o = TestsLabels.class.newInstance();
             final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
             final Object[] normalizedName = (Object[]) m.invoke(o);
 
@@ -182,10 +182,9 @@ public abstract class TestSuiteGlobals {
             details[4] = getStackTrace(result.getThrowable());
             results.put(details[3], details);
         }
-        for (ITestResult result : skipped.getAllResults()) {
+        for (final ITestResult result : skipped.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
 
-            final Object o = TestsLabels.class.newInstance();
             final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
             final Object[] normalizedName = (Object[]) m.invoke(o);
 
@@ -197,10 +196,9 @@ public abstract class TestSuiteGlobals {
             details[4] = getStackTrace(result.getThrowable());
             results.put(details[3], details);
         }
-        for (ITestResult result : failed.getAllResults()) {
+        for (final ITestResult result : failed.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
 
-            final Object o = TestsLabels.class.newInstance();
             final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
             final Object[] normalizedName = (Object[]) m.invoke(o);
 
@@ -226,7 +224,7 @@ public abstract class TestSuiteGlobals {
             if (thrown.getClass().getName().contains("TEST SKIPPED")) {
                 msg = thrown.getMessage();
             } else {
-                msg = Utils.stackTrace(thrown, false)[0];
+                msg = Utils.shortStackTrace(thrown, false);
             }
         }
 
