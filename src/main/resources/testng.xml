@@ -41,8 +41,8 @@
         <!--Specify methods to 'include' or 'exclude'-->
         <!--
         <methods>
-          <include name=".*ldpcMembershipTriples.*"/>
-          <include name=".*ldpcMinimalContainerTriples.*"/>
+          <include name="ldpcMembershipTriples"/>
+          <include name="ldpcMinimalContainerTriples"/>
         </methods>
         -->
       </class>
