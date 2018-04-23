@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibr.fedora.testsuite;
+package org.fcrepo.spec.testsuite.test;
 
 import static org.hamcrest.Matchers.containsString;
 
@@ -30,8 +30,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.ibr.fedora.TestSuiteGlobals;
-import com.ibr.fedora.TestsLabels;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
+import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;

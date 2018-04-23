@@ -18,11 +18,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibr.fedora.testsuite;
+package org.fcrepo.spec.testsuite.test;
 
 import java.io.FileNotFoundException;
 
-import com.ibr.fedora.TestSuiteGlobals;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.annotations.BeforeSuite;
 
 public class SetUpSuite {

@@ -3,8 +3,8 @@
 <suite name="Fedora API Specification Test Suite">
 
   <listeners>
-    <listener class-name='com.ibr.fedora.report.HtmlReporter'/>
-    <listener class-name="com.ibr.fedora.report.EarlReporter"/>
+    <listener class-name='org.fcrepo.spec.testsuite.report.HtmlReporter'/>
+    <listener class-name="org.fcrepo.spec.testsuite.report.EarlReporter"/>
   </listeners>
 
   <!--Set console logging with 'verbose' values from 1-10 (10 is most verbose)-->
@@ -36,8 +36,8 @@
     </groups>
 
     <classes>
-      <class name="com.ibr.fedora.testsuite.SetUpSuite"/>
-      <class name="com.ibr.fedora.testsuite.Container">
+      <class name="org.fcrepo.spec.testsuite.test.SetUpSuite"/>
+      <class name="org.fcrepo.spec.testsuite.test.Container">
         <!--Specify methods to 'include' or 'exclude'-->
         <!--
         <methods>
@@ -46,15 +46,15 @@
         </methods>
         -->
       </class>
-      <class name="com.ibr.fedora.testsuite.Ldpnr"/>
-      <class name="com.ibr.fedora.testsuite.HttpGet"/>
-      <class name="com.ibr.fedora.testsuite.HttpHead"/>
-      <class name="com.ibr.fedora.testsuite.HttpOptions"/>
-      <class name="com.ibr.fedora.testsuite.HttpPost"/>
-      <class name="com.ibr.fedora.testsuite.HttpPut"/>
-      <class name="com.ibr.fedora.testsuite.HttpPatch"/>
-      <class name="com.ibr.fedora.testsuite.HttpDelete"/>
-      <class name="com.ibr.fedora.testsuite.ExternalBinaryContent"/>
+      <class name="org.fcrepo.spec.testsuite.test.Ldpnr"/>
+      <class name="org.fcrepo.spec.testsuite.test.HttpGet"/>
+      <class name="org.fcrepo.spec.testsuite.test.HttpHead"/>
+      <class name="org.fcrepo.spec.testsuite.test.HttpOptions"/>
+      <class name="org.fcrepo.spec.testsuite.test.HttpPost"/>
+      <class name="org.fcrepo.spec.testsuite.test.HttpPut"/>
+      <class name="org.fcrepo.spec.testsuite.test.HttpPatch"/>
+      <class name="org.fcrepo.spec.testsuite.test.HttpDelete"/>
+      <class name="org.fcrepo.spec.testsuite.test.ExternalBinaryContent"/>
     </classes>
 
   </test>
