@@ -181,9 +181,9 @@ public class HtmlReporter implements IReporter {
         html.tr().th().content("Test");
         html.th().content("Result");
         html.th().content("")._tr();
-        final String[][] results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
+        final Map<String, String[]> results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
 
-        for (String[] r : results) {
+        for (String[] r : results.values()) {
             html.tr();
             html.td().a(href(r[0]).target("_blank")).write(r[3])._a()._td();
             html.td().span(class_(r[1])).content(r[1])._td();

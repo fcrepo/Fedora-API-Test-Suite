@@ -90,14 +90,14 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
                 skippedTests = testContext.getSkippedTests();
             }
 
-            final String[][] r = TestSuiteGlobals.orderTestsResults(passedTests, skippedTests, failedTests);
+            final Map<String, String[]> r = TestSuiteGlobals.orderTestsResults(passedTests, skippedTests, failedTests);
             getResultProperties(r);
         }
     }
 
-    private void getResultProperties(final String[][] tests) throws
+    private void getResultProperties(final Map<String, String[]> tests) throws
         InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        for (String[] r : tests) {
+        for (String[] r : tests.values()) {
             makeResultResource(r);
         }
     }
