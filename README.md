@@ -21,6 +21,13 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --baseurl http://localhost:
 * `password` (optional) The password to connect to the repository with
 * `testngxml` (optional) The custom testng.xml configuration ([documentation](http://testng.org/doc/documentation-main.html#testng-xml))
   * See example [testng.xml](https://github.com/fcrepo4-labs/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)
+* `requirements` (optional) The requirement-levels of test to be run: ALL|MUST|SHOULD|MAY|MUSTNOT|SHOULDNOT
+  * Multiple levels can be provided, separated by ','
 
+### Notes
+* Specific test methods may be invoked by using a custom testng.xml file (option: `testngxml`) with the addition of \<class>/\<methods> regular expression filters.
+ See commented example in [testng.xml](https://github.com/fcrepo4-labs/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)
+
+## Results
  Test results are available at:
  > report/testsuite-execution-report.html

@@ -30,7 +30,6 @@ import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -50,9 +49,8 @@ public class Ldpnr {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public Ldpnr(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -62,7 +60,7 @@ public class Ldpnr {
      *
      * @param uri
      */
-    @Test(priority = 5)
+    @Test(priority = 5, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -133,7 +131,7 @@ public class Ldpnr {
      *
      * @param uri
      */
-    @Test(priority = 6)
+    @Test(priority = 6, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationWrongLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

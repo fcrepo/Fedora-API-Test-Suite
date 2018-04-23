@@ -33,7 +33,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -53,9 +52,8 @@ public class HttpGet {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public HttpGet(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -65,7 +63,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 7)
+    @Test(priority = 7, groups = {"MAY"})
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -104,7 +102,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 8)
+    @Test(priority = 8, groups = {"MUST"})
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -140,7 +138,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 9)
+    @Test(priority = 9, groups = {"MUST"})
     @Parameters({"param1"})
     public void responseDescribesHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -174,7 +172,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 10)
+    @Test(priority = 10, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigest(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
@@ -212,7 +210,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 11)
+    @Test(priority = 11, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
@@ -258,7 +256,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 12)
+    @Test(priority = 12, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=1";
@@ -304,7 +302,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 13)
+    @Test(priority = 13, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=0";
@@ -342,7 +340,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 14)
+    @Test(priority = 14, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestNonSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,abc";

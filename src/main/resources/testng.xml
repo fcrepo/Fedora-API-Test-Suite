@@ -2,17 +2,61 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Fedora API Specification Test Suite">
 
-  <test name="All Tests">
+  <listeners>
+    <listener class-name='com.ibr.fedora.report.HtmlReporter'/>
+    <listener class-name="com.ibr.fedora.report.EarlReporter"/>
+  </listeners>
+
+  <!--Set console logging with 'verbose' values from 1-10 (10 is most verbose)-->
+  <test name="Fedora API Specification Tests" verbose="1">
+
     <groups>
-      <define name="allRequirementLevels">
+      <define name="all">
         <include name="MUST"/>
         <include name="SHOULD"/>
         <include name="MAY"/>
+        <include name="MUST NOT"/>
+        <include name="SHOULD NOT"/>
+      </define>
+      <define name="must">
+        <include name="MUST"/>
+      </define>
+      <define name="should">
+        <include name="SHOULD"/>
+      </define>
+      <define name="may">
+        <include name="MAY"/>
+      </define>
+      <define name="mustnot">
+        <include name="MUST NOT"/>
+      </define>
+      <define name="shouldnot">
+        <include name="SHOULD NOT"/>
       </define>
     </groups>
-    <packages>
-      <package name="com.ibr.fedora.testsuite"/>
-    </packages>
+
+    <classes>
+      <class name="com.ibr.fedora.testsuite.SetUpSuite"/>
+      <class name="com.ibr.fedora.testsuite.Container">
+        <!--Specify methods to 'include' or 'exclude'-->
+        <!--
+        <methods>
+          <include name=".*ldpcMembershipTriples.*"/>
+          <include name=".*ldpcMinimalContainerTriples.*"/>
+        </methods>
+        -->
+      </class>
+      <class name="com.ibr.fedora.testsuite.Ldpnr"/>
+      <class name="com.ibr.fedora.testsuite.HttpGet"/>
+      <class name="com.ibr.fedora.testsuite.HttpHead"/>
+      <class name="com.ibr.fedora.testsuite.HttpOptions"/>
+      <class name="com.ibr.fedora.testsuite.HttpPost"/>
+      <class name="com.ibr.fedora.testsuite.HttpPut"/>
+      <class name="com.ibr.fedora.testsuite.HttpPatch"/>
+      <class name="com.ibr.fedora.testsuite.HttpDelete"/>
+      <class name="com.ibr.fedora.testsuite.ExternalBinaryContent"/>
+    </classes>
+
   </test>
 
 </suite>

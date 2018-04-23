@@ -33,6 +33,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.jena.ext.com.google.common.base.Joiner;
 import org.testng.TestNG;
 import org.testng.xml.SuiteXmlParser;
 import org.testng.xml.XmlSuite;
@@ -60,6 +61,11 @@ public class App {
         final Option testngxml = new Option("x", "testngxml", true, "TestNG XML file");
         testngxml.setRequired(false);
         options.addOption(testngxml);
+        final Option reqs = new Option("r", "requirements", true, "Requirement levels. One or more of the following, " +
+                "separated by ',': [ALL|MUST|SHOULD|MAY|MUSTNOT|SHOULDNOT]");
+        reqs.setRequired(false);
+        reqs.setValueSeparator(',');;
+        options.addOption(reqs);
 
         final CommandLineParser parser = new BasicParser();
         final HelpFormatter formatter = new HelpFormatter();
@@ -77,6 +83,7 @@ public class App {
         final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
         final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
         final String inputXml = cmd.getOptionValue("testngxml");
+        final String[] requirements = cmd.getOptionValues("requirements");
 
         //Create the default container
         final Map<String, String> params = new HashMap<>();
@@ -103,6 +110,11 @@ public class App {
 
         final TestNG testng = new TestNG();
         testng.setCommandLineSuite(xmlSuite);
+
+        // Set requirement-level groups to be run
+        if (requirements != null && requirements.length > 0) {
+            testng.setGroups(Joiner.on(',').join(requirements).toLowerCase());
+        }
 
         testng.run();
     }

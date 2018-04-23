@@ -39,7 +39,6 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.SkipException;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -59,9 +58,8 @@ public class ExternalBinaryContent {
      * @param username
      * @param password
      */
-    @BeforeClass
     @Parameters({"param2", "param3"})
-    public void auth(final String username, final String password) {
+    public ExternalBinaryContent(final String username, final String password) {
         this.username = username;
         this.password = password;
     }
@@ -71,7 +69,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 45)
+    @Test(priority = 45, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -105,7 +103,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 46)
+    @Test(priority = 46, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -139,7 +137,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 47)
+    @Test(priority = 47, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -192,7 +190,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 48)
+    @Test(priority = 48, groups = {"MUST"})
     @Parameters({"param1"})
     public void createExternalBinaryContentCheckAccesType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -226,7 +224,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 49)
+    @Test(priority = 49, groups = {"MUST"})
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -253,7 +251,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 50)
+    @Test(priority = 50, groups = {"MUST"})
     @Parameters({"param1"})
     public void putCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -280,7 +278,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 51)
+    @Test(priority = 51, groups = {"MUST"})
     @Parameters({"param1"})
     public void checkUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -332,7 +330,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 52)
+    @Test(priority = 52, groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void postCheckHeaders(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -408,7 +406,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 53)
+    @Test(priority = 53, groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void putUpdateCheckHeaders(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -510,7 +508,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 54)
+    @Test(priority = 54, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void getCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -576,7 +574,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 55)
+    @Test(priority = 55, groups = {"SHOULD"})
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -642,7 +640,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 56)
+    @Test(priority = 56, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestExternalBinaryContent(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
@@ -688,7 +686,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 57)
+    @Test(priority = 57, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestExternalBinaryContentHead(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
@@ -734,7 +732,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 58)
+    @Test(priority = 58, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedExternalBinaryContent(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
@@ -788,7 +786,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 59)
+    @Test(priority = 59, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
@@ -843,7 +841,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 60)
+    @Test(priority = 60, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent(final String uri)
         throws FileNotFoundException {
@@ -899,7 +897,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 61)
+    @Test(priority = 61, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead(final String uri)
         throws FileNotFoundException {
@@ -955,7 +953,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 62)
+    @Test(priority = 62, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestNonSupportedExternalBinaryContent(final String uri)
         throws FileNotFoundException {
@@ -1002,7 +1000,7 @@ public class ExternalBinaryContent {
      *
      * @param uri
      */
-    @Test(priority = 63)
+    @Test(priority = 63, groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestNonSupportedExternalBinaryContentHead(final String uri)
         throws FileNotFoundException {
