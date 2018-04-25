@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibr.fedora;
+package org.fcrepo.spec.testsuite;
 
 public class TestsLabels {
     /**

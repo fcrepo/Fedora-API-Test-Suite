@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibr.fedora.report;
+package org.fcrepo.spec.testsuite.report;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -26,7 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import com.ibr.fedora.TestSuiteGlobals;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
@@ -104,26 +104,26 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
 
     private void makeResultResource(final String[] result) throws
         NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        final Resource assertionResource = model.createResource(null, EarlCoreReporter.Assertion);
+        final Resource assertionResource = model.createResource(null, Assertion);
 
-        final Resource resultResource = model.createResource(null, EarlCoreReporter.TestResult);
+        final Resource resultResource = model.createResource(null, TestResult);
 
         final Resource subjectResource = model.getResource(result[0]);
         final Resource assertorResource = model.getResource(TestSuiteGlobals.earlReportAssertor);
 
-        assertionResource.addProperty(EarlCoreReporter.testSubject, subjectResource);
+        assertionResource.addProperty(testSubject, subjectResource);
 
-        assertionResource.addProperty(EarlCoreReporter.test, model.getResource(result[3]));
+        assertionResource.addProperty(test, model.getResource(result[3]));
 
         switch (result[1]) {
             case "FAIL":
-                resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.failed);
+                resultResource.addProperty(outcome, failed);
                 break;
             case "PASS":
-                resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.passed);
+                resultResource.addProperty(outcome, passed);
                 break;
             case "SKIPPED":
-                resultResource.addProperty(EarlCoreReporter.outcome, EarlCoreReporter.untested);
+                resultResource.addProperty(outcome, untested);
                 break;
             default:
                 break;
@@ -133,14 +133,14 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
             createExceptionProperty(result[4], resultResource);
         }
 
-        assertionResource.addProperty(EarlCoreReporter.assertedBy, assertorResource);
+        assertionResource.addProperty(assertedBy, assertorResource);
 
         resultResource.addProperty(DCTerms.date, model.createTypedLiteral(GregorianCalendar.getInstance()));
 
         /*
          * Add the above resources to the Assertion Resource
          */
-        assertionResource.addProperty(EarlCoreReporter.testResult, resultResource);
+        assertionResource.addProperty(testResult, resultResource);
     }
 
     private void createExceptionProperty(final String stackTrace, final Resource resource) {

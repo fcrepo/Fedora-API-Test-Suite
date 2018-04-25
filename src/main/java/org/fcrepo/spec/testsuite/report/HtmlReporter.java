@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibr.fedora.report;
+package org.fcrepo.spec.testsuite.report;
 
 import static org.rendersnake.HtmlAttributesFactory.NO_ESCAPE;
 import static org.rendersnake.HtmlAttributesFactory.class_;
@@ -34,7 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.ibr.fedora.TestSuiteGlobals;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.StringResource;
 import org.testng.IReporter;

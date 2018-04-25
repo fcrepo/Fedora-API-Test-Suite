@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ibr.fedora.report;
+package org.fcrepo.spec.testsuite.report;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.ibr.fedora.TestSuiteGlobals;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
