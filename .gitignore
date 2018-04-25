@@ -18,3 +18,4 @@ maven-eclipse.xml
 atlassian-ide-plugin.xml
 test-output
 /bin
+/report
