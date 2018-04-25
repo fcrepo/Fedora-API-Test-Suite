@@ -1,6 +1,3 @@
-/**
- * @author Jorge Abrego, Fernando Cardoza
- */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -38,6 +35,10 @@ import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.internal.Utils;
 
+/**
+ *
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 public abstract class TestSuiteGlobals {
     public static String cssReport = "reportStyle.css";
     public static String outputDirectory = "report";

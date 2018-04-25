@@ -1,6 +1,3 @@
-/**
- * @author Jorge Abrego, Fernando Cardoza
- */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -45,6 +42,10 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.xml.XmlSuite;
 
+/**
+ *
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 public class HtmlReporter implements IReporter {
 
     HashMap<String, Integer> passClasses;
