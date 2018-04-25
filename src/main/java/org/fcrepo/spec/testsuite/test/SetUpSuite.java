@@ -1,6 +1,3 @@
-/**
- * @author Fernando Cardoza
- */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -25,6 +22,10 @@ import java.io.FileNotFoundException;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.annotations.BeforeSuite;
 
+/**
+ *
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 public class SetUpSuite {
 
     /**

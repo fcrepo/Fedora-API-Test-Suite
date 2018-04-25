@@ -1,6 +1,3 @@
-/**
- * @author Jorge Abrego, Fernando Cardoza
- */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -37,6 +34,10 @@ import org.testng.ISuiteResult;
 import org.testng.ITestContext;
 import org.testng.xml.XmlSuite;
 
+/**
+ *
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 public class EarlReporter extends EarlCoreReporter implements IReporter {
     private static final String PASS = "TEST PASSED";
     private static final String FAIL = "TEST FAILED";

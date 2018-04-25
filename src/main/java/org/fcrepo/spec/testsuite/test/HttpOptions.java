@@ -1,6 +1,3 @@
-/**
- * @author Jorge Abrego, Fernando Cardoza
- */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -32,6 +29,10 @@ import io.restassured.config.LogConfig;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+/**
+ *
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 public class HttpOptions {
     public String username;
     public String password;

@@ -1,6 +1,3 @@
-/**
- * @author Jorge Abrego, Fernando Cardoza
- */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -38,6 +35,10 @@ import org.testng.TestNG;
 import org.testng.xml.SuiteXmlParser;
 import org.testng.xml.XmlSuite;
 
+/**
+ *
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 public class App {
     private App() {
     }

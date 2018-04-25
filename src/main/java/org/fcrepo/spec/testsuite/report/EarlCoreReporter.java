@@ -1,6 +1,3 @@
-/**
- * @author Jorge Abrego, Fernando Cardoza
- */
 /*
  * Licensed to DuraSpace under one or more contributor license agreements.
  * See the NOTICE file distributed with this work for additional information
@@ -35,6 +32,10 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.openrdf.model.vocabulary.EARL;
 
+/**
+ *
+ * @author Jorge Abrego, Fernando Cardoza
+ */
 public abstract class EarlCoreReporter {
     //Earl resources
     public final static Resource Assertion = ResourceFactory.createResource(EARL.ASSERTION.toString());
