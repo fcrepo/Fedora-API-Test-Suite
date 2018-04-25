@@ -41,7 +41,7 @@ import org.testng.internal.Utils;
 public abstract class TestSuiteGlobals {
     public static String cssReport = "reportStyle.css";
     public static String outputDirectory = "report";
-    public static String outputName = "test";
+    public static String outputName = "testsuite";
     public static String earlReportSyntax = "TURTLE";
     public static String ldptNamespace = "http://fedora.info/2017/06/30/spec/#";
     public static String earlReportAssertor = "https://wiki.duraspace.org/display/FF";
