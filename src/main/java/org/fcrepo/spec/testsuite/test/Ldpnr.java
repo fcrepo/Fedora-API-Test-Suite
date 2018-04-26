@@ -65,7 +65,7 @@ public class Ldpnr {
     @Parameters({"param1"})
     public void ldpnrCreationLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n5." + tl.ldpnrCreationLinkType()[1]).append("\n");
+        ps.append("\n" + tl.ldpnrCreationLinkType()[1]).append("\n");
         ps.append("Request:\n");
 
         final Response res = RestAssured.given()
@@ -136,7 +136,7 @@ public class Ldpnr {
     @Parameters({"param1"})
     public void ldpnrCreationWrongLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n6." + tl.ldpnrCreationWrongLinkType()[1]).append("\n");
+        ps.append("\n" + tl.ldpnrCreationWrongLinkType()[1]).append("\n");
         ps.append("Request:\n");
 
         final Response res = RestAssured.given()

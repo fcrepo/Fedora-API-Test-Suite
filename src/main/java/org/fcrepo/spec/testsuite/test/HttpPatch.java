@@ -95,7 +95,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void supportPatch(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n34." + tl.supportPatch()[1]).append('\n');
+        ps.append("\n" + tl.supportPatch()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -136,7 +136,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void ldpPatchContentTypeSupport(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n35." + tl.ldpPatchContentTypeSupport()[1]).append('\n');
+        ps.append("\n" + tl.ldpPatchContentTypeSupport()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource =
@@ -176,7 +176,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void serverManagedPropertiesModification(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n36." + tl.serverManagedPropertiesModification()[1]).append('\n');
+        ps.append("\n" + tl.serverManagedPropertiesModification()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -217,7 +217,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void statementNotPersistedResponseBody(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n37." + tl.statementNotPersistedResponseBody()[1]).append('\n');
+        ps.append("\n" + tl.statementNotPersistedResponseBody()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -258,7 +258,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void statementNotPersistedConstrainedBy(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n38." + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
+        ps.append("\n" + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -299,7 +299,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void successfulPatchStatusCode(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n39." + tl.successfulPatchStatusCode()[1]).append('\n');
+        ps.append("\n" + tl.successfulPatchStatusCode()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -366,7 +366,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void disallowPatchContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n40." + tl.disallowPatchContainmentTriples()[1]).append('\n');
+        ps.append("\n" + tl.disallowPatchContainmentTriples()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response container = RestAssured.given()
@@ -416,7 +416,7 @@ public class HttpPatch {
     @Parameters({"param1"})
     public void disallowChangeResourceType(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n41." + tl.disallowChangeResourceType()[1]).append('\n');
+        ps.append("\n" + tl.disallowChangeResourceType()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()

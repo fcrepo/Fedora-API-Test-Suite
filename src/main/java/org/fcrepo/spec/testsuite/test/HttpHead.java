@@ -70,7 +70,7 @@ public class HttpHead {
     @Parameters({"param1"})
     public void httpHeadResponseNoBody(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n15." + tl.httpHeadResponseNoBody()[1]).append("\n");
+        ps.append("\n" + tl.httpHeadResponseNoBody()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource =
             RestAssured.given()
@@ -105,7 +105,7 @@ public class HttpHead {
     @Parameters({"param1"})
     public void httpHeadResponseDigest(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n16." + tl.httpHeadResponseDigest()[1]).append("\n");
+        ps.append("\n" + tl.httpHeadResponseDigest()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource =
             RestAssured.given()
@@ -178,7 +178,7 @@ public class HttpHead {
     @Parameters({"param1"})
     public void httpHeadResponseHeadersSameAsHttpGet(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n17." + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
+        ps.append("\n" + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)

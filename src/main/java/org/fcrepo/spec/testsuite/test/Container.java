@@ -83,7 +83,7 @@ public class Container {
     @Parameters({"param1"})
     public void createLDPC(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n1." + tl.createLDPC()[1]).append("\n");
+        ps.append("\n" + tl.createLDPC()[1]).append("\n");
         ps.append("Request:\n");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -110,7 +110,7 @@ public class Container {
     @Parameters({"param1"})
     public void ldpcContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n2." + tl.ldpcContainmentTriples()[1]).append("\n");
+        ps.append("\n" + tl.ldpcContainmentTriples()[1]).append("\n");
         ps.append("Request:\n");
         final Response pythagoras =
             RestAssured.given()
@@ -189,7 +189,7 @@ public class Container {
     @Parameters({"param1"})
     public void ldpcMembershipTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n3." + tl.ldpcMembershipTriples()[1]).append("\n");
+        ps.append("\n" + tl.ldpcMembershipTriples()[1]).append("\n");
         ps.append("Request:\n");
         final Response pythagoras =
             RestAssured.given()
@@ -265,7 +265,7 @@ public class Container {
     @Parameters({"param1"})
     public void ldpcMinimalContainerTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n4." + tl.ldpcMinimalContainerTriples()[1]).append("\n");
+        ps.append("\n" + tl.ldpcMinimalContainerTriples()[1]).append("\n");
         ps.append("Request:\n");
         final Response pythagoras =
             RestAssured.given()
