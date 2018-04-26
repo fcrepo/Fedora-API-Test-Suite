@@ -74,7 +74,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n45." + tl.postCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n" + tl.postCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
         final String resource = RestAssured.given()
                                            .auth().basic(this.username, this.password)
@@ -108,7 +108,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n46." + tl.putCreateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n" + tl.putCreateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
         final String resource = RestAssured.given()
                                            .auth().basic(this.username, this.password)
@@ -142,7 +142,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n47." + tl.putUpdateExternalBinaryContent()[1]).append('\n');
+        ps.append("\n" + tl.putUpdateExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final String resource1 = RestAssured.given()
@@ -195,7 +195,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void createExternalBinaryContentCheckAccesType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n48." + tl.createExternalBinaryContentCheckAccesType()[1]).append('\n');
+        ps.append("\n" + tl.createExternalBinaryContentCheckAccesType()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -229,7 +229,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n49." + tl.postCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n" + tl.postCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -256,7 +256,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void putCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n50." + tl.putCheckUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n" + tl.putCheckUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -283,7 +283,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void checkUnsupportedMediaType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n51." + tl.checkUnsupportedMediaType()[1]).append('\n');
+        ps.append("\n" + tl.checkUnsupportedMediaType()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -335,7 +335,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void postCheckHeaders(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n52." + tl.postCheckHeaders()[1]).append('\n');
+        ps.append("\n" + tl.postCheckHeaders()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -411,7 +411,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void putUpdateCheckHeaders(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n53." + tl.putUpdateCheckHeaders()[1]).append('\n');
+        ps.append("\n" + tl.putUpdateCheckHeaders()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -513,7 +513,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void getCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n54." + tl.getCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n" + tl.getCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -579,7 +579,7 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n55." + tl.headCheckContentLocationHeader()[1]).append('\n');
+        ps.append("\n" + tl.headCheckContentLocationHeader()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -646,7 +646,7 @@ public class ExternalBinaryContent {
     public void respondWantDigestExternalBinaryContent(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n56." + tl.respondWantDigestExternalBinaryContent()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -692,7 +692,7 @@ public class ExternalBinaryContent {
     public void respondWantDigestExternalBinaryContentHead(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n57." + tl.respondWantDigestExternalBinaryContentHead()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -738,7 +738,7 @@ public class ExternalBinaryContent {
     public void respondWantDigestTwoSupportedExternalBinaryContent(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n58." + tl.respondWantDigestTwoSupportedExternalBinaryContent()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupportedExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -792,7 +792,7 @@ public class ExternalBinaryContent {
     public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n59." + tl.respondWantDigestTwoSupportedExternalBinaryContentHead()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupportedExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -848,7 +848,7 @@ public class ExternalBinaryContent {
         throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=1";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n60." + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -904,7 +904,7 @@ public class ExternalBinaryContent {
         throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=1";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n61." + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -960,7 +960,7 @@ public class ExternalBinaryContent {
         throws FileNotFoundException {
         final String checksum = "md5,abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n62." + tl.respondWantDigestNonSupportedExternalBinaryContent()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestNonSupportedExternalBinaryContent()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()
@@ -1007,7 +1007,7 @@ public class ExternalBinaryContent {
         throws FileNotFoundException {
         final String checksum = "md5,abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n62." + tl.respondWantDigestNonSupportedExternalBinaryContentHead()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestNonSupportedExternalBinaryContentHead()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response exbcresource = RestAssured.given()

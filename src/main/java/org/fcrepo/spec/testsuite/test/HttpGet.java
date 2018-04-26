@@ -68,7 +68,7 @@ public class HttpGet {
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n7." + tl.additionalValuesForPreferHeader()[1]).append("\n");
+        ps.append("\n" + tl.additionalValuesForPreferHeader()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource =
             RestAssured.given()
@@ -107,7 +107,7 @@ public class HttpGet {
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n8." + tl.responsePreferenceAppliedHeader()[1]).append("\n");
+        ps.append("\n" + tl.responsePreferenceAppliedHeader()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource =
             RestAssured.given()
@@ -143,7 +143,7 @@ public class HttpGet {
     @Parameters({"param1"})
     public void responseDescribesHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n9." + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
+        ps.append("\n" + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource =
             RestAssured.given()
@@ -178,7 +178,7 @@ public class HttpGet {
     public void respondWantDigest(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n10." + tl.respondWantDigest()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigest()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource =
@@ -216,7 +216,7 @@ public class HttpGet {
     public void respondWantDigestTwoSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n11." + tl.respondWantDigestTwoSupported()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupported()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource =
@@ -262,7 +262,7 @@ public class HttpGet {
     public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=1";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n12." + tl.respondWantDigestTwoSupportedQvalueNonZero()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueNonZero()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource =
@@ -308,7 +308,7 @@ public class HttpGet {
     public void respondWantDigestTwoSupportedQvalueZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=0";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n13." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource =
@@ -346,7 +346,7 @@ public class HttpGet {
     public void respondWantDigestNonSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n14." + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
+        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
         ps.append("Request:\n");
 
         final Response resource =

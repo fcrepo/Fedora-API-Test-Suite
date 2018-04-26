@@ -66,7 +66,7 @@ public class HttpPost {
     @Parameters({"param1"})
     public void httpPost(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n20." + tl.httpPost()[1]).append("\n");
+        ps.append("\n" + tl.httpPost()[1]).append("\n");
         ps.append("Request:\n");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -93,7 +93,7 @@ public class HttpPost {
     @Parameters({"param1"})
     public void constrainedByResponseHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n21." + tl.constrainedByResponseHeader()[1]).append("\n");
+        ps.append("\n" + tl.constrainedByResponseHeader()[1]).append("\n");
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -121,7 +121,7 @@ public class HttpPost {
     @Parameters({"param1"})
     public void postNonRDFSource(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n22." + tl.postNonRDFSource()[1]).append('\n');
+        ps.append("\n" + tl.postNonRDFSource()[1]).append('\n');
         ps.append("Request:\n");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -147,7 +147,7 @@ public class HttpPost {
     @Parameters({"param1"})
     public void postResourceAndCheckAssociatedResource(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n23." + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
+        ps.append("\n" + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
         ps.append("Request:\n");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -175,7 +175,7 @@ public class HttpPost {
     public void postDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "md5=1234";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n24." + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
+        ps.append("\n" + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -206,7 +206,7 @@ public class HttpPost {
     public void postDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n25." + tl.postDigestResponseHeaderVerification()[1]).append('\n');
+        ps.append("\n" + tl.postDigestResponseHeaderVerification()[1]).append('\n');
         ps.append("Request:\n");
 
         RestAssured.given()

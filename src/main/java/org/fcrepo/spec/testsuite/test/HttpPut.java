@@ -66,7 +66,7 @@ public class HttpPut {
     public void httpPut(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
-        ps.append("\n26." + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
+        ps.append("\n" + tl.httpPut()[0] + "-" + tl.httpPut()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
@@ -101,7 +101,7 @@ public class HttpPut {
     @Parameters({"param1"})
     public void updateTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n27." + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
+        ps.append("\n" + tl.updateTriples()[0] + "-" + tl.updateTriples()[1]).append("\n");
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -147,7 +147,7 @@ public class HttpPut {
     @Parameters({"param1"})
     public void updateDisallowedTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n28." + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
+        ps.append("\n" + tl.updateDisallowedTriples()[0] + "-" + tl.updateDisallowedTriples()[1]).append("\n");
         ps.append("Request:\n");
 
         final Response resource = RestAssured.given()
@@ -201,7 +201,7 @@ public class HttpPut {
     @Parameters({"param1"})
     public void updateDisallowedTriplesResponse(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n29." + tl.updateDisallowedTriplesResponse()[0] + "-"
+        ps.append("\n" + tl.updateDisallowedTriplesResponse()[0] + "-"
                   + tl.updateDisallowedTriplesResponse()[1]).append("\n");
         ps.append("Request:\n");
 
@@ -257,7 +257,7 @@ public class HttpPut {
     @Parameters({"param1"})
     public void updateDisallowedTriplesConstrainedByHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n30." + tl.updateDisallowedTriplesConstrainedByHeader()[0] + "-"
+        ps.append("\n" + tl.updateDisallowedTriplesConstrainedByHeader()[0] + "-"
                   + tl.updateDisallowedTriplesConstrainedByHeader()[1]).append("\n");
         ps.append("Request:\n");
 
@@ -313,7 +313,7 @@ public class HttpPut {
     public void httpPutNR(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
 
-        ps.append("\n31." + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
+        ps.append("\n" + tl.httpPutNR()[0] + "-" + tl.httpPutNR()[1]).append("\n");
         ps.append("Request:\n");
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
@@ -348,7 +348,7 @@ public class HttpPut {
     public void putDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n32." + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
+        ps.append("\n" + tl.putDigestResponseHeaderAuthentication()[0] + "-" +
                   tl.putDigestResponseHeaderAuthentication()[1]).append("\n");
         ps.append("Request:\n");
 
@@ -386,7 +386,7 @@ public class HttpPut {
     public void putDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n33." + tl.putDigestResponseHeaderVerification()[0] + "-" +
+        ps.append("\n" + tl.putDigestResponseHeaderVerification()[0] + "-" +
                   tl.putDigestResponseHeaderVerification()[1]).append("\n");
         ps.append("Request:\n");
 

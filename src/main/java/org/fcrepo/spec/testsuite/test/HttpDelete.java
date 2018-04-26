@@ -66,7 +66,7 @@ public class HttpDelete {
     @Parameters({"param1"})
     public void httpDeleteOptionsCheck(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n42." + tl.httpDeleteOptionsCheck()[1]).append("\n");
+        ps.append("\n" + tl.httpDeleteOptionsCheck()[1]).append("\n");
         ps.append("Request:\n");
 
         final Response resourceOp =
@@ -210,7 +210,7 @@ public class HttpDelete {
     @Parameters({"param1"})
     public void httpDeleteStatusCheck(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n43." + tl.httpDeleteStatusCheck()[1]).append("\n");
+        ps.append("\n" + tl.httpDeleteStatusCheck()[1]).append("\n");
         ps.append("Request:\n");
 
         // Create resources
@@ -338,7 +338,7 @@ public class HttpDelete {
     @Parameters({"param1"})
     public void httpDeleteStatusCheckTwo(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n44." + tl.httpDeleteStatusCheckTwo()[1]).append("\n");
+        ps.append("\n" + tl.httpDeleteStatusCheckTwo()[1]).append("\n");
         ps.append("Request:\n");
 
         // Create resources

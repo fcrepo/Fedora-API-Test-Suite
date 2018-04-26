@@ -59,7 +59,7 @@ public class HttpOptions {
     @Parameters({"param1"})
     public void httpOptionsSupport(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n18." + tl.httpOptionsSupport()[1]).append("\n");
+        ps.append("\n" + tl.httpOptionsSupport()[1]).append("\n");
         ps.append("Request:\n");
 
         RestAssured.given()
@@ -84,7 +84,7 @@ public class HttpOptions {
     @Parameters({"param1"})
     public void httpOptionsSupportAllow(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n19." + tl.httpOptionsSupportAllow()[1]).append("\n");
+        ps.append("\n" + tl.httpOptionsSupportAllow()[1]).append("\n");
         ps.append("Request:\n");
 
         RestAssured.given()
