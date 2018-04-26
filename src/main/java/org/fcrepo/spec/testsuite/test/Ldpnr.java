@@ -61,7 +61,7 @@ public class Ldpnr {
      *
      * @param uri
      */
-    @Test(priority = 5, groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -132,7 +132,7 @@ public class Ldpnr {
      *
      * @param uri
      */
-    @Test(priority = 6, groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationWrongLinkType(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

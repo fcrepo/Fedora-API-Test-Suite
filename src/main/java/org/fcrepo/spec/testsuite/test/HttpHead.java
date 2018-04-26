@@ -66,7 +66,7 @@ public class HttpHead {
      *
      * @param uri
      */
-    @Test(priority = 15, groups = {"MUST NOT"})
+    @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpHeadResponseNoBody(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -101,7 +101,7 @@ public class HttpHead {
      *
      * @param uri
      */
-    @Test(priority = 16, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpHeadResponseDigest(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -174,7 +174,7 @@ public class HttpHead {
      *
      * @param uri
      */
-    @Test(priority = 17, groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void httpHeadResponseHeadersSameAsHttpGet(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

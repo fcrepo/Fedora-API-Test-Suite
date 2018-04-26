@@ -55,7 +55,7 @@ public class HttpOptions {
      *
      * @param uri
      */
-    @Test(priority = 18, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupport(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -80,7 +80,7 @@ public class HttpOptions {
      *
      * @param uri
      */
-    @Test(priority = 19, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupportAllow(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

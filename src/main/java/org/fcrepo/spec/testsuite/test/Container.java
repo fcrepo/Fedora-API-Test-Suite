@@ -79,7 +79,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 1, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void createLDPC(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -106,7 +106,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 2, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -185,7 +185,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 3, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMembershipTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -261,7 +261,7 @@ public class Container {
      *
      * @param uri
      */
-    @Test(priority = 4, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMinimalContainerTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
