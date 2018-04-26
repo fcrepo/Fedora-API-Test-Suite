@@ -64,7 +64,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 7, groups = {"MAY"})
+    @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -103,7 +103,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 8, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -139,7 +139,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 9, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void responseDescribesHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -173,7 +173,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 10, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigest(final String uri) throws FileNotFoundException {
         final String checksum = "md5";
@@ -211,7 +211,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 11, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
@@ -257,7 +257,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 12, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=1";
@@ -303,7 +303,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 13, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=0";
@@ -341,7 +341,7 @@ public class HttpGet {
      *
      * @param uri
      */
-    @Test(priority = 14, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestNonSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,abc";

@@ -61,7 +61,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 26, groups = {"MAY"})
+    @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void httpPut(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -97,7 +97,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 27, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void updateTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -143,7 +143,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 28, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void updateDisallowedTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -197,7 +197,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 29, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void updateDisallowedTriplesResponse(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -253,7 +253,7 @@ public class HttpPut {
      * @param uri
      * @throws FileNotFoundException
      */
-    @Test(priority = 30, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void updateDisallowedTriplesConstrainedByHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -308,7 +308,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 31, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutNR(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -343,7 +343,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 32, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void putDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
@@ -381,7 +381,7 @@ public class HttpPut {
      *
      * @param uri
      */
-    @Test(priority = 33, groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";

@@ -62,7 +62,7 @@ public class HttpDelete {
      *
      * @param uri
      */
-    @Test(priority = 42, groups = {"SHOULD NOT"})
+    @Test(groups = {"SHOULD NOT"})
     @Parameters({"param1"})
     public void httpDeleteOptionsCheck(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -206,7 +206,7 @@ public class HttpDelete {
      *
      * @param uri
      */
-    @Test(priority = 43, groups = {"MUST NOT"})
+    @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheck(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -334,7 +334,7 @@ public class HttpDelete {
      *
      * @param uri
      */
-    @Test(priority = 44, groups = {"MUST NOT"})
+    @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheckTwo(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();

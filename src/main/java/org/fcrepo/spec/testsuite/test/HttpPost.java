@@ -62,7 +62,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 20, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPost(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -89,7 +89,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 21, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void constrainedByResponseHeader(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -117,7 +117,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 22, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postNonRDFSource(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -143,7 +143,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 23, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postResourceAndCheckAssociatedResource(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -170,7 +170,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 24, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
         final String checksum = "md5=1234";
@@ -201,7 +201,7 @@ public class HttpPost {
      *
      * @param uri
      */
-    @Test(priority = 25, groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
         final String checksum = "abc=abc";

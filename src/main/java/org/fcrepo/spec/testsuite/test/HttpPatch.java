@@ -91,7 +91,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 34, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void supportPatch(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -132,7 +132,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 35, groups = {"MAY"})
+    @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpPatchContentTypeSupport(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -172,7 +172,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 36, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void serverManagedPropertiesModification(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -213,7 +213,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 37, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedResponseBody(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -254,7 +254,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 38, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedConstrainedBy(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -295,7 +295,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 39, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void successfulPatchStatusCode(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -362,7 +362,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 40, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowPatchContainmentTriples(final String uri) throws FileNotFoundException {
         final PrintStream ps = TestSuiteGlobals.logFile();
@@ -412,7 +412,7 @@ public class HttpPatch {
      *
      * @param uri
      */
-    @Test(priority = 41, groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowChangeResourceType(final String uri) throws IOException {
         final PrintStream ps = TestSuiteGlobals.logFile();
