@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -52,7 +50,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public ExternalBinaryContent(final String username, final String password) {
-        super(username,password);
+        super(username, password);
     }
 
     /**
@@ -196,14 +194,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + " parameter value of Content-Type: message/external-body.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)

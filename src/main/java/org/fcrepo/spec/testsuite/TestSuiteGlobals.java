@@ -51,12 +51,6 @@ public abstract class TestSuiteGlobals {
     public static String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
                                                 "insertedContentRelation"};
 
-    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-                                + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-                                + "<> a ldp:Container, ldp:BasicContainer;"
-                                + "dcterms:title 'Base Container' ;"
-                                + "dcterms:description 'This container is the base container for the Fedora API Test " +
-                                "Suite.' . ";
 
     /**
      * Get or create the default container for all tests resources to be created
@@ -73,7 +67,7 @@ public abstract class TestSuiteGlobals {
                                         .contentType("text/turtle")
                                         .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                         .header("slug", name)
-                                        .body(body)
+                                        .body(BASIC_CONTAINER_LINK_HEADER)
                                         .when()
                                         .post(baseurl);
         if (res.getStatusCode() == 201) {

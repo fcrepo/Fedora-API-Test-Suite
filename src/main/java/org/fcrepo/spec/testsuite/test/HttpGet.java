@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -46,7 +44,7 @@ public class HttpGet extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public HttpGet(final String username, final String password) {
-        super(username,password);
+        super(username, password);
     }
 
     /**
@@ -69,16 +67,8 @@ public class HttpGet extends AbstractTest {
                                         + "requests on LDPC resources.",
                                         "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
                                         ps);
-        final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(uri);
+        final Response resource = createBasicContainer(uri, info);
+
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -112,16 +102,7 @@ public class HttpGet extends AbstractTest {
                                         + " response header as defined in [RFC7240] section 3.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
                                         ps);
-        final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -287,7 +268,7 @@ public class HttpGet extends AbstractTest {
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .header("Content-Disposition",
                                "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero.txt\"")
-                       .header("slug", "Get-3.2.3-C")
+                       .header("slug", info.getId())
                        .body("TestString")
                        .when()
                        .post(uri);

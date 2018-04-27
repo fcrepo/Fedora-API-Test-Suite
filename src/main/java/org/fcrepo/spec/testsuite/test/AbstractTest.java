@@ -17,8 +17,14 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
+
 import java.io.PrintStream;
 
+import io.restassured.RestAssured;
+import io.restassured.config.LogConfig;
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 
@@ -74,5 +80,30 @@ public class AbstractTest {
         ps.append("\n" + info.getDescription()).append("\n");
         ps.append("Request:\n");
         return info;
+    }
+
+    protected Response createBasicContainer(final String uri, final TestInfo info) {
+        return createBasicContainer(uri, info.getId());
+    }
+
+    protected Response createBasicContainer(final String uri, final TestInfo info, final String body) {
+        return createBasicContainer(uri, info.getId(), body);
+    }
+
+    protected Response createBasicContainer(final String uri, final String slug) {
+        return createBasicContainer(uri, slug, BASIC_CONTAINER_BODY);
+    }
+
+    protected Response createBasicContainer(final String uri, final String slug, final String body) {
+        return RestAssured.given()
+                          .auth().basic(this.username, this.password)
+                          .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                          .contentType("text/turtle")
+                          .header("Link", BASIC_CONTAINER_LINK_HEADER)
+                          .header("slug", slug)
+                          .body(body)
+                          .log().all()
+                          .when()
+                          .post(uri);
     }
 }

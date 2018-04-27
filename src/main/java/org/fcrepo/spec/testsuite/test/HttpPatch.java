@@ -131,15 +131,7 @@ public class HttpPatch extends AbstractTest {
         final TestInfo info = setupTest("3.7-B", "ldpPatchContentTypeSupport",
                                         "Other content-types (e.g. [ldpatch]) may be available.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
-        final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -173,15 +165,7 @@ public class HttpPatch extends AbstractTest {
                                         + "4.2.4.1), the server must fail the request by responding with a 4xx range"
                                         + " status code (e.g. 409 Conflict).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link",
-                                                     BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -215,15 +199,7 @@ public class HttpPatch extends AbstractTest {
                                         + " about which statements could not be persisted."
                                         + " ([LDP] 4.2.4.4 should becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link",
-                                                     BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -258,15 +234,7 @@ public class HttpPatch extends AbstractTest {
                                         + "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
                                         + "response header per [LDP] 4.2.1.6.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link",
-                                                     BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -300,15 +268,7 @@ public class HttpPatch extends AbstractTest {
                                         + "specific code in the 2xx range may vary according to the response "
                                         + "body or request state.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link",
-                                                     BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         ps.append("Request method:\tPATCH\n");
         ps.append("Request URI:\t" + uri);
@@ -370,15 +330,7 @@ public class HttpPatch extends AbstractTest {
                                         + " 409 (Conflict) status code.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch-containment-triples",
                                         ps);
-        final Response container = RestAssured.given()
-                                              .auth().basic(this.username, this.password)
-                                              .contentType("text/turtle")
-                                              .header("Link",
-                                                      BASIC_CONTAINER_LINK_HEADER)
-                                              .header("slug", info.getId())
-                                              .body(BASIC_CONTAINER_BODY)
-                                              .when()
-                                              .post(uri);
+        final Response container = createBasicContainer(uri, info);
         final String locationHeader = container.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -422,15 +374,7 @@ public class HttpPatch extends AbstractTest {
                                         + " of the current resource type. That request must be rejected"
                                         + " with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link",
-                                                     BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", "Patch-3.7.2")
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)
