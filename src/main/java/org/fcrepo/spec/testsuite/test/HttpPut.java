@@ -72,6 +72,7 @@ public class HttpPut extends AbstractTest {
                                              .body("TestString.")
                                              .when()
                                              .post(uri);
+
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given().auth().basic(this.username, this.password)
                    .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
@@ -102,14 +103,7 @@ public class HttpPut extends AbstractTest {
                                         " triples (as defined "
                                         + "in [LDP] 2). [LDP] 4.2.4.1 and 4.2.4.3 remain in effect.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
 
         final String body2 = RestAssured.given()
@@ -154,16 +148,10 @@ public class HttpPut extends AbstractTest {
                                         + "responding with a 4xx "
                                         + "range status code (e.g. 409 Conflict).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
 
         final String locationHeader = resource.getHeader("Location");
+
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .contentType("text/turtle")
@@ -209,14 +197,7 @@ public class HttpPut extends AbstractTest {
                                         + "about which statements could"
                                         + " not be persisted. ([LDP] 4.2.4.4 shouldbecomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
 
         RestAssured.given()
@@ -267,32 +248,20 @@ public class HttpPut extends AbstractTest {
                                         " by a Link: rel=\"http://www.w3.org/ns/ldp#constrainedBy\" response header " +
                                         "per [LDP] 4.2.1.6.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info);
 
         final String locationHeader = resource.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                   .header("slug", "containedFolderSlug")
-                   .body(BASIC_CONTAINER_BODY)
-                   .when()
-                   .post(locationHeader);
+        final String containedFolderSlug = "containedFolderSlug";
+
+        createBasicContainer(locationHeader, containedFolderSlug);
 
         final String body2 = RestAssured.given()
                                         .auth().basic(this.username, this.password)
                                         .when()
                                         .get(locationHeader).asString();
 
-        final String newBody = body2.replace("containedFolderSlug", "some-name");
+        final String newBody = body2.replace(containedFolderSlug, "some-name");
 
         RestAssured.given()
                    .auth().basic(this.username, this.password)

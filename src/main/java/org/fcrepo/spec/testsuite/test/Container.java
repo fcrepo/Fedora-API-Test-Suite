@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-
 import java.io.FileNotFoundException;
 
 import io.restassured.RestAssured;
@@ -62,7 +60,7 @@ public class Container extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public Container(final String username, final String password) {
-        super(username,password);
+        super(username, password);
     }
 
     /**
@@ -76,19 +74,9 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-A", "createLDPC",
                                         "Implementations must support the creation and management of [LDP] Containers.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .contentType("text/turtle")
-                   .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                   .header("slug", info.getId())
-                   .body(BASIC_CONTAINER_BODY)
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(201);
+        createBasicContainer(uri, info).then()
+                                       .log().all()
+                                       .statusCode(201);
         ps.append("\n -Case End- \n").close();
     }
 
@@ -105,34 +93,13 @@ public class Container extends AbstractTest {
                                         "LDP Containers must distinguish [containment triples]",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
-        final Response pythagoras =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("slug", info.getId())
-                       .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                       .when()
-                       .body(pythagorasContainer)
-                       .post(uri);
+        final Response pythagoras = createBasicContainer(uri, info, pythagorasContainer);
         final String pythagorasLocationHeader = pythagoras.getHeader("Location");
+        final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).asString();
 
-        final String person = RestAssured.given()
-                                         .auth().basic(this.username, this.password)
-                                         .contentType("text/turtle")
-                                         .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                                         .header("slug", "person")
-                                         .when()
-                                         .body(personBody)
-                                         .post(pythagorasLocationHeader).asString();
+        final Response portraits =
+            createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
 
-        final Response portraits = RestAssured.given()
-                                              .auth().basic(this.username, this.password)
-                                              .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                                              .contentType("text/turtle")
-                                              .header("slug", "portraits")
-                                              .when()
-                                              .body(portraitContainer.replace("%person%", person))
-                                              .post(pythagorasLocationHeader);
         final String portraitsLocationHeader = portraits.getHeader("Location");
 
         RestAssured.given()
@@ -262,34 +229,13 @@ public class Container extends AbstractTest {
                                         "LDP Containers must distinguish [minimal-container] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
-        final Response pythagoras =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .when()
-                       .body(pythagorasContainer)
-                       .post(uri);
+        final Response pythagoras = createBasicContainer(uri, info, pythagorasContainer);
         final String pythagorasLocationHeader = pythagoras.getHeader("Location");
 
-        final String person = RestAssured.given()
-                                         .auth().basic(this.username, this.password)
-                                         .contentType("text/turtle")
-                                         .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                                         .header("slug", "person")
-                                         .when()
-                                         .body(personBody)
-                                         .post(pythagorasLocationHeader).asString();
+        final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).toString();
 
-        final Response portraits = RestAssured.given()
-                                              .auth().basic(this.username, this.password)
-                                              .contentType("text/turtle")
-                                              .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                                              .header("slug", "portraits")
-                                              .when()
-                                              .body(portraitContainer.replace("%person%", person))
-                                              .post(pythagorasLocationHeader);
+        final Response portraits =
+            createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
         final String portraitsLocationHeader = portraits.getHeader("Location");
 
         RestAssured.given()

@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -62,19 +60,10 @@ public class HttpPost extends AbstractTest {
                                         "/ 5.2.3). ",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .contentType("text/turtle")
-                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                   .header("slug", info.getId())
-                   .body(BASIC_CONTAINER_BODY)
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(201);
+        createBasicContainer(uri, info)
+            .then()
+            .log().all()
+            .statusCode(201);
         ps.append("\n -Case End- \n").close();
     }
 
@@ -95,19 +84,9 @@ public class HttpPost extends AbstractTest {
                                         ".w3.org/ns/ldp#constrainedBy\" "
                                         + "header ([LDP] 4.2.1.6 clarification).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .contentType("text/turtle")
-                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                   .header("slug", "Post-3.5-B")
-                   .body(BASIC_CONTAINER_BODY)
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(201).header("Link", containsString("constrainedBy"));
+        createBasicContainer(uri, info).then()
+                                       .log().all()
+                                       .statusCode(201).header("Link", containsString("constrainedBy"));
         ps.append("\n -Case End- \n").close();
     }
 
@@ -126,7 +105,7 @@ public class HttpPost extends AbstractTest {
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
-                   .header("slug", "Post-3.5.1-A")
+                   .header("slug", info.getId())
                    .body("TestString.")
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                    .log().all()

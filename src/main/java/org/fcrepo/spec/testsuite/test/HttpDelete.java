@@ -17,9 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
-
 import java.io.FileNotFoundException;
 
 import io.restassured.RestAssured;
@@ -45,7 +42,7 @@ public class HttpDelete extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public HttpDelete(final String username, final String password) {
-        super(username,password);
+        super(username, password);
     }
 
     /**
@@ -63,25 +60,9 @@ public class HttpDelete extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
                                         ps);
 
-        final Response resourceOp =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(uri);
+        final Response resourceOp = createBasicContainer(uri, info);
         final String locationHeader = resourceOp.getHeader("Location");
-        final Response resourceSonOp =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", "Delete-" + info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(locationHeader);
+        final Response resourceSonOp = createBasicContainer(locationHeader, "Delete-" + info.getId());
 
         final Response rdf01 =
             RestAssured.given()
@@ -208,25 +189,9 @@ public class HttpDelete extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
                                         ps);
         // Create resources
-        final Response rootres =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(uri);
+        final Response rootres = createBasicContainer(uri, info);
         final String locationHeader = rootres.getHeader("Location");
-        final Response resourceSon =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", "Delete-" + info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(locationHeader);
+        final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
         final String locationHeader2 = resourceSon.getHeader("Location");
         final Response nrdf01 =
             RestAssured.given()
@@ -338,25 +303,9 @@ public class HttpDelete extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
                                         ps);
         // Create resources
-        final Response rootres =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(uri);
+        final Response rootres = createBasicContainer(uri, info);
         final String locationHeader = rootres.getHeader("Location");
-        final Response resourceSon =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", "Delete-" + info.getId())
-                       .body(BASIC_CONTAINER_BODY)
-                       .when()
-                       .post(locationHeader);
+        final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
         final String locationHeader2 = resourceSon.getHeader("Location");
         final Response nrdf01 =
             RestAssured.given()
