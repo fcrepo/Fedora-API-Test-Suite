@@ -37,8 +37,6 @@ public class HttpPut extends AbstractTest {
                                 + "<> a ldp:Container, ldp:BasicContainer;"
                                 + "dcterms:title 'Put class Container' ;"
                                 + "dcterms:description 'This is a  test container  for the Fedora API Test Suite.' . ";
-    public String username;
-    public String password;
 
     /**
      * Authentication
@@ -48,8 +46,7 @@ public class HttpPut extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public HttpPut(final String username, final String password) {
-        this.username = username;
-        this.password = password;
+        super(username, password);
     }
 
     /**

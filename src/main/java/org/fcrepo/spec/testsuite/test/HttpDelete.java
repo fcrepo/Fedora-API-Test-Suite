@@ -38,9 +38,6 @@ public class HttpDelete extends AbstractTest {
                                 + "<> a ldp:Container, ldp:BasicContainer;"
                                 + "dcterms:title 'Delete class Container' ;"
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
-    public String username;
-    public String password;
-
     /**
      * Authentication
      *
@@ -49,8 +46,7 @@ public class HttpDelete extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public HttpDelete(final String username, final String password) {
-        this.username = username;
-        this.password = password;
+        super(username,password);
     }
 
     /**

@@ -39,8 +39,6 @@ public class Container extends AbstractTest {
                                 + "<> a ldp:Container, ldp:BasicContainer;"
                                 + "dcterms:title 'Container class Container' ;"
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
-    public String username;
-    public String password;
     public String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
                                         + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
                                         + "<> dc:title 'Pythagoras Collection'; "
@@ -67,8 +65,7 @@ public class Container extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public Container(final String username, final String password) {
-        this.username = username;
-        this.password = password;
+        super(username,password);
     }
 
     /**
