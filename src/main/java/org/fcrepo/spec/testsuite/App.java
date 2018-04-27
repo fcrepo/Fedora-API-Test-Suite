@@ -62,8 +62,7 @@ public class App {
         testngxml.setRequired(false);
         options.addOption(testngxml);
         final Option reqs = new Option("r", "requirements", true, "Requirement levels. One or more of the following, " +
-                                                                  "separated by ',': " +
-                                                                  "[ALL|MUST|SHOULD|MAY|MUSTNOT|SHOULDNOT]");
+                                                                  "separated by ',': [ALL|MUST|SHOULD|MAY]");
         reqs.setRequired(false);
         reqs.setValueSeparator(',');
         options.addOption(reqs);

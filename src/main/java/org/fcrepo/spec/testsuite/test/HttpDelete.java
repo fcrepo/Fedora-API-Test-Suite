@@ -52,7 +52,7 @@ public class HttpDelete extends AbstractTest {
      *
      * @param uri
      */
-    @Test(groups = {"SHOULD NOT"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void httpDeleteOptionsCheck(final String uri) throws FileNotFoundException {
         final TestInfo info = setupTest("3.8.1-A", "httpDeleteOptionsCheck",
@@ -198,7 +198,7 @@ public class HttpDelete extends AbstractTest {
      *
      * @param uri
      */
-    @Test(groups = {"MUST NOT"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheck(final String uri) throws FileNotFoundException {
         final TestInfo info = setupTest("3.8.1-C", "httpDeleteStatusCheck",
@@ -327,7 +327,7 @@ public class HttpDelete extends AbstractTest {
      *
      * @param uri
      */
-    @Test(groups = {"MUST NOT"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheckTwo(final String uri) throws FileNotFoundException {
         final TestInfo info = setupTest("3.8.1-D", "httpDeleteStatusCheckTwo",

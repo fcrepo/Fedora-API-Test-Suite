@@ -347,7 +347,7 @@ public class ExternalBinaryContent extends AbstractTest {
      *
      * @param uri
      */
-    @Test(groups = {"MUST NOT"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postCheckHeaders(final String uri) throws FileNotFoundException {
         final TestInfo info = setupTest("3.9-E", "postCheckHeaders",
@@ -427,7 +427,7 @@ public class ExternalBinaryContent extends AbstractTest {
      *
      * @param uri
      */
-    @Test(groups = {"MUST NOT"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void putUpdateCheckHeaders(final String uri) throws FileNotFoundException {
         final TestInfo info = setupTest("3.9-E", "putUpdateCheckHeaders",
