@@ -20,20 +20,17 @@ package org.fcrepo.spec.testsuite.test;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
+import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class HttpPost {
+public class HttpPost extends AbstractTest {
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                 + "<> a ldp:Container, ldp:BasicContainer;"
@@ -41,7 +38,6 @@ public class HttpPost {
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
-    public TestsLabels tl = new TestsLabels();
     public String resource = "";
     public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
 
@@ -65,15 +61,17 @@ public class HttpPost {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPost(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpPost()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.5-A", "httpPost",
+                                        "Any LDPC (except Version Containers (LDPCv)) must support POST ([LDP] 4.2.3 " +
+                                        "/ 5.2.3). ",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
+
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                   .header("slug", "Post-3.5-A")
+                   .header("slug", info.getId())
                    .body(body)
                    .log().all()
                    .when()
@@ -92,10 +90,15 @@ public class HttpPost {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void constrainedByResponseHeader(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.constrainedByResponseHeader()[1]).append("\n");
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.5-B", "constrainedByResponseHeader",
+                                        "The default interaction model that will be assigned when there is no " +
+                                        "explicit Link "
+                                        + "header in the request must be recorded in the constraints"
+                                        +
+                                        " document referenced in the Link: rel=\"http://www" +
+                                        ".w3.org/ns/ldp#constrainedBy\" "
+                                        + "header ([LDP] 4.2.1.6 clarification).",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -120,9 +123,10 @@ public class HttpPost {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postNonRDFSource(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.postNonRDFSource()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.5.1-A", "postNonRDFSource",
+                                        "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
+                                        " must).",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
@@ -146,13 +150,15 @@ public class HttpPost {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postResourceAndCheckAssociatedResource(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.postResourceAndCheckAssociatedResource()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.5.1-B", "postResourceAndCheckAssociatedResource",
+                                        "On creation of an LDP-NR, an implementation must create an associated LDP-RS" +
+                                        " describing"
+                                        + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
-                   .header("slug", "Post-3.5.1-B")
+                   .header("slug", info.getId())
                    .body("TestString.")
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                    .log().all()
@@ -173,16 +179,20 @@ public class HttpPost {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
+        final TestInfo info = setupTest("3.5.1-C", "postDigestResponseHeaderAuthentication",
+                                        "An HTTP POST request that would create an LDP-NR and includes a Digest " +
+                                        "header (as described"
+                                        +
+                                        " in [RFC3230]) for which the instance-digest in that header does not match " +
+                                        "that of the "
+                                        + "new LDP-NR must be rejected with a 409 Conflict response.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "md5=1234";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.postDigestResponseHeaderAuthentication()[1]).append('\n');
-        ps.append("Request:\n");
-
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .header("Content-Disposition",
                            "attachment; filename=\"test1digesttext.txt\"")
-                   .header("slug", "Post-3.5.1-C")
+                   .header("slug", info.getId())
                    .body("TestString.")
                    .header("Digest", checksum)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -204,16 +214,17 @@ public class HttpPost {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
+        final TestInfo info = setupTest("3.5.1-D", "postDigestResponseHeaderVerification",
+                                        "An HTTP POST request that includes an unsupported Digest type (as described " +
+                                        "in [RFC3230]), "
+                                        + "should be rejected with a 400 Bad Request response.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "abc=abc";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.postDigestResponseHeaderVerification()[1]).append('\n');
-        ps.append("Request:\n");
-
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .header("Content-Disposition",
                            "attachment; filename=\"test1digesttext2.txt\"")
-                   .header("slug", "Post-3.5.1-D")
+                   .header("slug", info.getId())
                    .body("TestString.")
                    .header("Digest", checksum)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))

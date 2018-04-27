@@ -20,23 +20,19 @@ package org.fcrepo.spec.testsuite.test;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
+import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class HttpOptions {
+public class HttpOptions extends AbstractTest {
     public String username;
     public String password;
-    public TestsLabels tl = new TestsLabels();
 
     /**
      * Authentication
@@ -58,10 +54,11 @@ public class HttpOptions {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupport(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpOptionsSupport()[1]).append("\n");
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.4-A", "httpOptionsSupport",
+                                        "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
+                                        + "4.2.8.1 LDP servers must support the HTTP OPTIONS method.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-options",
+                                        ps);
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -83,10 +80,14 @@ public class HttpOptions {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupportAllow(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpOptionsSupportAllow()[1]).append("\n");
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.4-B", "httpOptionsSupportAllow",
+                                        "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
+                                        + "LDP servers must indicate their support for HTTP Methods by responding to a"
+                                        +
+                                        " HTTP OPTIONS request on the LDPR’s URL with the HTTP Method tokens in the " +
+                                        "HTTP response header Allow.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-options",
+                                        ps);
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))

@@ -20,26 +20,24 @@ package org.fcrepo.spec.testsuite.test;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class HttpHead {
+public class HttpHead extends AbstractTest {
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                 + "<> a ldp:Container, ldp:BasicContainer;"
@@ -47,7 +45,6 @@ public class HttpHead {
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
-    public TestsLabels tl = new TestsLabels();
 
     /**
      * Authentication
@@ -69,9 +66,12 @@ public class HttpHead {
     @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpHeadResponseNoBody(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpHeadResponseNoBody()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.3-A", "httpHeadResponseNoBody",
+                                        "The HEAD method is identical to GET except that the server must not return a "
+                                        + "message-body in the response, as "
+                                        + "specified in [RFC7231] section 4.3.2.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-head",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
@@ -104,15 +104,19 @@ public class HttpHead {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpHeadResponseDigest(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpHeadResponseDigest()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.3-B", "httpHeadResponseDigest",
+                                        "The server must send the same Digest header in the response as it"
+                                        +
+                                        " would have sent if the request had been a GET (or omit it if it would have " +
+                                        "been omitted for a GET).",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-head",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
-                       .header("slug", "HEAD-3.3-B")
+                       .header("slug", info.getId())
                        .body("TestString.")
                        .when()
                        .post(uri);
@@ -177,14 +181,20 @@ public class HttpHead {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void httpHeadResponseHeadersSameAsHttpGet(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpHeadResponseHeadersSameAsHttpGet()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.3-C", "httpHeadResponseHeadersSameAsHttpGet",
+                                        "In other cases, The server should send the same headers in response to a " +
+                                        "HEAD request "
+                                        + "as it would have sent if the request had "
+                                        +
+                                        "been a GET, except that the payload headers (defined in [RFC7231] section " +
+                                        "3.3) may be omitted.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-head",
+                                        ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
                                              .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                             .header("slug", "Head-3.3-C")
+                                             .header("slug", info.getId())
                                              .body(body)
                                              .when()
                                              .post(uri);

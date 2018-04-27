@@ -20,36 +20,32 @@ package org.fcrepo.spec.testsuite.test;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class ExternalBinaryContent {
+public class ExternalBinaryContent extends AbstractTest {
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                 + "<> a ldp:Container, ldp:BasicContainer;"
                                 + "dcterms:title 'External binary content class Container' ;"
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
-    public TestsLabels tl = new TestsLabels();
     public String username;
     public String password;
 
@@ -73,9 +69,11 @@ public class ExternalBinaryContent {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.postCreateExternalBinaryContent()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-A", "postCreateExternalBinaryContent",
+                                        "Fedora servers should support the creation of LDP-NRs with Content-Type "
+                                        + "of message/external-body and"
+                                        + " access-type parameter of url.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
         final String resource = RestAssured.given()
                                            .auth().basic(this.username, this.password)
                                            .header("Content-Disposition",
@@ -107,14 +105,16 @@ public class ExternalBinaryContent {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.putCreateExternalBinaryContent()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-A", "putCreateExternalBinaryContent",
+                                        "Fedora servers should support the creation of LDP-NRs with Content-Type "
+                                        + "of message/external-body and"
+                                        + " access-type parameter of url.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
         final String resource = RestAssured.given()
                                            .auth().basic(this.username, this.password)
                                            .header("Content-Disposition",
                                                    "attachment; filename=\"externalbinarycontentputcreate.txt\"")
-                                           .header("slug", "External-Binary-Content-3.9-A-PutCreate")
+                                           .header("slug", info.getId())
                                            .body("TestString.")
                                            .when()
                                            .post(uri).asString();
@@ -141,15 +141,17 @@ public class ExternalBinaryContent {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.putUpdateExternalBinaryContent()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-A", "putUpdateExternalBinaryContent",
+                                        "Fedora servers should support the creation of LDP-NRs with Content-Type "
+                                        + "of message/external-body and"
+                                        + " access-type parameter of url.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String resource1 = RestAssured.given()
                                             .auth().basic(this.username, this.password)
                                             .header("Content-Disposition",
                                                     "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
-                                            .header("slug", "External-Binary-Content-3.9-A-PutUpdate1")
+                                            .header("slug", info.getId())
                                             .body("TestString1.")
                                             .when()
                                             .post(uri).asString();
@@ -158,7 +160,7 @@ public class ExternalBinaryContent {
                                             .auth().basic(this.username, this.password)
                                             .header("Content-Disposition",
                                                     "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
-                                            .header("slug", "External-Binary-Content-3.9-A-PutUpdate2")
+                                            .header("slug", info.getId() + "-PutUpdate2")
                                             .body("TestString2.")
                                             .when()
                                             .post(uri).asString();
@@ -168,7 +170,7 @@ public class ExternalBinaryContent {
                                              .header("Content-Type",
                                                      "message/external-body; access-type=URL; URL=\"" + resource1 +
                                                      "\"")
-                                             .header("slug", "External-Binary-Content-3.9-A-PutUpdate3")
+                                             .header("slug", info.getId() + "PutUpdate3")
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -194,15 +196,17 @@ public class ExternalBinaryContent {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void createExternalBinaryContentCheckAccesType(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.createExternalBinaryContentCheckAccesType()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-B", "createExternalBinaryContentCheckAccesType",
+                                        "Fedora servers must advertise support in the Accept-Post response header for" +
+                                        " each supported access-type "
+                                        + " parameter value of Content-Type: message/external-body.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
                                              .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                             .header("slug", "External-Binary-Content-3.9-B")
+                                             .header("slug", info.getId())
                                              .body(body)
                                              .when()
                                              .post(uri);
@@ -228,9 +232,17 @@ public class ExternalBinaryContent {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.postCheckUnsupportedMediaType()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-C", "postCheckUnsupportedMediaType",
+                                        "Fedora servers receiving requests that would create or update a LDP-NR with "
+                                        + "a message/external-body with an "
+                                        +
+                                        "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE. "
+                                        + "In the case that a Fedora"
+                                        +
+                                        " server does not support external LDP-NR content, all message/external-body " +
+                                        "messages must be rejected"
+                                        + " with HTTP 415.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -255,9 +267,17 @@ public class ExternalBinaryContent {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void putCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.putCheckUnsupportedMediaType()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-C", "putCheckUnsupportedMediaType",
+                                        "Fedora servers receiving requests that would create or update a LDP-NR with a "
+                                        + "message/external-body with an "
+                                        +
+                                        "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE" +
+                                        ". In the case that a Fedora"
+                                        +
+                                        " server does not support external LDP-NR content, all message/external-body " +
+                                        "messages must be rejected"
+                                        + " with HTTP 415.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         RestAssured.given()
                    .auth().basic(this.username, this.password)
@@ -282,15 +302,18 @@ public class ExternalBinaryContent {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void checkUnsupportedMediaType(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.checkUnsupportedMediaType()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-D", "checkUnsupportedMediaType",
+                                        "In the case that a Fedora server does not support external LDP-NR content, "
+                                        +
+                                        "all message/external-body messages must be rejected with 415 (Unsupported " +
+                                        "Media Type).",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .header("Content-Disposition",
                                                      "attachment; filename=\"checkUnsupportedMediaType.txt\"")
-                                             .header("slug", "External-Binary-Content-3.9-D")
+                                             .header("slug", info.getId())
                                              .body("TestString.")
                                              .when()
                                              .post(uri);
@@ -334,10 +357,15 @@ public class ExternalBinaryContent {
     @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void postCheckHeaders(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.postCheckHeaders()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.9-E", "postCheckHeaders",
+                                        "Fedora servers receiving requests that would create or update an LDP-NR with" +
+                                        " Content-Type: "
+                                        +
+                                        "message/external-body must not accept the request if it cannot guarantee all. "
+                                        +
+                                        "of the response headers required by the LDP-NR interaction model in this " +
+                                        "specification.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
@@ -384,7 +412,6 @@ public class ExternalBinaryContent {
             ps.append(h.getValue() + "\n");
         }
 
-
         final List<String> h2 = new ArrayList<>();
         for (Header h : headersext) {
             h2.add(h.getName());
@@ -410,14 +437,20 @@ public class ExternalBinaryContent {
     @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void putUpdateCheckHeaders(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.putUpdateCheckHeaders()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-E", "putUpdateCheckHeaders",
+                                        "Fedora servers receiving requests that would create or update an LDP-NR with" +
+                                        " Content-Type: "
+                                        +
+                                        "message/external-body must not accept the request if it cannot guarantee all. "
+                                        +
+                                        "of the response headers required by the LDP-NR interaction model in this " +
+                                        "specification.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .header("Content-Disposition", "attachment; filename=\"testExamtxt.txt\"")
-                                             .header("slug", "External-Binary-Content-3.9-E")
+                                             .header("slug", info.getId())
                                              .body("TestString.")
                                              .when()
                                              .post(uri);
@@ -445,7 +478,7 @@ public class ExternalBinaryContent {
                                                   .auth().basic(this.username, this.password)
                                                   .header("Content-Disposition",
                                                           "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
-                                                  .header("slug", "External-Binary-Content-3.9-E")
+                                                  .header("slug", info.getId())
                                                   .body("TestString1.")
                                                   .when()
                                                   .post(uri);
@@ -454,7 +487,7 @@ public class ExternalBinaryContent {
                                                   .auth().basic(this.username, this.password)
                                                   .header("Content-Disposition",
                                                           "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
-                                                  .header("slug", "External-Binary-Content-3.9-E")
+                                                  .header("slug", info.getId())
                                                   .body("TestString2.")
                                                   .when()
                                                   .post(uri);
@@ -512,15 +545,18 @@ public class ExternalBinaryContent {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void getCheckContentLocationHeader(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.getCheckContentLocationHeader()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.9-F", "getCheckContentLocationHeader",
+                                        "GET and HEAD responses for any external LDP-NR should include a " +
+                                        "Content-Location header with a URI  "
+                                        +
+                                        "representation of the location of the external content if the Fedora server " +
+                                        "is proxying the content.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"getCheckContentLocationHeader.txt\"")
-                                                 .header("slug", "External-Binary-Content1-3.9-F")
+                                                 .header("slug", info.getId())
                                                  .body("TestString1.")
                                                  .when()
                                                  .post(uri);
@@ -578,15 +614,19 @@ public class ExternalBinaryContent {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.headCheckContentLocationHeader()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-F", "headCheckContentLocationHeader",
+                                        "GET and HEAD responses for any external LDP-NR should include a " +
+                                        "Content-Location header with a URI  "
+                                        +
+                                        "representation of the location of the external content if the Fedora server " +
+                                        "is proxying the content.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"headCheckContentLocationHeader.txt\"")
-                                                 .header("slug", "External-Binary-Content2-3.9-F")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -637,23 +677,24 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-G
+     * 3.9-G-1
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final String checksum = "md5";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestExternalBinaryContent()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-G-1", "respondWantDigestExternalBinaryContent",
+                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                                        + "Want-Digest header defined in [RFC3230].",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"respondWantDigest.txt\"")
-                                                 .header("slug", "External-Binary-Content1-3.9-G")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -683,23 +724,24 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-G
+     * 3.9-G-2
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestExternalBinaryContentHead(final String uri) throws FileNotFoundException {
-        final String checksum = "md5";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestExternalBinaryContentHead()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-G-2", "respondWantDigestExternalBinaryContentHead",
+                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                                        + "Want-Digest header defined in [RFC3230].",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"respondWantDigestHead.txt\"")
-                                                 .header("slug", "External-Binary-Content2-3.9-G")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -729,23 +771,25 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-H
+     * 3.9-H-1
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final String checksum = "md5,sha";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupportedExternalBinaryContent()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info =
+            setupTest("3.9-H-1", "respondWantDigestTwoSupportedExternalBinaryContent",
+                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                      + "Want-Digest header defined in [RFC3230]. With two supported digests.",
+                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5,sha";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"respondWantDigestTwoSupported.txt\"")
-                                                 .header("slug", "External-Binary-Content1-3.9-H")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -783,24 +827,26 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-H
+     * 3.9-H-2
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String uri) throws FileNotFoundException {
-        final String checksum = "md5,sha";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupportedExternalBinaryContentHead()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info =
+            setupTest("3.9-H-2", "respondWantDigestTwoSupportedExternalBinaryContentHead",
+                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                      + "Want-Digest header defined in [RFC3230]. With two supported digests.",
+                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5,sha";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"respondWantDigestTwoSupportedHead" +
                                                          ".txt\"")
-                                                 .header("slug", "External-Binary-Content2-3.9-H")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -838,7 +884,7 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-I
+     * 3.9-I-1
      *
      * @param uri
      */
@@ -846,17 +892,22 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent(final String uri)
         throws FileNotFoundException {
-        final String checksum = "md5;q=0.3,sha;q=1";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-I-1",
+                                        "" +
+                                        "respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent",
+                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                                        +
+                                        "Want-Digest header defined in [RFC3230]. Two digests with different weights," +
+                                        " q values.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5;q=0.3,sha;q=1";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; " +
                                                          "filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
-                                                 .header("slug", "External-Binary-Content1-3.9-I")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -894,7 +945,7 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-I
+     * 3.9-I-2
      *
      * @param uri
      */
@@ -902,17 +953,21 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead(final String uri)
         throws FileNotFoundException {
-        final String checksum = "md5;q=0.3,sha;q=1";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.9-I-2",
+                                        "respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead",
+                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                                        +
+                                        "Want-Digest header defined in [RFC3230]. Two digests with different weights," +
+                                        " q values.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5;q=0.3,sha;q=1";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; " +
                                                          "filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
-                                                 .header("slug", "External-Binary-Content2-3.9-I")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -950,7 +1005,7 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-J
+     * 3.9-J-2
      *
      * @param uri
      */
@@ -958,16 +1013,18 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void respondWantDigestNonSupportedExternalBinaryContent(final String uri)
         throws FileNotFoundException {
-        final String checksum = "md5,abc";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestNonSupportedExternalBinaryContent()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info =
+            setupTest("3.9-J-2", "respondWantDigestNonSupportedExternalBinaryContent",
+                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                      + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
+                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5,abc";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"respondWantDigestNonSupported.txt\"")
-                                                 .header("slug", "External-Binary-Content1-3.9-J")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -997,7 +1054,7 @@ public class ExternalBinaryContent {
     }
 
     /**
-     * 3.9-J
+     * 3.9-J-2
      *
      * @param uri
      */
@@ -1005,17 +1062,19 @@ public class ExternalBinaryContent {
     @Parameters({"param1"})
     public void respondWantDigestNonSupportedExternalBinaryContentHead(final String uri)
         throws FileNotFoundException {
-        final String checksum = "md5,abc";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestNonSupportedExternalBinaryContentHead()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info =
+            setupTest("3.9-J-2", "respondWantDigestNonSupportedExternalBinaryContentHead",
+                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
+                      + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
+                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        final String checksum = "md5,abc";
         final Response exbcresource = RestAssured.given()
                                                  .auth().basic(this.username, this.password)
                                                  .header("Content-Disposition",
                                                          "attachment; filename=\"respondWantDigestNonSupportedHead" +
                                                          ".txt\"")
-                                                 .header("slug", "External-Binary-Content2-3.9-J")
+                                                 .header("slug", info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);

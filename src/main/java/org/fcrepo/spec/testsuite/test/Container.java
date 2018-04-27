@@ -18,24 +18,22 @@
 package org.fcrepo.spec.testsuite.test;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class Container {
+public class Container extends AbstractTest {
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                 + "<> a ldp:Container, ldp:BasicContainer;"
@@ -43,7 +41,6 @@ public class Container {
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
-    public TestsLabels tl = new TestsLabels();
     public String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
                                         + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
                                         + "<> dc:title 'Pythagoras Collection'; "
@@ -82,15 +79,15 @@ public class Container {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void createLDPC(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.createLDPC()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.1.1-A", "createLDPC",
+                                        "Implementations must support the creation and management of [LDP] Containers.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                   .header("slug", "Container-3.1.1-A")
+                   .header("slug", info.getId())
                    .body(body)
                    .log().all()
                    .when()
@@ -109,14 +106,16 @@ public class Container {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcContainmentTriples(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.ldpcContainmentTriples()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.1.1-B",
+                                        "ldpcContainmentTriples",
+                                        "LDP Containers must distinguish [containment triples]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc",
+                                        ps);
         final Response pythagoras =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
-                       .header("slug", "pythagoras-3.1.1-B")
+                       .header("slug", info.getId())
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                        .when()
                        .body(pythagorasContainer)
@@ -188,15 +187,16 @@ public class Container {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMembershipTriples(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.ldpcMembershipTriples()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.1.1-C", "ldpcMembershipTriples",
+                                        "LDP Containers must distinguish [membership] triples.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc",
+                                        ps);
         final Response pythagoras =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "pythagoras-3.1.1-C")
+                       .header("slug", info.getId())
                        .when()
                        .body(pythagorasContainer)
                        .post(uri);
@@ -264,15 +264,16 @@ public class Container {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMinimalContainerTriples(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.ldpcMinimalContainerTriples()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.1.1-D", "ldpcMinimalContainerTriples",
+                                        "LDP Containers must distinguish [minimal-container] triples.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc",
+                                        ps);
         final Response pythagoras =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "pythagoras-3.1.1-D")
+                       .header("slug", info.getId())
                        .when()
                        .body(pythagorasContainer)
                        .post(uri);

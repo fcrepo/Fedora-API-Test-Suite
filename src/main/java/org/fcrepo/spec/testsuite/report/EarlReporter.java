@@ -23,10 +23,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.IReporter;
 import org.testng.IResultMap;
 import org.testng.ISuite;
@@ -35,7 +35,6 @@ import org.testng.ITestContext;
 import org.testng.xml.XmlSuite;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class EarlReporter extends EarlCoreReporter implements IReporter {

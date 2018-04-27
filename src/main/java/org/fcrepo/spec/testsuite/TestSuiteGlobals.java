@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -36,7 +35,6 @@ import org.testng.ITestResult;
 import org.testng.internal.Utils;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
 public abstract class TestSuiteGlobals {
@@ -144,14 +142,17 @@ public abstract class TestSuiteGlobals {
 
     /**
      * @return ps
-     * @throws FileNotFoundException
      */
-    public static PrintStream logFile() throws FileNotFoundException {
-        final FileOutputStream fos = new FileOutputStream(new File(TestSuiteGlobals.outputDirectory + "/" +
-                                                                   TestSuiteGlobals.outputName + "-execution.log"),
-                                                          true);
-        final PrintStream ps = new PrintStream(fos);
-        return ps;
+    public static PrintStream logFile() {
+        try {
+            final FileOutputStream fos = new FileOutputStream(new File(TestSuiteGlobals.outputDirectory + "/" +
+                                                                       TestSuiteGlobals.outputName + "-execution.log"),
+                                                              true);
+            final PrintStream ps = new PrintStream(fos);
+            return ps;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     /**
@@ -168,51 +169,54 @@ public abstract class TestSuiteGlobals {
                                                           final IResultMap skipped, final IResultMap failed)
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         final TreeMap<String, String[]> results = new TreeMap<>();
-        final Object o = TestsLabels.class.newInstance();
         for (final ITestResult result : passed.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
+            if (method == null) {
+                System.out.println("***********METHOD NAME MISMATCH=" + method.getMethodName());
 
-            final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
-            final Object[] normalizedName = (Object[]) m.invoke(o);
+            }
+            final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
 
             final String[] details = new String[5];
-            details[0] = normalizedName[2].toString();
+            details[0] = info.getSpecLink().toString();
             details[1] = "PASS";
-            details[2] = normalizedName[1].toString();
-            details[3] = normalizedName[0].toString();
+            details[2] = info.getDescription().toString();
+            details[3] = formatTestLinkText(info);
             details[4] = getStackTrace(result.getThrowable());
             results.put(details[3], details);
         }
         for (final ITestResult result : skipped.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
 
-            final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
-            final Object[] normalizedName = (Object[]) m.invoke(o);
+            final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
 
             final String[] details = new String[5];
-            details[0] = normalizedName[2].toString();
+            details[0] = info.getSpecLink().toString();
             details[1] = "SKIPPED";
-            details[2] = normalizedName[1].toString();
-            details[3] = normalizedName[0].toString();
+            details[2] = info.getDescription().toString();
+            details[3] = formatTestLinkText(info);
             details[4] = getStackTrace(result.getThrowable());
             results.put(details[3], details);
         }
         for (final ITestResult result : failed.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
 
-            final Method m = TestsLabels.class.getDeclaredMethod(method.getMethodName());
-            final Object[] normalizedName = (Object[]) m.invoke(o);
+            final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
 
             final String[] details = new String[5];
-            details[0] = normalizedName[2].toString();
+            details[0] = info.getSpecLink().toString();
             details[1] = "FAIL";
-            details[2] = normalizedName[1].toString();
-            details[3] = normalizedName[0].toString();
+            details[2] = info.getDescription().toString();
+            details[3] = formatTestLinkText(info);
             details[4] = getStackTrace(result.getThrowable());
             results.put(details[3], details);
         }
 
         return results;
+    }
+
+    private static String formatTestLinkText(final TestInfo info) {
+        return info.getId() + ": " + info.getClassName() + " - " + info.getTitle();
     }
 
     /**

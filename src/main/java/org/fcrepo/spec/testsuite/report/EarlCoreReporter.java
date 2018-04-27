@@ -24,16 +24,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.openrdf.model.vocabulary.EARL;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
 public abstract class EarlCoreReporter {

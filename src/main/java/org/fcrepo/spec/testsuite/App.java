@@ -36,7 +36,6 @@ import org.testng.xml.SuiteXmlParser;
 import org.testng.xml.XmlSuite;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class App {
@@ -63,9 +62,10 @@ public class App {
         testngxml.setRequired(false);
         options.addOption(testngxml);
         final Option reqs = new Option("r", "requirements", true, "Requirement levels. One or more of the following, " +
-                "separated by ',': [ALL|MUST|SHOULD|MAY|MUSTNOT|SHOULDNOT]");
+                                                                  "separated by ',': " +
+                                                                  "[ALL|MUST|SHOULD|MAY|MUSTNOT|SHOULDNOT]");
         reqs.setRequired(false);
-        reqs.setValueSeparator(',');;
+        reqs.setValueSeparator(',');
         options.addOption(reqs);
 
         final CommandLineParser parser = new BasicParser();
