@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
+
 import java.io.FileNotFoundException;
 
 import io.restassured.RestAssured;
@@ -34,11 +36,6 @@ import org.testng.annotations.Test;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class Container extends AbstractTest {
-    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-                                + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-                                + "<> a ldp:Container, ldp:BasicContainer;"
-                                + "dcterms:title 'Container class Container' ;"
-                                + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
                                         + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
                                         + "<> dc:title 'Pythagoras Collection'; "
@@ -85,7 +82,7 @@ public class Container extends AbstractTest {
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                    .header("slug", info.getId())
-                   .body(body)
+                   .body(BASIC_CONTAINER_BODY)
                    .log().all()
                    .when()
                    .post(uri)
