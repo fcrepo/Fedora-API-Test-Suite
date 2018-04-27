@@ -31,6 +31,19 @@ public class AbstractTest {
 
     protected final PrintStream ps = TestSuiteGlobals.logFile();
 
+    protected String username;
+    protected String password;
+
+    /**
+     * Constructor
+     * @param username username
+     * @param password password
+     */
+    public AbstractTest(final String username, final String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     /**
      * A convenience method for creating TestInfo instances.
      *

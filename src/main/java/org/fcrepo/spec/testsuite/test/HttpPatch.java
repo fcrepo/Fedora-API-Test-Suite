@@ -42,8 +42,6 @@ public class HttpPatch extends AbstractTest {
                                  + "<> a ldp:Container, ldp:BasicContainer;"
                                  + "dcterms:title 'Patch class Container' ;"
                                  + "dcterms:description 'This is a test container for the Fedora API Test Suite' . ";
-    public String username;
-    public String password;
     public String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
                          + " INSERT {"
                          + " <> dcterms:description \"Patch Updated Description\" ."
@@ -78,8 +76,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public HttpPatch(final String username, final String password) {
-        this.username = username;
-        this.password = password;
+        super(username, password);
     }
 
     /**

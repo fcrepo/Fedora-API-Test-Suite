@@ -49,8 +49,7 @@ public class HttpPost extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public HttpPost(final String username, final String password) {
-        this.username = username;
-        this.password = password;
+        super(username, password);
     }
 
     /**

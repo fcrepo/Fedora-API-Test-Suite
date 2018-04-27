@@ -31,8 +31,6 @@ import org.testng.annotations.Test;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class HttpOptions extends AbstractTest {
-    public String username;
-    public String password;
 
     /**
      * Authentication
@@ -42,8 +40,7 @@ public class HttpOptions extends AbstractTest {
      */
     @Parameters({"param2", "param3"})
     public HttpOptions(final String username, final String password) {
-        this.username = username;
-        this.password = password;
+        super(username, password);
     }
 
     /**
