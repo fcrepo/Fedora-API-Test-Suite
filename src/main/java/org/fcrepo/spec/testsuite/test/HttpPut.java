@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -32,11 +33,6 @@ import org.testng.annotations.Test;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class HttpPut extends AbstractTest {
-    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-                                + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-                                + "<> a ldp:Container, ldp:BasicContainer;"
-                                + "dcterms:title 'Put class Container' ;"
-                                + "dcterms:description 'This is a  test container  for the Fedora API Test Suite.' . ";
 
     /**
      * Authentication
@@ -110,7 +106,7 @@ public class HttpPut extends AbstractTest {
                                              .contentType("text/turtle")
                                              .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -162,7 +158,7 @@ public class HttpPut extends AbstractTest {
                                              .contentType("text/turtle")
                                              .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
 
@@ -172,7 +168,7 @@ public class HttpPut extends AbstractTest {
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                    .header("slug", "containedFolderSlug")
-                   .body(body)
+                   .body(BASIC_CONTAINER_BODY)
                    .when()
                    .post(locationHeader);
 
@@ -217,7 +213,7 @@ public class HttpPut extends AbstractTest {
                                              .contentType("text/turtle")
                                              .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -227,7 +223,7 @@ public class HttpPut extends AbstractTest {
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                    .header("slug", "containedFolderSlug")
-                   .body(body)
+                   .body(BASIC_CONTAINER_BODY)
                    .when()
                    .post(locationHeader);
 
@@ -275,7 +271,7 @@ public class HttpPut extends AbstractTest {
                                              .contentType("text/turtle")
                                              .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
 
@@ -286,7 +282,7 @@ public class HttpPut extends AbstractTest {
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                    .header("slug", "containedFolderSlug")
-                   .body(body)
+                   .body(BASIC_CONTAINER_BODY)
                    .when()
                    .post(locationHeader);
 

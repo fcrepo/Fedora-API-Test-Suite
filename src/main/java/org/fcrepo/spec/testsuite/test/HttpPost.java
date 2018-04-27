@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -31,11 +32,6 @@ import org.testng.annotations.Test;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class HttpPost extends AbstractTest {
-    public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-                                + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-                                + "<> a ldp:Container, ldp:BasicContainer;"
-                                + "dcterms:title 'Post class Container' ;"
-                                + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
     public String resource = "";
@@ -71,7 +67,7 @@ public class HttpPost extends AbstractTest {
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                    .header("slug", info.getId())
-                   .body(body)
+                   .body(BASIC_CONTAINER_BODY)
                    .log().all()
                    .when()
                    .post(uri)
@@ -104,7 +100,7 @@ public class HttpPost extends AbstractTest {
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                    .header("slug", "Post-3.5-B")
-                   .body(body)
+                   .body(BASIC_CONTAINER_BODY)
                    .log().all()
                    .when()
                    .post(uri)

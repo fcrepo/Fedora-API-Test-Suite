@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -37,11 +38,7 @@ import org.testng.annotations.Test;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class HttpPatch extends AbstractTest {
-    public static String body2 = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
-                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-                                 + "<> a ldp:Container, ldp:BasicContainer;"
-                                 + "dcterms:title 'Patch class Container' ;"
-                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite' . ";
+
     public String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
                          + " INSERT {"
                          + " <> dcterms:description \"Patch Updated Description\" ."
@@ -99,7 +96,7 @@ public class HttpPatch extends AbstractTest {
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body2)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -139,7 +136,7 @@ public class HttpPatch extends AbstractTest {
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                        .header("slug", info.getId())
-                       .body(body2)
+                       .body(BASIC_CONTAINER_BODY)
                        .when()
                        .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -181,7 +178,7 @@ public class HttpPatch extends AbstractTest {
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body2)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -223,7 +220,7 @@ public class HttpPatch extends AbstractTest {
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body2)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -266,7 +263,7 @@ public class HttpPatch extends AbstractTest {
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body2)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -308,7 +305,7 @@ public class HttpPatch extends AbstractTest {
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", info.getId())
-                                             .body(body2)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -378,7 +375,7 @@ public class HttpPatch extends AbstractTest {
                                               .header("Link",
                                                       "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                               .header("slug", info.getId())
-                                              .body(body2)
+                                              .body(BASIC_CONTAINER_BODY)
                                               .when()
                                               .post(uri);
         final String locationHeader = container.getHeader("Location");
@@ -387,7 +384,7 @@ public class HttpPatch extends AbstractTest {
                    .contentType("text/turtle")
                    .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                    .header("slug", "Patch-3.7.1")
-                   .body(body2)
+                   .body(BASIC_CONTAINER_BODY)
                    .when()
                    .post(locationHeader).asString();
 
@@ -430,7 +427,7 @@ public class HttpPatch extends AbstractTest {
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
                                              .header("slug", "Patch-3.7.2")
-                                             .body(body2)
+                                             .body(BASIC_CONTAINER_BODY)
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
