@@ -56,7 +56,7 @@ public class HttpHead extends AbstractTest {
      *
      * @param uri
      */
-    @Test(groups = {"MUST NOT"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpHeadResponseNoBody(final String uri) throws FileNotFoundException {
         final TestInfo info = setupTest("3.3-A", "httpHeadResponseNoBody",
