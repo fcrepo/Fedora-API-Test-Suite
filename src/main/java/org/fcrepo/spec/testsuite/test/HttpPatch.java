@@ -21,10 +21,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.LogConfig;
@@ -32,14 +29,14 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class HttpPatch {
+public class HttpPatch extends AbstractTest {
     public static String body2 = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                  + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                  + "<> a ldp:Container, ldp:BasicContainer;"
@@ -47,7 +44,6 @@ public class HttpPatch {
                                  + "dcterms:description 'This is a test container for the Fedora API Test Suite' . ";
     public String username;
     public String password;
-    public TestsLabels tl = new TestsLabels();
     public String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
                          + " INSERT {"
                          + " <> dcterms:description \"Patch Updated Description\" ."
@@ -94,16 +90,18 @@ public class HttpPatch {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void supportPatch(final String uri) throws IOException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.supportPatch()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7-A", "supportPatch",
+                                        "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). " +
+                                        "[sparql11-update] must be an accepted "
+                                        + "content-type for PATCH.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch",
+                                        ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                             .header("slug", "Patch-3.7-A")
+                                             .header("slug", info.getId())
                                              .body(body2)
                                              .when()
                                              .post(uri);
@@ -135,16 +133,15 @@ public class HttpPatch {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpPatchContentTypeSupport(final String uri) throws IOException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.ldpPatchContentTypeSupport()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7-B", "ldpPatchContentTypeSupport",
+                                        "Other content-types (e.g. [ldpatch]) may be available.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Patch-3.7-B")
+                       .header("slug", info.getId())
                        .body(body2)
                        .when()
                        .post(uri);
@@ -175,16 +172,18 @@ public class HttpPatch {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void serverManagedPropertiesModification(final String uri) throws IOException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.serverManagedPropertiesModification()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7-C", "serverManagedPropertiesModification",
+                                        "If an otherwise valid HTTP PATCH request is received that attempts to modify "
+                                        + "statements to a resource that a server disallows (not ignores per [LDP] "
+                                        + "4.2.4.1), the server must fail the request by responding with a 4xx range"
+                                        + " status code (e.g. 409 Conflict).",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                             .header("slug", "Patch-3.7-C")
+                                             .header("slug", info.getId())
                                              .body(body2)
                                              .when()
                                              .post(uri);
@@ -195,7 +194,7 @@ public class HttpPatch {
                    .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                                   .encodeContentTypeAs(
                                                                       "application/sparql-update",
-                                                                                       ContentType.TEXT))
+                                                                      ContentType.TEXT))
                                       .logConfig(new LogConfig().defaultStream(ps)))
                    .log().all()
                    .body(serverProps)
@@ -216,16 +215,17 @@ public class HttpPatch {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedResponseBody(final String uri) throws IOException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.statementNotPersistedResponseBody()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7-D", "statementNotPersistedResponseBody",
+                                        "The server must provide a corresponding response body containing information"
+                                        + " about which statements could not be persisted."
+                                        + " ([LDP] 4.2.4.4 should becomes must).",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                             .header("slug", "Patch-3.7-D")
+                                             .header("slug", info.getId())
                                              .body(body2)
                                              .when()
                                              .post(uri);
@@ -236,7 +236,7 @@ public class HttpPatch {
                    .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                                   .encodeContentTypeAs(
                                                                       "application/sparql-update",
-                                                                                       ContentType.TEXT))
+                                                                      ContentType.TEXT))
                                       .logConfig(new LogConfig().defaultStream(ps)))
                    .log().all()
                    .body(serverProps)
@@ -257,16 +257,18 @@ public class HttpPatch {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedConstrainedBy(final String uri) throws IOException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.statementNotPersistedConstrainedBy()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7-E", "statementNotPersistedConstrainedBy",
+                                        "In that response, the restrictions causing such a request to fail must be"
+                                        + " described in a resource indicated by a Link: "
+                                        + "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
+                                        + "response header per [LDP] 4.2.1.6.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                             .header("slug", "Patch-3.7-E")
+                                             .header("slug", info.getId())
                                              .body(body2)
                                              .when()
                                              .post(uri);
@@ -277,7 +279,7 @@ public class HttpPatch {
                    .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                                   .encodeContentTypeAs(
                                                                       "application/sparql-update",
-                                                                                       ContentType.TEXT))
+                                                                      ContentType.TEXT))
                                       .logConfig(new LogConfig().defaultStream(ps)))
                    .log().all()
                    .body(serverProps)
@@ -298,16 +300,17 @@ public class HttpPatch {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void successfulPatchStatusCode(final String uri) throws IOException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.successfulPatchStatusCode()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7-F", "successfulPatchStatusCode",
+                                        "A successful PATCH request must respond with a 2xx status code; the "
+                                        + "specific code in the 2xx range may vary according to the response "
+                                        + "body or request state.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
                                              .header("Link",
                                                      "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                             .header("slug", "Patch-3.7-F")
+                                             .header("slug", info.getId())
                                              .body(body2)
                                              .when()
                                              .post(uri);
@@ -324,8 +327,8 @@ public class HttpPatch {
                        .auth().basic(this.username, this.password)
                        .contentType("application/sparql-update")
                        .config(RestAssured.config().encoderConfig(new EncoderConfig().encodeContentTypeAs(
-                                                                        "application/sparql-update",
-                                                                        ContentType.TEXT)))
+                           "application/sparql-update",
+                           ContentType.TEXT)))
                        .body(body)
                        .when()
                        .patch(locationHeader);
@@ -365,16 +368,19 @@ public class HttpPatch {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowPatchContainmentTriples(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.disallowPatchContainmentTriples()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7.1", "disallowPatchContainmentTriples",
+                                        "The server should not allow HTTP PATCH to update an LDPC’s containment " +
+                                        "triples; if"
+                                        + " the server receives such a request, it should respond with a"
+                                        + " 409 (Conflict) status code.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch-containment-triples",
+                                        ps);
         final Response container = RestAssured.given()
                                               .auth().basic(this.username, this.password)
                                               .contentType("text/turtle")
                                               .header("Link",
                                                       "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                                              .header("slug", "Patch-3.7.1")
+                                              .header("slug", info.getId())
                                               .body(body2)
                                               .when()
                                               .post(uri);
@@ -394,7 +400,7 @@ public class HttpPatch {
                    .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                                   .encodeContentTypeAs(
                                                                       "application/sparql-update",
-                                                                                       ContentType.TEXT))
+                                                                      ContentType.TEXT))
                                       .logConfig(new LogConfig().defaultStream(ps)))
                    .log().all()
                    .body(updateContainmentTriples)
@@ -415,10 +421,12 @@ public class HttpPatch {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowChangeResourceType(final String uri) throws IOException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.disallowChangeResourceType()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.7.2", "disallowChangeResourceType",
+                                        "The server must disallow a PATCH request that would change the LDP"
+                                        + " interaction model of a resource to a type that is not a subtype"
+                                        + " of the current resource type. That request must be rejected"
+                                        + " with a 409 Conflict response.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models", ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
@@ -435,7 +443,7 @@ public class HttpPatch {
                    .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                                   .encodeContentTypeAs(
                                                                       "application/sparql-update",
-                                                                                       ContentType.TEXT))
+                                                                      ContentType.TEXT))
                                       .logConfig(new LogConfig().defaultStream(ps)))
                    .log().all()
                    .body(resourceType)

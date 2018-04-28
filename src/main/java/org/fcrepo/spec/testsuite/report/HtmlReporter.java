@@ -43,7 +43,6 @@ import org.testng.ITestResult;
 import org.testng.xml.XmlSuite;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class HtmlReporter implements IReporter {

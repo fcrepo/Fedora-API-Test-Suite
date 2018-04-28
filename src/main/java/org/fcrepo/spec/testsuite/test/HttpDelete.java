@@ -18,24 +18,21 @@
 package org.fcrepo.spec.testsuite.test;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class HttpDelete {
+public class HttpDelete extends AbstractTest {
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                 + "<> a ldp:Container, ldp:BasicContainer;"
@@ -43,7 +40,6 @@ public class HttpDelete {
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
-    public TestsLabels tl = new TestsLabels();
 
     /**
      * Authentication
@@ -65,16 +61,19 @@ public class HttpDelete {
     @Test(groups = {"SHOULD NOT"})
     @Parameters({"param1"})
     public void httpDeleteOptionsCheck(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpDeleteOptionsCheck()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.8.1-A", "httpDeleteOptionsCheck",
+                                        "An implementation that cannot recurse should not advertise DELETE in " +
+                                        "response to OPTIONS "
+                                        + "requests for containers with contained resources.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
+                                        ps);
 
         final Response resourceOp =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Delete-3.8.1-A")
+                       .header("slug", info.getId())
                        .body(body)
                        .when()
                        .post(uri);
@@ -84,7 +83,7 @@ public class HttpDelete {
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Delete-3.8.1-A")
+                       .header("slug", "Delete-" + info.getId())
                        .body(body)
                        .when()
                        .post(locationHeader);
@@ -93,7 +92,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
-                       .header("slug", "Delete1-3.8.1-A")
+                       .header("slug", "Delete1-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader);
@@ -104,7 +103,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
-                       .header("slug", "Delete2-3.8.1-A")
+                       .header("slug", "Delete2-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader2);
@@ -113,7 +112,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
-                       .header("slug", "Delete3-3.8.1-A")
+                       .header("slug", "Delete3-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader2);
@@ -178,7 +177,6 @@ public class HttpDelete {
                                              .when()
                                              .get(rlocationHeader3);
 
-
         if (allowHeader.contains("OPTIONS")) {
             if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
                 resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
@@ -209,17 +207,18 @@ public class HttpDelete {
     @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheck(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpDeleteStatusCheck()[1]).append("\n");
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.8.1-C", "httpDeleteStatusCheck",
+                                        "An implementation must not return a 200 (OK) or 204 (No Content) response "
+                                        + "unless the entire operation successfully completed.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
+                                        ps);
         // Create resources
         final Response rootres =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Delete-3.8.1-C")
+                       .header("slug", info.getId())
                        .body(body)
                        .when()
                        .post(uri);
@@ -229,7 +228,7 @@ public class HttpDelete {
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Delete-3.8.1-C")
+                       .header("slug", "Delete-" + info.getId())
                        .body(body)
                        .when()
                        .post(locationHeader);
@@ -238,7 +237,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
-                       .header("slug", "Delete1-3.8.1-C")
+                       .header("slug", "Delete1-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader);
@@ -247,7 +246,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
-                       .header("slug", "Delete2-3.8.1-C")
+                       .header("slug", "Delete2-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader2);
@@ -256,7 +255,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
-                       .header("slug", "Delete3-3.8.1-C")
+                       .header("slug", "Delete3-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader2);
@@ -337,17 +336,19 @@ public class HttpDelete {
     @Test(groups = {"MUST NOT"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheckTwo(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.httpDeleteStatusCheckTwo()[1]).append("\n");
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.8.1-D", "httpDeleteStatusCheckTwo",
+                                        "An implementation must not emit a message that implies the successful DELETE" +
+                                        " of a resource until "
+                                        + "the resource has been successfully removed.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
+                                        ps);
         // Create resources
         final Response rootres =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Delete-3.8.1-D")
+                       .header("slug", info.getId())
                        .body(body)
                        .when()
                        .post(uri);
@@ -357,7 +358,7 @@ public class HttpDelete {
                        .auth().basic(this.username, this.password)
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Delete-3.8.1-D")
+                       .header("slug", "Delete-" + info.getId())
                        .body(body)
                        .when()
                        .post(locationHeader);
@@ -366,7 +367,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
-                       .header("slug", "Delete1-3.8.1-D")
+                       .header("slug", "Delete1-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader);
@@ -375,7 +376,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
-                       .header("slug", "Delete2-3.8.1-D")
+                       .header("slug", "Delete2-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader2);
@@ -384,7 +385,7 @@ public class HttpDelete {
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
-                       .header("slug", "Delete3-3.8.1-D")
+                       .header("slug", "Delete3-" + info.getId())
                        .body("TestString.")
                        .when()
                        .post(locationHeader2);

@@ -23,7 +23,6 @@ import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.annotations.BeforeSuite;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class SetUpSuite {

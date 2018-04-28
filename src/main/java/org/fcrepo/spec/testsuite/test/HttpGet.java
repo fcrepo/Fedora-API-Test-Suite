@@ -20,24 +20,21 @@ package org.fcrepo.spec.testsuite.test;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class HttpGet {
+public class HttpGet extends AbstractTest {
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                 + "<> a ldp:Container, ldp:BasicContainer;"
@@ -45,7 +42,6 @@ public class HttpGet {
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
     public String username;
     public String password;
-    public TestsLabels tl = new TestsLabels();
 
     /**
      * Authentication
@@ -67,16 +63,25 @@ public class HttpGet {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.additionalValuesForPreferHeader()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.2.1-A", "additionalValuesForPreferHeader",
+                                        "In addition to the requirements of [LDP], an implementation may support the " +
+                                        "value "
+                                        +
+                                        "http://www.w3.org/ns/oa#PreferContainedDescriptions and should support the " +
+                                        "value "
+                                        +
+                                        "http://fedora.info/definitions/fcrepo#PreferInboundReferences for the Prefer" +
+                                        " header when making GET "
+                                        + "requests on LDPC resources.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Get-3.2.1-A")
+                       .header("slug", info.getId())
                        .body(body)
                        .when()
                        .post(uri);
@@ -106,16 +111,20 @@ public class HttpGet {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.responsePreferenceAppliedHeader()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.2.2-A", "responsePreferenceAppliedHeader",
+                                        "Responses to GET requests that apply a Prefer request header to any LDP-RS " +
+                                        "must "
+                                        + "include the Preference-Applied"
+                                        + " response header as defined in [RFC7240] section 3.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .contentType("text/turtle")
                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
-                       .header("slug", "Get-3.2.2-A")
+                       .header("slug", info.getId())
                        .body(body)
                        .when()
                        .post(uri);
@@ -142,15 +151,21 @@ public class HttpGet {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void responseDescribesHeader(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.responseDescribesHeader()[1] + "-" + tl.responseDescribesHeader()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.2.2-B", "responseDescribesHeader",
+                                        "When a GET request is made to an LDP-RS that describes an associated LDP-NR "
+                                        + "(3.5 HTTP POST and [LDP]5.2.3.12),"
+                                        +
+                                        "the response must include a Link: rel=\"describes\" header referencing the " +
+                                        "LDP-NR "
+                                        + "in question, as defined in [RFC6892].",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
-                       .header("slug", "Get-3.2.2-B")
+                       .header("slug", info.getId())
                        .body("TestString")
                        .when()
                        .post(uri);
@@ -176,17 +191,20 @@ public class HttpGet {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigest(final String uri) throws FileNotFoundException {
+        final TestInfo info = setupTest("3.2.3-A", "respondWantDigest",
+                                        "Testing for supported digest "
+                                        + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+                                        + "header defined in [RFC3230]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
         final String checksum = "md5";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigest()[1]).append('\n');
-        ps.append("Request:\n");
 
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
-                       .header("slug", "Get-3.2.3-A")
+                       .header("slug", info.getId())
                        .body("TestString")
                        .when()
                        .post(uri);
@@ -202,7 +220,6 @@ public class HttpGet {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-
         ps.append("-Case End- \n").close();
     }
 
@@ -215,16 +232,18 @@ public class HttpGet {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,sha";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupported()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.2.3-B", "respondWantDigestTwoSupported",
+                                        "Testing for two supported digests with no weights"
+                                        + " GET requests to any LDP-NR must correctly respond to the Want-Digest "
+                                        + "header defined in [RFC3230]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
-                       .header("slug", "Get-3.2.3-B")
+                       .header("slug", info.getId())
                        .body("TestString")
                        .when()
                        .post(uri);
@@ -261,9 +280,12 @@ public class HttpGet {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=1";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueNonZero()[1]).append('\n');
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.2.3-C", "respondWantDigestTwoSupportedQvalueNonZero",
+                                        "Testing for two supported digests with different weights"
+                                        + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+                                        + "header defined in [RFC3230]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
 
         final Response resource =
             RestAssured.given()
@@ -307,16 +329,18 @@ public class HttpGet {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueZero(final String uri) throws FileNotFoundException {
         final String checksum = "md5;q=0.3,sha;q=0";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.2.3-D", "respondWantDigestTwoSupportedQvalueZero",
+                                        "Testing for two supported digests with different weights q=0.3,q=0"
+                                        + " GET requests to any LDP-NR must correctly respond to the Want-Digest"
+                                        + " header defined in [RFC3230]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
-                       .header("slug", "Get-3.2.3-D")
+                       .header("slug", info.getId())
                        .body("TestString")
                        .when()
                        .post(uri);
@@ -331,7 +355,6 @@ public class HttpGet {
                    .then()
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
-
 
         ps.append("-Case End- \n").close();
     }
@@ -345,16 +368,19 @@ public class HttpGet {
     @Parameters({"param1"})
     public void respondWantDigestNonSupported(final String uri) throws FileNotFoundException {
         final String checksum = "md5,abc";
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.respondWantDigestTwoSupportedQvalueZero()[1]).append('\n');
-        ps.append("Request:\n");
 
+        final TestInfo info = setupTest("3.2.3-E", "respondWantDigestNonSupported",
+                                        "Testing for one supported digest and one unsupported digest."
+                                        + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+                                        + "header defined in [RFC3230]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
         final Response resource =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                        .header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
-                       .header("slug", "Get-3.2.3-E")
+                       .header("slug", info.getId())
                        .body("TestString")
                        .when()
                        .post(uri);
@@ -370,9 +396,7 @@ public class HttpGet {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-
         ps.append("-Case End- \n").close();
     }
-
 
 }

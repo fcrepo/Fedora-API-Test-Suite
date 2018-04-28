@@ -18,29 +18,25 @@
 package org.fcrepo.spec.testsuite.test;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.fcrepo.spec.testsuite.TestsLabels;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- *
  * @author Jorge Abrego, Fernando Cardoza
  */
-public class Ldpnr {
+public class Ldpnr extends AbstractTest {
     public static String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                 + "@prefix dcterms: <http://purl.org/dc/terms/> ."
                                 + "<> a ldp:Container, ldp:BasicContainer;"
                                 + "dcterms:title 'Ldpnr class Container' ;"
                                 + "dcterms:description 'This is a test container for the Fedora API Test Suite.' . ";
-    public TestsLabels tl = new TestsLabels();
     public String username;
     public String password;
 
@@ -64,16 +60,24 @@ public class Ldpnr {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationLinkType(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.ldpnrCreationLinkType()[1]).append("\n");
-        ps.append("Request:\n");
+        final TestInfo info = setupTest("3.1.2.-A", "ldpnrCreationLinkType",
+                                        "If, in a successful resource creation request, a Link: rel=\"type\" request " +
+                                        "header specifies"
+                                        +
+                                        " the LDP-NR interaction model (http://www.w3.org/ns/ldp#NonRDFSource, " +
+                                        "regardless of "
+                                        +
+                                        "Content-Type: value), then the server should handle subsequent requests to " +
+                                        "the newly "
+                                        + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
 
         final Response res = RestAssured.given()
                                         .auth().basic(this.username, this.password)
                                         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                                         .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
                                         .header("Link", "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\"")
-                                        .header("slug", "LDPNR-3.1.2.-A")
+                                        .header("slug", info.getId())
                                         .body("TestString")
                                         .when()
                                         .post(uri);
@@ -135,16 +139,23 @@ public class Ldpnr {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationWrongLinkType(final String uri) throws FileNotFoundException {
-        final PrintStream ps = TestSuiteGlobals.logFile();
-        ps.append("\n" + tl.ldpnrCreationWrongLinkType()[1]).append("\n");
-        ps.append("Request:\n");
-
+        final TestInfo info = setupTest("3.1.2-B", "ldpnrCreationWrongLinkType",
+                                        "If, in a successful resource creation request, a Link: rel=\"type\" request " +
+                                        "header specifies"
+                                        +
+                                        " the LDP-NR interaction model (http://www.w3.org/ns/ldp#NonRDFSource, " +
+                                        "regardless of "
+                                        +
+                                        "Content-Type: value), then the server should handle subsequent requests to " +
+                                        "the newly "
+                                        + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
         final Response res = RestAssured.given()
                                         .auth().basic(this.username, this.password)
                                         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                                         .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
                                         .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
-                                        .header("slug", "LDPNR-3.1.2.-B")
+                                        .header("slug", info.getId())
                                         .body("TestString")
                                         .when()
                                         .post(uri);
