@@ -171,10 +171,6 @@ public abstract class TestSuiteGlobals {
         final TreeMap<String, String[]> results = new TreeMap<>();
         for (final ITestResult result : passed.getAllResults()) {
             final ITestNGMethod method = result.getMethod();
-            if (method == null) {
-                System.out.println("***********METHOD NAME MISMATCH=" + method.getMethodName());
-
-            }
             final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
 
             final String[] details = new String[5];
