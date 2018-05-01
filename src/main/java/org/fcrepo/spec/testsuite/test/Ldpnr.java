@@ -68,7 +68,7 @@ public class Ldpnr extends AbstractTest {
                                         .auth().basic(this.username, this.password)
                                         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                                         .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
-                                        .header("Link", "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\"")
+                                        .header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER)
                                         .header("slug", info.getId())
                                         .body("TestString")
                                         .when()

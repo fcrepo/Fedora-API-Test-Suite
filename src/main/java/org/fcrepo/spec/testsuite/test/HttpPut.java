@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -104,7 +105,7 @@ public class HttpPut extends AbstractTest {
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
-                                             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                              .header("slug", info.getId())
                                              .body(BASIC_CONTAINER_BODY)
                                              .when()
@@ -156,7 +157,7 @@ public class HttpPut extends AbstractTest {
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
-                                             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                              .header("slug", info.getId())
                                              .body(BASIC_CONTAINER_BODY)
                                              .when()
@@ -166,7 +167,7 @@ public class HttpPut extends AbstractTest {
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .contentType("text/turtle")
-                   .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
                    .header("slug", "containedFolderSlug")
                    .body(BASIC_CONTAINER_BODY)
                    .when()
@@ -211,7 +212,7 @@ public class HttpPut extends AbstractTest {
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
-                                             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                              .header("slug", info.getId())
                                              .body(BASIC_CONTAINER_BODY)
                                              .when()
@@ -221,7 +222,7 @@ public class HttpPut extends AbstractTest {
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .contentType("text/turtle")
-                   .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
                    .header("slug", "containedFolderSlug")
                    .body(BASIC_CONTAINER_BODY)
                    .when()
@@ -269,7 +270,7 @@ public class HttpPut extends AbstractTest {
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .contentType("text/turtle")
-                                             .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                                             .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                              .header("slug", info.getId())
                                              .body(BASIC_CONTAINER_BODY)
                                              .when()
@@ -280,7 +281,7 @@ public class HttpPut extends AbstractTest {
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .contentType("text/turtle")
-                   .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
                    .header("slug", "containedFolderSlug")
                    .body(BASIC_CONTAINER_BODY)
                    .when()

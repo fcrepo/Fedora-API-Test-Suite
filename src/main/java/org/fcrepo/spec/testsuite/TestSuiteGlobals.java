@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite;
 
+import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -69,7 +71,7 @@ public abstract class TestSuiteGlobals {
         final Response res = RestAssured.given()
                                         .auth().basic(user, pass)
                                         .contentType("text/turtle")
-                                        .header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"")
+                                        .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                         .header("slug", name)
                                         .body(body)
                                         .when()
