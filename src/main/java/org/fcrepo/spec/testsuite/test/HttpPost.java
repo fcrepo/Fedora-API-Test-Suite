@@ -64,7 +64,7 @@ public class HttpPost extends AbstractTest {
             .then()
             .log().all()
             .statusCode(201);
-        ps.append("\n -Case End- \n").close();
+
     }
 
     /**
@@ -87,7 +87,7 @@ public class HttpPost extends AbstractTest {
         createBasicContainer(uri, info).then()
                                        .log().all()
                                        .statusCode(201).header("Link", containsString("constrainedBy"));
-        ps.append("\n -Case End- \n").close();
+
     }
 
     /**
@@ -114,7 +114,7 @@ public class HttpPost extends AbstractTest {
                    .then()
                    .log().all()
                    .statusCode(201);
-        ps.append("\n -Case End- \n").close();
+
     }
 
     /**
@@ -143,7 +143,6 @@ public class HttpPost extends AbstractTest {
                    .log().all()
                    .statusCode(201).header("Link", containsString("describedby"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -178,7 +177,6 @@ public class HttpPost extends AbstractTest {
                    .log().all()
                    .statusCode(409);
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -210,6 +208,5 @@ public class HttpPost extends AbstractTest {
                    .log().all()
                    .statusCode(400);
 
-        ps.append("\n -Case End- \n").close();
     }
 }

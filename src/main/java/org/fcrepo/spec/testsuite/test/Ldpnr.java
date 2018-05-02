@@ -110,17 +110,16 @@ public class Ldpnr extends AbstractTest {
                 Assert.assertTrue(true, "OK");
             } else {
                 ps.append("\nExpected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.\n");
-                ps.append("\n -Case End- \n").close();
+
                 throw new AssertionError("Expected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.");
             }
 
         } else {
             ps.append("\nExpected response with a 2xx range status code.\n");
-            ps.append("\n -Case End- \n").close();
+
             throw new AssertionError("Expected response with a 2xx range status code.");
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -165,10 +164,9 @@ public class Ldpnr extends AbstractTest {
 
         if (res.getStatusCode() >= 200 && res.getStatusCode() < 300) {
             ps.append("\nExpected response with a 4xx range status code.\n");
-            ps.append("\n -Case End- \n").close();
+
             throw new AssertionError("Expected response with a 4xx range status code.");
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 }

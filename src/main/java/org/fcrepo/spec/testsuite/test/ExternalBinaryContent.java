@@ -86,7 +86,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(201);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -122,7 +121,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(201);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -177,7 +175,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(204);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -206,7 +203,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Accept-Post", containsString("access-type=URL"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -241,7 +237,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(415);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -276,7 +271,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(415);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -319,7 +313,6 @@ public class ExternalBinaryContent extends AbstractTest {
             ps.append(h.getName() + ": ");
             ps.append(h.getValue() + "\n");
         }
-        ps.append("\n -Case End- \n").close();
 
         final String status = String.valueOf(res.getStatusCode());
         final char charStatus = status.charAt(0);
@@ -411,7 +404,6 @@ public class ExternalBinaryContent extends AbstractTest {
             Assert.assertTrue(false, "FAIL");
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -519,7 +511,6 @@ public class ExternalBinaryContent extends AbstractTest {
             Assert.assertTrue(false, "FAIL");
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -581,14 +572,13 @@ public class ExternalBinaryContent extends AbstractTest {
 
             if (!isValid) {
                 ps.append("Content-Location header was not sent in the response.");
-                ps.append("\n -Case End- \n").close();
+
                 throw new AssertionError("Content-Location header was not set in the response.");
             }
         } else {
             throw new SkipException("Skipping this exception");
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -651,14 +641,13 @@ public class ExternalBinaryContent extends AbstractTest {
 
             if (!isValid) {
                 ps.append("Content-Location header was not sent in the response.");
-                ps.append("\n -Case End- \n").close();
+
                 throw new AssertionError("Content-Location header was not set in the response.");
             }
         } else {
             throw new SkipException("Skipping this exception");
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -705,7 +694,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -752,7 +740,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -808,7 +795,6 @@ public class ExternalBinaryContent extends AbstractTest {
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
                           headers.getValue("Digest").contains("sha"), "OK");
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -865,7 +851,6 @@ public class ExternalBinaryContent extends AbstractTest {
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
                           headers.getValue("Digest").contains("sha"), "OK");
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -926,7 +911,6 @@ public class ExternalBinaryContent extends AbstractTest {
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
                           headers.getValue("Digest").contains("sha"), "OK");
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -986,7 +970,6 @@ public class ExternalBinaryContent extends AbstractTest {
         Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
                           headers.getValue("Digest").contains("sha"), "OK");
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -1035,7 +1018,6 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -1085,6 +1067,5 @@ public class ExternalBinaryContent extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-        ps.append("-Case End- \n").close();
     }
 }

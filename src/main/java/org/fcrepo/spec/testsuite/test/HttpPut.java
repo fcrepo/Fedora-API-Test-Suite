@@ -86,7 +86,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(409);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -126,7 +125,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(204);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -180,7 +178,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(409);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -229,7 +226,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(409).body(containsString("ldp#contains"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -275,7 +271,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(409).header("Link", containsString("constrainedBy"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -309,7 +304,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(204);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -350,7 +344,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(409);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -388,7 +381,6 @@ public class HttpPut extends AbstractTest {
                    .log().all()
                    .statusCode(400);
 
-        ps.append("\n -Case End- \n").close();
     }
 
 }

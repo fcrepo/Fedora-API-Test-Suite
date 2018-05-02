@@ -77,7 +77,6 @@ public class HttpHead extends AbstractTest {
                    .log().all()
                    .statusCode(200).assertThat().body(equalTo(""));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -134,8 +133,6 @@ public class HttpHead extends AbstractTest {
             ps.append(h.getName().toString() + ": ");
             ps.append(h.getValue().toString() + "\n");
         }
-
-        ps.append("\n -Case End- \n").close();
 
         if (resget.getStatusCode() == 200 && reshead.getStatusCode() == 200) {
 
@@ -220,7 +217,7 @@ public class HttpHead extends AbstractTest {
         } else {
             Assert.assertTrue(false, "FAIL");
         }
-        ps.append("\n -Case End- \n").close();
+
     }
 
 }

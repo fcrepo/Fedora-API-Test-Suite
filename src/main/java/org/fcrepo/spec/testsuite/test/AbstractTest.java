@@ -27,6 +27,8 @@ import io.restassured.config.LogConfig;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 
 /**
  * A test base class for common test functions.
@@ -35,19 +37,43 @@ import org.fcrepo.spec.testsuite.TestSuiteGlobals;
  */
 public class AbstractTest {
 
-    protected final PrintStream ps = TestSuiteGlobals.logFile();
+    protected PrintStream ps;
 
     protected String username;
     protected String password;
 
     /**
      * Constructor
+     *
      * @param username username
      * @param password password
      */
     public AbstractTest(final String username, final String password) {
         this.username = username;
         this.password = password;
+    }
+
+    /**
+     * setup
+     */
+    @BeforeMethod
+    public void setup() {
+        ps = TestSuiteGlobals.logFile();
+        ps.append("************************************************\n");
+        ps.append("**** Test Start ********************************\n");
+        ps.append("************************************************\n");
+
+    }
+
+    /**
+     * tearDown
+     */
+    @AfterMethod
+    public void tearDown() {
+        ps.append("\n************************************************");
+        ps.append("\n**** Test End **********************************");
+        ps.append("\n************************************************\n\n\n\n").close();
+
     }
 
     /**
@@ -61,7 +87,7 @@ public class AbstractTest {
      */
     protected TestInfo createTestInfo(final String id, final String title, final String description,
                                       final String specLink) {
-        return new TestInfo(id, getClass().getSimpleName(), title, description, specLink);
+        return new TestInfo(id, getClass(), title, description, specLink);
     }
 
     /**
@@ -77,7 +103,9 @@ public class AbstractTest {
     protected TestInfo setupTest(final String id, final String title, final String description, final String specLink,
                                  final PrintStream ps) {
         final TestInfo info = createTestInfo(id, title, description, specLink);
-        ps.append("\n" + info.getDescription()).append("\n");
+        ps.append("Class: " + info.getTestClass().getName()).append("\n");
+        ps.append("Method: " + info.getTitle()).append("\n");
+        ps.append("Description: " + info.getDescription()).append("\n");
         ps.append("Request:\n");
         return info;
     }

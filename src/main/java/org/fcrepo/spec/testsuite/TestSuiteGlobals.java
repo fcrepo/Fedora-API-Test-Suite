@@ -187,7 +187,7 @@ public abstract class TestSuiteGlobals {
     }
 
     private static String formatTestLinkText(final TestInfo info) {
-        return info.getId() + ": " + info.getClassName() + " - " + info.getTitle();
+        return info.getId() + ": " + info.getTestClass().getName() + "." + info.getTitle() + "()";
     }
 
     /**
