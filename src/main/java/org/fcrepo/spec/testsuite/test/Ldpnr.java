@@ -52,7 +52,7 @@ public class Ldpnr extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationLinkType(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.1.2.-A", "ldpnrCreationLinkType",
+        final TestInfo info = setupTest("3.1.2-A", "ldpnrCreationLinkType",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
                                         +
