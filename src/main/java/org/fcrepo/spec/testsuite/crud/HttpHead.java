@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.fcrepo.spec.testsuite.test;
+package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
-import static org.fcrepo.spec.testsuite.test.Constants.DIGEST;
-import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
+import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.Constants.DIGEST;
+import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.io.FileNotFoundException;
@@ -29,6 +29,7 @@ import java.util.List;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.Assert;

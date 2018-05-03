@@ -15,23 +15,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.fcrepo.spec.testsuite.test;
+package org.fcrepo.spec.testsuite.versioning;
 
 import java.io.FileNotFoundException;
 
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
-import org.testng.annotations.BeforeSuite;
+import org.fcrepo.spec.testsuite.AbstractTest;
+import org.testng.annotations.Parameters;
 
 /**
- * @author Jorge Abrego, Fernando Cardoza
+ * @author Daniel Bernstein
  */
-public class SetUpSuite {
+public class HttpGet extends AbstractTest {
 
     /**
-     * @throws FileNotFoundException
+     * Authentication
+     *
+     * @param username
+     * @param password
      */
-    @BeforeSuite
-    public void setUp() throws FileNotFoundException {
-        TestSuiteGlobals.resetFile();
+    @Parameters({"param2", "param3"})
+    public HttpGet(final String username, final String password) {
+        super(username, password);
+    }
+
+
+
+    /**
+     * First versioning test will go here.
+     *
+     * @param uri
+     */
+    //@Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void firstTest(final String uri) throws FileNotFoundException {
     }
 }

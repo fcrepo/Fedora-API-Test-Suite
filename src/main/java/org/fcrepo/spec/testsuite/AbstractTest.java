@@ -15,11 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.fcrepo.spec.testsuite.test;
+package org.fcrepo.spec.testsuite;
 
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
-import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
+import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import java.io.PrintStream;
 
@@ -27,13 +27,11 @@ import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.fcrepo.spec.testsuite.TestInfo;
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 /**
- * A test base class for common test functions.
+ * A crud base class for common crud functions.
  *
  * @author Daniel Berntein
  */

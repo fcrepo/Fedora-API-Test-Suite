@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.fcrepo.spec.testsuite.test;
+package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.test.Constants.APPLICATION_SPARQL_UPDATE;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
+import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -31,6 +31,7 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
