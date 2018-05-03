@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
 import static org.hamcrest.Matchers.equalTo;
 
 import java.io.FileNotFoundException;
@@ -89,7 +90,7 @@ public class HttpHead extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-head",
                                         ps);
         final Response resource =
-            createRequest().header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"headerwantdigest.txt\"")
                            .header("slug", info.getId())
                            .body("TestString.")
                            .when()

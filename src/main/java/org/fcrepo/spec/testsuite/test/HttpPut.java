@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -64,14 +65,14 @@ public class HttpPut extends AbstractTest {
                                         + "rejected with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
         final Response resource = createRequest()
-            .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+            .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
             .header("slug", info.getId())
             .body("TestString.")
             .when()
             .post(uri);
 
         final String locationHeader = resource.getHeader("Location");
-        createRequest().header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+        createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
                        .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
                        .body("TestString2.")
                        .when()
@@ -246,13 +247,13 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
-                                             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+                                             .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
                                              .header("slug", info.getId())
                                              .body("TestString.")
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        createRequest().header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+        createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
                        .body("TestString2.")
                        .when()
                        .put(locationHeader)
@@ -280,14 +281,14 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
         final Response resource =
-            createRequest().header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\"")
                            .header("slug", info.getId())
                            .body("TestString.")
                            .when()
                            .post(uri);
         final String locationHeader = resource.getHeader("Location");
         createRequest().header("digest", checksum)
-                       .header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
+                       .header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\"")
                        .body("TestString.")
                        .when()
                        .put(locationHeader)
@@ -312,14 +313,14 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final String checksum = "abc=abc";
         final Response resource = createRequest()
-            .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+            .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
             .header("slug", info.getId())
             .body("TestString.")
             .when()
             .post(uri);
         final String locationHeader = resource.getHeader("Location");
         createRequest().header("digest", checksum)
-                       .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+                       .header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
                        .body("TestString2.")
                        .when()
                        .put(locationHeader)

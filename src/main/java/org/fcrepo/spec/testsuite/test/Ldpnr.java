@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+
 import java.io.FileNotFoundException;
 
 import io.restassured.http.Header;
@@ -62,7 +64,7 @@ public class Ldpnr extends AbstractTest {
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
 
-        final Response res = createRequest().header("Content-Disposition", "attachment; filename=\"sample.txt\"")
+        final Response res = createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\"")
                                             .header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER)
                                             .header("slug", info.getId())
                                             .body("TestString")
@@ -133,7 +135,7 @@ public class Ldpnr extends AbstractTest {
                                         "the newly "
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
-        final Response res = createRequest().header("Content-Disposition", "attachment; filename=\"sample.txt\"")
+        final Response res = createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\"")
                                             .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
                                             .header("slug", info.getId())
                                             .body("TestString")

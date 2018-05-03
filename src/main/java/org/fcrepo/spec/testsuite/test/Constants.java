@@ -32,6 +32,8 @@ public class Constants {
                                                       "dcterms:description 'This is a test container for the Fedora " +
                                                       "API Test Suite.' . ";
 
+    public static final String CONTENT_DISPOSITION = "Content-Disposition";
+
     private Constants() {
 
     }

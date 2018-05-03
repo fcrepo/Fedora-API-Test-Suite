@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -100,7 +101,7 @@ public class HttpPost extends AbstractTest {
                                         "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
                                         " must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        createRequest().header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
+        createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"postNonRDFSource.txt\"")
                        .header("slug", info.getId())
                        .body("TestString.")
                        .when()
@@ -125,7 +126,7 @@ public class HttpPost extends AbstractTest {
                                         + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
         createRequest()
-            .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
+            .header(CONTENT_DISPOSITION, "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
             .header("slug", info.getId())
             .body("TestString.")
             .when()
@@ -153,7 +154,7 @@ public class HttpPost extends AbstractTest {
                                         + "new LDP-NR must be rejected with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "md5=1234";
-        createRequest().header("Content-Disposition",
+        createRequest().header(CONTENT_DISPOSITION,
                                "attachment; filename=\"test1digesttext.txt\"")
                        .header("slug", info.getId())
                        .body("TestString.")
@@ -180,7 +181,7 @@ public class HttpPost extends AbstractTest {
                                         + "should be rejected with a 400 Bad Request response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "abc=abc";
-        createRequest().header("Content-Disposition",
+        createRequest().header(CONTENT_DISPOSITION,
                                "attachment; filename=\"test1digesttext2.txt\"")
                        .header("slug", info.getId())
                        .body("TestString.")

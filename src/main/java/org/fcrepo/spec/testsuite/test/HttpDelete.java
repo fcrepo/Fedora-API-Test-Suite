@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+
 import java.io.FileNotFoundException;
 
 import io.restassured.RestAssured;
@@ -64,7 +66,7 @@ public class HttpDelete extends AbstractTest {
         final Response resourceSonOp = createBasicContainer(locationHeader, "Delete-" + info.getId());
 
         final Response rdf01 =
-            createRequest().header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"rdf01.txt\"")
                            .header("slug", "Delete1-" + info.getId())
                            .body("TestString.")
                            .when()
@@ -73,14 +75,14 @@ public class HttpDelete extends AbstractTest {
         final String locationHeader2 = resourceSonOp.getHeader("Location");
 
         final Response rdf02 =
-            createRequest().header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"rdf02.txt\"")
                            .header("slug", "Delete2-" + info.getId())
                            .body("TestString.")
                            .when()
                            .post(locationHeader2);
 
         final Response rdf03 =
-            createRequest().header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"rdf03.txt\"")
                            .header("slug", "Delete3-" + info.getId())
                            .body("TestString.")
                            .when()
@@ -160,21 +162,21 @@ public class HttpDelete extends AbstractTest {
         final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
         final String locationHeader2 = resourceSon.getHeader("Location");
         final Response nrdf01 =
-            createRequest().header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf01.txt\"")
                            .header("slug", "Delete1-" + info.getId())
                            .body("TestString.")
                            .when()
                            .post(locationHeader);
 
         final Response nrdf02 =
-            createRequest().header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf02.txt\"")
                            .header("slug", "Delete2-" + info.getId())
                            .body("TestString.")
                            .when()
                            .post(locationHeader2);
 
         final Response nrdf03 =
-            createRequest().header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf03.txt\"")
                            .header("slug", "Delete3-" + info.getId())
                            .body("TestString.")
                            .when()
@@ -249,7 +251,7 @@ public class HttpDelete extends AbstractTest {
         final Response nrdf01 =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
+                       .header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf01.txt\"")
                        .header("slug", "Delete1-" + info.getId())
                        .body("TestString.")
                        .when()
@@ -258,7 +260,7 @@ public class HttpDelete extends AbstractTest {
         final Response nrdf02 =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
+                       .header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf02.txt\"")
                        .header("slug", "Delete2-" + info.getId())
                        .body("TestString.")
                        .when()
@@ -267,7 +269,7 @@ public class HttpDelete extends AbstractTest {
         final Response nrdf03 =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
+                       .header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf03.txt\"")
                        .header("slug", "Delete3-" + info.getId())
                        .body("TestString.")
                        .when()
