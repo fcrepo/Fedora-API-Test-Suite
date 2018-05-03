@@ -82,7 +82,7 @@ public class Ldpnr extends AbstractTest {
         }
 
         ps.append("\n" + res.asString() + "\n");
-        final String locationHeader = res.getHeader("Location");
+        final String locationHeader = getLocation(res);
 
         if (res.getStatusCode() == 201) {
             final Response nonr = createRequest()

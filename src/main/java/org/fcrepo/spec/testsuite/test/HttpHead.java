@@ -67,7 +67,7 @@ public class HttpHead extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         ;
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().when()
                        .head(locationHeader)
                        .then()
@@ -98,7 +98,7 @@ public class HttpHead extends AbstractTest {
                            .when()
                            .post(uri);
 
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         final Response resget = createRequest().when()
                                                .get(locationHeader);
 
@@ -156,7 +156,7 @@ public class HttpHead extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-head",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         final Response resget = createRequest()
             .when()
             .get(locationHeader);
