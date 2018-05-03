@@ -20,7 +20,6 @@ package org.fcrepo.spec.testsuite.test;
 import java.io.FileNotFoundException;
 
 import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -65,33 +64,27 @@ public class HttpDelete extends AbstractTest {
         final Response resourceSonOp = createBasicContainer(locationHeader, "Delete-" + info.getId());
 
         final Response rdf01 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
-                       .header("slug", "Delete1-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader);
+            createRequest().header("Content-Disposition", "attachment; filename=\"rdf01.txt\"")
+                           .header("slug", "Delete1-" + info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(locationHeader);
 
         final String locationHeader2 = resourceSonOp.getHeader("Location");
 
         final Response rdf02 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
-                       .header("slug", "Delete2-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader2);
+            createRequest().header("Content-Disposition", "attachment; filename=\"rdf02.txt\"")
+                           .header("slug", "Delete2-" + info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(locationHeader2);
 
         final Response rdf03 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
-                       .header("slug", "Delete3-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader2);
+            createRequest().header("Content-Disposition", "attachment; filename=\"rdf03.txt\"")
+                           .header("slug", "Delete3-" + info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(locationHeader2);
 
         final String rlocationHeader1 = rdf01.getHeader("Location");
         final String rlocationHeader2 = rdf02.getHeader("Location");
@@ -103,21 +96,14 @@ public class HttpDelete extends AbstractTest {
         ps.append("Body:\n");
 
         // Options to resourceOp
-        final Response responseOptions = RestAssured.given()
-                                                    .auth().basic(this.username, this.password)
-                                                    .config(RestAssured.config()
-                                                                       .logConfig(new LogConfig().defaultStream(ps)))
-                                                    .log().all()
-                                                    .when()
-                                                    .options(locationHeader);
+        final Response responseOptions = createRequest().when()
+                                                        .options(locationHeader);
 
         final String allowHeader = responseOptions.getHeader("Allow");
 
         // Delete to resourceOp
-        final Response response = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .delete(locationHeader);
+        final Response response = createRequest().when()
+                                                 .delete(locationHeader);
 
         // Print headers and status
         final Headers headers = response.getHeaders();
@@ -128,30 +114,11 @@ public class HttpDelete extends AbstractTest {
         }
 
         //GET deleted resources
-        final Response resResource = RestAssured.given()
-                                                .auth().basic(this.username, this.password)
-                                                .when()
-                                                .get(locationHeader);
-
-        final Response resResourceSon = RestAssured.given()
-                                                   .auth().basic(this.username, this.password)
-                                                   .when()
-                                                   .get(locationHeader2);
-
-        final Response resRdf01 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader1);
-
-        final Response resRdf02 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader2);
-
-        final Response resRdf03 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader3);
+        final Response resResource = doGet(locationHeader);
+        final Response resResourceSon = doGet(locationHeader2);
+        final Response resRdf01 = doGet(rlocationHeader1);
+        final Response resRdf02 = doGet(rlocationHeader2);
+        final Response resRdf03 = doGet(rlocationHeader3);
 
         if (allowHeader.contains("OPTIONS")) {
             if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
@@ -193,31 +160,25 @@ public class HttpDelete extends AbstractTest {
         final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
         final String locationHeader2 = resourceSon.getHeader("Location");
         final Response nrdf01 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
-                       .header("slug", "Delete1-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader);
+            createRequest().header("Content-Disposition", "attachment; filename=\"nrdf01.txt\"")
+                           .header("slug", "Delete1-" + info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(locationHeader);
 
         final Response nrdf02 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
-                       .header("slug", "Delete2-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader2);
+            createRequest().header("Content-Disposition", "attachment; filename=\"nrdf02.txt\"")
+                           .header("slug", "Delete2-" + info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(locationHeader2);
 
         final Response nrdf03 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
-                       .header("slug", "Delete3-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader2);
+            createRequest().header("Content-Disposition", "attachment; filename=\"nrdf03.txt\"")
+                           .header("slug", "Delete3-" + info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(locationHeader2);
         final String rlocationHeader1 = nrdf01.getHeader("Location");
         final String rlocationHeader2 = nrdf02.getHeader("Location");
         final String rlocationHeader3 = nrdf03.getHeader("Location");
@@ -228,10 +189,8 @@ public class HttpDelete extends AbstractTest {
         ps.append("Body:\n");
 
         // Delete root folder
-        final Response response = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .delete(locationHeader);
+        final Response response = createRequest().when()
+                                                 .delete(locationHeader);
 
         // Print headers and status
         final int statusDelete = response.getStatusCode();
@@ -243,30 +202,11 @@ public class HttpDelete extends AbstractTest {
         }
 
         //GET deleted resources
-        final Response resResource = RestAssured.given()
-                                                .auth().basic(this.username, this.password)
-                                                .when()
-                                                .get(locationHeader);
-
-        final Response resResourceSon = RestAssured.given()
-                                                   .auth().basic(this.username, this.password)
-                                                   .when()
-                                                   .get(locationHeader2);
-
-        final Response resRdf01 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader1);
-
-        final Response resRdf02 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader2);
-
-        final Response resRdf03 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader3);
+        final Response resResource = doGet(locationHeader);
+        final Response resResourceSon = doGet(locationHeader2);
+        final Response resRdf01 = doGet(rlocationHeader1);
+        final Response resRdf02 = doGet(rlocationHeader2);
+        final Response resRdf03 = doGet(rlocationHeader3);
 
         if (statusDelete == 200 || statusDelete == 204) {
             if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
@@ -343,10 +283,8 @@ public class HttpDelete extends AbstractTest {
         ps.append("Body:\n");
 
         // Delete root folder
-        final Response response = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .delete(locationHeader);
+        final Response response = createRequest().when()
+                                                 .delete(locationHeader);
 
         // Print headers and status
         final int statusDelete = response.getStatusCode();
@@ -358,30 +296,11 @@ public class HttpDelete extends AbstractTest {
         }
 
         //GET deleted resources
-        final Response resResource = RestAssured.given()
-                                                .auth().basic(this.username, this.password)
-                                                .when()
-                                                .get(locationHeader);
-
-        final Response resResourceSon = RestAssured.given()
-                                                   .auth().basic(this.username, this.password)
-                                                   .when()
-                                                   .get(locationHeader2);
-
-        final Response resRdf01 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader1);
-
-        final Response resRdf02 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader2);
-
-        final Response resRdf03 = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .when()
-                                             .get(rlocationHeader3);
+        final Response resResource = doGet(locationHeader);
+        final Response resResourceSon = doGet(locationHeader2);
+        final Response resRdf01 = doGet(rlocationHeader1);
+        final Response resRdf02 = doGet(rlocationHeader2);
+        final Response resRdf03 = doGet(rlocationHeader3);
 
         final String statusdeletestring = String.valueOf(statusDelete);
         if (statusdeletestring.charAt(0) == '2') {

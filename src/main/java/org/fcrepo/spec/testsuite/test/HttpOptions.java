@@ -21,8 +21,6 @@ import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -56,15 +54,11 @@ public class HttpOptions extends AbstractTest {
                                         + "4.2.8.1 LDP servers must support the HTTP OPTIONS method.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-options",
                                         ps);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .options(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(200);
+        createRequest().when()
+                       .options(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(200);
 
     }
 
@@ -84,15 +78,11 @@ public class HttpOptions extends AbstractTest {
                                         "HTTP response header Allow.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-options",
                                         ps);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .options(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("Allow", containsString("GET"));
+        createRequest().when()
+                       .options(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("Allow", containsString("GET"));
 
     }
 }

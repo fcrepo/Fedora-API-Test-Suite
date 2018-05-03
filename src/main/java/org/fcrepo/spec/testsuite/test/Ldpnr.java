@@ -19,8 +19,6 @@ package org.fcrepo.spec.testsuite.test;
 
 import java.io.FileNotFoundException;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
@@ -64,15 +62,12 @@ public class Ldpnr extends AbstractTest {
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
 
-        final Response res = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                        .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
-                                        .header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER)
-                                        .header("slug", info.getId())
-                                        .body("TestString")
-                                        .when()
-                                        .post(uri);
+        final Response res = createRequest().header("Content-Disposition", "attachment; filename=\"sample.txt\"")
+                                            .header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER)
+                                            .header("slug", info.getId())
+                                            .body("TestString")
+                                            .when()
+                                            .post(uri);
 
         ps.append("Request method:\tPOST\n");
         ps.append("Request URI:\t" + uri + "\n");
@@ -87,12 +82,9 @@ public class Ldpnr extends AbstractTest {
         final String locationHeader = res.getHeader("Location");
 
         if (res.getStatusCode() == 201) {
-            final Response nonr = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                             .log().all()
-                                             .when()
-                                             .get(locationHeader);
+            final Response nonr = createRequest()
+                .when()
+                .get(locationHeader);
 
             for (Header h : nonr.getHeaders()) {
                 ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
@@ -141,15 +133,12 @@ public class Ldpnr extends AbstractTest {
                                         "the newly "
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
-        final Response res = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                        .header("Content-Disposition", "attachment; filename=\"sample.txt\"")
-                                        .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
-                                        .header("slug", info.getId())
-                                        .body("TestString")
-                                        .when()
-                                        .post(uri);
+        final Response res = createRequest().header("Content-Disposition", "attachment; filename=\"sample.txt\"")
+                                            .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
+                                            .header("slug", info.getId())
+                                            .body("TestString")
+                                            .when()
+                                            .post(uri);
         ps.append("Request method:\tPOST\n");
         ps.append("Request URI:\t" + uri + "\n");
         ps.append("Headers:\tAccept=*/*\n");

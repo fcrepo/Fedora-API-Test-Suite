@@ -18,7 +18,6 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -91,31 +90,21 @@ public class HttpPatch extends AbstractTest {
                                         + "content-type for PATCH.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch",
                                         ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .contentType("text/turtle")
-                                             .header("Link",
-                                                     BASIC_CONTAINER_LINK_HEADER)
-                                             .header("slug", info.getId())
-                                             .body(BASIC_CONTAINER_BODY)
-                                             .when()
-                                             .post(uri);
+        final Response resource = createBasicContainer(uri, info.getId(), BASIC_CONTAINER_BODY);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("application/sparql-update")
-                   .config(RestAssured.config()
-                                      .encoderConfig(new EncoderConfig()
-                                                         .encodeContentTypeAs("application/sparql-update",
-                                                                              ContentType.TEXT))
-                                      .logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .request().body(body)
-                   .patch(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(204);
+        createRequestAuthOnly("application/sparql-update")
+            .config(RestAssured.config()
+                               .encoderConfig(new EncoderConfig()
+                                                  .encodeContentTypeAs("application/sparql-update",
+                                                                       ContentType.TEXT))
+                               .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .when()
+            .request().body(body)
+            .patch(locationHeader)
+            .then()
+            .log().all()
+            .statusCode(204);
 
     }
 
@@ -132,20 +121,18 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/ldpatch")
-                   .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                                  .encodeContentTypeAs("text/ldpatch",
-                                                                                       ContentType.TEXT))
-                                      .logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .body(ldpatch)
-                   .when()
-                   .patch(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(204);
+        createRequestAuthOnly("text/ldpatch")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+                                                           .encodeContentTypeAs("text/ldpatch",
+                                                                                ContentType.TEXT))
+                               .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(ldpatch)
+            .when()
+            .patch(locationHeader)
+            .then()
+            .log().all()
+            .statusCode(204);
 
     }
 
@@ -165,21 +152,19 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("application/sparql-update")
-                   .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                                  .encodeContentTypeAs(
-                                                                      "application/sparql-update",
-                                                                      ContentType.TEXT))
-                                      .logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .body(serverProps)
-                   .when()
-                   .patch(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409);
+        createRequestAuthOnly("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+                                                           .encodeContentTypeAs(
+                                                               "application/sparql-update",
+                                                               ContentType.TEXT))
+                               .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(serverProps)
+            .when()
+            .patch(locationHeader)
+            .then()
+            .log().all()
+            .statusCode(409);
 
     }
 
@@ -198,21 +183,19 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("application/sparql-update")
-                   .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                                  .encodeContentTypeAs(
-                                                                      "application/sparql-update",
-                                                                      ContentType.TEXT))
-                                      .logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .body(serverProps)
-                   .when()
-                   .patch(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409).body(containsString("lastModified"));
+        createRequestAuthOnly("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+                                                           .encodeContentTypeAs(
+                                                               "application/sparql-update",
+                                                               ContentType.TEXT))
+                               .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(serverProps)
+            .when()
+            .patch(locationHeader)
+            .then()
+            .log().all()
+            .statusCode(409).body(containsString("lastModified"));
 
     }
 
@@ -232,21 +215,19 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("application/sparql-update")
-                   .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                                  .encodeContentTypeAs(
-                                                                      "application/sparql-update",
-                                                                      ContentType.TEXT))
-                                      .logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .body(serverProps)
-                   .when()
-                   .patch(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409).header("Link", containsString("constrainedBy"));
+        createRequestAuthOnly("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+                                                           .encodeContentTypeAs(
+                                                               "application/sparql-update",
+                                                               ContentType.TEXT))
+                               .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(serverProps)
+            .when()
+            .patch(locationHeader)
+            .then()
+            .log().all()
+            .statusCode(409).header("Link", containsString("constrainedBy"));
 
     }
 
@@ -273,15 +254,13 @@ public class HttpPatch extends AbstractTest {
         ps.append(body + "\n");
 
         final Response response =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("application/sparql-update")
-                       .config(RestAssured.config().encoderConfig(new EncoderConfig().encodeContentTypeAs(
-                           "application/sparql-update",
-                           ContentType.TEXT)))
-                       .body(body)
-                       .when()
-                       .patch(locationHeader);
+            createRequestAuthOnly("application/sparql-update")
+                .config(RestAssured.config().encoderConfig(new EncoderConfig().encodeContentTypeAs(
+                    "application/sparql-update",
+                    ContentType.TEXT)))
+                .body(body)
+                .when()
+                .patch(locationHeader);
 
         final int statusCode = response.getStatusCode();
         final Headers headers = response.getHeaders();
@@ -326,30 +305,21 @@ public class HttpPatch extends AbstractTest {
                                         ps);
         final Response container = createBasicContainer(uri, info);
         final String locationHeader = container.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                   .header("slug", "Patch-3.7.1")
-                   .body(BASIC_CONTAINER_BODY)
-                   .when()
-                   .post(locationHeader).asString();
+        createBasicContainer(locationHeader, info.getId(), BASIC_CONTAINER_BODY);
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("application/sparql-update")
-                   .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                                  .encodeContentTypeAs(
-                                                                      "application/sparql-update",
-                                                                      ContentType.TEXT))
-                                      .logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .body(updateContainmentTriples)
-                   .when()
-                   .patch(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409);
+        createRequestAuthOnly("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+                                                           .encodeContentTypeAs(
+                                                               "application/sparql-update",
+                                                               ContentType.TEXT))
+                               .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(updateContainmentTriples)
+            .when()
+            .patch(locationHeader)
+            .then()
+            .log().all()
+            .statusCode(409);
 
     }
 
@@ -369,21 +339,19 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("application/sparql-update")
-                   .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                                  .encodeContentTypeAs(
-                                                                      "application/sparql-update",
-                                                                      ContentType.TEXT))
-                                      .logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .body(resourceType)
-                   .when()
-                   .patch(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409);
+        createRequestAuthOnly("application/sparql-update")
+            .config(RestAssured.config().encoderConfig(new EncoderConfig()
+                                                           .encodeContentTypeAs(
+                                                               "application/sparql-update",
+                                                               ContentType.TEXT))
+                               .logConfig(new LogConfig().defaultStream(ps)))
+            .log().all()
+            .body(resourceType)
+            .when()
+            .patch(locationHeader)
+            .then()
+            .log().all()
+            .statusCode(409);
 
     }
 }

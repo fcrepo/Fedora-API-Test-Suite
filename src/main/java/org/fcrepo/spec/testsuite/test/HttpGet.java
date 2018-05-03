@@ -70,19 +70,15 @@ public class HttpGet extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
 
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Prefer", "return=representation; "
-                                     + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
-                   .when()
-                   .get(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("preference-applied",
-                                           containsString(
-                                               "http://fedora.info/definitions/fcrepo#PreferInboundReferences"));
+        createRequest().header("Prefer", "return=representation; "
+                                         + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
+                       .when()
+                       .get(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("preference-applied",
+                                               containsString(
+                                                   "http://fedora.info/definitions/fcrepo#PreferInboundReferences"));
 
     }
 
@@ -103,16 +99,12 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Prefer", "return=minimal")
-                   .when()
-                   .get(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("preference-applied", containsString("return=minimal"));
+        createRequest().header("Prefer", "return=minimal")
+                       .when()
+                       .get(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("preference-applied", containsString("return=minimal"));
 
     }
 
@@ -134,24 +126,17 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
                                         ps);
         final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
-                       .header("slug", info.getId())
-                       .body("TestString")
-                       .when()
-                       .post(uri);
+            createRequest().header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
+                           .header("slug", info.getId())
+                           .body("TestString")
+                           .when()
+                           .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .get(locationHeader + "/fcr:metadata")
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("Link", containsString("describes"));
+        createRequest().when()
+                       .get(locationHeader + "/fcr:metadata")
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("Link", containsString("describes"));
 
     }
 
@@ -172,25 +157,18 @@ public class HttpGet extends AbstractTest {
         final String checksum = "md5";
 
         final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
-                       .header("slug", info.getId())
-                       .body("TestString")
-                       .when()
-                       .post(uri);
+            createRequest().header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
+                           .header("slug", info.getId())
+                           .body("TestString")
+                           .when()
+                           .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Want-Digest", checksum)
-                   .when()
-                   .get(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("Digest", containsString("md5"));
+        createRequest().header("Want-Digest", checksum)
+                       .when()
+                       .get(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("Digest", containsString("md5"));
 
     }
 
@@ -210,24 +188,16 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
         final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
-                       .header("slug", info.getId())
-                       .body("TestString")
-                       .when()
-                       .post(uri);
+            createRequest().header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
+                           .header("slug", info.getId())
+                           .body("TestString")
+                           .when()
+                           .post(uri);
         final String locationHeader = resource.getHeader("Location");
 
-        final Response wantDigestResponse = RestAssured.given()
-                                                       .auth().basic(this.username, this.password)
-                                                       .config(RestAssured.config()
-                                                                          .logConfig(new LogConfig().defaultStream(ps)))
-                                                       .log().all()
-                                                       .header("Want-Digest", checksum)
-                                                       .when()
-                                                       .get(locationHeader);
+        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
+                                                           .when()
+                                                           .get(locationHeader);
 
         final Headers headers = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
@@ -237,7 +207,8 @@ public class HttpGet extends AbstractTest {
         }
 
         Assert
-            .assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
+            .assertTrue(headers.getValue("Digest").contains("md5") ||
+                        headers.getValue("Digest").contains("sha"), "OK");
 
     }
 
@@ -257,25 +228,17 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
 
-        final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .header("Content-Disposition",
-                               "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero.txt\"")
-                       .header("slug", info.getId())
-                       .body("TestString")
-                       .when()
-                       .post(uri);
+        final Response resource = createRequest().header("Content-Disposition",
+                                                         "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero" +
+                                                         ".txt\"")
+                                                 .header("slug", info.getId())
+                                                 .body("TestString")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        final Response wantDigestResponse = RestAssured.given()
-                                                       .auth().basic(this.username, this.password)
-                                                       .config(RestAssured.config()
-                                                                          .logConfig(new LogConfig().defaultStream(ps)))
-                                                       .log().all()
-                                                       .header("Want-Digest", checksum)
-                                                       .when()
-                                                       .get(locationHeader);
+        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
+                                                           .when()
+                                                           .get(locationHeader);
 
         final Headers headers = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
@@ -285,7 +248,8 @@ public class HttpGet extends AbstractTest {
         }
 
         Assert
-            .assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
+            .assertTrue(headers.getValue("Digest").contains("md5") ||
+                        headers.getValue("Digest").contains("sha"), "OK");
 
     }
 
@@ -304,26 +268,19 @@ public class HttpGet extends AbstractTest {
                                         + " header defined in [RFC3230]",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
-        final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
-                       .header("slug", info.getId())
-                       .body("TestString")
-                       .when()
-                       .post(uri);
+        final Response resource = createRequest()
+            .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
+            .header("slug", info.getId())
+            .body("TestString")
+            .when()
+            .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Want-Digest", checksum)
-                   .when()
-                   .get(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("Digest", containsString("md5"));
+        createRequest().header("Want-Digest", checksum)
+                       .when()
+                       .get(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("Digest", containsString("md5"));
 
     }
 
@@ -344,14 +301,11 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
         final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
-                       .header("slug", info.getId())
-                       .body("TestString")
-                       .when()
-                       .post(uri);
+            createRequest().header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
+                           .header("slug", info.getId())
+                           .body("TestString")
+                           .when()
+                           .post(uri);
         final String locationHeader = resource.getHeader("Location");
         RestAssured.given()
                    .auth().basic(this.username, this.password)

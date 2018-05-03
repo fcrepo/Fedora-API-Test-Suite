@@ -18,13 +18,11 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
 
 import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -65,26 +63,22 @@ public class HttpPut extends AbstractTest {
                                         "request must be "
                                         + "rejected with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
-                                             .header("slug", info.getId())
-                                             .body("TestString.")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest()
+            .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+            .header("slug", info.getId())
+            .body("TestString.")
+            .when()
+            .post(uri);
 
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given().auth().basic(this.username, this.password)
-                   .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
-                   .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
-                   .body("TestString2.")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409);
+        createRequest().header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+                       .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
+                       .body("TestString2.")
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(409);
 
     }
 
@@ -105,25 +99,20 @@ public class HttpPut extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
 
-        final String body2 = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .when()
-                                        .get(locationHeader).asString();
+        final String body2 = createRequest()
+            .when()
+            .get(locationHeader).asString();
 
         final String newBody = body2.replace("Put class Container", "some-title");
 
         ps.append(newBody);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .body(newBody)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(204);
+        createRequest().contentType("text/turtle")
+                       .body(newBody)
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(204);
 
     }
 
@@ -150,33 +139,21 @@ public class HttpPut extends AbstractTest {
 
         final String locationHeader = resource.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                   .header("slug", "containedFolderSlug")
-                   .body(BASIC_CONTAINER_BODY)
-                   .when()
-                   .post(locationHeader);
+        createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
-        final String body2 = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .when()
-                                        .get(locationHeader).asString();
+        final String body2 = createRequest()
+            .when()
+            .get(locationHeader).asString();
 
         final String newBody = body2.replace("containedFolderSlug", "some-name");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .body(newBody)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409);
+        createRequest().contentType("text/turtle")
+                       .body(newBody)
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(409);
 
     }
 
@@ -197,34 +174,21 @@ public class HttpPut extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                   .header("slug", "containedFolderSlug")
-                   .body(BASIC_CONTAINER_BODY)
-                   .when()
-                   .post(locationHeader);
+        createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
-        final String body2 = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .when()
-                                        .get(locationHeader).asString();
+        final String body2 = createRequest().when()
+                                            .get(locationHeader).asString();
 
         final String newBody = body2.replace("containedFolderSlug", "some-name");
 
         ps.append("PUT Request: \n");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .body(newBody)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409).body(containsString("ldp#contains"));
+        createRequest().contentType("text/turtle")
+                       .body(newBody)
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(409).body(containsString("ldp#contains"));
 
     }
 
@@ -259,17 +223,13 @@ public class HttpPut extends AbstractTest {
 
         final String newBody = body2.replace(containedFolderSlug, "some-name");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("text/turtle")
-                   .body(newBody)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409).header("Link", containsString("constrainedBy"));
+        createRequest().contentType("text/turtle")
+                       .body(newBody)
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(409).header("Link", containsString("constrainedBy"));
 
     }
 
@@ -292,17 +252,13 @@ public class HttpPut extends AbstractTest {
                                              .when()
                                              .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
-                   .body("TestString2.")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(204);
+        createRequest().header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+                       .body("TestString2.")
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(204);
 
     }
 
@@ -323,26 +279,21 @@ public class HttpPut extends AbstractTest {
                                         + "with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
-                                             .header("slug", info.getId())
-                                             .body("TestString.")
-                                             .when()
-                                             .post(uri);
+        final Response resource =
+            createRequest().header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
+                           .header("slug", info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("digest", checksum)
-                   .header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
-                   .body("TestString.")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(409);
+        createRequest().header("digest", checksum)
+                       .header("Content-Disposition", "attachment; filename=\"digestAuth.txt\"")
+                       .body("TestString.")
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(409);
 
     }
 
@@ -360,26 +311,21 @@ public class HttpPut extends AbstractTest {
                                         + " be rejected with a 400 (Bad Request) response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final String checksum = "abc=abc";
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
-                                             .header("slug", info.getId())
-                                             .body("TestString.")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest()
+            .header("Content-Disposition", "attachment; filename=\"postCreate.txt\"")
+            .header("slug", info.getId())
+            .body("TestString.")
+            .when()
+            .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("digest", checksum)
-                   .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
-                   .body("TestString2.")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(400);
+        createRequest().header("digest", checksum)
+                       .header("Content-Disposition", "attachment; filename=\"putUpdate.txt\"")
+                       .body("TestString2.")
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(400);
 
     }
 
