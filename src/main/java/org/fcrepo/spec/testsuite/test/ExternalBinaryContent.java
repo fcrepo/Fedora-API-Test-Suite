@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -66,7 +67,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + "of message/external-body and"
                                         + " access-type parameter of url.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final String resource = createRequest().header("Content-Disposition",
+        final String resource = createRequest().header(CONTENT_DISPOSITION,
                                                        "attachment; filename=\"externalbinarycontentpostcreate.txt\"")
                                                .header("slug", info.getId())
                                                .body("TestString.")
@@ -95,7 +96,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + "of message/external-body and"
                                         + " access-type parameter of url.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final String resource = createRequest().header("Content-Disposition",
+        final String resource = createRequest().header(CONTENT_DISPOSITION,
                                                        "attachment; filename=\"externalbinarycontentputcreate.txt\"")
                                                .header("slug", info.getId())
                                                .body("TestString.")
@@ -125,14 +126,14 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + " access-type parameter of url.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String resource1 = createRequest().header("Content-Disposition",
+        final String resource1 = createRequest().header(CONTENT_DISPOSITION,
                                                         "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
                                                 .header("slug", info.getId())
                                                 .body("TestString1.")
                                                 .when()
                                                 .post(uri).asString();
 
-        final String resource2 = createRequest().header("Content-Disposition",
+        final String resource2 = createRequest().header(CONTENT_DISPOSITION,
                                                         "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
                                                 .header("slug", info.getId() + "-PutUpdate2")
                                                 .body("TestString2.")
@@ -254,7 +255,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "Media Type).",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Response resource = createRequest().header("Content-Disposition",
+        final Response resource = createRequest().header(CONTENT_DISPOSITION,
                                                          "attachment; filename=\"checkUnsupportedMediaType.txt\"")
                                                  .header("slug", info.getId())
                                                  .body("TestString.")
@@ -304,7 +305,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "of the response headers required by the LDP-NR interaction model in this " +
                                         "specification.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final Response resource = createRequest().header("Content-Disposition",
+        final Response resource = createRequest().header(CONTENT_DISPOSITION,
                                                          "attachment; filename=\"testExamtxtpost.txt\"")
                                                  .header("slug", "External-Binary-Content-3.9-E1")
                                                  .body("TestString.")
@@ -321,7 +322,7 @@ public class ExternalBinaryContent extends AbstractTest {
         for (Header h : headers) {
             h1.add(h.getName());
         }
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"postCheckHeaders.txt\"")
                                                      .header("slug", "External-Binary-Content-3.9-E2")
                                                      .body("TestString.")
@@ -376,14 +377,14 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Response resource =
-            createRequest().header("Content-Disposition", "attachment; filename=\"testExamtxt.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"testExamtxt.txt\"")
                            .header("slug", info.getId())
                            .body("TestString.")
                            .when()
                            .post(uri);
         final String locationHeader = resource.getHeader("Location");
         final Response putup =
-            createRequest().header("Content-Disposition", "attachment; filename=\"putUpdatetext.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdatetext.txt\"")
                            .when()
                            .put(locationHeader);
 
@@ -398,14 +399,14 @@ public class ExternalBinaryContent extends AbstractTest {
             h1.add(h.getName());
         }
 
-        final Response exbcresource1 = createRequest().header("Content-Disposition",
+        final Response exbcresource1 = createRequest().header(CONTENT_DISPOSITION,
                                                               "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
                                                       .header("slug", info.getId())
                                                       .body("TestString1.")
                                                       .when()
                                                       .post(uri);
 
-        final Response exbcresource2 = createRequest().header("Content-Disposition",
+        final Response exbcresource2 = createRequest().header(CONTENT_DISPOSITION,
                                                               "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
                                                       .header("slug", info.getId())
                                                       .body("TestString2.")
@@ -466,7 +467,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "representation of the location of the external content if the Fedora server " +
                                         "is proxying the content.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"getCheckContentLocationHeader" +
                                                              ".txt\"")
                                                      .header("slug", info.getId())
@@ -529,7 +530,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "is proxying the content.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"headCheckContentLocationHeader" +
                                                              ".txt\"")
                                                      .header("slug", info.getId())
@@ -591,7 +592,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigest.txt\"")
                                                      .header("slug", info.getId())
                                                      .body("TestString.")
@@ -629,7 +630,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigestHead.txt\"")
                                                      .header("slug", info.getId())
                                                      .body("TestString.")
@@ -672,7 +673,7 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,sha";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigestTwoSupported" +
                                                              ".txt\"")
                                                      .header("slug", info.getId())
@@ -719,7 +720,7 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,sha";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestTwoSupportedHead" +
                                                              ".txt\"")
@@ -771,7 +772,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5;q=0.3,sha;q=1";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
                                                              ".txt\"")
@@ -822,7 +823,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5;q=0.3,sha;q=1";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
                                                              ".txt\"")
@@ -871,7 +872,7 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,abc";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigestNonSupported" +
                                                              ".txt\"")
                                                      .header("slug", info.getId())
@@ -912,7 +913,7 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,abc";
-        final Response exbcresource = createRequest().header("Content-Disposition",
+        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestNonSupportedHead" +
                                                              ".txt\"")

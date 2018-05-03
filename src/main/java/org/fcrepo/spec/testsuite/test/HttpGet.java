@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -126,7 +127,7 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
                                         ps);
         final Response resource =
-            createRequest().header("Content-Disposition", "attachment; filename=\"responseDescribesHeader.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"responseDescribesHeader.txt\"")
                            .header("slug", info.getId())
                            .body("TestString")
                            .when()
@@ -157,7 +158,7 @@ public class HttpGet extends AbstractTest {
         final String checksum = "md5";
 
         final Response resource =
-            createRequest().header("Content-Disposition", "attachment; filename=\"respondwantdigest.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"respondwantdigest.txt\"")
                            .header("slug", info.getId())
                            .body("TestString")
                            .when()
@@ -188,7 +189,7 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
         final Response resource =
-            createRequest().header("Content-Disposition", "attachment; filename=\"wantdigestTwoSupported.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"wantdigestTwoSupported.txt\"")
                            .header("slug", info.getId())
                            .body("TestString")
                            .when()
@@ -228,7 +229,7 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
 
-        final Response resource = createRequest().header("Content-Disposition",
+        final Response resource = createRequest().header(CONTENT_DISPOSITION,
                                                          "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero" +
                                                          ".txt\"")
                                                  .header("slug", info.getId())
@@ -269,7 +270,7 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
         final Response resource = createRequest()
-            .header("Content-Disposition", "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
+            .header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
             .header("slug", info.getId())
             .body("TestString")
             .when()
@@ -301,7 +302,7 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
         final Response resource =
-            createRequest().header("Content-Disposition", "attachment; filename=\"wantDigestNonSupported.txt\"")
+            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestNonSupported.txt\"")
                            .header("slug", info.getId())
                            .body("TestString")
                            .when()
