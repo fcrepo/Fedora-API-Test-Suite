@@ -33,6 +33,7 @@ public class Constants {
                                                       "API Test Suite.' . ";
 
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
+    public static final String SLUG = "slug";
 
     private Constants() {
 

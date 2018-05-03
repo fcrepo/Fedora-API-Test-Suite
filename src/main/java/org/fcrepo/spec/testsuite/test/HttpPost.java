@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -102,7 +103,7 @@ public class HttpPost extends AbstractTest {
                                         " must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
         createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"postNonRDFSource.txt\"")
-                       .header("slug", info.getId())
+                       .header(SLUG, info.getId())
                        .body("TestString.")
                        .when()
                        .post(uri)
@@ -127,7 +128,7 @@ public class HttpPost extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
         createRequest()
             .header(CONTENT_DISPOSITION, "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
-            .header("slug", info.getId())
+            .header(SLUG, info.getId())
             .body("TestString.")
             .when()
             .post(uri)
@@ -156,7 +157,7 @@ public class HttpPost extends AbstractTest {
         final String checksum = "md5=1234";
         createRequest().header(CONTENT_DISPOSITION,
                                "attachment; filename=\"test1digesttext.txt\"")
-                       .header("slug", info.getId())
+                       .header(SLUG, info.getId())
                        .body("TestString.")
                        .header("Digest", checksum)
                        .when()
@@ -183,7 +184,7 @@ public class HttpPost extends AbstractTest {
         final String checksum = "abc=abc";
         createRequest().header(CONTENT_DISPOSITION,
                                "attachment; filename=\"test1digesttext2.txt\"")
-                       .header("slug", info.getId())
+                       .header(SLUG, info.getId())
                        .body("TestString.")
                        .header("Digest", checksum)
                        .when()

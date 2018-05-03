@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -128,7 +129,7 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"responseDescribesHeader.txt\"")
-                           .header("slug", info.getId())
+                           .header(SLUG, info.getId())
                            .body("TestString")
                            .when()
                            .post(uri);
@@ -159,7 +160,7 @@ public class HttpGet extends AbstractTest {
 
         final Response resource =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"respondwantdigest.txt\"")
-                           .header("slug", info.getId())
+                           .header(SLUG, info.getId())
                            .body("TestString")
                            .when()
                            .post(uri);
@@ -190,7 +191,7 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"wantdigestTwoSupported.txt\"")
-                           .header("slug", info.getId())
+                           .header(SLUG, info.getId())
                            .body("TestString")
                            .when()
                            .post(uri);
@@ -232,7 +233,7 @@ public class HttpGet extends AbstractTest {
         final Response resource = createRequest().header(CONTENT_DISPOSITION,
                                                          "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero" +
                                                          ".txt\"")
-                                                 .header("slug", info.getId())
+                                                 .header(SLUG, info.getId())
                                                  .body("TestString")
                                                  .when()
                                                  .post(uri);
@@ -271,7 +272,7 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource = createRequest()
             .header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
-            .header("slug", info.getId())
+            .header(SLUG, info.getId())
             .body("TestString")
             .when()
             .post(uri);
@@ -303,7 +304,7 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestNonSupported.txt\"")
-                           .header("slug", info.getId())
+                           .header(SLUG, info.getId())
                            .body("TestString")
                            .when()
                            .post(uri);

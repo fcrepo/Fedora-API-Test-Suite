@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 
 import java.io.FileNotFoundException;
 
@@ -66,7 +67,7 @@ public class Ldpnr extends AbstractTest {
 
         final Response res = createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\"")
                                             .header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER)
-                                            .header("slug", info.getId())
+                                            .header(SLUG, info.getId())
                                             .body("TestString")
                                             .when()
                                             .post(uri);
@@ -137,7 +138,7 @@ public class Ldpnr extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
         final Response res = createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\"")
                                             .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
-                                            .header("slug", info.getId())
+                                            .header(SLUG, info.getId())
                                             .body("TestString")
                                             .when()
                                             .post(uri);
