@@ -84,7 +84,6 @@ public class HttpGet extends AbstractTest {
                                            containsString(
                                                "http://fedora.info/definitions/fcrepo#PreferInboundReferences"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -115,7 +114,6 @@ public class HttpGet extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("preference-applied", containsString("return=minimal"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -155,7 +153,6 @@ public class HttpGet extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Link", containsString("describes"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -195,7 +192,6 @@ public class HttpGet extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -243,7 +239,6 @@ public class HttpGet extends AbstractTest {
         Assert
             .assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -292,7 +287,6 @@ public class HttpGet extends AbstractTest {
         Assert
             .assertTrue(headers.getValue("Digest").contains("md5") || headers.getValue("Digest").contains("sha"), "OK");
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -331,7 +325,6 @@ public class HttpGet extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-        ps.append("-Case End- \n").close();
     }
 
     /**
@@ -371,7 +364,6 @@ public class HttpGet extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Digest", containsString("md5"));
 
-        ps.append("-Case End- \n").close();
     }
 
 }

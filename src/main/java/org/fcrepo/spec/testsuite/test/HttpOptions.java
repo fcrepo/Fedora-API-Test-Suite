@@ -66,7 +66,6 @@ public class HttpOptions extends AbstractTest {
                    .log().all()
                    .statusCode(200);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -95,6 +94,5 @@ public class HttpOptions extends AbstractTest {
                    .log().all()
                    .statusCode(200).header("Allow", containsString("GET"));
 
-        ps.append("\n -Case End- \n").close();
     }
 }

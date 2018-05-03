@@ -178,10 +178,10 @@ public class HtmlReporter implements IReporter {
         throws IOException, NoSuchMethodException, IllegalAccessException,
         InstantiationException, InvocationTargetException {
         html.table(class_("indented"));
-        html.tr().th().content("Test");
+        html.tr().th().content("Specification Section");
         html.th().content("Req Level");
         html.th().content("Result");
-        html.th().content("")._tr();
+        html.th().content("Test Description")._tr();
         final Map<String, String[]> results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
 
         for (String[] r : results.values()) {

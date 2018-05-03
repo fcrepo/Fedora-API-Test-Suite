@@ -117,7 +117,6 @@ public class HttpPatch extends AbstractTest {
                    .log().all()
                    .statusCode(204);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -148,7 +147,6 @@ public class HttpPatch extends AbstractTest {
                    .log().all()
                    .statusCode(204);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -183,7 +181,6 @@ public class HttpPatch extends AbstractTest {
                    .log().all()
                    .statusCode(409);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -217,7 +214,6 @@ public class HttpPatch extends AbstractTest {
                    .log().all()
                    .statusCode(409).body(containsString("lastModified"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -252,7 +248,6 @@ public class HttpPatch extends AbstractTest {
                    .log().all()
                    .statusCode(409).header("Link", containsString("constrainedBy"));
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -308,11 +303,10 @@ public class HttpPatch extends AbstractTest {
 
         ps.append(str);
         if (err) {
-            ps.append("\n -Case End- \n").close();
+
             throw new AssertionError("\nThe response status code is not a valid successful status code for PATCH.");
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -357,7 +351,6 @@ public class HttpPatch extends AbstractTest {
                    .log().all()
                    .statusCode(409);
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
@@ -392,6 +385,5 @@ public class HttpPatch extends AbstractTest {
                    .log().all()
                    .statusCode(409);
 
-        ps.append("\n -Case End- \n").close();
     }
 }

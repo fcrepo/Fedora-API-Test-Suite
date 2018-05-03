@@ -31,7 +31,7 @@ public class TestInfo {
     private final static Map<String, TestInfo> TEST_INFO = new HashMap<>();
 
     private String id;
-    private String className;
+    private Class testClass;
     private String title;
     private String description;
     private String specLink;
@@ -40,15 +40,15 @@ public class TestInfo {
      * Default constructor
      *
      * @param id
-     * @param className
+     * @param testClass
      * @param title
      * @param description
      * @param specLink
      */
-    public TestInfo(final String id, final String className, final String title, final String description,
+    public TestInfo(final String id, final Class testClass, final String title, final String description,
                     final String specLink) {
         this.id = id;
-        this.className = className;
+        this.testClass = testClass;
         this.title = title;
         this.description = description;
         this.specLink = specLink;
@@ -76,10 +76,10 @@ public class TestInfo {
     }
 
     /**
-     * @return className
+     * @return testClass
      */
-    public String getClassName() {
-        return className;
+    public Class getTestClass() {
+        return testClass;
     }
 
     /**

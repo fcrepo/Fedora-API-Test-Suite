@@ -77,7 +77,7 @@ public class Container extends AbstractTest {
         createBasicContainer(uri, info).then()
                                        .log().all()
                                        .statusCode(201);
-        ps.append("\n -Case End- \n").close();
+
     }
 
     /**
@@ -127,7 +127,6 @@ public class Container extends AbstractTest {
         }
         final String body = resP.getBody().asString();
         ps.append(body);
-        ps.append("\n -Case End- \n").close();
 
         final boolean triple = TestSuiteGlobals.checkMembershipTriple(body);
 
@@ -207,7 +206,6 @@ public class Container extends AbstractTest {
         }
         final String body = resP.getBody().asString();
         ps.append(body);
-        ps.append("\n -Case End- \n").close();
 
         if (body.contains("hasMemberRelation") && body.contains("membershipResource") &&
             !body.contains("ldp:contains")) {
@@ -263,7 +261,6 @@ public class Container extends AbstractTest {
         }
         final String body = resP.getBody().asString();
         ps.append(body);
-        ps.append("\n -Case End- \n").close();
 
         final boolean triple = TestSuiteGlobals.checkMembershipTriple(body);
 

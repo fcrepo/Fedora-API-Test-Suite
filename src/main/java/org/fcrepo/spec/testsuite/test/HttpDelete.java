@@ -172,7 +172,6 @@ public class HttpDelete extends AbstractTest {
 
         }
 
-        ps.append("\n -Case End- \n").close();
     }
 
     /**
