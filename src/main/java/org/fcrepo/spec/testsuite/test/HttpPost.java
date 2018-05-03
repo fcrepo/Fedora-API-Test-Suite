@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
@@ -159,7 +160,7 @@ public class HttpPost extends AbstractTest {
                                "attachment; filename=\"test1digesttext.txt\"")
                        .header(SLUG, info.getId())
                        .body("TestString.")
-                       .header("Digest", checksum)
+                       .header(DIGEST, checksum)
                        .when()
                        .post(uri)
                        .then()
@@ -186,7 +187,7 @@ public class HttpPost extends AbstractTest {
                                "attachment; filename=\"test1digesttext2.txt\"")
                        .header(SLUG, info.getId())
                        .body("TestString.")
-                       .header("Digest", checksum)
+                       .header(DIGEST, checksum)
                        .when()
                        .post(uri)
                        .then()

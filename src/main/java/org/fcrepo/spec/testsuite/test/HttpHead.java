@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -119,14 +120,14 @@ public class HttpHead extends AbstractTest {
 
         if (resget.getStatusCode() == 200 && reshead.getStatusCode() == 200) {
 
-            if (resget.getHeader("Digest") == null) {
-                if (reshead.getHeader("Digest") == null) {
+            if (resget.getHeader(DIGEST) == null) {
+                if (reshead.getHeader(DIGEST) == null) {
                     Assert.assertTrue(true, "OK");
                 } else {
                     Assert.assertTrue(false, "FAIL");
                 }
             } else {
-                if (reshead.getHeader("Digest") == null) {
+                if (reshead.getHeader(DIGEST) == null) {
                     Assert.assertTrue(false, "FAIL");
                 } else {
                     Assert.assertTrue(true, "OK");

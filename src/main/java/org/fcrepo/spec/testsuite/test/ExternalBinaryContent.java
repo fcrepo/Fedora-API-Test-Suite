@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
@@ -613,7 +614,7 @@ public class ExternalBinaryContent extends AbstractTest {
                        .get(locationHeader2)
                        .then()
                        .log().all()
-                       .statusCode(200).header("Digest", containsString("md5"));
+                       .statusCode(200).header(DIGEST, containsString("md5"));
 
     }
 
@@ -655,7 +656,7 @@ public class ExternalBinaryContent extends AbstractTest {
                    .head(locationHeader2)
                    .then()
                    .log().all()
-                   .statusCode(200).header("Digest", containsString("md5"));
+                   .statusCode(200).header(DIGEST, containsString("md5"));
 
     }
 
@@ -701,8 +702,8 @@ public class ExternalBinaryContent extends AbstractTest {
             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
-        Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
-                          headers.getValue("Digest").contains("sha"), "OK");
+        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
+                          headers.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -749,8 +750,8 @@ public class ExternalBinaryContent extends AbstractTest {
             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
-        Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
-                          headers.getValue("Digest").contains("sha"), "OK");
+        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
+                          headers.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -801,8 +802,8 @@ public class ExternalBinaryContent extends AbstractTest {
             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
-        Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
-                          headers.getValue("Digest").contains("sha"), "OK");
+        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
+                          headers.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -852,8 +853,8 @@ public class ExternalBinaryContent extends AbstractTest {
             ps.append(h.getName() + ": " + h.getValue() + "\n");
         }
 
-        Assert.assertTrue(headers.getValue("Digest").contains("md5") ||
-                          headers.getValue("Digest").contains("sha"), "OK");
+        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
+                          headers.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -894,7 +895,7 @@ public class ExternalBinaryContent extends AbstractTest {
                        .get(locationHeader2)
                        .then()
                        .log().all()
-                       .statusCode(200).header("Digest", containsString("md5"));
+                       .statusCode(200).header(DIGEST, containsString("md5"));
 
     }
 
@@ -940,7 +941,7 @@ public class ExternalBinaryContent extends AbstractTest {
                    .head(locationHeader2)
                    .then()
                    .log().all()
-                   .statusCode(200).header("Digest", containsString("md5"));
+                   .statusCode(200).header(DIGEST, containsString("md5"));
 
     }
 }

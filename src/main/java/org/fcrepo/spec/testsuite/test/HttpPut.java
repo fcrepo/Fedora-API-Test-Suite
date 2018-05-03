@@ -19,6 +19,7 @@ package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.CoreMatchers.containsString;
 
@@ -288,7 +289,7 @@ public class HttpPut extends AbstractTest {
                            .when()
                            .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        createRequest().header("digest", checksum)
+        createRequest().header(DIGEST, checksum)
                        .header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\"")
                        .body("TestString.")
                        .when()
@@ -320,7 +321,7 @@ public class HttpPut extends AbstractTest {
             .when()
             .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        createRequest().header("digest", checksum)
+        createRequest().header(DIGEST, checksum)
                        .header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
                        .body("TestString2.")
                        .when()
