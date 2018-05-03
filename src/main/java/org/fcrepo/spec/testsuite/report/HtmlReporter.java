@@ -179,6 +179,7 @@ public class HtmlReporter implements IReporter {
         InstantiationException, InvocationTargetException {
         html.table(class_("indented"));
         html.tr().th().content("Test");
+        html.th().content("Req Level");
         html.th().content("Result");
         html.th().content("")._tr();
         final Map<String, String[]> results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
@@ -186,6 +187,7 @@ public class HtmlReporter implements IReporter {
         for (String[] r : results.values()) {
             html.tr();
             html.td().a(href(r[0]).target("_blank")).write(r[3])._a()._td();
+            html.td().content(r[5]);
             html.td().span(class_(r[1])).content(r[1])._td();
             html.td().content(r[2]);
             html._tr();

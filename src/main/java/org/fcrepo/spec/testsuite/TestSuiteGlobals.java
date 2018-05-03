@@ -51,7 +51,6 @@ public abstract class TestSuiteGlobals {
     public static String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
                                                 "insertedContentRelation"};
 
-
     /**
      * Get or create the default container for all tests resources to be created
      *
@@ -165,46 +164,26 @@ public abstract class TestSuiteGlobals {
                                                           final IResultMap skipped, final IResultMap failed)
         throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         final TreeMap<String, String[]> results = new TreeMap<>();
-        for (final ITestResult result : passed.getAllResults()) {
-            final ITestNGMethod method = result.getMethod();
-            final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
-
-            final String[] details = new String[5];
-            details[0] = info.getSpecLink().toString();
-            details[1] = "PASS";
-            details[2] = info.getDescription().toString();
-            details[3] = formatTestLinkText(info);
-            details[4] = getStackTrace(result.getThrowable());
-            results.put(details[3], details);
-        }
-        for (final ITestResult result : skipped.getAllResults()) {
-            final ITestNGMethod method = result.getMethod();
-
-            final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
-
-            final String[] details = new String[5];
-            details[0] = info.getSpecLink().toString();
-            details[1] = "SKIPPED";
-            details[2] = info.getDescription().toString();
-            details[3] = formatTestLinkText(info);
-            details[4] = getStackTrace(result.getThrowable());
-            results.put(details[3], details);
-        }
-        for (final ITestResult result : failed.getAllResults()) {
-            final ITestNGMethod method = result.getMethod();
-
-            final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
-
-            final String[] details = new String[5];
-            details[0] = info.getSpecLink().toString();
-            details[1] = "FAIL";
-            details[2] = info.getDescription().toString();
-            details[3] = formatTestLinkText(info);
-            details[4] = getStackTrace(result.getThrowable());
-            results.put(details[3], details);
-        }
-
+        addToResults(results, passed, "PASS");
+        addToResults(results, skipped, "SKIPPED");
+        addToResults(results, failed, "FAIL");
         return results;
+    }
+
+    private static void addToResults(final TreeMap<String, String[]> results, final IResultMap resultMap,
+                                     final String outcome) {
+        for (final ITestResult result : resultMap.getAllResults()) {
+            final ITestNGMethod method = result.getMethod();
+            final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
+            final String[] details = new String[6];
+            details[0] = info.getSpecLink().toString();
+            details[1] = outcome;
+            details[2] = info.getDescription().toString();
+            details[3] = formatTestLinkText(info);
+            details[4] = getStackTrace(result.getThrowable());
+            details[5] = method.getGroups()[0];
+            results.put(details[3], details);
+        }
     }
 
     private static String formatTestLinkText(final TestInfo info) {
