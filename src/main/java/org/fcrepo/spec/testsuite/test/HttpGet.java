@@ -72,7 +72,7 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
 
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header("Prefer", "return=representation; "
                                          + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
                        .when()
@@ -101,7 +101,7 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header("Prefer", "return=minimal")
                        .when()
                        .get(locationHeader)
@@ -134,7 +134,7 @@ public class HttpGet extends AbstractTest {
                            .body("TestString")
                            .when()
                            .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().when()
                        .get(locationHeader + "/fcr:metadata")
                        .then()
@@ -165,7 +165,7 @@ public class HttpGet extends AbstractTest {
                            .body("TestString")
                            .when()
                            .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header("Want-Digest", checksum)
                        .when()
                        .get(locationHeader)
@@ -196,7 +196,7 @@ public class HttpGet extends AbstractTest {
                            .body("TestString")
                            .when()
                            .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
 
         final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
                                                            .when()
@@ -238,7 +238,7 @@ public class HttpGet extends AbstractTest {
                                                  .body("TestString")
                                                  .when()
                                                  .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
                                                            .when()
                                                            .get(locationHeader);
@@ -277,7 +277,7 @@ public class HttpGet extends AbstractTest {
             .body("TestString")
             .when()
             .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header("Want-Digest", checksum)
                        .when()
                        .get(locationHeader)
@@ -309,7 +309,7 @@ public class HttpGet extends AbstractTest {
                            .body("TestString")
                            .when()
                            .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         RestAssured.given()
                    .auth().basic(this.username, this.password)
                    .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))

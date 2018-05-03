@@ -63,7 +63,7 @@ public class HttpDelete extends AbstractTest {
                                         ps);
 
         final Response resourceOp = createBasicContainer(uri, info);
-        final String locationHeader = resourceOp.getHeader("Location");
+        final String locationHeader = getLocation(resourceOp);
         final Response resourceSonOp = createBasicContainer(locationHeader, "Delete-" + info.getId());
 
         final Response rdf01 =
@@ -73,7 +73,7 @@ public class HttpDelete extends AbstractTest {
                            .when()
                            .post(locationHeader);
 
-        final String locationHeader2 = resourceSonOp.getHeader("Location");
+        final String locationHeader2 = getLocation(resourceSonOp);
 
         final Response rdf02 =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"rdf02.txt\"")
@@ -89,9 +89,9 @@ public class HttpDelete extends AbstractTest {
                            .when()
                            .post(locationHeader2);
 
-        final String rlocationHeader1 = rdf01.getHeader("Location");
-        final String rlocationHeader2 = rdf02.getHeader("Location");
-        final String rlocationHeader3 = rdf03.getHeader("Location");
+        final String rlocationHeader1 = getLocation(rdf01);
+        final String rlocationHeader2 = getLocation(rdf02);
+        final String rlocationHeader3 = getLocation(rdf03);
 
         ps.append("Request method:\tDELETE\n");
         ps.append("Request URI:\t" + uri + "\n");
@@ -159,9 +159,9 @@ public class HttpDelete extends AbstractTest {
                                         ps);
         // Create resources
         final Response rootres = createBasicContainer(uri, info);
-        final String locationHeader = rootres.getHeader("Location");
+        final String locationHeader = getLocation(rootres);
         final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
-        final String locationHeader2 = resourceSon.getHeader("Location");
+        final String locationHeader2 = getLocation(resourceSon);
         final Response nrdf01 =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf01.txt\"")
                            .header(SLUG, "Delete1-" + info.getId())
@@ -182,9 +182,9 @@ public class HttpDelete extends AbstractTest {
                            .body("TestString.")
                            .when()
                            .post(locationHeader2);
-        final String rlocationHeader1 = nrdf01.getHeader("Location");
-        final String rlocationHeader2 = nrdf02.getHeader("Location");
-        final String rlocationHeader3 = nrdf03.getHeader("Location");
+        final String rlocationHeader1 = getLocation(nrdf01);
+        final String rlocationHeader2 = getLocation(nrdf02);
+        final String rlocationHeader3 = getLocation(nrdf03);
 
         ps.append("Request method:\tDELETE\n");
         ps.append("Request URI:\t" + uri + "\n");
@@ -246,9 +246,9 @@ public class HttpDelete extends AbstractTest {
                                         ps);
         // Create resources
         final Response rootres = createBasicContainer(uri, info);
-        final String locationHeader = rootres.getHeader("Location");
+        final String locationHeader = getLocation(rootres);
         final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
-        final String locationHeader2 = resourceSon.getHeader("Location");
+        final String locationHeader2 = getLocation(resourceSon);
         final Response nrdf01 =
             RestAssured.given()
                        .auth().basic(this.username, this.password)
@@ -276,9 +276,9 @@ public class HttpDelete extends AbstractTest {
                        .when()
                        .post(locationHeader2);
 
-        final String rlocationHeader1 = nrdf01.getHeader("Location");
-        final String rlocationHeader2 = nrdf02.getHeader("Location");
-        final String rlocationHeader3 = nrdf03.getHeader("Location");
+        final String rlocationHeader1 = getLocation(nrdf01);
+        final String rlocationHeader2 = getLocation(nrdf02);
+        final String rlocationHeader3 = getLocation(nrdf03);
 
         ps.append("Request method:\tDELETE\n");
         ps.append("Request URI:\t" + uri + "\n");

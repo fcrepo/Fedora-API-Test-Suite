@@ -73,7 +73,7 @@ public class HttpPut extends AbstractTest {
             .when()
             .post(uri);
 
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
                        .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
                        .body("TestString2.")
@@ -100,7 +100,7 @@ public class HttpPut extends AbstractTest {
                                         + "in [LDP] 2). [LDP] 4.2.4.1 and 4.2.4.3 remain in effect.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
 
         final String body2 = createRequest()
             .when()
@@ -140,7 +140,7 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
 
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
 
         createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
@@ -175,7 +175,7 @@ public class HttpPut extends AbstractTest {
                                         + " not be persisted. ([LDP] 4.2.4.4 shouldbecomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
 
         createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
@@ -213,7 +213,7 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
 
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
 
         final String containedFolderSlug = "containedFolderSlug";
 
@@ -254,7 +254,7 @@ public class HttpPut extends AbstractTest {
                                              .body("TestString.")
                                              .when()
                                              .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
                        .body("TestString2.")
                        .when()
@@ -288,7 +288,7 @@ public class HttpPut extends AbstractTest {
                            .body("TestString.")
                            .when()
                            .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header(DIGEST, checksum)
                        .header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\"")
                        .body("TestString.")
@@ -320,7 +320,7 @@ public class HttpPut extends AbstractTest {
             .body("TestString.")
             .when()
             .post(uri);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequest().header(DIGEST, checksum)
                        .header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
                        .body("TestString2.")

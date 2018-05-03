@@ -92,13 +92,13 @@ public class Container extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
         final Response pythagoras = createBasicContainer(uri, info, pythagorasContainer);
-        final String pythagorasLocationHeader = pythagoras.getHeader("Location");
+        final String pythagorasLocationHeader = getLocation(pythagoras);
         final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).asString();
 
         final Response portraits =
             createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
 
-        final String portraitsLocationHeader = portraits.getHeader("Location");
+        final String portraitsLocationHeader = getLocation(portraits);
 
         createRequest("JpgPortrait", "image/jpeg")
             .when()
@@ -144,13 +144,13 @@ public class Container extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
         final Response pythagoras = createBasicContainer(uri, info.getId(), pythagorasContainer);
-        final String pythagorasLocationHeader = pythagoras.getHeader("Location");
+        final String pythagorasLocationHeader = getLocation(pythagoras);
         final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).asString();
 
         final Response portraits =
             createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
 
-        final String portraitsLocationHeader = portraits.getHeader("Location");
+        final String portraitsLocationHeader = getLocation(portraits);
 
         createRequest("JpgPortrait", "image/jpeg")
             .when()
@@ -192,13 +192,13 @@ public class Container extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
         final Response pythagoras = createBasicContainer(uri, info, pythagorasContainer);
-        final String pythagorasLocationHeader = pythagoras.getHeader("Location");
+        final String pythagorasLocationHeader = getLocation(pythagoras);
 
         final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).toString();
 
         final Response portraits =
             createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
-        final String portraitsLocationHeader = portraits.getHeader("Location");
+        final String portraitsLocationHeader = getLocation(portraits);
 
         createRequest("JpgPortrait", "image/jpeg")
             .when()

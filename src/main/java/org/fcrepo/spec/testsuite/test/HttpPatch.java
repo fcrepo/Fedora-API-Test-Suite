@@ -91,7 +91,7 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch",
                                         ps);
         final Response resource = createBasicContainer(uri, info.getId(), BASIC_CONTAINER_BODY);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequestAuthOnly("application/sparql-update")
             .config(RestAssured.config()
                                .encoderConfig(new EncoderConfig()
@@ -120,7 +120,7 @@ public class HttpPatch extends AbstractTest {
                                         "Other content-types (e.g. [ldpatch]) may be available.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequestAuthOnly("text/ldpatch")
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs("text/ldpatch",
@@ -151,7 +151,7 @@ public class HttpPatch extends AbstractTest {
                                         + " status code (e.g. 409 Conflict).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequestAuthOnly("application/sparql-update")
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
@@ -182,7 +182,7 @@ public class HttpPatch extends AbstractTest {
                                         + " ([LDP] 4.2.4.4 should becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequestAuthOnly("application/sparql-update")
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
@@ -214,7 +214,7 @@ public class HttpPatch extends AbstractTest {
                                         + "response header per [LDP] 4.2.1.6.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequestAuthOnly("application/sparql-update")
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
@@ -245,7 +245,7 @@ public class HttpPatch extends AbstractTest {
                                         + "body or request state.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         ps.append("Request method:\tPATCH\n");
         ps.append("Request URI:\t" + uri);
         ps.append("Headers:\tAccept=*/*\n");
@@ -304,7 +304,7 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch-containment-triples",
                                         ps);
         final Response container = createBasicContainer(uri, info);
-        final String locationHeader = container.getHeader("Location");
+        final String locationHeader = getLocation(container);
         createBasicContainer(locationHeader, info.getId(), BASIC_CONTAINER_BODY);
 
         createRequestAuthOnly("application/sparql-update")
@@ -338,7 +338,7 @@ public class HttpPatch extends AbstractTest {
                                         + " with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = resource.getHeader("Location");
+        final String locationHeader = getLocation(resource);
         createRequestAuthOnly("application/sparql-update")
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(

@@ -154,4 +154,8 @@ public class AbstractTest {
         return createRequest().when()
                               .get(uri);
     }
+
+    protected String getLocation(final Response response) {
+        return response.getHeader("Location");
+    }
 }
