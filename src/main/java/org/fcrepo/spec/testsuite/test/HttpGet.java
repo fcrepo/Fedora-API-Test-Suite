@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
@@ -170,7 +171,7 @@ public class HttpGet extends AbstractTest {
                        .get(locationHeader)
                        .then()
                        .log().all()
-                       .statusCode(200).header("Digest", containsString("md5"));
+                       .statusCode(200).header(DIGEST, containsString("md5"));
 
     }
 
@@ -209,8 +210,8 @@ public class HttpGet extends AbstractTest {
         }
 
         Assert
-            .assertTrue(headers.getValue("Digest").contains("md5") ||
-                        headers.getValue("Digest").contains("sha"), "OK");
+            .assertTrue(headers.getValue(DIGEST).contains("md5") ||
+                        headers.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -250,8 +251,8 @@ public class HttpGet extends AbstractTest {
         }
 
         Assert
-            .assertTrue(headers.getValue("Digest").contains("md5") ||
-                        headers.getValue("Digest").contains("sha"), "OK");
+            .assertTrue(headers.getValue(DIGEST).contains("md5") ||
+                        headers.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -282,7 +283,7 @@ public class HttpGet extends AbstractTest {
                        .get(locationHeader)
                        .then()
                        .log().all()
-                       .statusCode(200).header("Digest", containsString("md5"));
+                       .statusCode(200).header(DIGEST, containsString("md5"));
 
     }
 
@@ -318,7 +319,7 @@ public class HttpGet extends AbstractTest {
                    .get(locationHeader)
                    .then()
                    .log().all()
-                   .statusCode(200).header("Digest", containsString("md5"));
+                   .statusCode(200).header(DIGEST, containsString("md5"));
 
     }
 

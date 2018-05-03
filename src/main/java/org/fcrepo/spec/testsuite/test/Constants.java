@@ -34,6 +34,7 @@ public class Constants {
 
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
     public static final String SLUG = "slug";
+    public static final String DIGEST = "Digest";
 
     private Constants() {
 
