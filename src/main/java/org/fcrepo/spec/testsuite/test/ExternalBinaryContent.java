@@ -73,7 +73,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                .when()
                                                .post(uri).asString();
 
-        createRequest().header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource + "\"")
+        createRequest().contentType( "message/external-body; access-type=URL; URL=\"" + resource + "\"")
                        .when()
                        .post(uri)
                        .then()
@@ -102,7 +102,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                .when()
                                                .post(uri).asString();
 
-        createRequest().header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource + "\"")
+        createRequest().contentType( "message/external-body; access-type=URL; URL=\"" + resource + "\"")
                        .when()
                        .put(uri)
                        .then()
@@ -139,14 +139,14 @@ public class ExternalBinaryContent extends AbstractTest {
                                                 .when()
                                                 .post(uri).asString();
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" + resource1 +
                                                          "\"")
                                                  .header("slug", info.getId() + "PutUpdate3")
                                                  .when()
                                                  .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        createRequest().header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource2 + "\"")
+        createRequest().contentType( "message/external-body; access-type=URL; URL=\"" + resource2 + "\"")
                        .when()
                        .put(locationHeader)
                        .then()
@@ -199,7 +199,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + " with HTTP 415.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        createRequest().header("Content-Type", "message/external-body; access-type=abc;"
+        createRequest().contentType( "message/external-body; access-type=abc;"
                                                + " NAME=\"/some/file\"; site=\"example.com\"")
                        .when()
                        .post(uri)
@@ -229,7 +229,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + " with HTTP 415.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        createRequest().header("Content-Type",
+        createRequest().contentType(
                                "message/external-body; access-type=abc; NAME=\"/some/file\"; site=\"example.com\"")
                        .when()
                        .put(uri)
@@ -261,7 +261,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                  .when()
                                                  .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        final Response res = createRequest().header("Content-Type",
+        final Response res = createRequest().contentType(
                                                     "message/external-body; access-type=URL; URL=\"" + locationHeader +
                                                     "\"")
                                             .when()
@@ -328,7 +328,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .when()
                                                      .post(uri);
         final String locationHeader = exbcresource.getHeader("Location");
-        final Response res = createRequest().header("Content-Type",
+        final Response res = createRequest().contentType(
                                                     "message/external-body; access-type=URL; URL=\"" + locationHeader +
                                                     "\"")
                                             .when()
@@ -415,13 +415,13 @@ public class ExternalBinaryContent extends AbstractTest {
         final String locationHeader1 = exbcresource1.getHeader("Location");
         final String locationHeader2 = exbcresource2.getHeader("Location");
 
-        final Response resourceext = createRequest().header("Content-Type",
+        final Response resourceext = createRequest().contentType(
                                                             "message/external-body; access-type=URL; URL=\"" +
                                                             locationHeader1 + "\"")
                                                     .when()
                                                     .post(uri);
         final String locationHeader3 = resourceext.getHeader("Location");
-        final Response resext = createRequest().header("Content-Type",
+        final Response resext = createRequest().contentType(
                                                        "message/external-body; access-type=URL; URL=\"" +
                                                        locationHeader2
                                                        + "\"")
@@ -475,7 +475,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -538,7 +538,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -599,7 +599,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -637,7 +637,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -681,7 +681,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -729,7 +729,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -781,7 +781,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -832,7 +832,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -880,7 +880,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
@@ -922,7 +922,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                      .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = createRequest().header("Content-Type",
+        final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" +
                                                          locationHeader1 + "\"")
                                                  .when()
