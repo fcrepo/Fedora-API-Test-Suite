@@ -19,6 +19,7 @@ package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 
 import java.io.PrintStream;
 
@@ -137,7 +138,7 @@ public class AbstractTest {
     }
 
     protected RequestSpecification createRequest(final String slug, final String contentType) {
-        return createRequest().header("slug", slug).contentType(contentType);
+        return createRequest().header(SLUG, slug).contentType(contentType);
     }
 
     protected RequestSpecification createRequestAuthOnly() {

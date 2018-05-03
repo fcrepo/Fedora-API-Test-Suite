@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -69,7 +70,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
         final String resource = createRequest().header(CONTENT_DISPOSITION,
                                                        "attachment; filename=\"externalbinarycontentpostcreate.txt\"")
-                                               .header("slug", info.getId())
+                                               .header(SLUG, info.getId())
                                                .body("TestString.")
                                                .when()
                                                .post(uri).asString();
@@ -98,7 +99,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
         final String resource = createRequest().header(CONTENT_DISPOSITION,
                                                        "attachment; filename=\"externalbinarycontentputcreate.txt\"")
-                                               .header("slug", info.getId())
+                                               .header(SLUG, info.getId())
                                                .body("TestString.")
                                                .when()
                                                .post(uri).asString();
@@ -128,14 +129,14 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final String resource1 = createRequest().header(CONTENT_DISPOSITION,
                                                         "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
-                                                .header("slug", info.getId())
+                                                .header(SLUG, info.getId())
                                                 .body("TestString1.")
                                                 .when()
                                                 .post(uri).asString();
 
         final String resource2 = createRequest().header(CONTENT_DISPOSITION,
                                                         "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
-                                                .header("slug", info.getId() + "-PutUpdate2")
+                                                .header(SLUG, info.getId() + "-PutUpdate2")
                                                 .body("TestString2.")
                                                 .when()
                                                 .post(uri).asString();
@@ -143,7 +144,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final Response resource = createRequest().contentType(
                                                          "message/external-body; access-type=URL; URL=\"" + resource1 +
                                                          "\"")
-                                                 .header("slug", info.getId() + "PutUpdate3")
+                                                 .header(SLUG, info.getId() + "PutUpdate3")
                                                  .when()
                                                  .post(uri);
         final String locationHeader = resource.getHeader("Location");
@@ -257,7 +258,7 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Response resource = createRequest().header(CONTENT_DISPOSITION,
                                                          "attachment; filename=\"checkUnsupportedMediaType.txt\"")
-                                                 .header("slug", info.getId())
+                                                 .header(SLUG, info.getId())
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -307,7 +308,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
         final Response resource = createRequest().header(CONTENT_DISPOSITION,
                                                          "attachment; filename=\"testExamtxtpost.txt\"")
-                                                 .header("slug", "External-Binary-Content-3.9-E1")
+                                                 .header(SLUG, "External-Binary-Content-3.9-E1")
                                                  .body("TestString.")
                                                  .when()
                                                  .post(uri);
@@ -324,7 +325,7 @@ public class ExternalBinaryContent extends AbstractTest {
         }
         final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"postCheckHeaders.txt\"")
-                                                     .header("slug", "External-Binary-Content-3.9-E2")
+                                                     .header(SLUG, "External-Binary-Content-3.9-E2")
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -378,7 +379,7 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Response resource =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"testExamtxt.txt\"")
-                           .header("slug", info.getId())
+                           .header(SLUG, info.getId())
                            .body("TestString.")
                            .when()
                            .post(uri);
@@ -401,14 +402,14 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Response exbcresource1 = createRequest().header(CONTENT_DISPOSITION,
                                                               "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
-                                                      .header("slug", info.getId())
+                                                      .header(SLUG, info.getId())
                                                       .body("TestString1.")
                                                       .when()
                                                       .post(uri);
 
         final Response exbcresource2 = createRequest().header(CONTENT_DISPOSITION,
                                                               "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
-                                                      .header("slug", info.getId())
+                                                      .header(SLUG, info.getId())
                                                       .body("TestString2.")
                                                       .when()
                                                       .post(uri);
@@ -470,7 +471,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"getCheckContentLocationHeader" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString1.")
                                                      .when()
                                                      .post(uri);
@@ -533,7 +534,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"headCheckContentLocationHeader" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -594,7 +595,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final String checksum = "md5";
         final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigest.txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -632,7 +633,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final String checksum = "md5";
         final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigestHead.txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -676,7 +677,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigestTwoSupported" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -724,7 +725,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestTwoSupportedHead" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -776,7 +777,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -827,7 +828,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -875,7 +876,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
                                                              "attachment; filename=\"respondWantDigestNonSupported" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);
@@ -917,7 +918,7 @@ public class ExternalBinaryContent extends AbstractTest {
                                                              "attachment; " +
                                                              "filename=\"respondWantDigestNonSupportedHead" +
                                                              ".txt\"")
-                                                     .header("slug", info.getId())
+                                                     .header(SLUG, info.getId())
                                                      .body("TestString.")
                                                      .when()
                                                      .post(uri);

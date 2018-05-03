@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,7 +66,7 @@ public abstract class TestSuiteGlobals {
                                         .auth().basic(user, pass)
                                         .contentType("text/turtle")
                                         .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                                        .header("slug", name)
+                                        .header(SLUG, name)
                                         .body(BASIC_CONTAINER_LINK_HEADER)
                                         .when()
                                         .post(baseurl);

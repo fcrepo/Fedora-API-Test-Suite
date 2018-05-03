@@ -19,6 +19,7 @@ package org.fcrepo.spec.testsuite.test;
 
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.test.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.FileNotFoundException;
@@ -66,7 +67,7 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
         final Response resource = createRequest()
             .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
-            .header("slug", info.getId())
+            .header(SLUG, info.getId())
             .body("TestString.")
             .when()
             .post(uri);
@@ -248,7 +249,7 @@ public class HttpPut extends AbstractTest {
         final Response resource = RestAssured.given()
                                              .auth().basic(this.username, this.password)
                                              .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
-                                             .header("slug", info.getId())
+                                             .header(SLUG, info.getId())
                                              .body("TestString.")
                                              .when()
                                              .post(uri);
@@ -282,7 +283,7 @@ public class HttpPut extends AbstractTest {
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
         final Response resource =
             createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\"")
-                           .header("slug", info.getId())
+                           .header(SLUG, info.getId())
                            .body("TestString.")
                            .when()
                            .post(uri);
@@ -314,7 +315,7 @@ public class HttpPut extends AbstractTest {
         final String checksum = "abc=abc";
         final Response resource = createRequest()
             .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
-            .header("slug", info.getId())
+            .header(SLUG, info.getId())
             .body("TestString.")
             .when()
             .post(uri);
