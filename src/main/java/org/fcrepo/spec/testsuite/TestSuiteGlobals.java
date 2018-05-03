@@ -166,7 +166,7 @@ public abstract class TestSuiteGlobals {
         final TreeMap<String, String[]> results = new TreeMap<>();
         addToResults(results, passed, "PASS");
         addToResults(results, skipped, "SKIPPED");
-        addToResults(results, failed, "FAILED");
+        addToResults(results, failed, "FAIL");
         return results;
     }
 
