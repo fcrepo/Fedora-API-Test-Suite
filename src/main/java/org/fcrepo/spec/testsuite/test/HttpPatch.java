@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.test;
 
+import static org.fcrepo.spec.testsuite.test.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.containsString;
 
@@ -92,10 +93,10 @@ public class HttpPatch extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info.getId(), BASIC_CONTAINER_BODY);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly("application/sparql-update")
+        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
             .config(RestAssured.config()
                                .encoderConfig(new EncoderConfig()
-                                                  .encodeContentTypeAs("application/sparql-update",
+                                                  .encodeContentTypeAs(APPLICATION_SPARQL_UPDATE,
                                                                        ContentType.TEXT))
                                .logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
@@ -152,10 +153,10 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly("application/sparql-update")
+        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
-                                                               "application/sparql-update",
+                                                               APPLICATION_SPARQL_UPDATE,
                                                                ContentType.TEXT))
                                .logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
@@ -183,10 +184,10 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly("application/sparql-update")
+        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
-                                                               "application/sparql-update",
+                                                               APPLICATION_SPARQL_UPDATE,
                                                                ContentType.TEXT))
                                .logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
@@ -215,10 +216,10 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly("application/sparql-update")
+        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
-                                                               "application/sparql-update",
+                                                               APPLICATION_SPARQL_UPDATE,
                                                                ContentType.TEXT))
                                .logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
@@ -254,9 +255,9 @@ public class HttpPatch extends AbstractTest {
         ps.append(body + "\n");
 
         final Response response =
-            createRequestAuthOnly("application/sparql-update")
+            createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
                 .config(RestAssured.config().encoderConfig(new EncoderConfig().encodeContentTypeAs(
-                    "application/sparql-update",
+                    APPLICATION_SPARQL_UPDATE,
                     ContentType.TEXT)))
                 .body(body)
                 .when()
@@ -307,10 +308,10 @@ public class HttpPatch extends AbstractTest {
         final String locationHeader = getLocation(container);
         createBasicContainer(locationHeader, info.getId(), BASIC_CONTAINER_BODY);
 
-        createRequestAuthOnly("application/sparql-update")
+        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
-                                                               "application/sparql-update",
+                                                               APPLICATION_SPARQL_UPDATE,
                                                                ContentType.TEXT))
                                .logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
@@ -339,10 +340,10 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly("application/sparql-update")
+        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
             .config(RestAssured.config().encoderConfig(new EncoderConfig()
                                                            .encodeContentTypeAs(
-                                                               "application/sparql-update",
+                                                               APPLICATION_SPARQL_UPDATE,
                                                                ContentType.TEXT))
                                .logConfig(new LogConfig().defaultStream(ps)))
             .log().all()
