@@ -25,6 +25,7 @@ import java.io.PrintStream;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.annotations.AfterMethod;
@@ -123,15 +124,33 @@ public class AbstractTest {
     }
 
     protected Response createBasicContainer(final String uri, final String slug, final String body) {
+        return createRequest(slug, "text/turtle")
+            .header("Link", BASIC_CONTAINER_LINK_HEADER)
+            .body(body)
+            .when()
+            .post(uri);
+    }
+
+    protected RequestSpecification createRequest() {
+        return createRequestAuthOnly().config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+                                      .log().all();
+    }
+
+    protected RequestSpecification createRequest(final String slug, final String contentType) {
+        return createRequest().header("slug", slug).contentType(contentType);
+    }
+
+    protected RequestSpecification createRequestAuthOnly() {
         return RestAssured.given()
-                          .auth().basic(this.username, this.password)
-                          .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                          .contentType("text/turtle")
-                          .header("Link", BASIC_CONTAINER_LINK_HEADER)
-                          .header("slug", slug)
-                          .body(body)
-                          .log().all()
-                          .when()
-                          .post(uri);
+                          .auth().basic(this.username, this.password);
+    }
+
+    protected RequestSpecification createRequestAuthOnly(final String contentType) {
+        return createRequestAuthOnly().contentType(contentType);
+    }
+
+    protected Response doGet(final String uri) {
+        return createRequest().when()
+                              .get(uri);
     }
 }

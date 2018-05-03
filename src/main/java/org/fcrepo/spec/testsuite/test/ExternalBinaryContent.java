@@ -66,25 +66,19 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + "of message/external-body and"
                                         + " access-type parameter of url.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final String resource = RestAssured.given()
-                                           .auth().basic(this.username, this.password)
-                                           .header("Content-Disposition",
-                                                   "attachment; filename=\"externalbinarycontentpostcreate.txt\"")
-                                           .header("slug", "External-Binary-Content-3.9-A-PostCreate")
-                                           .body("TestString.")
-                                           .when()
-                                           .post(uri).asString();
+        final String resource = createRequest().header("Content-Disposition",
+                                                       "attachment; filename=\"externalbinarycontentpostcreate.txt\"")
+                                               .header("slug", info.getId())
+                                               .body("TestString.")
+                                               .when()
+                                               .post(uri).asString();
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource + "\"")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(201);
+        createRequest().header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource + "\"")
+                       .when()
+                       .post(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(201);
 
     }
 
@@ -101,25 +95,19 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + "of message/external-body and"
                                         + " access-type parameter of url.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final String resource = RestAssured.given()
-                                           .auth().basic(this.username, this.password)
-                                           .header("Content-Disposition",
-                                                   "attachment; filename=\"externalbinarycontentputcreate.txt\"")
-                                           .header("slug", info.getId())
-                                           .body("TestString.")
-                                           .when()
-                                           .post(uri).asString();
+        final String resource = createRequest().header("Content-Disposition",
+                                                       "attachment; filename=\"externalbinarycontentputcreate.txt\"")
+                                               .header("slug", info.getId())
+                                               .body("TestString.")
+                                               .when()
+                                               .post(uri).asString();
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource + "\"")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(201);
+        createRequest().header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource + "\"")
+                       .when()
+                       .put(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(201);
 
     }
 
@@ -137,43 +125,33 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + " access-type parameter of url.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String resource1 = RestAssured.given()
-                                            .auth().basic(this.username, this.password)
-                                            .header("Content-Disposition",
-                                                    "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
-                                            .header("slug", info.getId())
-                                            .body("TestString1.")
-                                            .when()
-                                            .post(uri).asString();
+        final String resource1 = createRequest().header("Content-Disposition",
+                                                        "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
+                                                .header("slug", info.getId())
+                                                .body("TestString1.")
+                                                .when()
+                                                .post(uri).asString();
 
-        final String resource2 = RestAssured.given()
-                                            .auth().basic(this.username, this.password)
-                                            .header("Content-Disposition",
-                                                    "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
-                                            .header("slug", info.getId() + "-PutUpdate2")
-                                            .body("TestString2.")
-                                            .when()
-                                            .post(uri).asString();
+        final String resource2 = createRequest().header("Content-Disposition",
+                                                        "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
+                                                .header("slug", info.getId() + "-PutUpdate2")
+                                                .body("TestString2.")
+                                                .when()
+                                                .post(uri).asString();
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" + resource1 +
-                                                     "\"")
-                                             .header("slug", info.getId() + "PutUpdate3")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" + resource1 +
+                                                         "\"")
+                                                 .header("slug", info.getId() + "PutUpdate3")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource2 + "\"")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(204);
+        createRequest().header("Content-Type", "message/external-body; access-type=URL; URL=\"" + resource2 + "\"")
+                       .when()
+                       .put(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(204);
 
     }
 
@@ -193,15 +171,11 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .get(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("Accept-Post", containsString("access-type=URL"));
+        createRequest().when()
+                       .get(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("Accept-Post", containsString("access-type=URL"));
 
     }
 
@@ -225,17 +199,13 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + " with HTTP 415.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Type", "message/external-body; access-type=abc;"
-                                           + " NAME=\"/some/file\"; site=\"example.com\"")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(415);
+        createRequest().header("Content-Type", "message/external-body; access-type=abc;"
+                                               + " NAME=\"/some/file\"; site=\"example.com\"")
+                       .when()
+                       .post(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(415);
 
     }
 
@@ -259,17 +229,13 @@ public class ExternalBinaryContent extends AbstractTest {
                                         + " with HTTP 415.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Type",
-                           "message/external-body; access-type=abc; NAME=\"/some/file\"; site=\"example.com\"")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .put(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(415);
+        createRequest().header("Content-Type",
+                               "message/external-body; access-type=abc; NAME=\"/some/file\"; site=\"example.com\"")
+                       .when()
+                       .put(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(415);
 
     }
 
@@ -288,24 +254,18 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "Media Type).",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Disposition",
-                                                     "attachment; filename=\"checkUnsupportedMediaType.txt\"")
-                                             .header("slug", info.getId())
-                                             .body("TestString.")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Disposition",
+                                                         "attachment; filename=\"checkUnsupportedMediaType.txt\"")
+                                                 .header("slug", info.getId())
+                                                 .body("TestString.")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        final Response res = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .header("Content-Type",
-                                                "message/external-body; access-type=URL; URL=\"" + locationHeader +
-                                                "\"")
-                                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                        .log().all()
-                                        .when()
-                                        .post(uri);
+        final Response res = createRequest().header("Content-Type",
+                                                    "message/external-body; access-type=URL; URL=\"" + locationHeader +
+                                                    "\"")
+                                            .when()
+                                            .post(uri);
 
         ps.append(res.getStatusLine() + "\n");
         final Headers headers = res.getHeaders();
@@ -344,15 +304,12 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "of the response headers required by the LDP-NR interaction model in this " +
                                         "specification.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                             .header("Content-Disposition",
-                                                     "attachment; filename=\"testExamtxtpost.txt\"")
-                                             .header("slug", "External-Binary-Content-3.9-E1")
-                                             .body("TestString.")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Disposition",
+                                                         "attachment; filename=\"testExamtxtpost.txt\"")
+                                                 .header("slug", "External-Binary-Content-3.9-E1")
+                                                 .body("TestString.")
+                                                 .when()
+                                                 .post(uri);
 
         ps.append(resource.getStatusLine() + "\n");
         final Headers headers = resource.getHeaders();
@@ -364,24 +321,18 @@ public class ExternalBinaryContent extends AbstractTest {
         for (Header h : headers) {
             h1.add(h.getName());
         }
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"postCheckHeaders.txt\"")
-                                                 .header("slug", "External-Binary-Content-3.9-E2")
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; filename=\"postCheckHeaders.txt\"")
+                                                     .header("slug", "External-Binary-Content-3.9-E2")
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader = exbcresource.getHeader("Location");
-        final Response res = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .header("Content-Type",
-                                                "message/external-body; access-type=URL; URL=\"" + locationHeader +
-                                                "\"")
-                                        .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                        .log().all()
-                                        .when()
-                                        .post(uri);
+        final Response res = createRequest().header("Content-Type",
+                                                    "message/external-body; access-type=URL; URL=\"" + locationHeader +
+                                                    "\"")
+                                            .when()
+                                            .post(uri);
 
         ps.append(res.getStatusLine() + "\n");
         final Headers headersext = res.getHeaders();
@@ -424,21 +375,17 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "specification.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Disposition", "attachment; filename=\"testExamtxt.txt\"")
-                                             .header("slug", info.getId())
-                                             .body("TestString.")
-                                             .when()
-                                             .post(uri);
+        final Response resource =
+            createRequest().header("Content-Disposition", "attachment; filename=\"testExamtxt.txt\"")
+                           .header("slug", info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(uri);
         final String locationHeader = resource.getHeader("Location");
-        final Response putup = RestAssured.given()
-                                          .auth().basic(this.username, this.password)
-                                          .header("Content-Disposition", "attachment; filename=\"putUpdatetext.txt\"")
-                                          .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                          .log().all()
-                                          .when()
-                                          .put(locationHeader);
+        final Response putup =
+            createRequest().header("Content-Disposition", "attachment; filename=\"putUpdatetext.txt\"")
+                           .when()
+                           .put(locationHeader);
 
         ps.append(putup.getStatusLine() + "\n");
         final Headers headers = putup.getHeaders();
@@ -451,44 +398,35 @@ public class ExternalBinaryContent extends AbstractTest {
             h1.add(h.getName());
         }
 
-        final Response exbcresource1 = RestAssured.given()
-                                                  .auth().basic(this.username, this.password)
-                                                  .header("Content-Disposition",
-                                                          "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
-                                                  .header("slug", info.getId())
-                                                  .body("TestString1.")
-                                                  .when()
-                                                  .post(uri);
+        final Response exbcresource1 = createRequest().header("Content-Disposition",
+                                                              "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
+                                                      .header("slug", info.getId())
+                                                      .body("TestString1.")
+                                                      .when()
+                                                      .post(uri);
 
-        final Response exbcresource2 = RestAssured.given()
-                                                  .auth().basic(this.username, this.password)
-                                                  .header("Content-Disposition",
-                                                          "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
-                                                  .header("slug", info.getId())
-                                                  .body("TestString2.")
-                                                  .when()
-                                                  .post(uri);
+        final Response exbcresource2 = createRequest().header("Content-Disposition",
+                                                              "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
+                                                      .header("slug", info.getId())
+                                                      .body("TestString2.")
+                                                      .when()
+                                                      .post(uri);
 
         final String locationHeader1 = exbcresource1.getHeader("Location");
         final String locationHeader2 = exbcresource2.getHeader("Location");
 
-        final Response resourceext = RestAssured.given()
-                                                .auth().basic(this.username, this.password)
-                                                .header("Content-Type",
-                                                        "message/external-body; access-type=URL; URL=\"" +
-                                                        locationHeader1 + "\"")
-                                                .when()
-                                                .post(uri);
+        final Response resourceext = createRequest().header("Content-Type",
+                                                            "message/external-body; access-type=URL; URL=\"" +
+                                                            locationHeader1 + "\"")
+                                                    .when()
+                                                    .post(uri);
         final String locationHeader3 = resourceext.getHeader("Location");
-        final Response resext = RestAssured.given()
-                                           .auth().basic(this.username, this.password)
-                                           .header("Content-Type",
-                                                   "message/external-body; access-type=URL; URL=\"" + locationHeader2
-                                                   + "\"")
-                                           .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                           .log().all()
-                                           .when()
-                                           .put(locationHeader3);
+        final Response resext = createRequest().header("Content-Type",
+                                                       "message/external-body; access-type=URL; URL=\"" +
+                                                       locationHeader2
+                                                       + "\"")
+                                               .when()
+                                               .put(locationHeader3);
 
         ps.append(resext.getStatusLine() + "\n");
         final Headers headersext = resext.getHeaders();
@@ -528,23 +466,20 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "representation of the location of the external content if the Fedora server " +
                                         "is proxying the content.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"getCheckContentLocationHeader.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString1.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; filename=\"getCheckContentLocationHeader" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString1.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
         ps.append("Request method:\tGET\n");
@@ -552,10 +487,7 @@ public class ExternalBinaryContent extends AbstractTest {
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"\n\n");
 
-        final Headers headers = RestAssured.given()
-                                           .auth().basic(this.username, this.password)
-                                           .when()
-                                           .get(locationHeader2).getHeaders();
+        final Headers headers = doGet(locationHeader2).getHeaders();
 
         for (Header h : headers) {
             ps.append(h.getName() + ": ");
@@ -597,23 +529,20 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "is proxying the content.",
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"headCheckContentLocationHeader.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; filename=\"headCheckContentLocationHeader" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
         ps.append("Request method:\tHEAD\n");
@@ -621,10 +550,8 @@ public class ExternalBinaryContent extends AbstractTest {
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"\n\n");
 
-        final Headers headers = RestAssured.given()
-                                           .auth().basic(this.username, this.password)
-                                           .when()
-                                           .head(locationHeader2).getHeaders();
+        final Headers headers = createRequest().when()
+                                               .head(locationHeader2).getHeaders();
 
         for (Header h : headers) {
             ps.append(h.getName() + ": ");
@@ -664,35 +591,27 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"respondWantDigest.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; filename=\"respondWantDigest.txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Want-Digest", checksum)
-                   .when()
-                   .get(locationHeader2)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("Digest", containsString("md5"));
+        createRequest().header("Want-Digest", checksum)
+                       .when()
+                       .get(locationHeader2)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("Digest", containsString("md5"));
 
     }
 
@@ -710,23 +629,19 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"respondWantDigestHead.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; filename=\"respondWantDigestHead.txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()
@@ -757,33 +672,25 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,sha";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"respondWantDigestTwoSupported.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; filename=\"respondWantDigestTwoSupported" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
-        final Response wantDigestResponse = RestAssured.given()
-                                                       .auth().basic(this.username, this.password)
-                                                       .config(RestAssured.config()
-                                                                          .logConfig(new LogConfig().defaultStream(ps)))
-                                                       .log().all()
-                                                       .header("Want-Digest", checksum)
-                                                       .when()
-                                                       .get(locationHeader2);
+        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
+                                                           .when()
+                                                           .get(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
@@ -812,34 +719,26 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,sha";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"respondWantDigestTwoSupportedHead" +
-                                                         ".txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; " +
+                                                             "filename=\"respondWantDigestTwoSupportedHead" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
-        final Response wantDigestResponse = RestAssured.given()
-                                                       .auth().basic(this.username, this.password)
-                                                       .config(RestAssured.config()
-                                                                          .logConfig(new LogConfig().defaultStream(ps)))
-                                                       .log().all()
-                                                       .header("Want-Digest", checksum)
-                                                       .when()
-                                                       .head(locationHeader2);
+        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
+                                                           .when()
+                                                           .head(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
@@ -872,34 +771,26 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5;q=0.3,sha;q=1";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; " +
-                                                         "filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; " +
+                                                             "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
-        final Response wantDigestResponse = RestAssured.given()
-                                                       .auth().basic(this.username, this.password)
-                                                       .config(RestAssured.config()
-                                                                          .logConfig(new LogConfig().defaultStream(ps)))
-                                                       .log().all()
-                                                       .header("Want-Digest", checksum)
-                                                       .when()
-                                                       .get(locationHeader2);
+        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
+                                                           .when()
+                                                           .get(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
@@ -931,34 +822,26 @@ public class ExternalBinaryContent extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5;q=0.3,sha;q=1";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; " +
-                                                         "filename=\"respondWantDigestTwoSupportedQvalueNonZero.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; " +
+                                                             "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
-        final Response wantDigestResponse = RestAssured.given()
-                                                       .auth().basic(this.username, this.password)
-                                                       .config(RestAssured.config()
-                                                                          .logConfig(new LogConfig().defaultStream(ps)))
-                                                       .log().all()
-                                                       .header("Want-Digest", checksum)
-                                                       .when()
-                                                       .head(locationHeader2);
+        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
+                                                           .when()
+                                                           .head(locationHeader2);
 
         final Headers headers = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
@@ -988,35 +871,28 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,abc";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"respondWantDigestNonSupported.txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; filename=\"respondWantDigestNonSupported" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Want-Digest", checksum)
-                   .when()
-                   .get(locationHeader2)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header("Digest", containsString("md5"));
+        createRequest().header("Want-Digest", checksum)
+                       .when()
+                       .get(locationHeader2)
+                       .then()
+                       .log().all()
+                       .statusCode(200).header("Digest", containsString("md5"));
 
     }
 
@@ -1036,24 +912,21 @@ public class ExternalBinaryContent extends AbstractTest {
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final String checksum = "md5,abc";
-        final Response exbcresource = RestAssured.given()
-                                                 .auth().basic(this.username, this.password)
-                                                 .header("Content-Disposition",
-                                                         "attachment; filename=\"respondWantDigestNonSupportedHead" +
-                                                         ".txt\"")
-                                                 .header("slug", info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
+        final Response exbcresource = createRequest().header("Content-Disposition",
+                                                             "attachment; " +
+                                                             "filename=\"respondWantDigestNonSupportedHead" +
+                                                             ".txt\"")
+                                                     .header("slug", info.getId())
+                                                     .body("TestString.")
+                                                     .when()
+                                                     .post(uri);
         final String locationHeader1 = exbcresource.getHeader("Location");
 
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header("Content-Type",
-                                                     "message/external-body; access-type=URL; URL=\"" +
-                                                     locationHeader1 + "\"")
-                                             .when()
-                                             .post(uri);
+        final Response resource = createRequest().header("Content-Type",
+                                                         "message/external-body; access-type=URL; URL=\"" +
+                                                         locationHeader1 + "\"")
+                                                 .when()
+                                                 .post(uri);
         final String locationHeader2 = resource.getHeader("Location");
 
         RestAssured.given()

@@ -19,8 +19,6 @@ package org.fcrepo.spec.testsuite.test;
 
 import java.io.FileNotFoundException;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -102,22 +100,16 @@ public class Container extends AbstractTest {
 
         final String portraitsLocationHeader = portraits.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("image/jpeg")
-                   .header("slug", "JpgPortrait")
-                   .when()
-                   .post(portraitsLocationHeader).asString();
+        createRequest("JpgPortrait", "image/jpeg")
+            .when()
+            .post(portraitsLocationHeader).asString();
 
-        final Response resP = RestAssured.given()
-                                         .auth().basic(this.username, this.password)
-                                         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                         .log().all()
-                                         .header("Prefer",
-                                                 "return=representation; include=\"http://www" +
-                                                 ".w3.org/ns/ldp#PreferContainment\"")
-                                         .when()
-                                         .get(portraitsLocationHeader);
+        final Response resP = createRequest()
+            .header("Prefer",
+                    "return=representation; include=\"http://www" +
+                    ".w3.org/ns/ldp#PreferContainment\"")
+            .when()
+            .get(portraitsLocationHeader);
 
         ps.append(resP.getStatusLine().toString() + "\n");
         final Headers headers = resP.getHeaders();
@@ -151,52 +143,24 @@ public class Container extends AbstractTest {
                                         "LDP Containers must distinguish [membership] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
-        final Response pythagoras =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .contentType("text/turtle")
-                       .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                       .header("slug", info.getId())
-                       .when()
-                       .body(pythagorasContainer)
-                       .post(uri);
+        final Response pythagoras = createBasicContainer(uri, info.getId(), pythagorasContainer);
         final String pythagorasLocationHeader = pythagoras.getHeader("Location");
+        final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).asString();
 
-        final String person = RestAssured.given()
-                                         .auth().basic(this.username, this.password)
-                                         .contentType("text/turtle")
-                                         .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                                         .header("slug", "person")
-                                         .when()
-                                         .body(personBody)
-                                         .post(pythagorasLocationHeader).asString();
+        final Response portraits =
+            createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
 
-        final Response portraits = RestAssured.given()
-                                              .auth().basic(this.username, this.password)
-                                              .contentType("text/turtle")
-                                              .header("Link", Constants.BASIC_CONTAINER_LINK_HEADER)
-                                              .header("slug", "portraits")
-                                              .when()
-                                              .body(portraitContainer.replace("%person%", person))
-                                              .post(pythagorasLocationHeader);
         final String portraitsLocationHeader = portraits.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("image/jpeg")
-                   .header("slug", "JpgPortrait")
-                   .when()
-                   .post(portraitsLocationHeader).asString();
+        createRequest("JpgPortrait", "image/jpeg")
+            .when()
+            .post(portraitsLocationHeader).asString();
 
-        final Response resP = RestAssured.given()
-                                         .auth().basic(this.username, this.password)
-                                         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                         .log().all()
-                                         .header("Prefer",
-                                                 "return=representation; include=\"http://www" +
-                                                 ".w3.org/ns/ldp#PreferMembership\"")
-                                         .when()
-                                         .get(portraitsLocationHeader);
+        final Response resP = createRequest().header("Prefer",
+                                                     "return=representation; include=\"http://www" +
+                                                     ".w3.org/ns/ldp#PreferMembership\"")
+                                             .when()
+                                             .get(portraitsLocationHeader);
 
         ps.append(resP.getStatusLine().toString() + "\n");
         final Headers headers = resP.getHeaders();
@@ -236,22 +200,15 @@ public class Container extends AbstractTest {
             createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
         final String portraitsLocationHeader = portraits.getHeader("Location");
 
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .contentType("image/jpeg")
-                   .header("slug", "JpgPortrait")
-                   .when()
-                   .post(portraitsLocationHeader).asString();
+        createRequest("JpgPortrait", "image/jpeg")
+            .when()
+            .post(portraitsLocationHeader).asString();
 
-        final Response resP = RestAssured.given()
-                                         .auth().basic(this.username, this.password)
-                                         .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                         .log().all()
-                                         .header("Prefer",
-                                                 "return=representation; include=\"http://www" +
-                                                 ".w3.org/ns/ldp#PreferMinimalContainer\"")
-                                         .when()
-                                         .get(portraitsLocationHeader);
+        final Response resP = createRequest().header("Prefer",
+                                                     "return=representation; include=\"http://www" +
+                                                     ".w3.org/ns/ldp#PreferMinimalContainer\"")
+                                             .when()
+                                             .get(portraitsLocationHeader);
 
         ps.append(resP.getStatusLine().toString() + "\n");
         final Headers headers = resP.getHeaders();

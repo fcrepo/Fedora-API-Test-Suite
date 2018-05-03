@@ -21,8 +21,6 @@ import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -102,18 +100,14 @@ public class HttpPost extends AbstractTest {
                                         "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
                                         " must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
-                   .header("slug", info.getId())
-                   .body("TestString.")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(201);
+        createRequest().header("Content-Disposition", "attachment; filename=\"postNonRDFSource.txt\"")
+                       .header("slug", info.getId())
+                       .body("TestString.")
+                       .when()
+                       .post(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(201);
 
     }
 
@@ -130,18 +124,15 @@ public class HttpPost extends AbstractTest {
                                         " describing"
                                         + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
-                   .header("slug", info.getId())
-                   .body("TestString.")
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(201).header("Link", containsString("describedby"));
+        createRequest()
+            .header("Content-Disposition", "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
+            .header("slug", info.getId())
+            .body("TestString.")
+            .when()
+            .post(uri)
+            .then()
+            .log().all()
+            .statusCode(201).header("Link", containsString("describedby"));
 
     }
 
@@ -162,20 +153,16 @@ public class HttpPost extends AbstractTest {
                                         + "new LDP-NR must be rejected with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "md5=1234";
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Disposition",
-                           "attachment; filename=\"test1digesttext.txt\"")
-                   .header("slug", info.getId())
-                   .body("TestString.")
-                   .header("Digest", checksum)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(409);
+        createRequest().header("Content-Disposition",
+                               "attachment; filename=\"test1digesttext.txt\"")
+                       .header("slug", info.getId())
+                       .body("TestString.")
+                       .header("Digest", checksum)
+                       .when()
+                       .post(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(409);
 
     }
 
@@ -193,20 +180,16 @@ public class HttpPost extends AbstractTest {
                                         + "should be rejected with a 400 Bad Request response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "abc=abc";
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .header("Content-Disposition",
-                           "attachment; filename=\"test1digesttext2.txt\"")
-                   .header("slug", info.getId())
-                   .body("TestString.")
-                   .header("Digest", checksum)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .post(uri)
-                   .then()
-                   .log().all()
-                   .statusCode(400);
+        createRequest().header("Content-Disposition",
+                               "attachment; filename=\"test1digesttext2.txt\"")
+                       .header("slug", info.getId())
+                       .body("TestString.")
+                       .header("Digest", checksum)
+                       .when()
+                       .post(uri)
+                       .then()
+                       .log().all()
+                       .statusCode(400);
 
     }
 }

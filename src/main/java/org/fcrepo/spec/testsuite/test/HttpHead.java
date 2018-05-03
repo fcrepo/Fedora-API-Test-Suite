@@ -23,8 +23,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -67,15 +65,11 @@ public class HttpHead extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
         ;
         final String locationHeader = resource.getHeader("Location");
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .when()
-                   .head(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(200).assertThat().body(equalTo(""));
+        createRequest().when()
+                       .head(locationHeader)
+                       .then()
+                       .log().all()
+                       .statusCode(200).assertThat().body(equalTo(""));
 
     }
 
@@ -95,23 +89,15 @@ public class HttpHead extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-head",
                                         ps);
         final Response resource =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
-                       .header("slug", info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(uri);
+            createRequest().header("Content-Disposition", "attachment; filename=\"headerwantdigest.txt\"")
+                           .header("slug", info.getId())
+                           .body("TestString.")
+                           .when()
+                           .post(uri);
 
         final String locationHeader = resource.getHeader("Location");
-        final Response resget =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .log().all()
-                       .when()
-                       .get(locationHeader);
+        final Response resget = createRequest().when()
+                                               .get(locationHeader);
 
         ps.append(resget.getStatusLine().toString() + "\n");
         final Headers headersGet = resget.getHeaders();
@@ -120,13 +106,8 @@ public class HttpHead extends AbstractTest {
             ps.append(h.getValue().toString() + "\n");
         }
 
-        final Response reshead =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                       .log().all()
-                       .when()
-                       .head(locationHeader);
+        final Response reshead = createRequest().when()
+                                                .head(locationHeader);
         ps.append(reshead.getStatusLine().toString() + "\n");
         final Headers headers = reshead.getHeaders();
         for (Header h : headers) {
@@ -173,10 +154,9 @@ public class HttpHead extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = resource.getHeader("Location");
-        final Response resget = RestAssured.given()
-                                           .auth().basic(this.username, this.password)
-                                           .when()
-                                           .get(locationHeader);
+        final Response resget = createRequest()
+            .when()
+            .get(locationHeader);
 
         ps.append(resget.getStatusLine().toString() + "\n");
         final Headers headersGet = resget.getHeaders();
@@ -192,12 +172,8 @@ public class HttpHead extends AbstractTest {
             }
         }
 
-        final Response reshead = RestAssured.given()
-                                            .auth().basic(this.username, this.password)
-                                            .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                                            .log().all()
-                                            .when()
-                                            .head(locationHeader);
+        final Response reshead = createRequest().when()
+                                                .head(locationHeader);
 
         ps.append(reshead.getStatusLine().toString() + "\n");
         final Headers headershead = reshead.getHeaders();
