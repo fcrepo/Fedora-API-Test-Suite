@@ -36,8 +36,8 @@
     </groups>
 
     <classes>
-      <class name="org.fcrepo.spec.testsuite.test.SetUpSuite"/>
-      <class name="org.fcrepo.spec.testsuite.test.Container">
+      <class name="org.fcrepo.spec.testsuite.SetUpSuite"/>
+      <class name="org.fcrepo.spec.testsuite.crud.Container">
         <!--Specify methods to 'include' or 'exclude'-->
         <!--
         <methods>
@@ -46,15 +46,15 @@
         </methods>
         -->
       </class>
-      <class name="org.fcrepo.spec.testsuite.test.Ldpnr"/>
-      <class name="org.fcrepo.spec.testsuite.test.HttpGet"/>
-      <class name="org.fcrepo.spec.testsuite.test.HttpHead"/>
-      <class name="org.fcrepo.spec.testsuite.test.HttpOptions"/>
-      <class name="org.fcrepo.spec.testsuite.test.HttpPost"/>
-      <class name="org.fcrepo.spec.testsuite.test.HttpPut"/>
-      <class name="org.fcrepo.spec.testsuite.test.HttpPatch"/>
-      <class name="org.fcrepo.spec.testsuite.test.HttpDelete"/>
-      <class name="org.fcrepo.spec.testsuite.test.ExternalBinaryContent"/>
+      <class name="org.fcrepo.spec.testsuite.crud.Ldpnr"/>
+      <class name="org.fcrepo.spec.testsuite.crud.HttpGet"/>
+      <class name="org.fcrepo.spec.testsuite.crud.HttpHead"/>
+      <class name="org.fcrepo.spec.testsuite.crud.HttpOptions"/>
+      <class name="org.fcrepo.spec.testsuite.crud.HttpPost"/>
+      <class name="org.fcrepo.spec.testsuite.crud.HttpPut"/>
+      <class name="org.fcrepo.spec.testsuite.crud.HttpPatch"/>
+      <class name="org.fcrepo.spec.testsuite.crud.HttpDelete"/>
+      <class name="org.fcrepo.spec.testsuite.crud.ExternalBinaryContent"/>
     </classes>
 
   </test>

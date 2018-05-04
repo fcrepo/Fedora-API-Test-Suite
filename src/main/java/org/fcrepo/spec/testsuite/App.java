@@ -43,7 +43,7 @@ public class App {
     }
 
     /**
-     * Main configuration and execution of test cases
+     * Main configuration and execution of crud cases
      *
      * @param args
      */

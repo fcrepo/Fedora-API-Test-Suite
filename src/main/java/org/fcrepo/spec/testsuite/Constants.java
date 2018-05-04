@@ -15,8 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.fcrepo.spec.testsuite.test;
+package org.fcrepo.spec.testsuite;
 
 /**
  * @author Daniel Bernstein
@@ -29,7 +28,7 @@ public class Constants {
                                                       + "<> a ldp:Container, ldp:BasicContainer;"
                                                       + "dcterms:title 'Container class Container' ;"
                                                       +
-                                                      "dcterms:description 'This is a test container for the Fedora " +
+                                                      "dcterms:description 'This is a crud container for the Fedora " +
                                                       "API Test Suite.' . ";
 
     public static final String CONTENT_DISPOSITION = "Content-Disposition";

@@ -17,8 +17,8 @@
  */
 package org.fcrepo.spec.testsuite;
 
-import static org.fcrepo.spec.testsuite.test.Constants.BASIC_CONTAINER_LINK_HEADER;
-import static org.fcrepo.spec.testsuite.test.Constants.SLUG;
+import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import java.io.File;
 import java.io.FileNotFoundException;

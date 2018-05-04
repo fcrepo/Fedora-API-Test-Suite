@@ -55,7 +55,7 @@ public class TestInfo {
 
         if (TEST_INFO.containsKey(title)) {
             throw new RuntimeException(
-                "The test titles must be unique across the test suite: " + title + " is duplicated.");
+                "The crud titles must be unique across the crud suite: " + title + " is duplicated.");
         }
         TEST_INFO.put(title, this);
     }
