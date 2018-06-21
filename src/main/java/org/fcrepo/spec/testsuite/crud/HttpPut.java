@@ -173,7 +173,7 @@ public class HttpPut extends AbstractTest {
         final TestInfo info = setupTest("3.6.1-C", "httpPutUpdateDisallowedTriplesResponse",
                                         "The server must provide a corresponding response body containing information "
                                         + "about which statements could"
-                                        + " not be persisted. ([LDP] 4.2.4.4 shouldbecomes must).",
+                                        + " not be persisted. ([LDP] 4.2.4.4 should becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
