@@ -292,14 +292,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-E
+     * 3.9-E-1
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postCheckHeaders(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-E", "postCheckHeaders",
+        final TestInfo info = setupTest("3.9-E-1", "postCheckHeaders",
                                         "Fedora servers receiving requests that would create or update an LDP-NR with" +
                                         " Content-Type: "
                                         +
@@ -362,14 +362,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-E
+     * 3.9-E-2
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void putUpdateCheckHeaders(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-E", "putUpdateCheckHeaders",
+        final TestInfo info = setupTest("3.9-E-2", "putUpdateCheckHeaders",
                                         "Fedora servers receiving requests that would create or update an LDP-NR with" +
                                         " Content-Type: "
                                         +
@@ -456,14 +456,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-F
+     * 3.9-F-1
      *
      * @param uri
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void getCheckContentLocationHeader(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-F", "getCheckContentLocationHeader",
+        final TestInfo info = setupTest("3.9-F-1", "getCheckContentLocationHeader",
                                         "GET and HEAD responses for any external LDP-NR should include a " +
                                         "Content-Location header with a URI  "
                                         +
@@ -518,14 +518,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-F
+     * 3.9-F-2
      *
      * @param uri
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void headCheckContentLocationHeader(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-F", "headCheckContentLocationHeader",
+        final TestInfo info = setupTest("3.9-F-2", "headCheckContentLocationHeader",
                                         "GET and HEAD responses for any external LDP-NR should include a " +
                                         "Content-Location header with a URI  "
                                         +
