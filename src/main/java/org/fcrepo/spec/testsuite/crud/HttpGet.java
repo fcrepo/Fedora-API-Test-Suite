@@ -56,19 +56,14 @@ public class HttpGet extends AbstractTest {
      *
      * @param uri
      */
-    @Test(groups = {"MAY"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String uri) throws FileNotFoundException {
         final TestInfo info = setupTest("3.2.1-A", "additionalValuesForPreferHeader",
-                                        "In addition to the requirements of [LDP], an implementation may support the " +
-                                        "value "
-                                        +
-                                        "http://www.w3.org/ns/oa#PreferContainedDescriptions and should support the " +
-                                        "value "
-                                        +
-                                        "http://fedora.info/definitions/fcrepo#PreferInboundReferences for the Prefer" +
-                                        " header when making GET "
-                                        + "requests on LDPC resources.",
+                                        "In addition to the requirements of [LDP], an implementation ... " +
+                                        "should support the value " +
+                                        "http://fedora.info/definitions/fcrepo#PreferInboundReferences for the " +
+                                        "Prefer header when making GET requests on LDPC resources.",
                                         "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
@@ -80,9 +75,7 @@ public class HttpGet extends AbstractTest {
                        .get(locationHeader)
                        .then()
                        .log().all()
-                       .statusCode(200).header("preference-applied",
-                                               containsString(
-                                                   "http://fedora.info/definitions/fcrepo#PreferInboundReferences"));
+                       .statusCode(200).header("preference-applied", containsString("return=representation"));
 
     }
 
