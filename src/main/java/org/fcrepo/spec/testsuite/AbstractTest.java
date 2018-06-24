@@ -22,11 +22,18 @@ import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import java.io.PrintStream;
+import java.io.StringReader;
 
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -156,4 +163,30 @@ public class AbstractTest {
     protected String getLocation(final Response response) {
         return response.getHeader("Location");
     }
+
+    protected class TripleMatcher<T> extends BaseMatcher<T> {
+
+        private Statement triple;
+
+        public TripleMatcher(final String s, final String p, final String o) {
+            triple = ResourceFactory.createStatement(
+                    ResourceFactory.createResource(s),
+                    ResourceFactory.createProperty(p),
+                    ResourceFactory.createStringLiteral(o));
+        }
+
+        @Override
+        public boolean matches(final Object item) {
+            final Model model = ModelFactory.createDefaultModel();
+            model.read(new StringReader(item.toString()), "", "TURTLE");
+
+            return model.contains(triple);
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            description.appendText("To contain triple: ").appendText(triple.toString());
+        }
+    }
+
 }

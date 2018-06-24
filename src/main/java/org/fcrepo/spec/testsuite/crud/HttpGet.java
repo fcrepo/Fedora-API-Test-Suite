@@ -80,6 +80,36 @@ public class HttpGet extends AbstractTest {
     }
 
     /**
+     * 3.2.1-B
+     *
+     * @param uri
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void additionalValuesForPreferHeaderContainedDescriptions(final String uri) throws FileNotFoundException {
+        final TestInfo info = setupTest("3.2.1-B", "additionalValuesForPreferHeaderContainedDescriptions",
+                "In addition to the requirements of [LDP], an implementation ... " +
+                        "may support the value " +
+                        "http://www.w3.org/ns/oa#PreferContainedDescriptions for the " +
+                        "Prefer header when making GET requests on LDPC resources.",
+                "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
+                ps);
+        final Response resource = createBasicContainer(uri, info);
+        final String locationHeader = getLocation(resource);
+
+        final Response child = createBasicContainer(locationHeader, "child", Container.personBody);
+
+        createRequest().header("Prefer", "return=representation; "
+                + "include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\"")
+                .when()
+                .get(locationHeader)
+                .then()
+                .log().all()
+                .statusCode(200).header("preference-applied", containsString("return=representation"))
+                .body(new TripleMatcher(getLocation(child), "http://xmlns.com/foaf/0.1/name", "Pythagoras"));
+    }
+
+    /**
      * 3.2.2-A
      *
      * @param uri

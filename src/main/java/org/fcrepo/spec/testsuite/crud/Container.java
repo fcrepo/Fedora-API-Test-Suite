@@ -33,17 +33,17 @@ import org.testng.annotations.Test;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class Container extends AbstractTest {
-    public String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
+    public static String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
                                         + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
                                         + "<> dc:title 'Pythagoras Collection'; "
                                         + "dc:abstract 'A collection of materials and facts about Pythagoras' .";
-    public String personBody = "@prefix dc: <http://purl.org/dc/terms/> . "
+    public static String personBody = "@prefix dc: <http://purl.org/dc/terms/> . "
                                + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
                                + "<> a foaf:Person; "
                                + "foaf:name \"Pythagoras\" ; "
                                + "foaf:based_near \"Croton\" ; "
                                + "foaf:interest [ dc:title \"Geometry\" ] .";
-    public String portraitContainer = "@prefix ldp: <http://www.w3.org/ns/ldp#> . "
+    public static String portraitContainer = "@prefix ldp: <http://www.w3.org/ns/ldp#> . "
                                       + "@prefix dcterms: <http://purl.org/dc/terms/> . "
                                       + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
                                       + "<> a ldp:DirectContainer; "
