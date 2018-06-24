@@ -103,12 +103,13 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequest().header("Prefer", "return=minimal")
+        createRequest().header("Prefer", "return=representation; "
+                                         + "include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"")
                        .when()
                        .get(locationHeader)
                        .then()
                        .log().all()
-                       .statusCode(200).header("preference-applied", containsString("return=minimal"));
+                       .statusCode(200).header("preference-applied", containsString("return=representation"));
 
     }
 
