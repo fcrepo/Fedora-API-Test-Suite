@@ -23,6 +23,8 @@ import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
 import java.io.FileNotFoundException;
+import java.net.URI;
+import java.util.List;
 
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
@@ -36,6 +38,8 @@ import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
+import javax.ws.rs.core.Link;
 
 /**
  * @author Jorge Abrego, Fernando Cardoza
@@ -179,11 +183,25 @@ public class HttpGet extends AbstractTest {
                            .when()
                            .post(uri);
         final String locationHeader = getLocation(resource);
+
+        // Get Binary description (from community impl: /fcr:metadata)
+        final Response getResponse = doGet(locationHeader);
+        final List<Header> linkHeaders = getResponse.getHeaders().getList("Link");
+        URI description = null;
+        for (final Header header : linkHeaders) {
+            final Link link = Link.valueOf(header.getValue());
+            if (link.getRel().equals("describedby")) {
+                description = link.getUri();
+                break;
+            }
+        }
+        Assert.assertNotNull(description, "Description is null!");
+
         createRequest().when()
-                       .get(locationHeader + "/fcr:metadata")
+                       .get(description)
                        .then()
                        .log().all()
-                       .statusCode(200).header("Link", containsString("describes"));
+                       .statusCode(200).header("Link", containsString("<" + locationHeader + ">; rel=\"describes\""));
 
     }
 
