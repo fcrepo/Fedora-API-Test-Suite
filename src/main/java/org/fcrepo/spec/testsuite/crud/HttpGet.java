@@ -29,6 +29,8 @@ import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
@@ -67,15 +69,26 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
-
         final String locationHeader = getLocation(resource);
+
+        // Create second resource that references first resource.
+        final Response referrer = createBasicContainer(
+                uri, info, "<> <http://purl.org/dc/terms/isPartOf> <" + locationHeader + "> ;");
+
+        // Triple expected in result body
+        final Statement triple = ResourceFactory.createStatement(
+                ResourceFactory.createResource(getLocation(referrer)),
+                ResourceFactory.createProperty("http://purl.org/dc/terms/isPartOf"),
+                ResourceFactory.createResource(locationHeader));
+
         createRequest().header("Prefer", "return=representation; "
                                          + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
                        .when()
                        .get(locationHeader)
                        .then()
                        .log().all()
-                       .statusCode(200).header("preference-applied", containsString("return=representation"));
+                       .statusCode(200).header("preference-applied", containsString("return=representation"))
+                       .body(new TripleMatcher(triple));
 
     }
 
@@ -99,6 +112,12 @@ public class HttpGet extends AbstractTest {
 
         final Response child = createBasicContainer(locationHeader, "child", Container.personBody);
 
+        // Triple expected in result body
+        final Statement triple = ResourceFactory.createStatement(
+                ResourceFactory.createResource(getLocation(child)),
+                ResourceFactory.createProperty("http://xmlns.com/foaf/0.1/name"),
+                ResourceFactory.createStringLiteral("Pythagoras"));
+
         createRequest().header("Prefer", "return=representation; "
                 + "include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\"")
                 .when()
@@ -106,7 +125,7 @@ public class HttpGet extends AbstractTest {
                 .then()
                 .log().all()
                 .statusCode(200).header("preference-applied", containsString("return=representation"))
-                .body(new TripleMatcher(getLocation(child), "http://xmlns.com/foaf/0.1/name", "Pythagoras"));
+                .body(new TripleMatcher(triple));
     }
 
     /**

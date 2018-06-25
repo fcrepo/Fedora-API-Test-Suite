@@ -30,7 +30,6 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -168,11 +167,8 @@ public class AbstractTest {
 
         private Statement triple;
 
-        public TripleMatcher(final String s, final String p, final String o) {
-            triple = ResourceFactory.createStatement(
-                    ResourceFactory.createResource(s),
-                    ResourceFactory.createProperty(p),
-                    ResourceFactory.createStringLiteral(o));
+        public TripleMatcher(final Statement t) {
+            triple = t;
         }
 
         @Override
