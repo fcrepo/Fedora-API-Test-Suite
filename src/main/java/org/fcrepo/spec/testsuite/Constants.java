@@ -31,6 +31,14 @@ public class Constants {
                                                       "dcterms:description 'This is a crud container for the Fedora " +
                                                       "API Test Suite.' . ";
 
+    public static final String DIRECT_CONTAINER_BODY = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+            + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+            + "<> dcterms:title 'A Direct Container' ; "
+            + "dcterms:description 'This is a direct container for the Fedora ' ;"
+            + "ldp:membershipResource <%membershipResource%> ;"
+            + "ldp:hasMemberRelation dcterms:hasPart ." ;
+
+
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
     public static final String SLUG = "slug";
     public static final String DIGEST = "Digest";

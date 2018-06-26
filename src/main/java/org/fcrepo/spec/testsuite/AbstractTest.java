@@ -33,6 +33,7 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -136,6 +137,19 @@ public class AbstractTest {
             .post(uri);
     }
 
+    protected Response createDirectContainer(final String uri, final String body) {
+        final Response response = createRequestAuthOnly()
+                .header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\"")
+                .header("Content-Type", "text/turtle")
+                .body(body)
+                .when()
+                .post(uri);
+
+        Assert.assertEquals(response.getStatusCode(), 201);
+
+        return response;
+    }
+
     protected RequestSpecification createRequest() {
         return createRequestAuthOnly().config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
                                       .log().all();
@@ -165,10 +179,16 @@ public class AbstractTest {
 
     protected class TripleMatcher<T> extends BaseMatcher<T> {
 
-        private Statement triple;
+        private final Statement triple;
+        private final boolean expectMatch;
 
         public TripleMatcher(final Statement t) {
+            this(t, true);
+        }
+
+        public TripleMatcher(final Statement t, final boolean expect) {
             triple = t;
+            expectMatch = expect;
         }
 
         @Override
@@ -176,12 +196,13 @@ public class AbstractTest {
             final Model model = ModelFactory.createDefaultModel();
             model.read(new StringReader(item.toString()), "", "TURTLE");
 
-            return model.contains(triple);
+            return model.contains(triple) == expectMatch;
         }
 
         @Override
         public void describeTo(final Description description) {
-            description.appendText("To contain triple: ").appendText(triple.toString());
+            final String msg = expectMatch ? "To contain triple: " : "Not to contain triple: ";
+            description.appendText(msg).appendText(triple.toString());
         }
     }
 
