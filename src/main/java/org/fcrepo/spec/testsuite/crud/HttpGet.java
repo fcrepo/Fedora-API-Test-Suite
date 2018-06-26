@@ -77,7 +77,7 @@ public class HttpGet extends AbstractTest {
 
         // Create second resource that references first resource.
         final Response referrer = createBasicContainer(
-                uri, info, "<> <http://purl.org/dc/terms/isPartOf> <" + locationHeader + "> ;");
+                uri, info, "<> <http://purl.org/dc/terms/isPartOf> <" + locationHeader + "> .");
 
         // Triple expected in result body
         final Statement triple = ResourceFactory.createStatement(
