@@ -860,7 +860,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-J-1
+     * 3.9.3-A
      *
      * @param uri
      */
@@ -869,7 +869,7 @@ public class ExternalBinaryContent extends AbstractTest {
     public void respondWantDigestNonSupportedExternalBinaryContent(final String uri)
         throws FileNotFoundException {
         final TestInfo info =
-            setupTest("3.9-J-1", "respondWantDigestNonSupportedExternalBinaryContent",
+            setupTest("3.9.3-A", "respondWantDigestNonSupportedExternalBinaryContent",
                       "GET and HEAD requests to any external LDP-NR must correctly respond to the "
                       + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
@@ -901,7 +901,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-J-2
+     * 3.9.3-B
      *
      * @param uri
      */
@@ -910,7 +910,7 @@ public class ExternalBinaryContent extends AbstractTest {
     public void respondWantDigestNonSupportedExternalBinaryContentHead(final String uri)
         throws FileNotFoundException {
         final TestInfo info =
-            setupTest("3.9-J-2", "respondWantDigestNonSupportedExternalBinaryContentHead",
+            setupTest("3.9.3-B", "respondWantDigestNonSupportedExternalBinaryContentHead",
                       "GET and HEAD requests to any external LDP-NR must correctly respond to the "
                       + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
