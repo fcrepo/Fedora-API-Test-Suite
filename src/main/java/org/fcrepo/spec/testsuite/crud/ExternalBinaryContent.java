@@ -58,14 +58,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-A PostCreate
+     * 3.9-A-1 PostCreate
      *
      * @param uri
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-A", "postCreateExternalBinaryContent",
+        final TestInfo info = setupTest("3.9-A-1", "postCreateExternalBinaryContent",
                                         "Fedora servers should support the creation of LDP-NRs with Content-Type "
                                         + "of message/external-body and"
                                         + " access-type parameter of url.",
@@ -87,14 +87,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-A PutCreate
+     * 3.9-A-2 PutCreate
      *
      * @param uri
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-A", "putCreateExternalBinaryContent",
+        final TestInfo info = setupTest("3.9-A-2", "putCreateExternalBinaryContent",
                                         "Fedora servers should support the creation of LDP-NRs with Content-Type "
                                         + "of message/external-body and"
                                         + " access-type parameter of url.",
@@ -116,14 +116,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-A PutUpdate
+     * 3.9-A-3 PutUpdate
      *
      * @param uri
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void putUpdateExternalBinaryContent(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-A", "putUpdateExternalBinaryContent",
+        final TestInfo info = setupTest("3.9-A-3", "putUpdateExternalBinaryContent",
                                         "Fedora servers should support the creation of LDP-NRs with Content-Type "
                                         + "of message/external-body and"
                                         + " access-type parameter of url.",
@@ -184,14 +184,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-C
+     * 3.9-C-1
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-C", "postCheckUnsupportedMediaType",
+        final TestInfo info = setupTest("3.9-C-1", "postCheckUnsupportedMediaType",
                                         "Fedora servers receiving requests that would create or update a LDP-NR with "
                                         + "a message/external-body with an "
                                         +
@@ -214,14 +214,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-C
+     * 3.9-C-2
      *
      * @param uri
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void putCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
-        final TestInfo info = setupTest("3.9-C", "putCheckUnsupportedMediaType",
+        final TestInfo info = setupTest("3.9-C-2", "putCheckUnsupportedMediaType",
                                         "Fedora servers receiving requests that would create or update a LDP-NR with a "
                                         + "message/external-body with an "
                                         +
@@ -860,7 +860,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-J-2
+     * 3.9-J-1
      *
      * @param uri
      */
@@ -869,7 +869,7 @@ public class ExternalBinaryContent extends AbstractTest {
     public void respondWantDigestNonSupportedExternalBinaryContent(final String uri)
         throws FileNotFoundException {
         final TestInfo info =
-            setupTest("3.9-J-2", "respondWantDigestNonSupportedExternalBinaryContent",
+            setupTest("3.9-J-1", "respondWantDigestNonSupportedExternalBinaryContent",
                       "GET and HEAD requests to any external LDP-NR must correctly respond to the "
                       + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
                       "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
