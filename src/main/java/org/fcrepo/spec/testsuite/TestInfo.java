@@ -30,11 +30,11 @@ public class TestInfo {
 
     private final static Map<String, TestInfo> TEST_INFO = new HashMap<>();
 
-    private String id;
-    private Class testClass;
-    private String title;
-    private String description;
-    private String specLink;
+    private final String id;
+    private final Class testClass;
+    private final String title;
+    private final String description;
+    private final String specLink;
 
     /**
      * Default constructor

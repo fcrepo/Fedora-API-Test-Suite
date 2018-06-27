@@ -46,8 +46,8 @@ public class AbstractTest {
 
     protected PrintStream ps;
 
-    protected String username;
-    protected String password;
+    protected final String username;
+    protected final String password;
 
     /**
      * Constructor
@@ -85,34 +85,27 @@ public class AbstractTest {
 
     /**
      * A convenience method for creating TestInfo instances.
-     *
-     * @param id
-     * @param title
-     * @param description
-     * @param specLink
-     * @return
      */
-    protected TestInfo createTestInfo(final String id, final String title, final String description,
-                                      final String specLink) {
+    private TestInfo createTestInfo(final String id, final String title, final String description,
+                                    final String specLink) {
         return new TestInfo(id, getClass(), title, description, specLink);
     }
 
     /**
      * A convenience method for setup boilerplate
-     *
-     * @param id
-     * @param title
-     * @param description
-     * @param specLink
-     * @param ps
-     * @return
      */
     protected TestInfo setupTest(final String id, final String title, final String description, final String specLink,
                                  final PrintStream ps) {
         final TestInfo info = createTestInfo(id, title, description, specLink);
-        ps.append("Class: " + info.getTestClass().getName()).append("\n");
-        ps.append("Method: " + info.getTitle()).append("\n");
-        ps.append("Description: " + info.getDescription()).append("\n");
+        ps.append("Class: ");
+        ps.append(info.getTestClass().getName());
+        ps.append("\n");
+        ps.append("Method: ");
+        ps.append(info.getTitle());
+        ps.append("\n");
+        ps.append("Description: ");
+        ps.append(info.getDescription());
+        ps.append("\n");
         ps.append("Request:\n");
         return info;
     }
@@ -159,11 +152,11 @@ public class AbstractTest {
                                       .log().all();
     }
 
-    protected RequestSpecification createRequest(final String slug, final String contentType) {
+    private RequestSpecification createRequest(final String slug, final String contentType) {
         return createRequest().header(SLUG, slug).contentType(contentType);
     }
 
-    protected RequestSpecification createRequestAuthOnly() {
+    private RequestSpecification createRequestAuthOnly() {
         return RestAssured.given()
                           .auth().basic(this.username, this.password);
     }

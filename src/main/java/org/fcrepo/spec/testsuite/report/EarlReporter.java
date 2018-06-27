@@ -57,13 +57,8 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
         createModel();
         try {
             createAssertions(suites);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (NoSuchMethodException | InstantiationException | InvocationTargetException |
+                IllegalAccessException e) {
             e.printStackTrace();
         }
         write();
@@ -95,15 +90,13 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
         }
     }
 
-    private void getResultProperties(final Map<String, String[]> tests) throws
-        InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private void getResultProperties(final Map<String, String[]> tests) {
         for (String[] r : tests.values()) {
             makeResultResource(r);
         }
     }
 
-    private void makeResultResource(final String[] result) throws
-        NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    private void makeResultResource(final String[] result) {
         final Resource assertionResource = model.createResource(null, Assertion);
 
         final Resource resultResource = model.createResource(null, TestResult);

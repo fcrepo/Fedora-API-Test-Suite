@@ -20,8 +20,6 @@ package org.fcrepo.spec.testsuite.crud;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
-import java.io.FileNotFoundException;
-
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
@@ -54,7 +52,7 @@ public class Ldpnr extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void ldpnrCreationLinkType(final String uri) throws FileNotFoundException {
+    public void ldpnrCreationLinkType(final String uri) {
         final TestInfo info = setupTest("3.1.2-A", "ldpnrCreationLinkType",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
@@ -75,15 +73,15 @@ public class Ldpnr extends AbstractTest {
                                             .post(uri);
 
         ps.append("Request method:\tPOST\n");
-        ps.append("Request URI:\t" + uri + "\n");
+        ps.append("Request URI:\t").append(uri).append("\n");
 
         ps.append("Body:\n");
-        ps.append("HTTP/1.1 " + res.getStatusCode() + "\n");
+        ps.append("HTTP/1.1 ").append(String.valueOf(res.getStatusCode())).append("\n");
         for (Header h : res.getHeaders()) {
-            ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
-        ps.append("\n" + res.asString() + "\n");
+        ps.append("\n").append(res.asString()).append("\n");
         final String locationHeader = getLocation(res);
 
         if (res.getStatusCode() == 201) {
@@ -92,9 +90,9 @@ public class Ldpnr extends AbstractTest {
                 .get(locationHeader);
 
             for (Header h : nonr.getHeaders()) {
-                ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+                ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
             }
-            ps.append("\n" + nonr.asString() + "\n");
+            ps.append("\n").append(nonr.asString()).append("\n");
             boolean header = false;
 
             for (Header h : nonr.getHeaders()) {
@@ -126,7 +124,7 @@ public class Ldpnr extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void ldpnrCreationWrongLinkType(final String uri) throws FileNotFoundException {
+    public void ldpnrCreationWrongLinkType(final String uri) {
         final TestInfo info = setupTest("3.1.2-B", "ldpnrCreationWrongLinkType",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
@@ -145,16 +143,16 @@ public class Ldpnr extends AbstractTest {
                                             .when()
                                             .post(uri);
         ps.append("Request method:\tPOST\n");
-        ps.append("Request URI:\t" + uri + "\n");
+        ps.append("Request URI:\t").append(uri).append("\n");
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
-        ps.append("HTTP/1.1 " + res.getStatusCode() + "\n");
+        ps.append("HTTP/1.1 ").append(String.valueOf(res.getStatusCode())).append("\n");
         for (Header h : res.getHeaders()) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
-        ps.append("\n" + res.asString() + "\n");
+        ps.append("\n").append(res.asString()).append("\n");
 
         if (res.getStatusCode() >= 200 && res.getStatusCode() < 300) {
             ps.append("\nExpected response with a 4xx range status code.\n");

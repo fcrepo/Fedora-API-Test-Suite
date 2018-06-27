@@ -23,7 +23,6 @@ import static org.fcrepo.spec.testsuite.Constants.RDF_BODY;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
-import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void additionalValuesForPreferHeader(final String uri) throws FileNotFoundException {
+    public void additionalValuesForPreferHeader(final String uri) {
         final TestInfo info = setupTest("3.2.1-A", "additionalValuesForPreferHeader",
                                         "In addition to the requirements of [LDP], an implementation ... " +
                                         "should support the value " +
@@ -104,7 +103,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
-    public void additionalValuesForPreferHeaderContainedDescriptions(final String uri) throws FileNotFoundException {
+    public void additionalValuesForPreferHeaderContainedDescriptions(final String uri) {
         final TestInfo info = setupTest("3.2.1-B", "additionalValuesForPreferHeaderContainedDescriptions",
                 "In addition to the requirements of [LDP], an implementation ... " +
                         "may support the value " +
@@ -140,7 +139,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void responsePreferenceAppliedHeader(final String uri) throws FileNotFoundException {
+    public void responsePreferenceAppliedHeader(final String uri) {
         final TestInfo info = setupTest("3.2.2-A", "responsePreferenceAppliedHeader",
                                         "Responses to GET requests that apply a Prefer request header to any LDP-RS " +
                                         "must "
@@ -167,7 +166,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void responseDescribesHeader(final String uri) throws FileNotFoundException {
+    public void responseDescribesHeader(final String uri) {
         final TestInfo info = setupTest("3.2.2-B", "responseDescribesHeader",
                                         "When a GET request is made to an LDP-RS that describes an associated LDP-NR "
                                         + "(3.5 HTTP POST and [LDP]5.2.3.12),"
@@ -218,7 +217,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigest(final String uri) throws FileNotFoundException {
+    public void respondWantDigest(final String uri) {
         final TestInfo info = setupTest("3.2.3-A", "respondWantDigest",
                                         "Testing for supported digest "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
@@ -250,7 +249,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupported(final String uri) throws FileNotFoundException {
+    public void respondWantDigestTwoSupported(final String uri) {
         final String checksum = "md5,sha";
         final TestInfo info = setupTest("3.2.3-B", "respondWantDigestTwoSupported",
                                         "Testing for two supported digests with no weights"
@@ -274,7 +273,7 @@ public class HttpGet extends AbstractTest {
         ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert
@@ -290,7 +289,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) {
         final String checksum = "md5;q=0.3,sha;q=1";
         final TestInfo info = setupTest("3.2.3-C", "respondWantDigestTwoSupportedQvalueNonZero",
                                         "Testing for two supported digests with different weights"
@@ -315,7 +314,7 @@ public class HttpGet extends AbstractTest {
         ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert
@@ -331,7 +330,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueZero(final String uri) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedQvalueZero(final String uri) {
         final String checksum = "md5;q=0.3,sha;q=0";
         final TestInfo info = setupTest("3.2.3-D", "respondWantDigestTwoSupportedQvalueZero",
                                         "Testing for two supported digests with different weights q=0.3,q=0"
@@ -362,7 +361,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestNonSupported(final String uri) throws FileNotFoundException {
+    public void respondWantDigestNonSupported(final String uri) {
         final String checksum = "md5,abc";
 
         final TestInfo info = setupTest("3.2.3-E", "respondWantDigestNonSupported",

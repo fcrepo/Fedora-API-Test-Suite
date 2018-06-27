@@ -22,11 +22,11 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import io.restassured.RestAssured;
@@ -64,7 +64,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void postCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
+    public void postCreateExternalBinaryContent(final String uri) {
         final TestInfo info = setupTest("3.9-A-1", "postCreateExternalBinaryContent",
                                         "Fedora servers should support the creation of LDP-NRs with Content-Type "
                                         + "of message/external-body and"
@@ -93,7 +93,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void putCreateExternalBinaryContent(final String uri) throws FileNotFoundException {
+    public void putCreateExternalBinaryContent(final String uri) {
         final TestInfo info = setupTest("3.9-A-2", "putCreateExternalBinaryContent",
                                         "Fedora servers should support the creation of LDP-NRs with Content-Type "
                                         + "of message/external-body and"
@@ -122,7 +122,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void putUpdateExternalBinaryContent(final String uri) throws FileNotFoundException {
+    public void putUpdateExternalBinaryContent(final String uri) {
         final TestInfo info = setupTest("3.9-A-3", "putUpdateExternalBinaryContent",
                                         "Fedora servers should support the creation of LDP-NRs with Content-Type "
                                         + "of message/external-body and"
@@ -166,7 +166,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void createExternalBinaryContentCheckAccesType(final String uri) throws FileNotFoundException {
+    public void createExternalBinaryContentCheckAccesType(final String uri) {
         final TestInfo info = setupTest("3.9-B", "createExternalBinaryContentCheckAccesType",
                                         "Fedora servers must advertise support in the Accept-Post response header for" +
                                         " each supported access-type "
@@ -190,7 +190,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void postCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
+    public void postCheckUnsupportedMediaType(final String uri) {
         final TestInfo info = setupTest("3.9-C-1", "postCheckUnsupportedMediaType",
                                         "Fedora servers receiving requests that would create or update a LDP-NR with "
                                         + "a message/external-body with an "
@@ -220,7 +220,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void putCheckUnsupportedMediaType(final String uri) throws FileNotFoundException {
+    public void putCheckUnsupportedMediaType(final String uri) {
         final TestInfo info = setupTest("3.9-C-2", "putCheckUnsupportedMediaType",
                                         "Fedora servers receiving requests that would create or update a LDP-NR with a "
                                         + "message/external-body with an "
@@ -250,7 +250,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void checkUnsupportedMediaType(final String uri) throws FileNotFoundException {
+    public void checkUnsupportedMediaType(final String uri) {
         final TestInfo info = setupTest("3.9-D", "checkUnsupportedMediaType",
                                         "In the case that a Fedora server does not support external LDP-NR content, "
                                         +
@@ -271,23 +271,19 @@ public class ExternalBinaryContent extends AbstractTest {
                                             .when()
                                             .post(uri);
 
-        ps.append(res.getStatusLine() + "\n");
+        ps.append(res.getStatusLine()).append("\n");
         final Headers headers = res.getHeaders();
         for (Header h : headers) {
-            ps.append(h.getName() + ": ");
-            ps.append(h.getValue() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         final String status = String.valueOf(res.getStatusCode());
         final char charStatus = status.charAt(0);
         if (charStatus != '2') {
-            if (res.getStatusCode() == 415) {
-                Assert.assertTrue(true, "OK");
-            } else {
-                Assert.assertTrue(false, "FAIL");
+            if (res.getStatusCode() != 415) {
+                Assert.fail();
             }
-        } else {
-            Assert.assertTrue(true, "OK");
         }
     }
 
@@ -298,7 +294,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void postCheckHeaders(final String uri) throws FileNotFoundException {
+    public void postCheckHeaders(final String uri) {
         final TestInfo info = setupTest("3.9-E-1", "postCheckHeaders",
                                         "Fedora servers receiving requests that would create or update an LDP-NR with" +
                                         " Content-Type: "
@@ -315,11 +311,11 @@ public class ExternalBinaryContent extends AbstractTest {
                                                  .when()
                                                  .post(uri);
 
-        ps.append(resource.getStatusLine() + "\n");
+        ps.append(resource.getStatusLine()).append("\n");
         final Headers headers = resource.getHeaders();
         for (Header h : headers) {
-            ps.append(h.getName() + ": ");
-            ps.append(h.getValue() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
         final List<String> h1 = new ArrayList<>();
         for (Header h : headers) {
@@ -338,11 +334,11 @@ public class ExternalBinaryContent extends AbstractTest {
                                             .when()
                                             .post(uri);
 
-        ps.append(res.getStatusLine() + "\n");
+        ps.append(res.getStatusLine()).append("\n");
         final Headers headersext = res.getHeaders();
         for (Header h : headersext) {
-            ps.append(h.getName() + ": ");
-            ps.append(h.getValue() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         final List<String> h2 = new ArrayList<>();
@@ -350,13 +346,11 @@ public class ExternalBinaryContent extends AbstractTest {
             h2.add(h.getName());
         }
 
-        final Set set1 = new HashSet(Arrays.asList(h1));
-        final Set set2 = new HashSet(Arrays.asList(h2));
+        final Set set1 = new HashSet(Collections.singletonList(h1));
+        final Set set2 = new HashSet(Collections.singletonList(h2));
 
-        if (set2.containsAll(set1)) {
-            Assert.assertTrue(true, "OK");
-        } else {
-            Assert.assertTrue(false, "FAIL");
+        if (!set2.containsAll(set1)) {
+            Assert.fail();
         }
 
     }
@@ -368,7 +362,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void putUpdateCheckHeaders(final String uri) throws FileNotFoundException {
+    public void putUpdateCheckHeaders(final String uri) {
         final TestInfo info = setupTest("3.9-E-2", "putUpdateCheckHeaders",
                                         "Fedora servers receiving requests that would create or update an LDP-NR with" +
                                         " Content-Type: "
@@ -391,11 +385,11 @@ public class ExternalBinaryContent extends AbstractTest {
                            .when()
                            .put(locationHeader);
 
-        ps.append(putup.getStatusLine() + "\n");
+        ps.append(putup.getStatusLine()).append("\n");
         final Headers headers = putup.getHeaders();
         for (Header h : headers) {
-            ps.append(h.getName() + ": ");
-            ps.append(h.getValue() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
         final List<String> h1 = new ArrayList<>();
         for (Header h : headers) {
@@ -432,11 +426,11 @@ public class ExternalBinaryContent extends AbstractTest {
                                                .when()
                                                .put(locationHeader3);
 
-        ps.append(resext.getStatusLine() + "\n");
+        ps.append(resext.getStatusLine()).append("\n");
         final Headers headersext = resext.getHeaders();
         for (Header h : headersext) {
-            ps.append(h.getName() + ": ");
-            ps.append(h.getValue() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         final List<String> h2 = new ArrayList<>();
@@ -444,13 +438,11 @@ public class ExternalBinaryContent extends AbstractTest {
             h2.add(h.getName());
         }
 
-        final Set set1 = new HashSet(Arrays.asList(h1));
-        final Set set2 = new HashSet(Arrays.asList(h2));
+        final Set set1 = new HashSet(Collections.singletonList(h1));
+        final Set set2 = new HashSet(Collections.singletonList(h2));
 
-        if (set2.containsAll(set1)) {
-            Assert.assertTrue(true, "OK");
-        } else {
-            Assert.assertTrue(false, "FAIL");
+        if (!set2.containsAll(set1)) {
+            Assert.fail();
         }
 
     }
@@ -462,7 +454,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void getCheckContentLocationHeader(final String uri) throws FileNotFoundException {
+    public void getCheckContentLocationHeader(final String uri) {
         final TestInfo info = setupTest("3.9-F-1", "getCheckContentLocationHeader",
                                         "GET and HEAD responses for any external LDP-NR should include a " +
                                         "Content-Location header with a URI  "
@@ -487,21 +479,22 @@ public class ExternalBinaryContent extends AbstractTest {
         final String locationHeader2 = getLocation(resource);
 
         ps.append("Request method:\tGET\n");
-        ps.append("Request URI:\t" + uri);
+        ps.append("Request URI:\t").append(uri);
         ps.append("Headers:\tAccept=*/*\n");
-        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"\n\n");
+        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"").append(locationHeader1);
+        ps.append("\"\n\n");
 
         final Headers headers = doGet(locationHeader2).getHeaders();
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": ");
-            ps.append(h.getValue() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         if (locationHeader2.indexOf("http") == 0) {
             boolean isValid = false;
             for (Header h : headers) {
-                if (h.getName().equals("Content-location") && h.getValue() != " ") {
+                if (h.getName().equals("Content-location") && !Objects.equals(h.getValue(), " ")) {
                     isValid = true;
                 }
             }
@@ -524,7 +517,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void headCheckContentLocationHeader(final String uri) throws FileNotFoundException {
+    public void headCheckContentLocationHeader(final String uri) {
         final TestInfo info = setupTest("3.9-F-2", "headCheckContentLocationHeader",
                                         "GET and HEAD responses for any external LDP-NR should include a " +
                                         "Content-Location header with a URI  "
@@ -550,22 +543,23 @@ public class ExternalBinaryContent extends AbstractTest {
         final String locationHeader2 = getLocation(resource);
 
         ps.append("Request method:\tHEAD\n");
-        ps.append("Request URI:\t" + uri);
+        ps.append("Request URI:\t").append(uri);
         ps.append("Headers:\tAccept=*/*\n");
-        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"" + locationHeader1 + "\"\n\n");
+        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"").append(locationHeader1);
+        ps.append("\"\n\n");
 
         final Headers headers = createRequest().when()
                                                .head(locationHeader2).getHeaders();
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": ");
-            ps.append(h.getValue() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         if (locationHeader2.indexOf("http") == 0) {
             boolean isValid = false;
             for (Header h : headers) {
-                if (h.getName().equals("Content-Location") && h.getValue() != " ") {
+                if (h.getName().equals("Content-Location") && !Objects.equals(h.getValue(), " ")) {
                     isValid = true;
                 }
             }
@@ -588,7 +582,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestExternalBinaryContent(final String uri) throws FileNotFoundException {
+    public void respondWantDigestExternalBinaryContent(final String uri) {
         final TestInfo info = setupTest("3.9-G-1", "respondWantDigestExternalBinaryContent",
                                         "GET and HEAD requests to any external LDP-NR must correctly respond to the "
                                         + "Want-Digest header defined in [RFC3230].",
@@ -626,7 +620,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestExternalBinaryContentHead(final String uri) throws FileNotFoundException {
+    public void respondWantDigestExternalBinaryContentHead(final String uri) {
         final TestInfo info = setupTest("3.9-G-2", "respondWantDigestExternalBinaryContentHead",
                                         "GET and HEAD requests to any external LDP-NR must correctly respond to the "
                                         + "Want-Digest header defined in [RFC3230].",
@@ -668,7 +662,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedExternalBinaryContent(final String uri) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedExternalBinaryContent(final String uri) {
         final TestInfo info =
             setupTest("3.9-H-1", "respondWantDigestTwoSupportedExternalBinaryContent",
                       "GET and HEAD requests to any external LDP-NR must correctly respond to the "
@@ -700,7 +694,7 @@ public class ExternalBinaryContent extends AbstractTest {
         ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
@@ -715,7 +709,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String uri) throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String uri) {
         final TestInfo info =
             setupTest("3.9-H-2", "respondWantDigestTwoSupportedExternalBinaryContentHead",
                       "GET and HEAD requests to any external LDP-NR must correctly respond to the "
@@ -748,7 +742,7 @@ public class ExternalBinaryContent extends AbstractTest {
         ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
@@ -763,8 +757,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent(final String uri)
-        throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent(final String uri) {
         final TestInfo info = setupTest("3.9-I-1",
                                         "" +
                                         "respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent",
@@ -800,7 +793,7 @@ public class ExternalBinaryContent extends AbstractTest {
         ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
@@ -815,8 +808,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead(final String uri)
-        throws FileNotFoundException {
+    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead(final String uri) {
         final TestInfo info = setupTest("3.9-I-2",
                                         "respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead",
                                         "GET and HEAD requests to any external LDP-NR must correctly respond to the "
@@ -851,7 +843,7 @@ public class ExternalBinaryContent extends AbstractTest {
         ps.append(wantDigestResponse.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
@@ -866,8 +858,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestNonSupportedExternalBinaryContent(final String uri)
-        throws FileNotFoundException {
+    public void respondWantDigestNonSupportedExternalBinaryContent(final String uri) {
         final TestInfo info =
             setupTest("3.9.3-A", "respondWantDigestNonSupportedExternalBinaryContent",
                       "GET and HEAD requests to any external LDP-NR must correctly respond to the "
@@ -907,8 +898,7 @@ public class ExternalBinaryContent extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestNonSupportedExternalBinaryContentHead(final String uri)
-        throws FileNotFoundException {
+    public void respondWantDigestNonSupportedExternalBinaryContentHead(final String uri) {
         final TestInfo info =
             setupTest("3.9.3-B", "respondWantDigestNonSupportedExternalBinaryContentHead",
                       "GET and HEAD requests to any external LDP-NR must correctly respond to the "

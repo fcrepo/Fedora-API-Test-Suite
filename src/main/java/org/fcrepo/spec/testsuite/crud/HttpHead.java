@@ -22,7 +22,6 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.equalTo;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +58,7 @@ public class HttpHead extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpHeadResponseNoBody(final String uri) throws FileNotFoundException {
+    public void httpHeadResponseNoBody(final String uri) {
         final TestInfo info = setupTest("3.3-A", "httpHeadResponseNoBody",
                                         "The HEAD method is identical to GET except that the server must not return a "
                                         + "message-body in the response, as "
@@ -67,7 +66,6 @@ public class HttpHead extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-head",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
-        ;
         final String locationHeader = getLocation(resource);
         createRequest().when()
                        .head(locationHeader)
@@ -84,7 +82,7 @@ public class HttpHead extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpHeadResponseDigest(final String uri) throws FileNotFoundException {
+    public void httpHeadResponseDigest(final String uri) {
         final TestInfo info = setupTest("3.3-B", "httpHeadResponseDigest",
                                         "The server must send the same Digest header in the response as it"
                                         +
@@ -103,39 +101,33 @@ public class HttpHead extends AbstractTest {
         final Response resget = createRequest().when()
                                                .get(locationHeader);
 
-        ps.append(resget.getStatusLine().toString() + "\n");
+        ps.append(resget.getStatusLine()).append("\n");
         final Headers headersGet = resget.getHeaders();
         for (Header h : headersGet) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         final Response reshead = createRequest().when()
                                                 .head(locationHeader);
-        ps.append(reshead.getStatusLine().toString() + "\n");
+        ps.append(reshead.getStatusLine()).append("\n");
         final Headers headers = reshead.getHeaders();
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         if (resget.getStatusCode() == 200 && reshead.getStatusCode() == 200) {
 
             if (resget.getHeader(DIGEST) == null) {
-                if (reshead.getHeader(DIGEST) == null) {
-                    Assert.assertTrue(true, "OK");
-                } else {
-                    Assert.assertTrue(false, "FAIL");
+                if (reshead.getHeader(DIGEST) != null) {
+                    Assert.fail();
                 }
-            } else {
-                if (reshead.getHeader(DIGEST) == null) {
-                    Assert.assertTrue(false, "FAIL");
-                } else {
-                    Assert.assertTrue(true, "OK");
-                }
+            } else if (reshead.getHeader(DIGEST) == null) {
+                Assert.fail();
             }
         } else {
-            Assert.assertTrue(false, "FAIL");
+            Assert.fail();
         }
     }
 
@@ -146,7 +138,7 @@ public class HttpHead extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void httpHeadResponseHeadersSameAsHttpGet(final String uri) throws FileNotFoundException {
+    public void httpHeadResponseHeadersSameAsHttpGet(final String uri) {
         final TestInfo info = setupTest("3.3-C", "httpHeadResponseHeadersSameAsHttpGet",
                                         "In other cases, The server should send the same headers in response to a " +
                                         "HEAD request "
@@ -162,11 +154,11 @@ public class HttpHead extends AbstractTest {
             .when()
             .get(locationHeader);
 
-        ps.append(resget.getStatusLine().toString() + "\n");
+        ps.append(resget.getStatusLine()).append("\n");
         final Headers headersGet = resget.getHeaders();
         for (Header h : headersGet) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
 
         final List<Header> h1 = new ArrayList<>();
@@ -179,11 +171,11 @@ public class HttpHead extends AbstractTest {
         final Response reshead = createRequest().when()
                                                 .head(locationHeader);
 
-        ps.append(reshead.getStatusLine().toString() + "\n");
+        ps.append(reshead.getStatusLine()).append("\n");
         final Headers headershead = reshead.getHeaders();
         for (Header h : headershead) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
         final List<Header> h2 = new ArrayList<>();
         for (Header h : headershead) {
@@ -192,10 +184,8 @@ public class HttpHead extends AbstractTest {
             }
         }
         // Compares if both lists have the same size
-        if (h2.equals(h1)) {
-            Assert.assertTrue(true, "OK");
-        } else {
-            Assert.assertTrue(false, "FAIL");
+        if (!h2.equals(h1)) {
+            Assert.fail();
         }
 
     }

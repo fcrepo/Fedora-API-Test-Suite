@@ -17,7 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import io.restassured.http.Header;
@@ -57,7 +56,7 @@ public class Container extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void createLDPC(final String uri) throws FileNotFoundException {
+    public void createLDPC(final String uri) {
         final TestInfo info = setupTest("3.1.1-A", "createLDPC",
                                         "Implementations must support the creation and management of [LDP] Containers.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
@@ -74,7 +73,7 @@ public class Container extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void ldpcContainmentTriples(final String uri) throws FileNotFoundException {
+    public void ldpcContainmentTriples(final String uri) {
         final TestInfo info = setupTest("3.1.1-B",
                                         "ldpcContainmentTriples",
                                         "LDP Containers must distinguish [containment triples]",
@@ -94,11 +93,11 @@ public class Container extends AbstractTest {
             .when()
             .get(getLocation(container));
 
-        ps.append(resP.getStatusLine().toString() + "\n");
+        ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
         final String body = resP.getBody().asString();
         ps.append(body);
@@ -127,7 +126,7 @@ public class Container extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void ldpcMembershipTriples(final String uri) throws FileNotFoundException {
+    public void ldpcMembershipTriples(final String uri) {
         final TestInfo info = setupTest("3.1.1-C", "ldpcMembershipTriples",
                                         "LDP Containers must distinguish [membership] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
@@ -152,11 +151,11 @@ public class Container extends AbstractTest {
             // 1. Expect two ldp:contains triples for basic GET
             final Response resP = createRequest().when().get(getLocation(container));
 
-            ps.append(resP.getStatusLine().toString() + "\n");
+            ps.append(resP.getStatusLine()).append("\n");
             final Headers headers = resP.getHeaders();
             for (Header h : headers) {
-                ps.append(h.getName().toString() + ": ");
-                ps.append(h.getValue().toString() + "\n");
+                ps.append(h.getName()).append(": ");
+                ps.append(h.getValue()).append("\n");
             }
             final String body = resP.getBody().asString();
             ps.append(body);
@@ -228,7 +227,7 @@ public class Container extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void ldpcMinimalContainerTriples(final String uri) throws FileNotFoundException {
+    public void ldpcMinimalContainerTriples(final String uri) {
         final TestInfo info = setupTest("3.1.1-D", "ldpcMinimalContainerTriples",
                                         "LDP Containers must distinguish [minimal-container] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
@@ -247,11 +246,11 @@ public class Container extends AbstractTest {
                 .when()
                 .get(getLocation(container));
 
-        ps.append(resP.getStatusLine().toString() + "\n");
+        ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ");
+            ps.append(h.getValue()).append("\n");
         }
         final String body = resP.getBody().asString();
         ps.append(body);

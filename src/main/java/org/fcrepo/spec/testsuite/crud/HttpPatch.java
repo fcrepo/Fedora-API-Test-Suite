@@ -21,9 +21,6 @@ import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.containsString;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.LogConfig;
@@ -41,27 +38,27 @@ import org.testng.annotations.Test;
  */
 public class HttpPatch extends AbstractTest {
 
-    public String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
+    private final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
                          + " INSERT {"
                          + " <> dcterms:description \"Patch Updated Description\" ."
                          + "}"
                          + " WHERE { }";
-    public String ldpatch = "@prefix dcterms: <http://purl.org/dc/terms/>"
+    private final String ldpatch = "@prefix dcterms: <http://purl.org/dc/terms/>"
                             + "Add {"
                             + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
                             + "} .";
-    public String serverProps = "PREFIX fedora: <http://fedora.info/definitions/v4/repository#>"
+    private final String serverProps = "PREFIX fedora: <http://fedora.info/definitions/v4/repository#>"
                                 + " INSERT {"
                                 + " <> fedora:lastModifiedBy \"User\" ."
                                 + "}"
                                 + " WHERE { }";
-    public String resourceType = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
+    private final String resourceType = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
                                  + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
                                  + " INSERT {"
                                  + " <> rdf:type ldp:NonRDFSource ."
                                  + "}"
                                  + " WHERE { }";
-    public String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#>\n"
+    private final String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#>\n"
                                              + " INSERT {   \n"
                                              + "  <> ldp:contains \"some-url\" .\n"
                                              + "}\n"
@@ -85,7 +82,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void supportPatch(final String uri) throws IOException {
+    public void supportPatch(final String uri) {
         final TestInfo info = setupTest("3.7-A", "supportPatch",
                                         "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). " +
                                         "[sparql11-update] must be an accepted "
@@ -117,7 +114,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
-    public void ldpPatchContentTypeSupport(final String uri) throws IOException {
+    public void ldpPatchContentTypeSupport(final String uri) {
         final TestInfo info = setupTest("3.7-B", "ldpPatchContentTypeSupport",
                                         "Other content-types (e.g. [ldpatch]) may be available.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
@@ -145,7 +142,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void serverManagedPropertiesModification(final String uri) throws IOException {
+    public void serverManagedPropertiesModification(final String uri) {
         final TestInfo info = setupTest("3.7-C", "serverManagedPropertiesModification",
                                         "If an otherwise valid HTTP PATCH request is received that attempts to modify "
                                         + "statements to a resource that a server disallows (not ignores per [LDP] "
@@ -177,7 +174,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void statementNotPersistedResponseBody(final String uri) throws IOException {
+    public void statementNotPersistedResponseBody(final String uri) {
         final TestInfo info = setupTest("3.7-D", "statementNotPersistedResponseBody",
                                         "The server must provide a corresponding response body containing information"
                                         + " about which statements could not be persisted."
@@ -208,7 +205,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void statementNotPersistedConstrainedBy(final String uri) throws IOException {
+    public void statementNotPersistedConstrainedBy(final String uri) {
         final TestInfo info = setupTest("3.7-E", "statementNotPersistedConstrainedBy",
                                         "In that response, the restrictions causing such a request to fail must be"
                                         + " described in a resource indicated by a Link: "
@@ -240,7 +237,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void successfulPatchStatusCode(final String uri) throws IOException {
+    public void successfulPatchStatusCode(final String uri) {
         final TestInfo info = setupTest("3.7-F", "successfulPatchStatusCode",
                                         "A successful PATCH request must respond with a 2xx status code; the "
                                         + "specific code in the 2xx range may vary according to the response "
@@ -249,7 +246,7 @@ public class HttpPatch extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
         ps.append("Request method:\tPATCH\n");
-        ps.append("Request URI:\t" + uri);
+        ps.append("Request URI:\t").append(uri);
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("\t\t\t\tContent-Type=application/sparql-update; charset=ISO-8859-1\n");
         ps.append("Body:\n");
@@ -267,12 +264,12 @@ public class HttpPatch extends AbstractTest {
         final int statusCode = response.getStatusCode();
         final Headers headers = response.getHeaders();
 
-        ps.append("HTTP/1.1 " + statusCode + "\n");
+        ps.append("HTTP/1.1 ").append(String.valueOf(statusCode)).append("\n");
         for (Header h : headers) {
-            ps.append(h.getName() + ": " + h.getValue() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
-        String str = "";
+        String str;
         boolean err = false;
         if (statusCode >= 200 && statusCode < 300) {
             str = "\n" + response.asString();
@@ -297,7 +294,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void disallowPatchContainmentTriples(final String uri) throws FileNotFoundException {
+    public void disallowPatchContainmentTriples(final String uri) {
         final TestInfo info = setupTest("3.7.1", "disallowPatchContainmentTriples",
                                         "The server should not allow HTTP PATCH to update an LDPC’s containment " +
                                         "triples; if"
@@ -332,7 +329,7 @@ public class HttpPatch extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void disallowChangeResourceType(final String uri) throws IOException {
+    public void disallowChangeResourceType(final String uri) {
         final TestInfo info = setupTest("3.7.2", "disallowChangeResourceType",
                                         "The server must disallow a PATCH request that would change the LDP"
                                         + " interaction model of a resource to a type that is not a subtype"

@@ -20,8 +20,6 @@ package org.fcrepo.spec.testsuite.crud;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
-import java.io.FileNotFoundException;
-
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -55,7 +53,7 @@ public class HttpDelete extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void httpDeleteOptionsCheck(final String uri) throws FileNotFoundException {
+    public void httpDeleteOptionsCheck(final String uri) {
         final TestInfo info = setupTest("3.8.1-A", "httpDeleteOptionsCheck",
                                         "An implementation that cannot recurse should not advertise DELETE in " +
                                         "response to OPTIONS "
@@ -95,7 +93,7 @@ public class HttpDelete extends AbstractTest {
         final String rlocationHeader3 = getLocation(rdf03);
 
         ps.append("Request method:\tDELETE\n");
-        ps.append("Request URI:\t" + uri + "\n");
+        ps.append("Request URI:\t").append(uri).append("\n");
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
@@ -111,10 +109,10 @@ public class HttpDelete extends AbstractTest {
 
         // Print headers and status
         final Headers headers = response.getHeaders();
-        ps.append(response.getStatusLine().toString());
+        ps.append(response.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         //GET deleted resources
@@ -125,22 +123,15 @@ public class HttpDelete extends AbstractTest {
         final Response resRdf03 = doGet(rlocationHeader3);
 
         if (allowHeader.contains("OPTIONS")) {
-            if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
+            if (resResource.getStatusCode() != 410 && resResourceSon.getStatusCode() != 410 &&
+                resRdf01.getStatusCode() != 410 && resRdf02.getStatusCode() != 410 &&
+                resRdf03.getStatusCode() != 410) {
+                Assert.fail();
+            }
+        } else if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
                 resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
                 resRdf03.getStatusCode() == 410) {
-                Assert.assertTrue(true, "OK");
-            } else {
-                Assert.assertTrue(false, "FAIL");
-            }
-        } else {
-            if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
-                resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
-                resRdf03.getStatusCode() == 410) {
-                Assert.assertTrue(false, "FAIL");
-            } else {
-                Assert.assertTrue(true, "OK");
-            }
-
+                Assert.fail();
         }
 
     }
@@ -152,7 +143,7 @@ public class HttpDelete extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpDeleteStatusCheck(final String uri) throws FileNotFoundException {
+    public void httpDeleteStatusCheck(final String uri) {
         final TestInfo info = setupTest("3.8.1-C", "httpDeleteStatusCheck",
                                         "An implementation must not return a 200 (OK) or 204 (No Content) response "
                                         + "unless the entire operation successfully completed.",
@@ -188,7 +179,7 @@ public class HttpDelete extends AbstractTest {
         final String rlocationHeader3 = getLocation(nrdf03);
 
         ps.append("Request method:\tDELETE\n");
-        ps.append("Request URI:\t" + uri + "\n");
+        ps.append("Request URI:\t").append(uri).append("\n");
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
@@ -199,10 +190,10 @@ public class HttpDelete extends AbstractTest {
         // Print headers and status
         final int statusDelete = response.getStatusCode();
         final Headers headers = response.getHeaders();
-        ps.append(response.getStatusLine().toString());
+        ps.append(response.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         //GET deleted resources
@@ -213,20 +204,16 @@ public class HttpDelete extends AbstractTest {
         final Response resRdf03 = doGet(rlocationHeader3);
 
         if (statusDelete == 200 || statusDelete == 204) {
-            if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
-                resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
-                resRdf03.getStatusCode() == 410) {
-                Assert.assertTrue(true, "OK");
-            } else {
-                Assert.assertTrue(false, "FAIL");
+            if (resResource.getStatusCode() != 410 && resResourceSon.getStatusCode() != 410 &&
+                resRdf01.getStatusCode() != 410 && resRdf02.getStatusCode() != 410 &&
+                resRdf03.getStatusCode() != 410) {
+                Assert.fail();
             }
         } else {
             if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
                 resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
                 resRdf03.getStatusCode() == 410) {
-                Assert.assertTrue(false, "FAIL");
-            } else {
-                Assert.assertTrue(true, "OK");
+                Assert.fail();
             }
         }
     }
@@ -238,7 +225,7 @@ public class HttpDelete extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpDeleteStatusCheckTwo(final String uri) throws FileNotFoundException {
+    public void httpDeleteStatusCheckTwo(final String uri) {
         final TestInfo info = setupTest("3.8.1-D", "httpDeleteStatusCheckTwo",
                                         "An implementation must not emit a message that implies the successful DELETE" +
                                         " of a resource until "
@@ -282,7 +269,7 @@ public class HttpDelete extends AbstractTest {
         final String rlocationHeader3 = getLocation(nrdf03);
 
         ps.append("Request method:\tDELETE\n");
-        ps.append("Request URI:\t" + uri + "\n");
+        ps.append("Request URI:\t").append(uri).append("\n");
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
@@ -293,10 +280,10 @@ public class HttpDelete extends AbstractTest {
         // Print headers and status
         final int statusDelete = response.getStatusCode();
         final Headers headers = response.getHeaders();
-        ps.append(response.getStatusLine().toString());
+        ps.append(response.getStatusLine());
 
         for (Header h : headers) {
-            ps.append(h.getName().toString() + ": " + h.getValue().toString() + "\n");
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         //GET deleted resources
@@ -308,20 +295,16 @@ public class HttpDelete extends AbstractTest {
 
         final String statusdeletestring = String.valueOf(statusDelete);
         if (statusdeletestring.charAt(0) == '2') {
-            if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
-                resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
-                resRdf03.getStatusCode() == 410) {
-                Assert.assertTrue(true, "OK");
-            } else {
-                Assert.assertTrue(false, "FAIL");
+            if (resResource.getStatusCode() != 410 && resResourceSon.getStatusCode() != 410 &&
+                resRdf01.getStatusCode() != 410 && resRdf02.getStatusCode() != 410 &&
+                resRdf03.getStatusCode() != 410) {
+                Assert.fail();
             }
         } else {
             if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
                 resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
                 resRdf03.getStatusCode() == 410) {
-                Assert.assertTrue(false, "FAIL");
-            } else {
-                Assert.assertTrue(true, "OK");
+                Assert.fail();
             }
         }
     }

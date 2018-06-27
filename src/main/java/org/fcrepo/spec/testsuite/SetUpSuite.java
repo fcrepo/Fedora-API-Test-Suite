@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite;
 
-import java.io.FileNotFoundException;
-
 import org.testng.annotations.BeforeSuite;
 
 /**
@@ -26,11 +24,12 @@ import org.testng.annotations.BeforeSuite;
  */
 public class SetUpSuite {
 
+
     /**
-     * @throws FileNotFoundException
+     * Reset Globals
      */
     @BeforeSuite
-    public void setUp() throws FileNotFoundException {
+    public void setUp() {
         TestSuiteGlobals.resetFile();
     }
 }

@@ -21,10 +21,8 @@ import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -41,15 +39,14 @@ import org.testng.internal.Utils;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public abstract class TestSuiteGlobals {
-    public static String cssReport = "reportStyle.css";
-    public static String outputDirectory = "report";
-    public static String outputName = "testsuite";
-    public static String earlReportSyntax = "TURTLE";
-    public static String ldptNamespace = "http://fedora.info/2017/06/30/spec/#";
-    public static String earlReportAssertor = "https://wiki.duraspace.org/display/FF";
-    public static String resourcePointer;
-    public static String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
-    public static String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
+    public static final String cssReport = "reportStyle.css";
+    public static final String outputDirectory = "report";
+    public static final String outputName = "testsuite";
+    public static final String earlReportSyntax = "TURTLE";
+    public static final String ldptNamespace = "http://fedora.info/2017/06/30/spec/#";
+    public static final String earlReportAssertor = "https://wiki.duraspace.org/display/FF";
+    private static final String[] payloadHeaders = {"Content-Length", "Content-Range", "Trailer", "Transfer-Encoding"};
+    private static final String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
                                                 "insertedContentRelation"};
 
     /**
@@ -109,24 +106,14 @@ public abstract class TestSuiteGlobals {
     /**
      * @return date
      */
-    public static String today() {
-        final String date = new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
-        return date;
+    private static String today() {
+        return new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
     }
 
     /**
-     * @param format
-     * @return date
+     * Remove existing log file
      */
-    public static String today(final String format) {
-        final String date = new SimpleDateFormat(format).format(new Date());
-        return date;
-    }
-
-    /**
-     * @throws FileNotFoundException
-     */
-    public static void resetFile() throws FileNotFoundException {
+    public static void resetFile() {
         final File dir = new File("report");
         dir.mkdirs();
         final File f = new File(
@@ -144,8 +131,7 @@ public abstract class TestSuiteGlobals {
             final FileOutputStream fos = new FileOutputStream(new File(TestSuiteGlobals.outputDirectory + "/" +
                                                                        TestSuiteGlobals.outputName + "-execution.log"),
                                                               true);
-            final PrintStream ps = new PrintStream(fos);
-            return ps;
+            return new PrintStream(fos);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -156,14 +142,9 @@ public abstract class TestSuiteGlobals {
      * @param skipped
      * @param failed
      * @return results
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
      */
     public static Map<String, String[]> orderTestsResults(final IResultMap passed,
-                                                          final IResultMap skipped, final IResultMap failed)
-        throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+                                                          final IResultMap skipped, final IResultMap failed) {
         final TreeMap<String, String[]> results = new TreeMap<>();
         addToResults(results, passed, "PASS");
         addToResults(results, skipped, "SKIPPED");
@@ -177,9 +158,9 @@ public abstract class TestSuiteGlobals {
             final ITestNGMethod method = result.getMethod();
             final TestInfo info = TestInfo.getByMethodName(method.getMethodName());
             final String[] details = new String[6];
-            details[0] = info.getSpecLink().toString();
+            details[0] = info.getSpecLink();
             details[1] = outcome;
-            details[2] = info.getDescription().toString();
+            details[2] = info.getDescription();
             details[3] = formatTestLinkText(info);
             details[4] = getStackTrace(result.getThrowable());
             details[5] = method.getGroups()[0];
@@ -195,7 +176,7 @@ public abstract class TestSuiteGlobals {
      * @param thrown
      * @return msg
      */
-    public static String getStackTrace(final Throwable thrown) {
+    private static String getStackTrace(final Throwable thrown) {
         String msg = "";
         if (thrown != null) {
             if (thrown.getClass().getName().contains("TEST SKIPPED")) {
