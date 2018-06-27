@@ -189,11 +189,16 @@ public class HttpGet extends AbstractTest {
         final Response getResponse = doGet(locationHeader);
         final List<Header> linkHeaders = getResponse.getHeaders().getList("Link");
         URI description = null;
+
+        // Loop individual Link headers
         for (final Header header : linkHeaders) {
-            final Link link = Link.valueOf(header.getValue());
-            if (link.getRel().equals("describedby")) {
-                description = link.getUri();
-                break;
+            // Loop multi-valued Link headers
+            for (final String linkValue : header.getValue().split(",")) {
+                final Link link = Link.valueOf(linkValue);
+                if (link.getRel().equals("describedby")) {
+                    description = link.getUri();
+                    break;
+                }
             }
         }
         Assert.assertNotNull(description, "Description is null!");
