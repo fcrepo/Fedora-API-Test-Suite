@@ -38,7 +38,7 @@ public class Constants {
             + "ldp:membershipResource <%membershipResource%> ;"
             + "ldp:hasMemberRelation dcterms:hasPart ." ;
 
-    public static String RDF_BODY = "@prefix dc: <http://purl.org/dc/terms/> . "
+    public static final String RDF_BODY = "@prefix dc: <http://purl.org/dc/terms/> . "
             + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
             + "<> a foaf:Person; "
             + "foaf:name \"Pythagoras\" ; "

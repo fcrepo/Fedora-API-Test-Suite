@@ -27,7 +27,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,9 +46,8 @@ import org.testng.xml.XmlSuite;
  */
 public class HtmlReporter implements IReporter {
 
-    HashMap<String, Integer> passClasses;
-    HashMap<String, Integer> failClasses;
-    HashMap<String, Integer> skipClasses;
+    private HashMap<String, Integer> failClasses;
+    private HashMap<String, Integer> skipClasses;
     private IResultMap passedTests;
     private IResultMap failedTests;
     private IResultMap skippedTests;
@@ -83,7 +81,7 @@ public class HtmlReporter implements IReporter {
                     skippedTests = tc.getSkippedTests();
                 }
 
-                passClasses = getClasses(passedTests);
+                final HashMap<String, Integer> passClasses = getClasses(passedTests);
                 failClasses = getClasses(failedTests);
                 skipClasses = getClasses(skippedTests);
 
@@ -95,15 +93,8 @@ public class HtmlReporter implements IReporter {
                 // send html to a file
                 createWriter(html.toHtml());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (IOException | InvocationTargetException | IllegalAccessException | InstantiationException |
+                NoSuchMethodException e) {
             e.printStackTrace();
         }
     }
@@ -115,34 +106,24 @@ public class HtmlReporter implements IReporter {
     }
 
     private void createWriter(final String output) {
-        BufferedWriter writer = null;
         final File dir = new File(TestSuiteGlobals.outputDirectory);
         dir.mkdirs();
 
         final String fileName = TestSuiteGlobals.outputName + "-execution-report.html";
         System.out.println("Writing HTML results:");
-        try {
-            final File file = new File(dir, fileName);
-            writer = new BufferedWriter(new FileWriter(file));
+        final File file = new File(dir, fileName);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(output);
             System.out.println("\t" + file.getAbsolutePath());
 
         } catch (IOException e) {
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-            }
         }
     }
 
     private HashMap<String, Integer> getClasses(final IResultMap tests) {
-        final HashMap<String, Integer> classes = new HashMap<String, Integer>();
-        final Iterator<ITestResult> results = tests.getAllResults().iterator();
-        while (results.hasNext()) {
-            String name = results.next().getTestClass().getName().toString();
+        final HashMap<String, Integer> classes = new HashMap<>();
+        for (ITestResult iTestResult : tests.getAllResults()) {
+            String name = iTestResult.getTestClass().getName();
             name = name.substring(name.lastIndexOf(".") + 1);
 
             if (!classes.containsKey(name)) {
@@ -175,8 +156,7 @@ public class HtmlReporter implements IReporter {
     }
 
     private void makeMethodSummaryTable(final IResultMap passed, final IResultMap skipped, final IResultMap failed)
-        throws IOException, NoSuchMethodException, IllegalAccessException,
-        InstantiationException, InvocationTargetException {
+        throws IOException {
         html.table(class_("indented"));
         html.tr().th().content("Specification Section");
         html.th().content("Req Level");

@@ -50,7 +50,7 @@ public abstract class EarlCoreReporter {
     public final static Property passed = ResourceFactory.createProperty(EARL.NAMESPACE + "passed");
     public final static Property failed = ResourceFactory.createProperty(EARL.NAMESPACE + "failed");
     public final static Property untested = ResourceFactory.createProperty(EARL.NAMESPACE + "untested");
-    protected static final HashMap<String, String> prefixes = new HashMap<String, String>();
+    private static final HashMap<String, String> prefixes = new HashMap<>();
 
     static {
         prefixes.put("earl", "http://www.w3.org/ns/earl#");
@@ -60,7 +60,7 @@ public abstract class EarlCoreReporter {
         prefixes.put("ldpt", TestSuiteGlobals.ldptNamespace);
     }
 
-    protected BufferedWriter writer;
+    private BufferedWriter writer;
     protected Model model;
 
     protected void createWriter(final String directory) throws IOException {
@@ -91,7 +91,7 @@ public abstract class EarlCoreReporter {
      *
      * @param model
      */
-    public void writePrefixes(final Model model) {
+    private void writePrefixes(final Model model) {
         for (Entry<String, String> prefix : prefixes.entrySet()) {
             model.setNsPrefix(prefix.getKey(), prefix.getValue());
         }

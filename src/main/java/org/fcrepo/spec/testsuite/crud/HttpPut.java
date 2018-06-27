@@ -23,8 +23,6 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.CoreMatchers.containsString;
 
-import java.io.FileNotFoundException;
-
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
@@ -55,7 +53,7 @@ public class HttpPut extends AbstractTest {
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
-    public void httpPut(final String uri) throws FileNotFoundException {
+    public void httpPut(final String uri) {
         final TestInfo info = setupTest("3.6-B", "httpPut",
                                         "When accepting a PUT request against an existant resource, an HTTP Link: " +
                                         "rel=\"type\" header "
@@ -90,11 +88,10 @@ public class HttpPut extends AbstractTest {
      * 3.6.1-A
      *
      * @param uri
-     * @throws FileNotFoundException
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpPutpdateTriples(final String uri) throws FileNotFoundException {
+    public void httpPutpdateTriples(final String uri) {
         final TestInfo info = setupTest("3.6.1-A", "httpPutpdateTriples",
                                         "Any LDP-RS must support PUT to update statements that are not server-managed" +
                                         " triples (as defined "
@@ -124,11 +121,10 @@ public class HttpPut extends AbstractTest {
      * 3.6.1-B
      *
      * @param uri
-     * @throws FileNotFoundException
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpPutUpdateDisallowedTriples(final String uri) throws FileNotFoundException {
+    public void httpPutUpdateDisallowedTriples(final String uri) {
         final TestInfo info = setupTest("3.6.1-B", "httpPutUpdateDisallowedTriples",
                                         "If an otherwise valid HTTP PUT request is received that attempts to modify " +
                                         "resource "
@@ -165,11 +161,10 @@ public class HttpPut extends AbstractTest {
      * 3.6.1-C
      *
      * @param uri
-     * @throws FileNotFoundException
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpPutUpdateDisallowedTriplesResponse(final String uri) throws FileNotFoundException {
+    public void httpPutUpdateDisallowedTriplesResponse(final String uri) {
         final TestInfo info = setupTest("3.6.1-C", "httpPutUpdateDisallowedTriplesResponse",
                                         "The server must provide a corresponding response body containing information "
                                         + "about which statements could"
@@ -200,11 +195,10 @@ public class HttpPut extends AbstractTest {
      * 3.6.1-D
      *
      * @param uri
-     * @throws FileNotFoundException
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpPutUpdateDisallowedTriplesConstrainedByHeader(final String uri) throws FileNotFoundException {
+    public void httpPutUpdateDisallowedTriplesConstrainedByHeader(final String uri) {
         final TestInfo info = setupTest("3.6.1-D", "httpPutUpdateDisallowedTriplesConstrainedByHeader",
                                         "In that response, the restrictions causing such a request to fail must be "
                                         + "described in a resource indicated"
@@ -244,7 +238,7 @@ public class HttpPut extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpPutNR(final String uri) throws FileNotFoundException {
+    public void httpPutNR(final String uri) {
         final TestInfo info = setupTest("3.6.2-A", "httpPutNR",
                                         "Any LDP-NR must support PUT to replace the binary content of that resource.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
@@ -273,7 +267,7 @@ public class HttpPut extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void nonRDFSourcePutDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
+    public void nonRDFSourcePutDigestResponseHeaderAuthentication(final String uri) {
         final TestInfo info = setupTest("3.6.2-B", "nonRDFSourcePutDigestResponseHeaderAuthentication",
                                         "An HTTP PUT request that includes a Digest header (as described in " +
                                         "[RFC3230]) for which any "
@@ -308,7 +302,7 @@ public class HttpPut extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void nonRDFSourcePutDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
+    public void nonRDFSourcePutDigestResponseHeaderVerification(final String uri) {
         final TestInfo info = setupTest("3.6.2-C", "nonRDFSourcePutDigestResponseHeaderVerification",
                                         "An HTTP PUT request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), should"

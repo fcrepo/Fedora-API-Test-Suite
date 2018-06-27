@@ -22,8 +22,6 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
-import java.io.FileNotFoundException;
-
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -33,10 +31,6 @@ import org.testng.annotations.Test;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class HttpPost extends AbstractTest {
-    public String username;
-    public String password;
-    public String resource = "";
-    public String binary = "https://www.w3.org/StyleSheets/TR/2016/logos/UD-watermark";
 
     /**
      * Authentication
@@ -56,7 +50,7 @@ public class HttpPost extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpPost(final String uri) throws FileNotFoundException {
+    public void httpPost(final String uri) {
         final TestInfo info = setupTest("3.5-A", "httpPost",
                                         "Any LDPC (except Version Containers (LDPCv)) must support POST ([LDP] 4.2.3 " +
                                         "/ 5.2.3). ",
@@ -76,7 +70,7 @@ public class HttpPost extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void constrainedByResponseHeader(final String uri) throws FileNotFoundException {
+    public void constrainedByResponseHeader(final String uri) {
         final TestInfo info = setupTest("3.5-B", "constrainedByResponseHeader",
                                         "The default interaction model that will be assigned when there is no " +
                                         "explicit Link "
@@ -99,7 +93,7 @@ public class HttpPost extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void postNonRDFSource(final String uri) throws FileNotFoundException {
+    public void postNonRDFSource(final String uri) {
         final TestInfo info = setupTest("3.5.1-A", "postNonRDFSource",
                                         "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
                                         " must).",
@@ -122,7 +116,7 @@ public class HttpPost extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void postResourceAndCheckAssociatedResource(final String uri) throws FileNotFoundException {
+    public void postResourceAndCheckAssociatedResource(final String uri) {
         final TestInfo info = setupTest("3.5.1-B", "postResourceAndCheckAssociatedResource",
                                         "On creation of an LDP-NR, an implementation must create an associated LDP-RS" +
                                         " describing"
@@ -147,7 +141,7 @@ public class HttpPost extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void postDigestResponseHeaderAuthentication(final String uri) throws FileNotFoundException {
+    public void postDigestResponseHeaderAuthentication(final String uri) {
         final TestInfo info = setupTest("3.5.1-C", "postDigestResponseHeaderAuthentication",
                                         "An HTTP POST request that would create an LDP-NR and includes a Digest " +
                                         "header (as described"
@@ -177,7 +171,7 @@ public class HttpPost extends AbstractTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void postDigestResponseHeaderVerification(final String uri) throws FileNotFoundException {
+    public void postDigestResponseHeaderVerification(final String uri) {
         final TestInfo info = setupTest("3.5.1-D", "postDigestResponseHeaderVerification",
                                         "An HTTP POST request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), "

@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
-import java.io.FileNotFoundException;
-
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.testng.annotations.Parameters;
 
@@ -47,6 +45,6 @@ public class HttpGet extends AbstractTest {
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void firstTest(final String uri) throws FileNotFoundException {
+    public void firstTest(final String uri) {
     }
 }
