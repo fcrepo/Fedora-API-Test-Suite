@@ -138,16 +138,20 @@ public class AbstractTest {
     }
 
     protected Response createDirectContainer(final String uri, final String body) {
-        final Response response = createRequestAuthOnly()
+        final Response response = createDirectContainerUnverifed(uri, body);
+
+        Assert.assertEquals(response.getStatusCode(), 201);
+
+        return response;
+    }
+
+    protected Response createDirectContainerUnverifed(final String uri, final String body) {
+        return createRequestAuthOnly()
                 .header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\"")
                 .header("Content-Type", "text/turtle")
                 .body(body)
                 .when()
                 .post(uri);
-
-        Assert.assertEquals(response.getStatusCode(), 201);
-
-        return response;
     }
 
     protected RequestSpecification createRequest() {

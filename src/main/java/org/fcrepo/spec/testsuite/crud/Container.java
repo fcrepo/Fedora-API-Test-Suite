@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite.crud;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -25,10 +26,11 @@ import io.restassured.response.Response;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+
+import javax.ws.rs.core.Link;
 
 import static org.fcrepo.spec.testsuite.Constants.DIRECT_CONTAINER_BODY;
 
@@ -36,23 +38,6 @@ import static org.fcrepo.spec.testsuite.Constants.DIRECT_CONTAINER_BODY;
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class Container extends AbstractTest {
-    public static String pythagorasContainer = "@prefix dc: <http://purl.org/dc/terms/> . "
-                                        + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-                                        + "<> dc:title 'Pythagoras Collection'; "
-                                        + "dc:abstract 'A collection of materials and facts about Pythagoras' .";
-    public static String personBody = "@prefix dc: <http://purl.org/dc/terms/> . "
-                               + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-                               + "<> a foaf:Person; "
-                               + "foaf:name \"Pythagoras\" ; "
-                               + "foaf:based_near \"Croton\" ; "
-                               + "foaf:interest [ dc:title \"Geometry\" ] .";
-    public static String portraitContainer = "@prefix ldp: <http://www.w3.org/ns/ldp#> . "
-                                      + "@prefix dcterms: <http://purl.org/dc/terms/> . "
-                                      + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
-                                      + "<> a ldp:DirectContainer; "
-                                      + "ldp:membershipResource <%person%>; "
-                                      + "ldp:hasMemberRelation foaf:depiction; "
-                                      + "dcterms:title \"Portraits of Pythagoras\" .";
 
     /**
      * Authentication
@@ -147,40 +132,93 @@ public class Container extends AbstractTest {
                                         "LDP Containers must distinguish [membership] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
-        final Response pythagoras = createBasicContainer(uri, info.getId(), pythagorasContainer);
-        final String pythagorasLocationHeader = getLocation(pythagoras);
-        final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).asString();
+        final Response base = createBasicContainer(uri, info);
 
-        final Response portraits =
-            createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
+        final Response container = createBasicContainer(getLocation(base), "container");
+        final Response containerChild = createBasicContainer(getLocation(container), "child");
 
-        final String portraitsLocationHeader = getLocation(portraits);
+        final String directBody = DIRECT_CONTAINER_BODY
+                .replace("%membershipResource%", getLocation(container))
+                .replace("dcterms:hasPart", "ldp:contains");
 
-        createRequest("JpgPortrait", "image/jpeg")
-            .when()
-            .post(portraitsLocationHeader).asString();
+        // Test if ldp:contains is an allowed `hasMemberRelation`
+        final Response direct = createDirectContainerUnverifed(getLocation(base), directBody);
+        if (direct.getStatusCode() == 409) {
+            verifyConstraintHeader(direct);
 
-        final Response resP = createRequest().header("Prefer",
-                                                     "return=representation; include=\"http://www" +
-                                                     ".w3.org/ns/ldp#PreferMembership\"")
-                                             .when()
-                                             .get(portraitsLocationHeader);
+        } else if (direct.statusCode() == 201) {
+            final Response directMember = createBasicContainer(getLocation(direct), "member");
 
-        ps.append(resP.getStatusLine().toString() + "\n");
-        final Headers headers = resP.getHeaders();
-        for (Header h : headers) {
-            ps.append(h.getName().toString() + ": ");
-            ps.append(h.getValue().toString() + "\n");
-        }
-        final String body = resP.getBody().asString();
-        ps.append(body);
+            // 1. Expect two ldp:contains triples for basic GET
+            final Response resP = createRequest().when().get(getLocation(container));
 
-        if (body.contains("hasMemberRelation") && body.contains("membershipResource") &&
-            !body.contains("ldp:contains")) {
-            Assert.assertTrue(true, "OK");
+            ps.append(resP.getStatusLine().toString() + "\n");
+            final Headers headers = resP.getHeaders();
+            for (Header h : headers) {
+                ps.append(h.getName().toString() + ": ");
+                ps.append(h.getValue().toString() + "\n");
+            }
+            final String body = resP.getBody().asString();
+            ps.append(body);
+
+            // Contained triple
+            final org.apache.jena.rdf.model.Statement tripleContained = ResourceFactory.createStatement(
+                    ResourceFactory.createResource(getLocation(container)),
+                    ResourceFactory.createProperty("http://www.w3.org/ns/ldp#contains"),
+                    ResourceFactory.createResource(getLocation(containerChild)));
+
+            // Member triple
+            final org.apache.jena.rdf.model.Statement tripleMember = ResourceFactory.createStatement(
+                    ResourceFactory.createResource(getLocation(container)),
+                    ResourceFactory.createProperty("http://www.w3.org/ns/ldp#contains"),
+                    ResourceFactory.createResource(getLocation(directMember)));
+
+            // Both triples should be ldp:contained
+            resP.then().body(new TripleMatcher(tripleMember));
+            resP.then().body(new TripleMatcher(tripleContained));
+
+            // 2. Expect one ldp:contains triple for GET : PreferContainment
+            final Response responseContainment = createRequest()
+                    .header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\"")
+                    .when()
+                    .get(getLocation(container));
+
+            // Contained triple should be present
+            responseContainment.then().body(new TripleMatcher(tripleContained));
+
+            // Member triple should NOT be present
+            responseContainment.then().body(new TripleMatcher(tripleMember, false));
+
+            // 3. Expect one ldp:contains triple for GET : PreferMembership
+            final Response responseMembership = createRequest()
+                    .header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMembership\"")
+                    .when()
+                    .get(getLocation(container));
+
+            // Contained triple should NOT be present
+            responseMembership.then().body(new TripleMatcher(tripleContained, false));
+
+            // Member triple should be present
+            responseMembership.then().body(new TripleMatcher(tripleMember));
+
         } else {
-            Assert.assertTrue(false, "FAIL");
+            Assert.fail("Unexpected response code: " + direct.getStatusCode());
         }
+    }
+
+    private void verifyConstraintHeader(final Response response) {
+        final List<Header> linkHeaders = response.getHeaders().getList("Link");
+        // Loop individual Link headers
+        for (final Header header : linkHeaders) {
+            // Loop multi-valued Link headers
+            for (final String linkValue : header.getValue().split(",")) {
+                final Link link = Link.valueOf(linkValue);
+                if (link.getRel().equals("http://www.w3.org/ns/ldp#constrainedBy")) {
+                    return;
+                }
+            }
+        }
+        Assert.fail("No constrainedBy header found in: " + response);
     }
 
     /**
@@ -195,24 +233,19 @@ public class Container extends AbstractTest {
                                         "LDP Containers must distinguish [minimal-container] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
-        final Response pythagoras = createBasicContainer(uri, info, pythagorasContainer);
-        final String pythagorasLocationHeader = getLocation(pythagoras);
+        final Response base = createBasicContainer(uri, info);
 
-        final String person = createBasicContainer(pythagorasLocationHeader, "person", personBody).toString();
+        final Response container = createBasicContainer(getLocation(base), "container");
+        final Response containerChild = createBasicContainer(getLocation(container), "child");
 
-        final Response portraits =
-            createBasicContainer(pythagorasLocationHeader, "portraits", portraitContainer.replace("%person%", person));
-        final String portraitsLocationHeader = getLocation(portraits);
+        final Response direct = createDirectContainer(
+                getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
+        final Response directMember = createBasicContainer(getLocation(direct), "member");
 
-        createRequest("JpgPortrait", "image/jpeg")
-            .when()
-            .post(portraitsLocationHeader).asString();
-
-        final Response resP = createRequest().header("Prefer",
-                                                     "return=representation; include=\"http://www" +
-                                                     ".w3.org/ns/ldp#PreferMinimalContainer\"")
-                                             .when()
-                                             .get(portraitsLocationHeader);
+        final Response resP = createRequest()
+                .header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"")
+                .when()
+                .get(getLocation(container));
 
         ps.append(resP.getStatusLine().toString() + "\n");
         final Headers headers = resP.getHeaders();
@@ -223,13 +256,21 @@ public class Container extends AbstractTest {
         final String body = resP.getBody().asString();
         ps.append(body);
 
-        final boolean triple = TestSuiteGlobals.checkMembershipTriple(body);
+        // Verify absence of contained triple in response body
+        final org.apache.jena.rdf.model.Statement tripleContained = ResourceFactory.createStatement(
+                ResourceFactory.createResource(getLocation(container)),
+                ResourceFactory.createProperty("http://www.w3.org/ns/ldp#contains"),
+                ResourceFactory.createResource(getLocation(containerChild)));
 
-        if (!triple && !body.contains("ldp:contains")) {
-            Assert.assertTrue(true, "OK");
-        } else {
-            Assert.assertTrue(false, "FAIL");
-        }
+        resP.then().body(new TripleMatcher(tripleContained, false));
+
+        // Verify absence of member triple in response body
+        final org.apache.jena.rdf.model.Statement tripleMember = ResourceFactory.createStatement(
+                ResourceFactory.createResource(getLocation(container)),
+                ResourceFactory.createProperty("http://www.w3.org/ns/ldp#contains"),
+                ResourceFactory.createResource(getLocation(directMember)));
+
+        resP.then().body(new TripleMatcher(tripleMember, false));
     }
 
 }

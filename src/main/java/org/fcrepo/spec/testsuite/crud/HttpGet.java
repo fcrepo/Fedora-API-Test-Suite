@@ -19,6 +19,7 @@ package org.fcrepo.spec.testsuite.crud;
 
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
+import static org.fcrepo.spec.testsuite.Constants.RDF_BODY;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
@@ -114,7 +115,7 @@ public class HttpGet extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
 
-        final Response child = createBasicContainer(locationHeader, "child", Container.personBody);
+        final Response child = createBasicContainer(locationHeader, "child", RDF_BODY);
 
         // Triple expected in result body
         final Statement triple = ResourceFactory.createStatement(
