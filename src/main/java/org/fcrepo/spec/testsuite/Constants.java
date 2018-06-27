@@ -38,6 +38,12 @@ public class Constants {
             + "ldp:membershipResource <%membershipResource%> ;"
             + "ldp:hasMemberRelation dcterms:hasPart ." ;
 
+    public static String RDF_BODY = "@prefix dc: <http://purl.org/dc/terms/> . "
+            + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
+            + "<> a foaf:Person; "
+            + "foaf:name \"Pythagoras\" ; "
+            + "foaf:based_near \"Croton\" ; "
+            + "foaf:interest [ dc:title \"Geometry\" ] .";
 
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
     public static final String SLUG = "slug";
