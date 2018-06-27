@@ -20,7 +20,6 @@ package org.fcrepo.spec.testsuite.crud;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
-import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -65,28 +64,22 @@ public class HttpDelete extends AbstractTest {
         final String locationHeader = getLocation(resourceOp);
         final Response resourceSonOp = createBasicContainer(locationHeader, "Delete-" + info.getId());
 
-        final Response rdf01 =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"rdf01.txt\"")
-                           .header(SLUG, "Delete1-" + info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(locationHeader);
+        final Headers headers = new Headers(
+                new Header(SLUG, "Delete1-" + info.getId()),
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"rdf01.txt\""));
+        final Response rdf01 = doPost(locationHeader, headers, "TestString.");
 
         final String locationHeader2 = getLocation(resourceSonOp);
 
-        final Response rdf02 =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"rdf02.txt\"")
-                           .header(SLUG, "Delete2-" + info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(locationHeader2);
+        final Headers headers2 = new Headers(
+                new Header(SLUG, "Delete2-" + info.getId()),
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"rdf02.txt\""));
+        final Response rdf02 = doPost(locationHeader2, headers2, "TestString.");
 
-        final Response rdf03 =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"rdf03.txt\"")
-                           .header(SLUG, "Delete3-" + info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(locationHeader2);
+        final Headers headers3 = new Headers(
+                new Header(SLUG, "Delete3-" + info.getId()),
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"rdf03.txt\""));
+        final Response rdf03 = doPost(locationHeader2, headers3, "TestString.");
 
         final String rlocationHeader1 = getLocation(rdf01);
         final String rlocationHeader2 = getLocation(rdf02);
@@ -98,29 +91,27 @@ public class HttpDelete extends AbstractTest {
         ps.append("Body:\n");
 
         // Options to resourceOp
-        final Response responseOptions = createRequest().when()
-                                                        .options(locationHeader);
+        final Response responseOptions = doOptions(locationHeader);
 
         final String allowHeader = responseOptions.getHeader("Allow");
 
         // Delete to resourceOp
-        final Response response = createRequest().when()
-                                                 .delete(locationHeader);
+        final Response response = doDelete(locationHeader);
 
         // Print headers and status
-        final Headers headers = response.getHeaders();
+        final Headers responseHeaders = response.getHeaders();
         ps.append(response.getStatusLine());
 
-        for (Header h : headers) {
+        for (Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         //GET deleted resources
-        final Response resResource = doGet(locationHeader);
-        final Response resResourceSon = doGet(locationHeader2);
-        final Response resRdf01 = doGet(rlocationHeader1);
-        final Response resRdf02 = doGet(rlocationHeader2);
-        final Response resRdf03 = doGet(rlocationHeader3);
+        final Response resResource = doGetUnverified(locationHeader);
+        final Response resResourceSon = doGetUnverified(locationHeader2);
+        final Response resRdf01 = doGetUnverified(rlocationHeader1);
+        final Response resRdf02 = doGetUnverified(rlocationHeader2);
+        final Response resRdf03 = doGetUnverified(rlocationHeader3);
 
         if (allowHeader.contains("OPTIONS")) {
             if (resResource.getStatusCode() != 410 && resResourceSon.getStatusCode() != 410 &&
@@ -154,26 +145,22 @@ public class HttpDelete extends AbstractTest {
         final String locationHeader = getLocation(rootres);
         final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
         final String locationHeader2 = getLocation(resourceSon);
-        final Response nrdf01 =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf01.txt\"")
-                           .header(SLUG, "Delete1-" + info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(locationHeader);
 
-        final Response nrdf02 =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf02.txt\"")
-                           .header(SLUG, "Delete2-" + info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(locationHeader2);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf01.txt\""),
+                new Header(SLUG, "Delete1-" + info.getId()));
+        final Response nrdf01 = doPost(locationHeader, headers, "TestString.");
 
-        final Response nrdf03 =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf03.txt\"")
-                           .header(SLUG, "Delete3-" + info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(locationHeader2);
+        final Headers headers2 = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf02.txt\""),
+                new Header(SLUG, "Delete2-" + info.getId()));
+        final Response nrdf02 = doPost(locationHeader2, headers2, "TestString.");
+
+        final Headers headers3 = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf03.txt\""),
+                new Header(SLUG, "Delete3-" + info.getId()));
+        final Response nrdf03 = doPost(locationHeader2, headers3, "TestString.");
+
         final String rlocationHeader1 = getLocation(nrdf01);
         final String rlocationHeader2 = getLocation(nrdf02);
         final String rlocationHeader3 = getLocation(nrdf03);
@@ -184,24 +171,23 @@ public class HttpDelete extends AbstractTest {
         ps.append("Body:\n");
 
         // Delete root folder
-        final Response response = createRequest().when()
-                                                 .delete(locationHeader);
+        final Response response = doDelete(locationHeader);
 
         // Print headers and status
         final int statusDelete = response.getStatusCode();
-        final Headers headers = response.getHeaders();
+        final Headers responseHeaders = response.getHeaders();
         ps.append(response.getStatusLine());
 
-        for (Header h : headers) {
+        for (Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         //GET deleted resources
-        final Response resResource = doGet(locationHeader);
-        final Response resResourceSon = doGet(locationHeader2);
-        final Response resRdf01 = doGet(rlocationHeader1);
-        final Response resRdf02 = doGet(rlocationHeader2);
-        final Response resRdf03 = doGet(rlocationHeader3);
+        final Response resResource = doGetUnverified(locationHeader);
+        final Response resResourceSon = doGetUnverified(locationHeader2);
+        final Response resRdf01 = doGetUnverified(rlocationHeader1);
+        final Response resRdf02 = doGetUnverified(rlocationHeader2);
+        final Response resRdf03 = doGetUnverified(rlocationHeader3);
 
         if (statusDelete == 200 || statusDelete == 204) {
             if (resResource.getStatusCode() != 410 && resResourceSon.getStatusCode() != 410 &&
@@ -237,32 +223,21 @@ public class HttpDelete extends AbstractTest {
         final String locationHeader = getLocation(rootres);
         final Response resourceSon = createBasicContainer(locationHeader, "Delete-" + info.getId());
         final String locationHeader2 = getLocation(resourceSon);
-        final Response nrdf01 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf01.txt\"")
-                       .header(SLUG, "Delete1-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader);
 
-        final Response nrdf02 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf02.txt\"")
-                       .header(SLUG, "Delete2-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader2);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf01.txt\""),
+                new Header(SLUG, "Delete1-" + info.getId()));
+        final Response nrdf01 = doPost(locationHeader, headers, "TestString.");
 
-        final Response nrdf03 =
-            RestAssured.given()
-                       .auth().basic(this.username, this.password)
-                       .header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf03.txt\"")
-                       .header(SLUG, "Delete3-" + info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(locationHeader2);
+        final Headers headers2 = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf02.txt\""),
+                new Header(SLUG, "Delete2-" + info.getId()));
+        final Response nrdf02 = doPost(locationHeader2, headers2, "TestString.");
+
+        final Headers headers3 = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"nrdf03.txt\""),
+                new Header(SLUG, "Delete3-" + info.getId()));
+        final Response nrdf03 = doPost(locationHeader2, headers3, "TestString.");
 
         final String rlocationHeader1 = getLocation(nrdf01);
         final String rlocationHeader2 = getLocation(nrdf02);
@@ -274,24 +249,23 @@ public class HttpDelete extends AbstractTest {
         ps.append("Body:\n");
 
         // Delete root folder
-        final Response response = createRequest().when()
-                                                 .delete(locationHeader);
+        final Response response = doDelete(locationHeader);
 
         // Print headers and status
         final int statusDelete = response.getStatusCode();
-        final Headers headers = response.getHeaders();
+        final Headers responseHeaders = response.getHeaders();
         ps.append(response.getStatusLine());
 
-        for (Header h : headers) {
+        for (Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         //GET deleted resources
-        final Response resResource = doGet(locationHeader);
-        final Response resResourceSon = doGet(locationHeader2);
-        final Response resRdf01 = doGet(rlocationHeader1);
-        final Response resRdf02 = doGet(rlocationHeader2);
-        final Response resRdf03 = doGet(rlocationHeader3);
+        final Response resResource = doGetUnverified(locationHeader);
+        final Response resResourceSon = doGetUnverified(locationHeader2);
+        final Response resRdf01 = doGetUnverified(rlocationHeader1);
+        final Response resRdf02 = doGetUnverified(rlocationHeader2);
+        final Response resRdf03 = doGetUnverified(rlocationHeader3);
 
         final String statusdeletestring = String.valueOf(statusDelete);
         if (statusdeletestring.charAt(0) == '2') {

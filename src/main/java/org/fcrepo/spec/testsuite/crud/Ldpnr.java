@@ -21,6 +21,7 @@ import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.Constants;
@@ -65,12 +66,11 @@ public class Ldpnr extends AbstractTest {
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
 
-        final Response res = createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\"")
-                                            .header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER)
-                                            .header(SLUG, info.getId())
-                                            .body("TestString")
-                                            .when()
-                                            .post(uri);
+        final Headers headers = new Headers(
+                new Header(SLUG, info.getId()),
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\""),
+                new Header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER));
+        final Response res = doPost(uri, headers, "TestString");
 
         ps.append("Request method:\tPOST\n");
         ps.append("Request URI:\t").append(uri).append("\n");
@@ -84,37 +84,27 @@ public class Ldpnr extends AbstractTest {
         ps.append("\n").append(res.asString()).append("\n");
         final String locationHeader = getLocation(res);
 
-        if (res.getStatusCode() == 201) {
-            final Response nonr = createRequest()
-                .when()
-                .get(locationHeader);
+        final Response nonr = doGet(locationHeader);
 
-            for (Header h : nonr.getHeaders()) {
-                ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
+        for (Header h : nonr.getHeaders()) {
+            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
+        }
+        ps.append("\n").append(nonr.asString()).append("\n");
+        boolean header = false;
+
+        for (Header h : nonr.getHeaders()) {
+            if (h.getName().equals("Link") && h.getValue().contains("NonRDFSource")) {
+                header = true;
             }
-            ps.append("\n").append(nonr.asString()).append("\n");
-            boolean header = false;
-
-            for (Header h : nonr.getHeaders()) {
-                if (h.getName().equals("Link") && h.getValue().contains("NonRDFSource")) {
-                    header = true;
-                }
-            }
-
-            if (header) {
-                Assert.assertTrue(true, "OK");
-            } else {
-                ps.append("\nExpected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.\n");
-
-                throw new AssertionError("Expected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.");
-            }
-
-        } else {
-            ps.append("\nExpected response with a 2xx range status code.\n");
-
-            throw new AssertionError("Expected response with a 2xx range status code.");
         }
 
+        if (header) {
+            Assert.assertTrue(true, "OK");
+        } else {
+            ps.append("\nExpected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.\n");
+
+            throw new AssertionError("Expected a Link: rel=\"type\" http://www.w3.org/ns/ldp#NonRDFSource.");
+        }
     }
 
     /**
@@ -136,12 +126,12 @@ public class Ldpnr extends AbstractTest {
                                         "the newly "
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
-        final Response res = createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\"")
-                                            .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
-                                            .header(SLUG, info.getId())
-                                            .body("TestString")
-                                            .when()
-                                            .post(uri);
+        final Headers headers = new Headers(
+                new Header(SLUG, info.getId()),
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\""),
+                new Header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\""));
+        final Response res = doPostUnverified(uri, headers, "TestString");
+
         ps.append("Request method:\tPOST\n");
         ps.append("Request URI:\t").append(uri).append("\n");
         ps.append("Headers:\tAccept=*/*\n");

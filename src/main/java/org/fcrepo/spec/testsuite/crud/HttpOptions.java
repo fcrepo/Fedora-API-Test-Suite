@@ -53,12 +53,7 @@ public class HttpOptions extends AbstractTest {
                                         + "4.2.8.1 LDP servers must support the HTTP OPTIONS method.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-options",
                                         ps);
-        createRequest().when()
-                       .options(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(200);
-
+        doOptions(uri);
     }
 
     /**
@@ -77,11 +72,6 @@ public class HttpOptions extends AbstractTest {
                                         "HTTP response header Allow.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-options",
                                         ps);
-        createRequest().when()
-                       .options(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header("Allow", containsString("GET"));
-
+        doOptions(uri).then().header("Allow", containsString("GET"));
     }
 }

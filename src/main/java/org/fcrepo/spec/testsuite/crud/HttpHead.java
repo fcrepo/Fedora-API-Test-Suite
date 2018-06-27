@@ -67,12 +67,7 @@ public class HttpHead extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequest().when()
-                       .head(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(200).assertThat().body(equalTo(""));
-
+        doHead(locationHeader).then().assertThat().body(equalTo(""));
     }
 
     /**
@@ -90,16 +85,13 @@ public class HttpHead extends AbstractTest {
                                         "been omitted for a GET).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-head",
                                         ps);
-        final Response resource =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"headerwantdigest.txt\"")
-                           .header(SLUG, info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"headerwantdigest.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
 
         final String locationHeader = getLocation(resource);
-        final Response resget = createRequest().when()
-                                               .get(locationHeader);
+        final Response resget = doGet(locationHeader);
 
         ps.append(resget.getStatusLine()).append("\n");
         final Headers headersGet = resget.getHeaders();
@@ -108,11 +100,11 @@ public class HttpHead extends AbstractTest {
             ps.append(h.getValue()).append("\n");
         }
 
-        final Response reshead = createRequest().when()
-                                                .head(locationHeader);
+        final Response reshead = doHead(locationHeader);
+
         ps.append(reshead.getStatusLine()).append("\n");
-        final Headers headers = reshead.getHeaders();
-        for (Header h : headers) {
+        final Headers responseHeaders = reshead.getHeaders();
+        for (Header h : responseHeaders) {
             ps.append(h.getName()).append(": ");
             ps.append(h.getValue()).append("\n");
         }
@@ -150,9 +142,7 @@ public class HttpHead extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        final Response resget = createRequest()
-            .when()
-            .get(locationHeader);
+        final Response resget = doGet(locationHeader);
 
         ps.append(resget.getStatusLine()).append("\n");
         final Headers headersGet = resget.getHeaders();
@@ -168,8 +158,7 @@ public class HttpHead extends AbstractTest {
             }
         }
 
-        final Response reshead = createRequest().when()
-                                                .head(locationHeader);
+        final Response reshead = doHead(locationHeader);
 
         ps.append(reshead.getStatusLine()).append("\n");
         final Headers headershead = reshead.getHeaders();

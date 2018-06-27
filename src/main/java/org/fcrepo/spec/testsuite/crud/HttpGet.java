@@ -26,8 +26,6 @@ import static org.hamcrest.Matchers.containsString;
 import java.net.URI;
 import java.util.List;
 
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -85,15 +83,11 @@ public class HttpGet extends AbstractTest {
                 ResourceFactory.createProperty("http://purl.org/dc/terms/isPartOf"),
                 ResourceFactory.createResource(locationHeader));
 
-        createRequest().header("Prefer", "return=representation; "
-                                         + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\"")
-                       .when()
-                       .get(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header("preference-applied", containsString("return=representation"))
-                       .body(new TripleMatcher(triple));
-
+        doGet(locationHeader, new Header("Prefer", "return=representation; "
+                + "include=\"http://fedora.info/definitions/fcrepo#PreferInboundReferences\""))
+                .then()
+                .header("preference-applied", containsString("return=representation"))
+                .body(new TripleMatcher(triple));
     }
 
     /**
@@ -122,13 +116,10 @@ public class HttpGet extends AbstractTest {
                 ResourceFactory.createProperty("http://xmlns.com/foaf/0.1/name"),
                 ResourceFactory.createStringLiteral("Pythagoras"));
 
-        createRequest().header("Prefer", "return=representation; "
-                + "include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\"")
-                .when()
-                .get(locationHeader)
+        doGet(locationHeader, new Header("Prefer", "return=representation; "
+                + "include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""))
                 .then()
-                .log().all()
-                .statusCode(200).header("preference-applied", containsString("return=representation"))
+                .header("preference-applied", containsString("return=representation"))
                 .body(new TripleMatcher(triple));
     }
 
@@ -149,14 +140,10 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequest().header("Prefer", "return=representation; "
-                                         + "include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"")
-                       .when()
-                       .get(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header("preference-applied", containsString("return=representation"));
-
+        doGet(locationHeader, new Header("Prefer", "return=representation; "
+                        + "include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\""))
+                .then()
+                .header("preference-applied", containsString("return=representation"));
     }
 
     /**
@@ -176,12 +163,10 @@ public class HttpGet extends AbstractTest {
                                         + "in question, as defined in [RFC6892].",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
                                         ps);
-        final Response resource =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"responseDescribesHeader.txt\"")
-                           .header(SLUG, info.getId())
-                           .body("TestString")
-                           .when()
-                           .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"responseDescribesHeader.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
         final String locationHeader = getLocation(resource);
 
         // Get Binary description (from community impl: /fcr:metadata)
@@ -202,12 +187,9 @@ public class HttpGet extends AbstractTest {
         }
         Assert.assertNotNull(description, "Description is null!");
 
-        createRequest().when()
-                       .get(description)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header("Link", containsString("<" + locationHeader + ">; rel=\"describes\""));
-
+        doGet(description.toString())
+                .then()
+                .header("Link", containsString("<" + locationHeader + ">; rel=\"describes\""));
     }
 
     /**
@@ -226,20 +208,14 @@ public class HttpGet extends AbstractTest {
                                         ps);
         final String checksum = "md5";
 
-        final Response resource =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"respondwantdigest.txt\"")
-                           .header(SLUG, info.getId())
-                           .body("TestString")
-                           .when()
-                           .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"respondwantdigest.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
         final String locationHeader = getLocation(resource);
-        createRequest().header("Want-Digest", checksum)
-                       .when()
-                       .get(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header(DIGEST, containsString("md5"));
-
+        doGet(locationHeader, new Header("Want-Digest", checksum))
+                .then()
+                .header(DIGEST, containsString("md5"));
     }
 
     /**
@@ -257,28 +233,24 @@ public class HttpGet extends AbstractTest {
                                         + "header defined in [RFC3230]",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
-        final Response resource =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"wantdigestTwoSupported.txt\"")
-                           .header(SLUG, info.getId())
-                           .body("TestString")
-                           .when()
-                           .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantdigestTwoSupported.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
         final String locationHeader = getLocation(resource);
 
-        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
-                                                           .when()
-                                                           .get(locationHeader);
+        final Response wantDigestResponse = doGet(locationHeader, new Header("Want-Digest", checksum));
 
-        final Headers headers = wantDigestResponse.getHeaders();
+        final Headers responseHeaders = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
 
-        for (Header h : headers) {
+        for (Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert
-            .assertTrue(headers.getValue(DIGEST).contains("md5") ||
-                        headers.getValue(DIGEST).contains("sha"), "OK");
+            .assertTrue(responseHeaders.getValue(DIGEST).contains("md5") ||
+                        responseHeaders.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -298,28 +270,23 @@ public class HttpGet extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
 
-        final Response resource = createRequest().header(CONTENT_DISPOSITION,
-                                                         "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero" +
-                                                         ".txt\"")
-                                                 .header(SLUG, info.getId())
-                                                 .body("TestString")
-                                                 .when()
-                                                 .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantdigestTwoSupportedQvalueNonZero.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
         final String locationHeader = getLocation(resource);
-        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
-                                                           .when()
-                                                           .get(locationHeader);
+        final Response wantDigestResponse = doGet(locationHeader, new Header("Want-Digest", checksum));
 
-        final Headers headers = wantDigestResponse.getHeaders();
+        final Headers responseHeaders = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
 
-        for (Header h : headers) {
+        for (Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
         Assert
-            .assertTrue(headers.getValue(DIGEST).contains("md5") ||
-                        headers.getValue(DIGEST).contains("sha"), "OK");
+            .assertTrue(responseHeaders.getValue(DIGEST).contains("md5") ||
+                        responseHeaders.getValue(DIGEST).contains("sha"), "OK");
 
     }
 
@@ -338,20 +305,14 @@ public class HttpGet extends AbstractTest {
                                         + " header defined in [RFC3230]",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
-        final Response resource = createRequest()
-            .header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\"")
-            .header(SLUG, info.getId())
-            .body("TestString")
-            .when()
-            .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
         final String locationHeader = getLocation(resource);
-        createRequest().header("Want-Digest", checksum)
-                       .when()
-                       .get(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header(DIGEST, containsString("md5"));
-
+        doGet(locationHeader, new Header("Want-Digest", checksum))
+                .then()
+                .header(DIGEST, containsString("md5"));
     }
 
     /**
@@ -370,24 +331,14 @@ public class HttpGet extends AbstractTest {
                                         + "header defined in [RFC3230]",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
                                         ps);
-        final Response resource =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestNonSupported.txt\"")
-                           .header(SLUG, info.getId())
-                           .body("TestString")
-                           .when()
-                           .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestNonSupported.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
         final String locationHeader = getLocation(resource);
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Want-Digest", checksum)
-                   .when()
-                   .get(locationHeader)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header(DIGEST, containsString("md5"));
-
+        doGet(locationHeader, new Header("Want-Digest", checksum))
+                .then()
+                .header(DIGEST, containsString("md5"));
     }
 
 }
