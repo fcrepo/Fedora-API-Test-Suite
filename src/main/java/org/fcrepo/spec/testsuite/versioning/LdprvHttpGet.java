@@ -110,7 +110,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final URI timeGateUri = getTimeGateUri(createResponse);
 
         final Response newMementoResponse = doPost(timeMapURI.toString());
-        newMementoResponse.then().statusCode(201);
         final String newMementoUri = getLocation(newMementoResponse);
 
         //query timegate using Accept-Datetime
@@ -144,8 +143,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
         final Response response = doGet(resourceUri);
-        //ensure valid response code
-        response.then().statusCode(200);
         final URI original = getOriginalUri(response);
         Assert.assertEquals(resourceUri, original.toString());
     }
@@ -167,8 +164,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
         final Response response = doGet(resourceUri);
-        //ensure valid response code
-        response.then().statusCode(200);
         final URI original = getTimeGateUri(response);
         Assert.assertEquals(resourceUri, original.toString());
     }
@@ -191,8 +186,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
         final Response response = doGet(resourceUri);
-        //ensure valid response code
-        response.then().statusCode(200);
         confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, response);
     }
 
@@ -214,8 +207,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
         final Response response = doGet(resourceUri);
-        //ensure valid response code
-        response.then().statusCode(200);
         confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, response);
     }
 
@@ -236,8 +227,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
         final Response response = doGet(resourceUri);
-        //ensure valid response code
-        response.then().statusCode(200);
         confirmPresenceOfTimeMapLink(response);
 
     }
@@ -259,7 +248,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
         final Response response = doGet(resourceUri);
-        response.then().statusCode(200);
 
         Assert.assertEquals(getHeaders(response, "Vary").filter(x -> {
             return Arrays.stream(x.getValue().split(","))

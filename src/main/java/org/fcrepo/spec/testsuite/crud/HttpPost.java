@@ -58,11 +58,7 @@ public class HttpPost extends AbstractTest {
                                         "/ 5.2.3). ",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
 
-        createBasicContainer(uri, info)
-            .then()
-            .log().all()
-            .statusCode(201);
-
+        createBasicContainer(uri, info);
     }
 
     /**
@@ -82,10 +78,7 @@ public class HttpPost extends AbstractTest {
                                         ".w3.org/ns/ldp#constrainedBy\" "
                                         + "header ([LDP] 4.2.1.6 clarification).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        createBasicContainer(uri, info).then()
-                                       .log().all()
-                                       .statusCode(201).header("Link", containsString("constrainedBy"));
-
+        createBasicContainer(uri, info).then().header("Link", containsString("constrainedBy"));
     }
 
     /**
