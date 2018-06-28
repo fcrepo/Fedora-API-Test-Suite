@@ -17,32 +17,14 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
-import static org.fcrepo.spec.testsuite.Constants.DIGEST;
-import static org.fcrepo.spec.testsuite.Constants.SLUG;
-import static org.hamcrest.Matchers.containsString;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
-import io.restassured.RestAssured;
-import io.restassured.config.LogConfig;
-import io.restassured.http.Header;
-import io.restassured.http.Headers;
-import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.Assert;
-import org.testng.SkipException;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- * @author Jorge Abrego, Fernando Cardoza
+ * @author awoods
+ * @since 2018-06-28
  */
 public class ExternalBinaryContent extends AbstractTest {
 
@@ -58,881 +40,430 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-A-1 PostCreate
+     * 3.9-A-1 PostCreate Copy
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void postCreateExternalBinaryContent(final String uri) {
-        final TestInfo info = setupTest("3.9-A-1", "postCreateExternalBinaryContent",
-                                        "Fedora servers should support the creation of LDP-NRs with Content-Type "
-                                        + "of message/external-body and"
-                                        + " access-type parameter of url.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final String resource = createRequest().header(CONTENT_DISPOSITION,
-                                                       "attachment; filename=\"externalbinarycontentpostcreate.txt\"")
-                                               .header(SLUG, info.getId())
-                                               .body("TestString.")
-                                               .when()
-                                               .post(uri).asString();
-
-        createRequest().contentType( "message/external-body; access-type=URL; URL=\"" + resource + "\"")
-                       .when()
-                       .post(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(201);
-
+    public void postCreateExternalBinaryContentCopy(final String uri) {
+        final TestInfo info = setupTest("3.9-A-1", "postCreateExternalBinaryContentCopy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-A-2 PutCreate
+     * 3.9-A-2 PostCreate Redirect
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void putCreateExternalBinaryContent(final String uri) {
-        final TestInfo info = setupTest("3.9-A-2", "putCreateExternalBinaryContent",
-                                        "Fedora servers should support the creation of LDP-NRs with Content-Type "
-                                        + "of message/external-body and"
-                                        + " access-type parameter of url.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final String resource = createRequest().header(CONTENT_DISPOSITION,
-                                                       "attachment; filename=\"externalbinarycontentputcreate.txt\"")
-                                               .header(SLUG, info.getId())
-                                               .body("TestString.")
-                                               .when()
-                                               .post(uri).asString();
-
-        createRequest().contentType( "message/external-body; access-type=URL; URL=\"" + resource + "\"")
-                       .when()
-                       .put(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(201);
-
+    public void postCreateExternalBinaryContentRedirect(final String uri) {
+        final TestInfo info = setupTest("3.9-A-2", "postCreateExternalBinaryContentRedirect",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-A-3 PutUpdate
+     * 3.9-A-3 PostCreate Proxy
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void putUpdateExternalBinaryContent(final String uri) {
-        final TestInfo info = setupTest("3.9-A-3", "putUpdateExternalBinaryContent",
-                                        "Fedora servers should support the creation of LDP-NRs with Content-Type "
-                                        + "of message/external-body and"
-                                        + " access-type parameter of url.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String resource1 = createRequest().header(CONTENT_DISPOSITION,
-                                                        "attachment; filename=\"externalbinarycontentputupdate1.txt\"")
-                                                .header(SLUG, info.getId())
-                                                .body("TestString1.")
-                                                .when()
-                                                .post(uri).asString();
-
-        final String resource2 = createRequest().header(CONTENT_DISPOSITION,
-                                                        "attachment; filename=\"externalbinarycontentputupdate2.txt\"")
-                                                .header(SLUG, info.getId() + "-PutUpdate2")
-                                                .body("TestString2.")
-                                                .when()
-                                                .post(uri).asString();
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" + resource1 +
-                                                         "\"")
-                                                 .header(SLUG, info.getId() + "PutUpdate3")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader = getLocation(resource);
-        createRequest().contentType( "message/external-body; access-type=URL; URL=\"" + resource2 + "\"")
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(204);
-
+    public void postCreateExternalBinaryContentProxy(final String uri) {
+        final TestInfo info = setupTest("3.9-A-3", "postCreateExternalBinaryContentProxy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-B
+     * 3.9-B-1 PutCreate Copy
      *
-     * @param uri
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void createExternalBinaryContentCheckAccesType(final String uri) {
-        final TestInfo info = setupTest("3.9-B", "createExternalBinaryContentCheckAccesType",
-                                        "Fedora servers must advertise support in the Accept-Post response header for" +
-                                        " each supported access-type "
-                                        + " parameter value of Content-Type: message/external-body.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = getLocation(resource);
-        createRequest().when()
-                       .get(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header("Accept-Post", containsString("access-type=URL"));
-
-    }
-
-    /**
-     * 3.9-C-1
-     *
-     * @param uri
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void postCheckUnsupportedMediaType(final String uri) {
-        final TestInfo info = setupTest("3.9-C-1", "postCheckUnsupportedMediaType",
-                                        "Fedora servers receiving requests that would create or update a LDP-NR with "
-                                        + "a message/external-body with an "
-                                        +
-                                        "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE. "
-                                        + "In the case that a Fedora"
-                                        +
-                                        " server does not support external LDP-NR content, all message/external-body " +
-                                        "messages must be rejected"
-                                        + " with HTTP 415.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        createRequest().contentType( "message/external-body; access-type=abc;"
-                                               + " NAME=\"/some/file\"; site=\"example.com\"")
-                       .when()
-                       .post(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(415);
-
-    }
-
-    /**
-     * 3.9-C-2
-     *
-     * @param uri
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void putCheckUnsupportedMediaType(final String uri) {
-        final TestInfo info = setupTest("3.9-C-2", "putCheckUnsupportedMediaType",
-                                        "Fedora servers receiving requests that would create or update a LDP-NR with a "
-                                        + "message/external-body with an "
-                                        +
-                                        "unsupported type parameter must respond with HTTP 415 UNSUPPORTED MEDIA TYPE" +
-                                        ". In the case that a Fedora"
-                                        +
-                                        " server does not support external LDP-NR content, all message/external-body " +
-                                        "messages must be rejected"
-                                        + " with HTTP 415.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        createRequest().contentType(
-                               "message/external-body; access-type=abc; NAME=\"/some/file\"; site=\"example.com\"")
-                       .when()
-                       .put(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(415);
-
-    }
-
-    /**
-     * 3.9-D
-     *
-     * @param uri
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void checkUnsupportedMediaType(final String uri) {
-        final TestInfo info = setupTest("3.9-D", "checkUnsupportedMediaType",
-                                        "In the case that a Fedora server does not support external LDP-NR content, "
-                                        +
-                                        "all message/external-body messages must be rejected with 415 (Unsupported " +
-                                        "Media Type).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final Response resource = createRequest().header(CONTENT_DISPOSITION,
-                                                         "attachment; filename=\"checkUnsupportedMediaType.txt\"")
-                                                 .header(SLUG, info.getId())
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader = getLocation(resource);
-        final Response res = createRequest().contentType(
-                                                    "message/external-body; access-type=URL; URL=\"" + locationHeader +
-                                                    "\"")
-                                            .when()
-                                            .post(uri);
-
-        ps.append(res.getStatusLine()).append("\n");
-        final Headers headers = res.getHeaders();
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ");
-            ps.append(h.getValue()).append("\n");
-        }
-
-        final String status = String.valueOf(res.getStatusCode());
-        final char charStatus = status.charAt(0);
-        if (charStatus != '2') {
-            if (res.getStatusCode() != 415) {
-                Assert.fail();
-            }
-        }
-    }
-
-    /**
-     * 3.9-E-1
-     *
-     * @param uri
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void postCheckHeaders(final String uri) {
-        final TestInfo info = setupTest("3.9-E-1", "postCheckHeaders",
-                                        "Fedora servers receiving requests that would create or update an LDP-NR with" +
-                                        " Content-Type: "
-                                        +
-                                        "message/external-body must not accept the request if it cannot guarantee all. "
-                                        +
-                                        "of the response headers required by the LDP-NR interaction model in this " +
-                                        "specification.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final Response resource = createRequest().header(CONTENT_DISPOSITION,
-                                                         "attachment; filename=\"testExamtxtpost.txt\"")
-                                                 .header(SLUG, "External-Binary-Content-3.9-E1")
-                                                 .body("TestString.")
-                                                 .when()
-                                                 .post(uri);
-
-        ps.append(resource.getStatusLine()).append("\n");
-        final Headers headers = resource.getHeaders();
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ");
-            ps.append(h.getValue()).append("\n");
-        }
-        final List<String> h1 = new ArrayList<>();
-        for (Header h : headers) {
-            h1.add(h.getName());
-        }
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; filename=\"postCheckHeaders.txt\"")
-                                                     .header(SLUG, "External-Binary-Content-3.9-E2")
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader = getLocation(exbcresource);
-        final Response res = createRequest().contentType(
-                                                    "message/external-body; access-type=URL; URL=\"" + locationHeader +
-                                                    "\"")
-                                            .when()
-                                            .post(uri);
-
-        ps.append(res.getStatusLine()).append("\n");
-        final Headers headersext = res.getHeaders();
-        for (Header h : headersext) {
-            ps.append(h.getName()).append(": ");
-            ps.append(h.getValue()).append("\n");
-        }
-
-        final List<String> h2 = new ArrayList<>();
-        for (Header h : headersext) {
-            h2.add(h.getName());
-        }
-
-        final Set set1 = new HashSet(Collections.singletonList(h1));
-        final Set set2 = new HashSet(Collections.singletonList(h2));
-
-        if (!set2.containsAll(set1)) {
-            Assert.fail();
-        }
-
-    }
-
-    /**
-     * 3.9-E-2
-     *
-     * @param uri
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void putUpdateCheckHeaders(final String uri) {
-        final TestInfo info = setupTest("3.9-E-2", "putUpdateCheckHeaders",
-                                        "Fedora servers receiving requests that would create or update an LDP-NR with" +
-                                        " Content-Type: "
-                                        +
-                                        "message/external-body must not accept the request if it cannot guarantee all. "
-                                        +
-                                        "of the response headers required by the LDP-NR interaction model in this " +
-                                        "specification.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final Response resource =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"testExamtxt.txt\"")
-                           .header(SLUG, info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(uri);
-        final String locationHeader = getLocation(resource);
-        final Response putup =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdatetext.txt\"")
-                           .when()
-                           .put(locationHeader);
-
-        ps.append(putup.getStatusLine()).append("\n");
-        final Headers headers = putup.getHeaders();
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ");
-            ps.append(h.getValue()).append("\n");
-        }
-        final List<String> h1 = new ArrayList<>();
-        for (Header h : headers) {
-            h1.add(h.getName());
-        }
-
-        final Response exbcresource1 = createRequest().header(CONTENT_DISPOSITION,
-                                                              "attachment; filename=\"putUpdateCheckHeaders1.txt\"")
-                                                      .header(SLUG, info.getId())
-                                                      .body("TestString1.")
-                                                      .when()
-                                                      .post(uri);
-
-        final Response exbcresource2 = createRequest().header(CONTENT_DISPOSITION,
-                                                              "attachment; filename=\"putUpdateCheckHeaders2.txt\"")
-                                                      .header(SLUG, info.getId())
-                                                      .body("TestString2.")
-                                                      .when()
-                                                      .post(uri);
-
-        final String locationHeader1 = getLocation(exbcresource1);
-        final String locationHeader2 = getLocation(exbcresource2);
-
-        final Response resourceext = createRequest().contentType(
-                                                            "message/external-body; access-type=URL; URL=\"" +
-                                                            locationHeader1 + "\"")
-                                                    .when()
-                                                    .post(uri);
-        final String locationHeader3 = getLocation(resourceext);
-        final Response resext = createRequest().contentType(
-                                                       "message/external-body; access-type=URL; URL=\"" +
-                                                       locationHeader2
-                                                       + "\"")
-                                               .when()
-                                               .put(locationHeader3);
-
-        ps.append(resext.getStatusLine()).append("\n");
-        final Headers headersext = resext.getHeaders();
-        for (Header h : headersext) {
-            ps.append(h.getName()).append(": ");
-            ps.append(h.getValue()).append("\n");
-        }
-
-        final List<String> h2 = new ArrayList<>();
-        for (Header h : headersext) {
-            h2.add(h.getName());
-        }
-
-        final Set set1 = new HashSet(Collections.singletonList(h1));
-        final Set set2 = new HashSet(Collections.singletonList(h2));
-
-        if (!set2.containsAll(set1)) {
-            Assert.fail();
-        }
-
-    }
-
-    /**
-     * 3.9-F-1
-     *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void getCheckContentLocationHeader(final String uri) {
-        final TestInfo info = setupTest("3.9-F-1", "getCheckContentLocationHeader",
-                                        "GET and HEAD responses for any external LDP-NR should include a " +
-                                        "Content-Location header with a URI  "
-                                        +
-                                        "representation of the location of the external content if the Fedora server " +
-                                        "is proxying the content.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; filename=\"getCheckContentLocationHeader" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString1.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        ps.append("Request method:\tGET\n");
-        ps.append("Request URI:\t").append(uri);
-        ps.append("Headers:\tAccept=*/*\n");
-        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"").append(locationHeader1);
-        ps.append("\"\n\n");
-
-        final Headers headers = doGet(locationHeader2).getHeaders();
-
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ");
-            ps.append(h.getValue()).append("\n");
-        }
-
-        if (locationHeader2.indexOf("http") == 0) {
-            boolean isValid = false;
-            for (Header h : headers) {
-                if (h.getName().equals("Content-location") && !Objects.equals(h.getValue(), " ")) {
-                    isValid = true;
-                }
-            }
-
-            if (!isValid) {
-                ps.append("Content-Location header was not sent in the response.");
-
-                throw new AssertionError("Content-Location header was not set in the response.");
-            }
-        } else {
-            throw new SkipException("Skipping this exception");
-        }
-
+    public void putCreateExternalBinaryContentCopy(final String uri) {
+        final TestInfo info = setupTest("3.9-B-1", "putCreateExternalBinaryContentCopy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-F-2
+     * 3.9-B-2 PutCreate Redirect
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void headCheckContentLocationHeader(final String uri) {
-        final TestInfo info = setupTest("3.9-F-2", "headCheckContentLocationHeader",
-                                        "GET and HEAD responses for any external LDP-NR should include a " +
-                                        "Content-Location header with a URI  "
-                                        +
-                                        "representation of the location of the external content if the Fedora server " +
-                                        "is proxying the content.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; filename=\"headCheckContentLocationHeader" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        ps.append("Request method:\tHEAD\n");
-        ps.append("Request URI:\t").append(uri);
-        ps.append("Headers:\tAccept=*/*\n");
-        ps.append("\t\t\t\tContent-Type=message/external-body; access-type=URL; URL=\"").append(locationHeader1);
-        ps.append("\"\n\n");
-
-        final Headers headers = createRequest().when()
-                                               .head(locationHeader2).getHeaders();
-
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ");
-            ps.append(h.getValue()).append("\n");
-        }
-
-        if (locationHeader2.indexOf("http") == 0) {
-            boolean isValid = false;
-            for (Header h : headers) {
-                if (h.getName().equals("Content-Location") && !Objects.equals(h.getValue(), " ")) {
-                    isValid = true;
-                }
-            }
-
-            if (!isValid) {
-                ps.append("Content-Location header was not sent in the response.");
-
-                throw new AssertionError("Content-Location header was not set in the response.");
-            }
-        } else {
-            throw new SkipException("Skipping this exception");
-        }
-
+    public void putCreateExternalBinaryContentRedirect(final String uri) {
+        final TestInfo info = setupTest("3.9-B-2", "putCreateExternalBinaryContentRedirect",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-G-1
+     * 3.9-B-3 PutCreate Proxy
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
-    @Test(groups = {"MUST"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void respondWantDigestExternalBinaryContent(final String uri) {
-        final TestInfo info = setupTest("3.9-G-1", "respondWantDigestExternalBinaryContent",
-                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                                        + "Want-Digest header defined in [RFC3230].",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; filename=\"respondWantDigest.txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        createRequest().header("Want-Digest", checksum)
-                       .when()
-                       .get(locationHeader2)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header(DIGEST, containsString("md5"));
-
+    public void putCreateExternalBinaryContentProxy(final String uri) {
+        final TestInfo info = setupTest("3.9-B-3", "putCreateExternalBinaryContentProxy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-G-2
+     * 3.9-C-1 PutUpdate Copy
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
-    @Test(groups = {"MUST"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void respondWantDigestExternalBinaryContentHead(final String uri) {
-        final TestInfo info = setupTest("3.9-G-2", "respondWantDigestExternalBinaryContentHead",
-                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                                        + "Want-Digest header defined in [RFC3230].",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; filename=\"respondWantDigestHead.txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Want-Digest", checksum)
-                   .when()
-                   .head(locationHeader2)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header(DIGEST, containsString("md5"));
-
+    public void putUpdateExternalBinaryContentCopy(final String uri) {
+        final TestInfo info = setupTest("3.9-C-1", "putUpdateExternalBinaryContentCopy",
+                "Fedora servers should support the update of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-H-1
+     * 3.9-C-2 PutUpdate Redirect
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
-    @Test(groups = {"MUST"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedExternalBinaryContent(final String uri) {
-        final TestInfo info =
-            setupTest("3.9-H-1", "respondWantDigestTwoSupportedExternalBinaryContent",
-                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                      + "Want-Digest header defined in [RFC3230]. With two supported digests.",
-                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5,sha";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; filename=\"respondWantDigestTwoSupported" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
-                                                           .when()
-                                                           .get(locationHeader2);
-
-        final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine());
-
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
-        }
-
-        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
-                          headers.getValue(DIGEST).contains("sha"), "OK");
-
+    public void putUpdateExternalBinaryContentRedirect(final String uri) {
+        final TestInfo info = setupTest("3.9-C-2", "putUpdateExternalBinaryContentRedirect",
+                "Fedora servers should support the update of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-H-2
+     * 3.9-C-3 PutUpdate Proxy
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
-    @Test(groups = {"MUST"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedExternalBinaryContentHead(final String uri) {
-        final TestInfo info =
-            setupTest("3.9-H-2", "respondWantDigestTwoSupportedExternalBinaryContentHead",
-                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                      + "Want-Digest header defined in [RFC3230]. With two supported digests.",
-                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5,sha";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; " +
-                                                             "filename=\"respondWantDigestTwoSupportedHead" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
-                                                           .when()
-                                                           .head(locationHeader2);
-
-        final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine());
-
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
-        }
-
-        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
-                          headers.getValue(DIGEST).contains("sha"), "OK");
-
+    public void putUpdateExternalBinaryContentProxy(final String uri) {
+        final TestInfo info = setupTest("3.9-C-3", "putUpdateExternalBinaryContentProxy",
+                "Fedora servers should support the update of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-I-1
+     * 3.9-D-1 Unsupported status code
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent(final String uri) {
-        final TestInfo info = setupTest("3.9-I-1",
-                                        "" +
-                                        "respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContent",
-                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                                        +
-                                        "Want-Digest header defined in [RFC3230]. Two digests with different weights," +
-                                        " q values.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5;q=0.3,sha;q=1";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; " +
-                                                             "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
-                                                           .when()
-                                                           .get(locationHeader2);
-
-        final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine());
-
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
-        }
-
-        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
-                          headers.getValue(DIGEST).contains("sha"), "OK");
-
+    public void unsupportedExternalBinaryContentStatus(final String uri) {
+        final TestInfo info = setupTest("3.9-D-1", "unsupportedExternalBinaryContentStatus",
+                "Fedora servers that do not support the creation of LDP-NRs with content external must reject " +
+                        "with a 4xx range status code",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9-I-2
+     * 3.9-D-2 Unsupported constraint
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead(final String uri) {
-        final TestInfo info = setupTest("3.9-I-2",
-                                        "respondWantDigestTwoSupportedQvalueNonZeroExternalBinaryContentHead",
-                                        "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                                        +
-                                        "Want-Digest header defined in [RFC3230]. Two digests with different weights," +
-                                        " q values.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5;q=0.3,sha;q=1";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; " +
-                                                             "filename=\"respondWantDigestTwoSupportedQvalueNonZero" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        final Response wantDigestResponse = createRequest().header("Want-Digest", checksum)
-                                                           .when()
-                                                           .head(locationHeader2);
-
-        final Headers headers = wantDigestResponse.getHeaders();
-        ps.append(wantDigestResponse.getStatusLine());
-
-        for (Header h : headers) {
-            ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
-        }
-
-        Assert.assertTrue(headers.getValue(DIGEST).contains("md5") ||
-                          headers.getValue(DIGEST).contains("sha"), "OK");
-
+    public void unsupportedExternalBinaryContentConstraint(final String uri) {
+        final TestInfo info = setupTest("3.9-D-2", "unsupportedExternalBinaryContentConstraint",
+                "Fedora servers that do not support the creation of LDP-NRs with content external must describe " +
+                        "this restriction in a resource indicated by a " +
+                        "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link response header.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9.3-A
+     * 3.9-E-1 handling attribute
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestNonSupportedExternalBinaryContent(final String uri) {
-        final TestInfo info =
-            setupTest("3.9.3-A", "respondWantDigestNonSupportedExternalBinaryContent",
-                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                      + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
-                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5,abc";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; filename=\"respondWantDigestNonSupported" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        createRequest().header("Want-Digest", checksum)
-                       .when()
-                       .get(locationHeader2)
-                       .then()
-                       .log().all()
-                       .statusCode(200).header(DIGEST, containsString("md5"));
-
+    public void externalBinaryContentHandlingAttribute(final String uri) {
+        final TestInfo info = setupTest("3.9-E-1", "externalBinaryContentHandlingAttribute",
+                "Fedora servers must use the handling attribute in the external content link to determine how to " +
+                        "process the request. At least one of the following handling attributes must be supported: " +
+                        "copy, redirect, and/or proxy.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
 
     /**
-     * 3.9.3-B
+     * 3.9-E-2 handling status
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestNonSupportedExternalBinaryContentHead(final String uri) {
-        final TestInfo info =
-            setupTest("3.9.3-B", "respondWantDigestNonSupportedExternalBinaryContentHead",
-                      "GET and HEAD requests to any external LDP-NR must correctly respond to the "
-                      + "Want-Digest header defined in [RFC3230]. One supported and an unsupported Digest.",
-                      "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String checksum = "md5,abc";
-        final Response exbcresource = createRequest().header(CONTENT_DISPOSITION,
-                                                             "attachment; " +
-                                                             "filename=\"respondWantDigestNonSupportedHead" +
-                                                             ".txt\"")
-                                                     .header(SLUG, info.getId())
-                                                     .body("TestString.")
-                                                     .when()
-                                                     .post(uri);
-        final String locationHeader1 = getLocation(exbcresource);
-
-        final Response resource = createRequest().contentType(
-                                                         "message/external-body; access-type=URL; URL=\"" +
-                                                         locationHeader1 + "\"")
-                                                 .when()
-                                                 .post(uri);
-        final String locationHeader2 = getLocation(resource);
-
-        RestAssured.given()
-                   .auth().basic(this.username, this.password)
-                   .config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
-                   .log().all()
-                   .header("Want-Digest", checksum)
-                   .when()
-                   .head(locationHeader2)
-                   .then()
-                   .log().all()
-                   .statusCode(200).header(DIGEST, containsString("md5"));
-
+    public void externalBinaryContentHandlingStatus(final String uri) {
+        final TestInfo info = setupTest("3.9-E-2", "externalBinaryContentHandlingStatus",
+                "Fedora servers must reject with a 4xx range status code requests for which the handling attribute " +
+                        "is not present or cannot be respected.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
     }
+
+    /**
+     * 3.9-E-3 unsupported handling
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void unsupportedBinaryContentHandlingAttribute(final String uri) {
+        final TestInfo info = setupTest("3.9-E-3", "unsupportedBinaryContentHandlingAttribute",
+                "In the case that the specified handling cannot be respected, the restrictions causing the request " +
+                        "to fail must be described in a resource indicated by a " +
+                        "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link response header.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-F-1 media type
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentMediaType(final String uri) {
+        final TestInfo info = setupTest("3.9-F-1", "binaryContentMediaType",
+                "Fedora servers must use the value of the type attribute in the external content link as the media " +
+                        "type of the external content, if provided.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-F-2 no type attribute - external type
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void binaryContentNoTypeExternalType(final String uri) {
+        final TestInfo info = setupTest("3.9-F-2", "binaryContentNoTypeExternalType",
+                "Fedora servers must use the value of the type attribute in the external content link as the media " +
+                        "type of the external content, if provided. Servers may use the media type obtained when " +
+                        "accessing the external content via the specified scheme (e.g. the Content-Type header for " +
+                        "external content accessed via http).",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-F-3 no type attribute - default
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void binaryContentNoTypeDefault(final String uri) {
+        final TestInfo info = setupTest("3.9-F-3", "binaryContentNoTypeDefault",
+                "Fedora servers must use the value of the type attribute in the external content link as the media " +
+                        "type of the external content, if provided. Servers may use a default media type.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-F-4 no type attribute - unsupported
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void binaryContentNoTypeUnsupported(final String uri) {
+        final TestInfo info = setupTest("3.9-F-4", "binaryContentNoTypeUnsupported",
+                "Fedora servers must use the value of the type attribute in the external content link as the media " +
+                        "type of the external content, if provided. Servers may reject the request with a 4xx range " +
+                        "status code.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-F-5 Content-Type and type
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"SHOULD"})
+    @Parameters({"param1"})
+    public void binaryContentContentTypeAndType(final String uri) {
+        final TestInfo info = setupTest("3.9-F-5", "binaryContentContentTypeAndType",
+                "Fedora servers must use the value of the type attribute in the external content link as the media " +
+                        "type of the external content, if provided. Any Content-Type header in the request should be " +
+                        "ignored.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-F-6 Content-Type and no type
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"SHOULD"})
+    @Parameters({"param1"})
+    public void binaryContentContentTypeAndNoType(final String uri) {
+        final TestInfo info = setupTest("3.9-F-6", "binaryContentContentTypeAndNoType",
+                "Fedora servers must use the value of the type attribute in the external content link as the media " +
+                        "type of the external content, if provided. Any Content-Type header in the request should be " +
+                        "ignored.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-G-1 Guaranteed headers - describedby
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentGuaranteeHeadersDescribedBy(final String uri) {
+        final TestInfo info = setupTest("3.9-G-1", "binaryContentGuaranteeHeadersDescribedBy",
+                "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
+                        "the request entity must reject request if it cannot guarantee all of the response headers " +
+                        "required by the LDP-NR interaction model in this specification.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-G-2 Guaranteed headers - Content-Type
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentGuaranteeHeadersContentType(final String uri) {
+        final TestInfo info = setupTest("3.9-G-2", "binaryContentGuaranteeHeadersContentType",
+                "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
+                        "the request entity must reject request if it cannot guarantee all of the response headers " +
+                        "required by the LDP-NR interaction model in this specification.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-G-3 Guaranteed headers - Content-Length
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentGuaranteeHeadersContentLength(final String uri) {
+        final TestInfo info = setupTest("3.9-G-3", "binaryContentGuaranteeHeadersContentLength",
+                "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
+                        "the request entity must reject request if it cannot guarantee all of the response headers " +
+                        "required by the LDP-NR interaction model in this specification.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9-G-4 Guaranteed headers - interaction model
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentGuaranteeHeadersInteractionModel(final String uri) {
+        final TestInfo info = setupTest("3.9-G-4", "binaryContentGuaranteeHeadersInteractionModel",
+                "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
+                        "the request entity must reject request if it cannot guarantee all of the response headers " +
+                        "required by the LDP-NR interaction model in this specification.",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+    }
+
+    /**
+     * 3.9.1 OPTIONS values
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentOptions(final String uri) {
+        final TestInfo info = setupTest("3.9.1", "binaryContentOptions",
+                "Fedora servers supporting external content MUST include \"Accept-External-Content-Handling\" " +
+                        "header in response to \"OPTIONS\" request.",
+                "https://fedora.info/2018/06/25/spec/#external-content-options", ps);
+    }
+
+    /**
+     * 3.9.3-A-1 redirect want-digest header
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentRedirectWantDigest(final String uri) {
+        final TestInfo info = setupTest("3.9.3-A-1", "binaryContentRedirectWantDigest",
+                "Fedora servers supporting \"redirect\" external content types MUST correctly respond to the " +
+                        "\"Want-Digest\" header.",
+                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+    }
+
+    /**
+     * 3.9.3-A-2 proxy want-digest header
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentProxyWantDigest(final String uri) {
+        final TestInfo info = setupTest("3.9.3-A-2", "binaryContentProxyWantDigest",
+                "Fedora servers supporting \"redirect\" external content types MUST correctly respond to the " +
+                        "\"Want-Digest\" header.",
+                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+    }
+
+    /**
+     * 3.9.3-B-1 redirect content status code on GET
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentRedirectStatusGet(final String uri) {
+        final TestInfo info = setupTest("3.9.3-B-1", "binaryContentRedirectStatusGet",
+                "A successful response to a GET request for external content with handling of redirect " +
+                        "must have status code of either 302 (Found) or 307 (Temporary Redirect)",
+                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+    }
+
+    /**
+     * 3.9.3-B-2 redirect content status code on HEAD
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void binaryContentRedirectStatusHead(final String uri) {
+        final TestInfo info = setupTest("3.9.3-B-2", "binaryContentRedirectStatusHead",
+                "A successful response to a HEAD request for external content with handling of redirect " +
+                        "must have status code of either 302 (Found) or 307 (Temporary Redirect)",
+                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+    }
+
 }
