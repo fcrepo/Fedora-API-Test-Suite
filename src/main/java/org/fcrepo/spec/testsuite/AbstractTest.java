@@ -223,7 +223,8 @@ public class AbstractTest {
         return response;
     }
 
-    protected RequestSpecification createRequest() {
+
+    private RequestSpecification createRequest() {
         return createRequestAuthOnly().config(RestAssured.config()
                                       .logConfig(new LogConfig().defaultStream(ps)
                                                                 .enableLoggingOfRequestAndResponseIfValidationFails()))

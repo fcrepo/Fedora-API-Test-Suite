@@ -20,3 +20,4 @@ test-output
 testng-local.xml
 /bin
 /report
+*.swp
