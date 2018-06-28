@@ -34,7 +34,6 @@ import javax.ws.rs.core.Link;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
 import org.testng.annotations.Parameters;
@@ -43,7 +42,7 @@ import org.testng.annotations.Test;
 /**
  * @author Daniel Bernstein
  */
-public class LdpvHttpGet extends AbstractTest {
+public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * Authentication
@@ -52,7 +51,7 @@ public class LdpvHttpGet extends AbstractTest {
      * @param password
      */
     @Parameters({"param2", "param3"})
-    public LdpvHttpGet(final String username, final String password) {
+    public LdprvHttpGet(final String username, final String password) {
         super(username, password);
     }
 
