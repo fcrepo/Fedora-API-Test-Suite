@@ -113,7 +113,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final Response newMementoResponse = createRequest().urlEncodingEnabled(false).post(timeMapURI);
         newMementoResponse.then().statusCode(201);
-        final String newMememntoUri = getLocation(newMementoResponse);
+        final String newMementoUri = getLocation(newMementoResponse);
 
         //query timegate using Accept-Datetime
         final String isoDateString = "1970-01-01T00:00:00Z";
@@ -127,7 +127,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final String resolvedMementoUri = getLocation(timeGateResponse);
 
-        Assert.assertEquals(newMememntoUri, resolvedMementoUri);
+        Assert.assertEquals(newMementoUri, resolvedMementoUri);
     }
 
     /**
@@ -329,14 +329,13 @@ public class LdpvHttpGet extends AbstractTest {
 
     private Stream<Header> getHeaders(final Response response, final String headerName) {
         return response.getHeaders()
-                       .asList()
-                       .stream()
-                       .filter(header -> header.getName().equalsIgnoreCase(headerName));
+                       .getList(headerName)
+                       .stream();
     }
 
     private Stream<Link> getLinksOfRelType(final Response response, final String relType) {
         return getHeaders(response, "Link")
-            .map(header -> Link.valueOf(header.getValue()))
+            .flatMap(header ->  Arrays.stream(header.getValue().split(",")).map(linkStr -> Link.valueOf(linkStr)))
             .filter(link -> link.getRel().equalsIgnoreCase(relType));
 
     }
