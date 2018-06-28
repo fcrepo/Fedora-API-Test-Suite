@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import javax.ws.rs.core.Link;
 
 import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
@@ -83,9 +84,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final String rfc1123Date = convertToRfc1123DateTimeString(isoDateString);
 
-        createRequest()
-            .header("Accept-Datetime", rfc1123Date).get(timeGateUri).then().statusCode(406);
-
+        doGetUnverified(timeGateUri.toString(), new Header("Accept-Datetime", rfc1123Date)).then().statusCode(406);
     }
 
     /**
@@ -111,7 +110,7 @@ public class LdpvHttpGet extends AbstractTest {
         //get timegate uri
         final URI timeGateUri = getTimeGateUri(createResponse);
 
-        final Response newMementoResponse = createRequest().urlEncodingEnabled(false).post(timeMapURI);
+        final Response newMementoResponse = doPost(timeMapURI.toString());
         newMementoResponse.then().statusCode(201);
         final String newMementoUri = getLocation(newMementoResponse);
 
@@ -120,8 +119,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final String rfc1123Date = convertToRfc1123DateTimeString(isoDateString);
 
-        final Response timeGateResponse = createRequest()
-            .header("Accept-Datetime", rfc1123Date).get(timeGateUri);
+        final Response timeGateResponse = doGet(timeGateUri.toString(), new Header("Accept-Datetime", rfc1123Date));
 
         timeGateResponse.then().statusCode(302);
 
@@ -146,7 +144,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
-        final Response response = createRequest().get(resourceUri);
+        final Response response = doGet(resourceUri);
         //ensure valid response code
         response.then().statusCode(200);
         final URI original = getOriginalUri(response);
@@ -169,7 +167,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
-        final Response response = createRequest().get(resourceUri);
+        final Response response = doGet(resourceUri);
         //ensure valid response code
         response.then().statusCode(200);
         final URI original = getTimeGateUri(response);
@@ -193,7 +191,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
-        final Response response = createRequest().get(resourceUri);
+        final Response response = doGet(resourceUri);
         //ensure valid response code
         response.then().statusCode(200);
         confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, response);
@@ -216,7 +214,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
-        final Response response = createRequest().get(resourceUri);
+        final Response response = doGet(resourceUri);
         //ensure valid response code
         response.then().statusCode(200);
         confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, response);
@@ -238,7 +236,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
-        final Response response = createRequest().get(resourceUri);
+        final Response response = doGet(resourceUri);
         //ensure valid response code
         response.then().statusCode(200);
         confirmPresenceOfTimeMapLink(response);
@@ -261,7 +259,7 @@ public class LdpvHttpGet extends AbstractTest {
 
         final Response createdResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createdResponse);
-        final Response response = createRequest().get(resourceUri);
+        final Response response = doGet(resourceUri);
         response.then().statusCode(200);
 
         Assert.assertEquals(getHeaders(response, "Vary").filter(x -> {
@@ -281,10 +279,10 @@ public class LdpvHttpGet extends AbstractTest {
     }
 
     private Response createVersionedResource(final String uri, final TestInfo info) {
-        return createRequest().header("Link", ORIGINAL_RESOURCE_LINK_HEADER)
-                              .header(SLUG, info.getId())
-                              .when()
-                              .post(uri);
+        final Headers headers = new Headers(
+                new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
+                new Header(SLUG, info.getId()));
+        return doPost(uri, headers);
     }
 
     private void confirmPresenceOfTimeGateLink(final Response response) {

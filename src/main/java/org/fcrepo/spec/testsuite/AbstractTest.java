@@ -38,7 +38,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -134,7 +133,7 @@ public class AbstractTest {
             .when()
             .post(uri);
 
-        Assert.assertEquals(response.getStatusCode(), 201);
+        response.then().statusCode(201);
 
         return response;
     }
@@ -142,7 +141,7 @@ public class AbstractTest {
     protected Response createDirectContainer(final String uri, final String body) {
         final Response response = createDirectContainerUnverifed(uri, body);
 
-        Assert.assertEquals(response.getStatusCode(), 201);
+        response.then().statusCode(201);
 
         return response;
     }
@@ -161,10 +160,38 @@ public class AbstractTest {
                 .post(uri);
     }
 
+    private Response doPostUnverified(final String uri, final Headers headers) {
+        return createRequest().headers(headers)
+                .when()
+                .post(uri);
+    }
+
+    private Response doPostUnverified(final String uri) {
+        return createRequest()
+                .when()
+                .post(uri);
+    }
+
+    protected Response doPost(final String uri, final Headers headers) {
+        final Response response = doPostUnverified(uri, headers);
+
+        response.then().statusCode(201);
+
+        return response;
+    }
+
+    protected Response doPost(final String uri) {
+        final Response response = doPostUnverified(uri);
+
+        response.then().statusCode(201);
+
+        return response;
+    }
+
     protected Response doPost(final String uri, final Headers headers, final String body) {
         final Response response = doPostUnverified(uri, headers, body);
 
-        Assert.assertEquals(response.statusCode(), 201);
+        response.then().statusCode(201);
 
         return response;
     }
@@ -179,7 +206,7 @@ public class AbstractTest {
     protected Response doPut(final String uri, final Headers headers, final String body) {
         final Response response = doPutUnverified(uri, headers, body);
 
-        Assert.assertEquals(response.statusCode(), 204);
+        response.then().statusCode(204);
 
         return response;
     }
@@ -191,7 +218,7 @@ public class AbstractTest {
     protected Response doOptions(final String uri) {
         final Response response = doOptionsUnverified(uri);
 
-        Assert.assertEquals(response.statusCode(), 200);
+        response.then().statusCode(200);
 
         return response;
     }
@@ -212,14 +239,10 @@ public class AbstractTest {
                           .auth().basic(this.username, this.password);
     }
 
-    protected RequestSpecification createRequestAuthOnly(final String contentType) {
-        return createRequestAuthOnly().contentType(contentType);
-    }
-
     protected Response doGet(final String uri, final Header header) {
         final Response response = doGetUnverified(uri, header);
 
-        Assert.assertEquals(response.getStatusCode(), 200);
+        response.then().statusCode(200);
 
         return response;
     }
@@ -227,12 +250,12 @@ public class AbstractTest {
     protected Response doGet(final String uri) {
         final Response response = doGetUnverified(uri);
 
-        Assert.assertEquals(response.getStatusCode(), 200);
+        response.then().statusCode(200);
 
         return response;
     }
 
-    private Response doGetUnverified(final String uri, final Header header) {
+    protected Response doGetUnverified(final String uri, final Header header) {
         return createRequest().header(header).when().get(uri);
     }
 
@@ -247,7 +270,7 @@ public class AbstractTest {
     protected Response doDelete(final String uri) {
         final Response response = doDeleteUnverified(uri);
 
-        Assert.assertEquals(response.statusCode(), 204);
+        response.then().statusCode(204);
 
         return response;
     }
@@ -259,7 +282,7 @@ public class AbstractTest {
     protected Response doHead(final String uri) {
         final Response response = doHeadUnverified(uri);
 
-        Assert.assertEquals(response.statusCode(), 200);
+        response.then().statusCode(200);
 
         return response;
     }
@@ -267,7 +290,7 @@ public class AbstractTest {
     protected Response doPatch(final String uri, final Headers headers, final String body) {
         final Response response = doPatchUnverified(uri, headers, body);
 
-        Assert.assertEquals(response.statusCode(), 204);
+        response.then().statusCode(204);
 
         return response;
     }
