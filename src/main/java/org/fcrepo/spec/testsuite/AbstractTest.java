@@ -148,7 +148,9 @@ public class AbstractTest {
     }
 
     protected RequestSpecification createRequest() {
-        return createRequestAuthOnly().config(RestAssured.config().logConfig(new LogConfig().defaultStream(ps)))
+        return createRequestAuthOnly().config(RestAssured.config()
+                                      .logConfig(new LogConfig().defaultStream(ps)
+                                                                .enableLoggingOfRequestAndResponseIfValidationFails()))
                                       .log().all();
     }
 
