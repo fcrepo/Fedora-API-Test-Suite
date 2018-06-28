@@ -33,8 +33,8 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public LdpcvHttpOptions(final String username, final String password) {
@@ -44,7 +44,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     /**
      * 4.3.2-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -64,7 +64,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     /**
      * 4.3.2-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -88,7 +88,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     /**
      * 4.3.2-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
@@ -108,7 +108,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     /**
      * 4.3.2-D
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
@@ -126,14 +126,14 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     }
 
     /**
-     * 4.3.2-D
+     * 4.3.2-E
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpcvMaySupportPost(final String uri) {
-        final TestInfo info = setupTest("4.3.2-D", "ldpcvMaySupportPost",
+        final TestInfo info = setupTest("4.3.2-E", "ldpcvMaySupportPost",
                                         "LDPCv (version containers) MAY support POST.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
                                         ps);
@@ -146,14 +146,14 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     }
 
     /**
-     * 4.3.2-E
+     * 4.3.2-F
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustReturnAcceptPostHeaderIfPostIsSupported(final String uri) {
-        final TestInfo info = setupTest("4.3.2-E", "ldpcvMustReturnAcceptPostHeaderIfPostIsSupported",
+        final TestInfo info = setupTest("4.3.2-F", "ldpcvMustReturnAcceptPostHeaderIfPostIsSupported",
                                         "If an LDPCv supports POST, the response to an OPTIONS request " +
                                         " MUST include the \"Accept-Post\" header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
@@ -172,14 +172,14 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     }
 
     /**
-     * 4.3.2-F
+     * 4.3.2-G
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustReturnAcceptPatchHeaderIfPatchIsSupported(final String uri) {
-        final TestInfo info = setupTest("4.3.2-F", "ldpcvMustReturnAcceptPatchHeaderIfPatchIsSupported",
+        final TestInfo info = setupTest("4.3.2-G", "ldpcvMustReturnAcceptPatchHeaderIfPatchIsSupported",
                                         "If an LDPCv supports PATCH, the response to an OPTIONS request " +
                                         " MUST include the \"Accept-Patch\" header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
@@ -191,7 +191,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
         final Response response = doOptions(timeMapURI.toString());
         if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", response)) {
             Assert.assertTrue(getHeaders(response, "Accept-Patch").count() > 0,
-                              "If an LDPCv supports POST, the response to an OPTIONS request " +
+                              "If an LDPCv supports PATCH, the response to an OPTIONS request " +
                               " MUST include the \"Accept-Patch\" header");
 
         }
