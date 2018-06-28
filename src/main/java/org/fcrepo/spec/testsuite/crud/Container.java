@@ -88,10 +88,8 @@ public class Container extends AbstractTest {
                 getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
         final Response directMember = createBasicContainer(getLocation(direct), "member");
 
-        final Response resP = createRequest()
-            .header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\"")
-            .when()
-            .get(getLocation(container));
+        final Response resP = doGet(getLocation(container),
+                new Header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\""));
 
         ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();
@@ -149,7 +147,7 @@ public class Container extends AbstractTest {
             final Response directMember = createBasicContainer(getLocation(direct), "member");
 
             // 1. Expect two ldp:contains triples for basic GET
-            final Response resP = createRequest().when().get(getLocation(container));
+            final Response resP = doGet(getLocation(container));
 
             ps.append(resP.getStatusLine()).append("\n");
             final Headers headers = resP.getHeaders();
@@ -177,10 +175,9 @@ public class Container extends AbstractTest {
             resP.then().body(new TripleMatcher(tripleContained));
 
             // 2. Expect one ldp:contains triple for GET : PreferContainment
-            final Response responseContainment = createRequest()
-                    .header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\"")
-                    .when()
-                    .get(getLocation(container));
+            final Response responseContainment = doGet(getLocation(container),
+                    new Header("Prefer",
+                            "return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\""));
 
             // Contained triple should be present
             responseContainment.then().body(new TripleMatcher(tripleContained));
@@ -189,10 +186,9 @@ public class Container extends AbstractTest {
             responseContainment.then().body(new TripleMatcher(tripleMember, false));
 
             // 3. Expect one ldp:contains triple for GET : PreferMembership
-            final Response responseMembership = createRequest()
-                    .header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMembership\"")
-                    .when()
-                    .get(getLocation(container));
+            final Response responseMembership = doGet(getLocation(container),
+                    new Header("Prefer",
+                            "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMembership\""));
 
             // Contained triple should NOT be present
             responseMembership.then().body(new TripleMatcher(tripleContained, false));
@@ -241,10 +237,9 @@ public class Container extends AbstractTest {
                 getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
         final Response directMember = createBasicContainer(getLocation(direct), "member");
 
-        final Response resP = createRequest()
-                .header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"")
-                .when()
-                .get(getLocation(container));
+        final Response resP = doGet(getLocation(container),
+                new Header("Prefer",
+                        "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\""));
 
         ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();

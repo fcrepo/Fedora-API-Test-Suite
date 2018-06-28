@@ -22,6 +22,8 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -98,15 +100,10 @@ public class HttpPost extends AbstractTest {
                                         "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
                                         " must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"postNonRDFSource.txt\"")
-                       .header(SLUG, info.getId())
-                       .body("TestString.")
-                       .when()
-                       .post(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(201);
-
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postNonRDFSource.txt\""),
+                new Header(SLUG, info.getId()));
+        doPost(uri, headers, "TestString.");
     }
 
     /**
@@ -122,16 +119,12 @@ public class HttpPost extends AbstractTest {
                                         " describing"
                                         + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        createRequest()
-            .header(CONTENT_DISPOSITION, "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\"")
-            .header(SLUG, info.getId())
-            .body("TestString.")
-            .when()
-            .post(uri)
-            .then()
-            .log().all()
-            .statusCode(201).header("Link", containsString("describedby"));
-
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\""),
+                new Header(SLUG, info.getId()));
+        doPost(uri, headers, "TestString.")
+                .then()
+                .header("Link", containsString("describedby"));
     }
 
     /**
@@ -151,17 +144,13 @@ public class HttpPost extends AbstractTest {
                                         + "new LDP-NR must be rejected with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "md5=1234";
-        createRequest().header(CONTENT_DISPOSITION,
-                               "attachment; filename=\"test1digesttext.txt\"")
-                       .header(SLUG, info.getId())
-                       .body("TestString.")
-                       .header(DIGEST, checksum)
-                       .when()
-                       .post(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(409);
-
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"test1digesttext.txt\""),
+                new Header(SLUG, info.getId()),
+                new Header(DIGEST, checksum));
+        doPostUnverified(uri, headers, "TestString.")
+                .then()
+                .statusCode(409);
     }
 
     /**
@@ -178,16 +167,12 @@ public class HttpPost extends AbstractTest {
                                         + "should be rejected with a 400 Bad Request response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
         final String checksum = "abc=abc";
-        createRequest().header(CONTENT_DISPOSITION,
-                               "attachment; filename=\"test1digesttext2.txt\"")
-                       .header(SLUG, info.getId())
-                       .body("TestString.")
-                       .header(DIGEST, checksum)
-                       .when()
-                       .post(uri)
-                       .then()
-                       .log().all()
-                       .statusCode(400);
-
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION,"attachment; filename=\"test1digesttext2.txt\""),
+                new Header(SLUG, info.getId()),
+                new Header(DIGEST, checksum));
+        doPostUnverified(uri, headers, "TestString.")
+                .then()
+                .statusCode(400);
     }
 }

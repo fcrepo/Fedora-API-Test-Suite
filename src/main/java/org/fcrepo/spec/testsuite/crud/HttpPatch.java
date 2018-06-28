@@ -21,10 +21,6 @@ import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.containsString;
 
-import io.restassured.RestAssured;
-import io.restassured.config.EncoderConfig;
-import io.restassured.config.LogConfig;
-import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -91,20 +87,8 @@ public class HttpPatch extends AbstractTest {
                                         ps);
         final Response resource = createBasicContainer(uri, info.getId(), BASIC_CONTAINER_BODY);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
-            .config(RestAssured.config()
-                               .encoderConfig(new EncoderConfig()
-                                                  .encodeContentTypeAs(APPLICATION_SPARQL_UPDATE,
-                                                                       ContentType.TEXT))
-                               .logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .when()
-            .request().body(body)
-            .patch(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(204);
-
+        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+        doPatch(locationHeader, headers, body);
     }
 
     /**
@@ -120,19 +104,8 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly("text/ldpatch")
-            .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                           .encodeContentTypeAs("text/ldpatch",
-                                                                                ContentType.TEXT))
-                               .logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .body(ldpatch)
-            .when()
-            .patch(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(204);
-
+        final Headers headers = new Headers(new Header("Content-Type", "text/ldpatch"));
+        doPatch(locationHeader, headers, ldpatch);
     }
 
     /**
@@ -151,20 +124,10 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
-            .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                           .encodeContentTypeAs(
-                                                               APPLICATION_SPARQL_UPDATE,
-                                                               ContentType.TEXT))
-                               .logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .body(serverProps)
-            .when()
-            .patch(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(409);
-
+        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+        doPatchUnverified(locationHeader, headers, serverProps)
+                .then()
+                .statusCode(409);
     }
 
     /**
@@ -182,20 +145,11 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
-            .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                           .encodeContentTypeAs(
-                                                               APPLICATION_SPARQL_UPDATE,
-                                                               ContentType.TEXT))
-                               .logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .body(serverProps)
-            .when()
-            .patch(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(409).body(containsString("lastModified"));
-
+        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+        doPatchUnverified(locationHeader, headers, serverProps)
+                .then()
+                .statusCode(409)
+                .body(containsString("lastModified"));
     }
 
     /**
@@ -214,20 +168,11 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
-            .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                           .encodeContentTypeAs(
-                                                               APPLICATION_SPARQL_UPDATE,
-                                                               ContentType.TEXT))
-                               .logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .body(serverProps)
-            .when()
-            .patch(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(409).header("Link", containsString("constrainedBy"));
-
+        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+        doPatchUnverified(locationHeader, headers, serverProps)
+                .then()
+                .statusCode(409)
+                .header("Link", containsString("constrainedBy"));
     }
 
     /**
@@ -252,39 +197,18 @@ public class HttpPatch extends AbstractTest {
         ps.append("Body:\n");
         ps.append(body + "\n");
 
-        final Response response =
-            createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
-                .config(RestAssured.config().encoderConfig(new EncoderConfig().encodeContentTypeAs(
-                    APPLICATION_SPARQL_UPDATE,
-                    ContentType.TEXT)))
-                .body(body)
-                .when()
-                .patch(locationHeader);
+        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+        final Response response = doPatch(locationHeader, headers, body);
 
         final int statusCode = response.getStatusCode();
-        final Headers headers = response.getHeaders();
+        final Headers responseHeaders = response.getHeaders();
 
         ps.append("HTTP/1.1 ").append(String.valueOf(statusCode)).append("\n");
-        for (Header h : headers) {
+        for (Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
-        String str;
-        boolean err = false;
-        if (statusCode >= 200 && statusCode < 300) {
-            str = "\n" + response.asString();
-        } else {
-            err = true;
-            str = "\nThe response status code is not a valid successful status code.\n\n";
-            str += response.asString();
-        }
-
-        ps.append(str);
-        if (err) {
-
-            throw new AssertionError("\nThe response status code is not a valid successful status code for PATCH.");
-        }
-
+        ps.append("\n" + response.asString());
     }
 
     /**
@@ -306,20 +230,10 @@ public class HttpPatch extends AbstractTest {
         final String locationHeader = getLocation(container);
         createBasicContainer(locationHeader, info.getId(), BASIC_CONTAINER_BODY);
 
-        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
-            .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                           .encodeContentTypeAs(
-                                                               APPLICATION_SPARQL_UPDATE,
-                                                               ContentType.TEXT))
-                               .logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .body(updateContainmentTriples)
-            .when()
-            .patch(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(409);
-
+        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+        doPatchUnverified(locationHeader, headers, updateContainmentTriples)
+                .then()
+                .statusCode(409);
     }
 
     /**
@@ -338,19 +252,10 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        createRequestAuthOnly(APPLICATION_SPARQL_UPDATE)
-            .config(RestAssured.config().encoderConfig(new EncoderConfig()
-                                                           .encodeContentTypeAs(
-                                                               APPLICATION_SPARQL_UPDATE,
-                                                               ContentType.TEXT))
-                               .logConfig(new LogConfig().defaultStream(ps)))
-            .log().all()
-            .body(resourceType)
-            .when()
-            .patch(locationHeader)
-            .then()
-            .log().all()
-            .statusCode(409);
 
+        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+        doPatchUnverified(locationHeader, headers, resourceType)
+                .then()
+                .statusCode(409);
     }
 }

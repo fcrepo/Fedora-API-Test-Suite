@@ -23,7 +23,8 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.CoreMatchers.containsString;
 
-import io.restassured.RestAssured;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
@@ -65,23 +66,18 @@ public class HttpPut extends AbstractTest {
                                         "request must be "
                                         + "rejected with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
-        final Response resource = createRequest()
-            .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
-            .header(SLUG, info.getId())
-            .body("TestString.")
-            .when()
-            .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
 
         final String locationHeader = getLocation(resource);
-        createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
-                       .header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"")
-                       .body("TestString2.")
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(409);
-
+        final Headers headers1 = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\""),
+                new Header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\""));
+        doPutUnverified(locationHeader, headers1, "TestString2.")
+                .then()
+                .statusCode(409);
     }
 
     /**
@@ -100,21 +96,12 @@ public class HttpPut extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
 
-        final String body2 = createRequest()
-            .when()
-            .get(locationHeader).asString();
+        final String body2 = doGet(locationHeader).asString();
 
         final String newBody = body2.replace("Put class Container", "some-title");
 
         ps.append(newBody);
-        createRequest().contentType("text/turtle")
-                       .body(newBody)
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(204);
-
+        doPut(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody);
     }
 
     /**
@@ -141,20 +128,13 @@ public class HttpPut extends AbstractTest {
 
         createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
-        final String body2 = createRequest()
-            .when()
-            .get(locationHeader).asString();
+        final String body2 = doGet(locationHeader).asString();
 
         final String newBody = body2.replace("containedFolderSlug", "some-name");
 
-        createRequest().contentType("text/turtle")
-                       .body(newBody)
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(409);
-
+        doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
+                .then()
+                .statusCode(409);
     }
 
     /**
@@ -175,20 +155,15 @@ public class HttpPut extends AbstractTest {
 
         createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
-        final String body2 = createRequest().when()
-                                            .get(locationHeader).asString();
+        final String body2 = doGet(locationHeader).asString();
 
         final String newBody = body2.replace("containedFolderSlug", "some-name");
 
         ps.append("PUT Request: \n");
-        createRequest().contentType("text/turtle")
-                       .body(newBody)
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(409).body(containsString("ldp#contains"));
-
+        doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
+                .then()
+                .statusCode(409)
+                .body(containsString("ldp#contains"));
     }
 
     /**
@@ -214,21 +189,14 @@ public class HttpPut extends AbstractTest {
 
         createBasicContainer(locationHeader, containedFolderSlug);
 
-        final String body2 = RestAssured.given()
-                                        .auth().basic(this.username, this.password)
-                                        .when()
-                                        .get(locationHeader).asString();
+        final String body2 = doGet(locationHeader).asString();
 
         final String newBody = body2.replace(containedFolderSlug, "some-name");
 
-        createRequest().contentType("text/turtle")
-                       .body(newBody)
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(409).header("Link", containsString("constrainedBy"));
-
+        doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
+                .then()
+                .statusCode(409)
+                .header("Link", containsString("constrainedBy"));
     }
 
     /**
@@ -242,22 +210,14 @@ public class HttpPut extends AbstractTest {
         final TestInfo info = setupTest("3.6.2-A", "httpPutNR",
                                         "Any LDP-NR must support PUT to replace the binary content of that resource.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
-        final Response resource = RestAssured.given()
-                                             .auth().basic(this.username, this.password)
-                                             .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
-                                             .header(SLUG, info.getId())
-                                             .body("TestString.")
-                                             .when()
-                                             .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
         final String locationHeader = getLocation(resource);
-        createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
-                       .body("TestString2.")
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(204);
-
+        doPut(locationHeader,
+                new Headers(new Header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")),
+                "TestString2.");
     }
 
     /**
@@ -277,22 +237,18 @@ public class HttpPut extends AbstractTest {
                                         + "with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
-        final Response resource =
-            createRequest().header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\"")
-                           .header(SLUG, info.getId())
-                           .body("TestString.")
-                           .when()
-                           .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
         final String locationHeader = getLocation(resource);
-        createRequest().header(DIGEST, checksum)
-                       .header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\"")
-                       .body("TestString.")
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(409);
 
+        final Headers headers1 = new Headers(
+                new Header(DIGEST, checksum),
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\""));
+        doPutUnverified(locationHeader, headers1, "TestString.")
+                .then()
+                .statusCode(409);
     }
 
     /**
@@ -309,22 +265,18 @@ public class HttpPut extends AbstractTest {
                                         + " be rejected with a 400 (Bad Request) response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final String checksum = "abc=abc";
-        final Response resource = createRequest()
-            .header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\"")
-            .header(SLUG, info.getId())
-            .body("TestString.")
-            .when()
-            .post(uri);
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
         final String locationHeader = getLocation(resource);
-        createRequest().header(DIGEST, checksum)
-                       .header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")
-                       .body("TestString2.")
-                       .when()
-                       .put(locationHeader)
-                       .then()
-                       .log().all()
-                       .statusCode(400);
 
+        final Headers headers1 = new Headers(
+                new Header(DIGEST, checksum),
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\""));
+        doPutUnverified(locationHeader, headers1, "TestString2.")
+                .then()
+                .statusCode(400);
     }
 
 }

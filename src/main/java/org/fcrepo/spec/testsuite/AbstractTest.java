@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite;
 
+import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
@@ -25,7 +26,11 @@ import java.io.PrintStream;
 import java.io.StringReader;
 
 import io.restassured.RestAssured;
+import io.restassured.config.EncoderConfig;
 import io.restassured.config.LogConfig;
+import io.restassured.http.ContentType;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.jena.rdf.model.Model;
@@ -33,7 +38,6 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -123,28 +127,100 @@ public class AbstractTest {
     }
 
     protected Response createBasicContainer(final String uri, final String slug, final String body) {
-        return createRequest(slug, "text/turtle")
+        final Response response = createRequest(slug, "text/turtle")
             .header("Link", BASIC_CONTAINER_LINK_HEADER)
             .body(body)
             .when()
             .post(uri);
+
+        response.then().statusCode(201);
+
+        return response;
     }
 
     protected Response createDirectContainer(final String uri, final String body) {
         final Response response = createDirectContainerUnverifed(uri, body);
 
-        Assert.assertEquals(response.getStatusCode(), 201);
+        response.then().statusCode(201);
 
         return response;
     }
 
     protected Response createDirectContainerUnverifed(final String uri, final String body) {
-        return createRequestAuthOnly()
-                .header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\"")
-                .header("Content-Type", "text/turtle")
+        final Headers headers = new Headers(
+                new Header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\""),
+                new Header("Content-Type", "text/turtle"));
+        return doPostUnverified(uri, headers, body);
+    }
+
+    protected Response doPostUnverified(final String uri, final Headers headers, final String body) {
+        return createRequest().headers(headers)
                 .body(body)
                 .when()
                 .post(uri);
+    }
+
+    private Response doPostUnverified(final String uri, final Headers headers) {
+        return createRequest().headers(headers)
+                .when()
+                .post(uri);
+    }
+
+    private Response doPostUnverified(final String uri) {
+        return createRequest()
+                .when()
+                .post(uri);
+    }
+
+    protected Response doPost(final String uri, final Headers headers) {
+        final Response response = doPostUnverified(uri, headers);
+
+        response.then().statusCode(201);
+
+        return response;
+    }
+
+    protected Response doPost(final String uri) {
+        final Response response = doPostUnverified(uri);
+
+        response.then().statusCode(201);
+
+        return response;
+    }
+
+    protected Response doPost(final String uri, final Headers headers, final String body) {
+        final Response response = doPostUnverified(uri, headers, body);
+
+        response.then().statusCode(201);
+
+        return response;
+    }
+
+    protected Response doPutUnverified(final String uri, final Headers headers, final String body) {
+        return createRequest().headers(headers)
+                .body(body)
+                .when()
+                .put(uri);
+    }
+
+    protected Response doPut(final String uri, final Headers headers, final String body) {
+        final Response response = doPutUnverified(uri, headers, body);
+
+        response.then().statusCode(204);
+
+        return response;
+    }
+
+    private Response doOptionsUnverified(final String uri) {
+        return createRequest().when().options(uri);
+    }
+
+    protected Response doOptions(final String uri) {
+        final Response response = doOptionsUnverified(uri);
+
+        response.then().statusCode(200);
+
+        return response;
     }
 
     protected RequestSpecification createRequest() {
@@ -163,13 +239,67 @@ public class AbstractTest {
                           .auth().basic(this.username, this.password);
     }
 
-    protected RequestSpecification createRequestAuthOnly(final String contentType) {
-        return createRequestAuthOnly().contentType(contentType);
+    protected Response doGet(final String uri, final Header header) {
+        final Response response = doGetUnverified(uri, header);
+
+        response.then().statusCode(200);
+
+        return response;
     }
 
     protected Response doGet(final String uri) {
-        return createRequest().when()
-                              .get(uri);
+        final Response response = doGetUnverified(uri);
+
+        response.then().statusCode(200);
+
+        return response;
+    }
+
+    protected Response doGetUnverified(final String uri, final Header header) {
+        return createRequest().header(header).when().get(uri);
+    }
+
+    protected Response doGetUnverified(final String uri) {
+        return createRequest().when().get(uri);
+    }
+
+    private Response doDeleteUnverified(final String uri) {
+        return createRequest().when().delete(uri);
+    }
+
+    protected Response doDelete(final String uri) {
+        final Response response = doDeleteUnverified(uri);
+
+        response.then().statusCode(204);
+
+        return response;
+    }
+
+    private Response doHeadUnverified(final String uri) {
+        return createRequest().when().head(uri);
+    }
+
+    protected Response doHead(final String uri) {
+        final Response response = doHeadUnverified(uri);
+
+        response.then().statusCode(200);
+
+        return response;
+    }
+
+    protected Response doPatch(final String uri, final Headers headers, final String body) {
+        final Response response = doPatchUnverified(uri, headers, body);
+
+        response.then().statusCode(204);
+
+        return response;
+    }
+
+    protected Response doPatchUnverified(final String uri, final Headers headers, final String body) {
+        return createRequest().config(
+                RestAssured.config().encoderConfig(
+                        new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)))
+                .headers(headers).body(body).when().patch(uri);
     }
 
     protected String getLocation(final Response response) {
