@@ -237,7 +237,7 @@ public class AbstractTest {
 
     private RequestSpecification createRequestAuthOnly() {
         return RestAssured.given()
-                          .auth().basic(this.username, this.password);
+                          .auth().basic(this.username, this.password).urlEncodingEnabled(false);
     }
 
     protected Response doGet(final String uri, final Header header) {

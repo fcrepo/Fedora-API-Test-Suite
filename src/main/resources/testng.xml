@@ -56,7 +56,7 @@
       <class name="org.fcrepo.spec.testsuite.crud.HttpDelete"/>
       <class name="org.fcrepo.spec.testsuite.crud.ExternalBinaryContent"/>
       <class name="org.fcrepo.spec.testsuite.versioning.LdprvHttpGet"/>
-
+      <class name="org.fcrepo.spec.testsuite.versioning.LdpcvHttpOptions"/>
     </classes>
 
   </test>
