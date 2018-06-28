@@ -20,7 +20,6 @@ package org.fcrepo.spec.testsuite.versioning;
 import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
-import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
 
 import java.net.URI;
@@ -28,11 +27,9 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.stream.Stream;
 import javax.ws.rs.core.Link;
 
 import io.restassured.http.Header;
-import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
@@ -265,13 +262,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         return FMT.format(ISO_INSTANT.parse(isoDateString, Instant::from));
     }
 
-    private Response createVersionedResource(final String uri, final TestInfo info) {
-        final Headers headers = new Headers(
-                new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
-                new Header(SLUG, info.getId()));
-        return doPost(uri, headers);
-    }
-
     private void confirmPresenceOfTimeGateLink(final Response response) {
         confirmPresenceOfRelType(response, "timegate");
     }
@@ -299,29 +289,8 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         return getLinksOfRelTypeAsUris(response, "timegate").findFirst().get();
     }
 
-    private URI getTimeMapUri(final Response response) {
-        return getLinksOfRelTypeAsUris(response, "timemap").findFirst().get();
-    }
 
     private URI getOriginalUri(final Response response) {
         return getLinksOfRelTypeAsUris(response, "original").findFirst().get();
-    }
-
-    private Stream<URI> getLinksOfRelTypeAsUris(final Response response, final String relType) {
-        return getLinksOfRelType(response, relType)
-            .map(link -> link.getUri());
-    }
-
-    private Stream<Header> getHeaders(final Response response, final String headerName) {
-        return response.getHeaders()
-                       .getList(headerName)
-                       .stream();
-    }
-
-    private Stream<Link> getLinksOfRelType(final Response response, final String relType) {
-        return getHeaders(response, "Link")
-            .flatMap(header ->  Arrays.stream(header.getValue().split(",")).map(linkStr -> Link.valueOf(linkStr)))
-            .filter(link -> link.getRel().equalsIgnoreCase(relType));
-
     }
 }
