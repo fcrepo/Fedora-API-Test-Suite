@@ -60,10 +60,7 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-A", "createLDPC",
                                         "Implementations must support the creation and management of [LDP] Containers.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
-        createBasicContainer(uri, info).then()
-                                       .log().all()
-                                       .statusCode(201);
-
+        createBasicContainer(uri, info);
     }
 
     /**
