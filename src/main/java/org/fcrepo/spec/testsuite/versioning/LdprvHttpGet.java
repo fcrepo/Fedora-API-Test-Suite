@@ -114,7 +114,8 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
         final String rfc1123Date = convertToRfc1123DateTimeString(isoDateString);
 
-        final Response timeGateResponse = doGet(timeGateUri.toString(), new Header("Accept-Datetime", rfc1123Date));
+        final Response timeGateResponse = doGetUnverified(timeGateUri.toString(),
+                                                          new Header("Accept-Datetime", rfc1123Date));
 
         timeGateResponse.then().statusCode(302);
 

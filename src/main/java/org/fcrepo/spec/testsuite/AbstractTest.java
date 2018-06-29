@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite;
 
+import static io.restassured.config.RedirectConfig.redirectConfig;
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
@@ -225,7 +226,7 @@ public class AbstractTest {
 
 
     private RequestSpecification createRequest() {
-        return createRequestAuthOnly().config(RestAssured.config()
+        return createRequestAuthOnly().config(RestAssured.config().redirect(redirectConfig().followRedirects(false))
                                       .logConfig(new LogConfig().defaultStream(ps)
                                                                 .enableLoggingOfRequestAndResponseIfValidationFails()))
                                       .log().all();
