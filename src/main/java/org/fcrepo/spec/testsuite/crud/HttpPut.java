@@ -157,13 +157,14 @@ public class HttpPut extends AbstractTest {
 
         final String body2 = doGet(locationHeader).asString();
 
-        final String newBody = body2.replace("containedFolderSlug", "some-name");
+        final String newBody = body2.replace("containedFolderSlug", "conflicting-contained-resource");
 
         ps.append("PUT Request: \n");
         doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
                 .then()
                 .statusCode(409)
-                .body(containsString("ldp#contains"));
+                .body(containsString("contains"))
+                .body(containsString("conflicting-contained-resource"));
     }
 
     /**
