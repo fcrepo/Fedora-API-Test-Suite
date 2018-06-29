@@ -31,8 +31,8 @@ public class ExternalBinaryContent extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public ExternalBinaryContent(final String username, final String password) {

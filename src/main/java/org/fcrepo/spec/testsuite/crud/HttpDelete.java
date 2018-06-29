@@ -37,8 +37,8 @@ public class HttpDelete extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public HttpDelete(final String username, final String password) {
@@ -48,7 +48,7 @@ public class HttpDelete extends AbstractTest {
     /**
      * 3.8.1-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
@@ -130,7 +130,7 @@ public class HttpDelete extends AbstractTest {
     /**
      * 3.8.1-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -207,7 +207,7 @@ public class HttpDelete extends AbstractTest {
     /**
      * 3.8.1-D
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})

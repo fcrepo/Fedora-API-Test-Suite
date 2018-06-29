@@ -44,8 +44,8 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public LdprvHttpGet(final String username, final String password) {
@@ -55,7 +55,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-A-1
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
@@ -86,7 +86,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-A-2
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -127,7 +127,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -148,7 +148,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -169,7 +169,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-D
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -190,7 +190,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-E
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -211,7 +211,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-F
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -232,7 +232,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     /**
      * 4.1.1-G
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})

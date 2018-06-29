@@ -43,8 +43,8 @@ public class HttpHead extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public HttpHead(final String username, final String password) {
@@ -54,7 +54,7 @@ public class HttpHead extends AbstractTest {
     /**
      * 3.3-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -73,7 +73,7 @@ public class HttpHead extends AbstractTest {
     /**
      * 3.3-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -126,7 +126,7 @@ public class HttpHead extends AbstractTest {
     /**
      * 3.3-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
