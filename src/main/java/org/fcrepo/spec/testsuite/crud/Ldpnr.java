@@ -38,8 +38,8 @@ public class Ldpnr extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public Ldpnr(final String username, final String password) {
@@ -49,7 +49,7 @@ public class Ldpnr extends AbstractTest {
     /**
      * 3.1.2.-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
@@ -110,7 +110,7 @@ public class Ldpnr extends AbstractTest {
     /**
      * 3.1.2.-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})

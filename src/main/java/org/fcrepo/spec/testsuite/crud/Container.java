@@ -41,8 +41,8 @@ public class Container extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public Container(final String username, final String password) {
@@ -52,7 +52,7 @@ public class Container extends AbstractTest {
     /**
      * 3.1.1-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -66,7 +66,7 @@ public class Container extends AbstractTest {
     /**
      * 3.1.1-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -117,7 +117,7 @@ public class Container extends AbstractTest {
     /**
      * 3.1.1-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -216,7 +216,7 @@ public class Container extends AbstractTest {
     /**
      * 3.1.1-D
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})

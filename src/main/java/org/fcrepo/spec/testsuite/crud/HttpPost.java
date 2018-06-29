@@ -37,8 +37,8 @@ public class HttpPost extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public HttpPost(final String username, final String password) {
@@ -48,7 +48,7 @@ public class HttpPost extends AbstractTest {
     /**
      * 3.5-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -64,7 +64,7 @@ public class HttpPost extends AbstractTest {
     /**
      * 3.5-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -84,7 +84,7 @@ public class HttpPost extends AbstractTest {
     /**
      * 3.5.1-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -102,7 +102,7 @@ public class HttpPost extends AbstractTest {
     /**
      * 3.5.1-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -123,7 +123,7 @@ public class HttpPost extends AbstractTest {
     /**
      * 3.5.1-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -149,7 +149,7 @@ public class HttpPost extends AbstractTest {
     /**
      * 3.5.1-D
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})

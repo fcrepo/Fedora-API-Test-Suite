@@ -47,8 +47,8 @@ public class HttpGet extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public HttpGet(final String username, final String password) {
@@ -58,7 +58,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.1-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
@@ -93,7 +93,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.1-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
@@ -126,7 +126,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.2-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -149,7 +149,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.2-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -195,7 +195,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.3-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -221,7 +221,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.3-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -257,7 +257,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.3-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -293,7 +293,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.3-D
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -318,7 +318,7 @@ public class HttpGet extends AbstractTest {
     /**
      * 3.2.3-E
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})

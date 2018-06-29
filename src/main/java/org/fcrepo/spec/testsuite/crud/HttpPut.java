@@ -39,8 +39,8 @@ public class HttpPut extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public HttpPut(final String username, final String password) {
@@ -50,7 +50,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
@@ -83,7 +83,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.1-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -107,7 +107,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.1-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -140,7 +140,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.1-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -170,7 +170,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.1-D
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -203,7 +203,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.2-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -224,7 +224,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.2-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -255,7 +255,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.2-C
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})

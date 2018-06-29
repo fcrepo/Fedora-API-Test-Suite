@@ -32,8 +32,8 @@ public class HttpOptions extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username
-     * @param password
+     * @param username The repository username
+     * @param password The repository password
      */
     @Parameters({"param2", "param3"})
     public HttpOptions(final String username, final String password) {
@@ -43,7 +43,7 @@ public class HttpOptions extends AbstractTest {
     /**
      * 3.4-A
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -59,7 +59,7 @@ public class HttpOptions extends AbstractTest {
     /**
      * 3.4-B
      *
-     * @param uri
+     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
