@@ -41,15 +41,14 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.3.1-A
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    //@Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpcvOfLdprsMustSupportPostWithoutMementoDatetimeHeader(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-A", "ldpcvOfLdprsMustSupportPostWithoutMementoDatetimeHeader",
                                         "If an LDPCv of an LDP-RS supports POST, a POST request that does not contain" +
-                                        " a " +
-                                        "Memento-Datetime header should be understood to create a new LDPRm " +
+                                        " a Memento-Datetime header should be understood to create a new LDPRm " +
                                         "contained by the LDPCv, reflecting the state of the LDPRv at the time of " +
                                         "the POST. ",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
@@ -60,15 +59,14 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.3.1-B
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    //@Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpcvOfLdpnrsMustSupportPostWithoutMementoDatetimeHeader(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-B", "ldpcvOfLdpnrsMustSupportPostWithoutMementoDatetimeHeader",
                                         "If an LDPCv of an LDP-NR supports POST, a POST request that does not contain" +
-                                        " a " +
-                                        "Memento-Datetime header should be understood to create a new LDPRm " +
+                                        " a Memento-Datetime header should be understood to create a new LDPRm " +
                                         "contained by the LDPCv, reflecting the state of the LDPRv at the time of " +
                                         "the POST. ",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
@@ -80,7 +78,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.3.1-C
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -97,7 +95,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.3.1-D
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -114,7 +112,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.3.1-E
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     // @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
@@ -131,7 +129,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.3.1-F
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"SHOULD"})
     @Parameters({"param1"})
@@ -148,7 +146,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.3.2
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -165,7 +163,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.4
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MAY"})
     @Parameters({"param1"})
@@ -180,7 +178,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * 4.3.5
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MAY"})
     @Parameters({"param1"})

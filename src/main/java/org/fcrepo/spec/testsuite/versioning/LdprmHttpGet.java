@@ -41,7 +41,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     /**
      * 4.2.1-A
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -59,12 +59,12 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     /**
      * 4.2.1-B
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpnrmMustSupportGet(final String uri) {
-        final TestInfo info = setupTest("4.2.1-A", "ldpnrmMustSupportGet",
+        final TestInfo info = setupTest("4.2.1-B", "ldpnrmMustSupportGet",
                                         "LDP-NR mementos must support GET",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
                                         ps);
@@ -77,7 +77,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     /**
      * 4.2.1-C
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -95,12 +95,12 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     /**
      * 4.2.1-D
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpnrmMustHaveCorrectTimeGate(final String uri) {
-        final TestInfo info = setupTest("4.2.1-C", "ldpnrmMustHaveCorrectTimeGate",
+        final TestInfo info = setupTest("4.2.1-D", "ldpnrmMustHaveCorrectTimeGate",
                                         "TimeGate  for an  LDP-NR memento  is the original versioned LDP-NR",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
                                         ps);
@@ -113,7 +113,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     /**
      * 4.2.1-E
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -132,7 +132,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     /**
      * 4.2.1-F
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})

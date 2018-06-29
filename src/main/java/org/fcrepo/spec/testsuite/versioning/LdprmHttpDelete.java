@@ -41,7 +41,7 @@ public class LdprmHttpDelete extends AbstractVersioningTest {
     /**
      * 4.2.6
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})

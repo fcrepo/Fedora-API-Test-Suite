@@ -41,7 +41,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     /**
      * 4.2.2-A
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -59,7 +59,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     /**
      * 4.2.2-B
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -77,7 +77,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     /**
      * 4.2.2-C
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MAY"})
     @Parameters({"param1"})
@@ -94,7 +94,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     /**
      * 4.2.3
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -112,7 +112,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     /**
      * 4.2.4
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -130,7 +130,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     /**
      * 4.2.5
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})

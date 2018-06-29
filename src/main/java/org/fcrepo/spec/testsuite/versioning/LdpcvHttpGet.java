@@ -41,7 +41,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     /**
      * 4.3.1-A
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -59,7 +59,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     /**
      * 4.3.1-B
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -77,13 +77,13 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     /**
      * 4.3.1-C
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustRespondToGetWithApplicationLinkAcceptHeader(final String uri) {
         final TestInfo info = setupTest("4.3.1-C", "ldpcvMustRespondToGetWithApplicationLinkAcceptHeader",
-                                        "An LDPCvmust respond to GET Accept: application/link-format as " +
+                                        "An LDPCv must respond to GET Accept: application/link-format as " +
                                         "indicated in [ RFC7089 ] section 5 and specified in [ RFC6690 ] section 7.3.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
@@ -94,7 +94,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     /**
      * 4.3.1-D
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -110,7 +110,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     /**
      * 4.3.1-E
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -127,7 +127,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     /**
      * 4.3.1-F
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -144,7 +144,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     /**
      * 4.3.1-G
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})

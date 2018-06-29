@@ -39,7 +39,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     /**
      * 4.1.2-A
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -57,7 +57,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     /**
      * 4.1.2-B
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -76,7 +76,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     /**
      * 4.1.2-C
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
@@ -94,7 +94,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     /**
      * 4.1.2-D
      *
-     * @param uri The repostory root URI
+     * @param uri The repository root URI
      */
     //@Test(groups = {"MUST"})
     @Parameters({"param1"})
