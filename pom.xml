@@ -22,7 +22,7 @@
     <commons.lang3.version>3.3.2</commons.lang3.version>
     <commons.io.version>2.4</commons.io.version>
     <testng.version>6.10</testng.version>
-    <rest.assured.version>3.0.5</rest.assured.version>
+    <rest.assured.version>3.1.0</rest.assured.version>
     <sesame.model.version>4.1.0</sesame.model.version>
     <jena.arq.version>3.4.0</jena.arq.version>
     <rendersnake.version>1.8</rendersnake.version>
