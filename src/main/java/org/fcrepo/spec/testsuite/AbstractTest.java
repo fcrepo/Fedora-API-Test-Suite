@@ -308,6 +308,10 @@ public class AbstractTest {
         return response.getHeader("Location");
     }
 
+    protected String getETag(final Response response) {
+        return response.getHeader("ETag");
+    }
+
     protected class TripleMatcher<T> extends BaseMatcher<T> {
 
         private final Statement triple;

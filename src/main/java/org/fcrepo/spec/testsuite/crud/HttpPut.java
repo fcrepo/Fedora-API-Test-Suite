@@ -31,6 +31,8 @@ import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import javax.ws.rs.core.EntityTag;
+
 /**
  * @author Jorge Abrego, Fernando Cardoza
  */
@@ -95,13 +97,33 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
+        final String etag = getETag(resource);
 
         final String body2 = doGet(locationHeader).asString();
 
         final String newBody = body2.replace("Put class Container", "some-title");
 
+        ps.append("ETag: ");
+        ps.append(etag);
+        ps.append("\n");
+        ps.append("new body: ");
         ps.append(newBody);
-        doPut(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody);
+        ps.append("\n");
+
+        // Add 'If-Match' header if ETag is available
+        final EntityTag entityTag = etag == null ? null : EntityTag.valueOf(etag);
+        final Headers headers;
+        if (entityTag != null && !entityTag.isWeak()) {
+            ps.append("Using entityTag");
+            headers = new Headers(
+                    new Header("Content-Type", "text/turtle"),
+                    new Header("If-Match", entityTag.getValue())
+            );
+        } else {
+            headers = new Headers(new Header("Content-Type", "text/turtle"));
+        }
+
+        doPut(locationHeader, headers, newBody);
     }
 
     /**
