@@ -118,7 +118,7 @@ public class HttpPut extends AbstractTest {
             ps.append("Using entityTag");
             headers = new Headers(
                     new Header("Content-Type", "text/turtle"),
-                    new Header("If-Match", entityTag.getValue())
+                    new Header("If-Match", "\"" + entityTag.getValue() + "\"")
             );
         } else {
             headers = new Headers(new Header("Content-Type", "text/turtle"));
