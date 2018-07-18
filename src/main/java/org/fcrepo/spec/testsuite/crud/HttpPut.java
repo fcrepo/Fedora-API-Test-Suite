@@ -97,9 +97,10 @@ public class HttpPut extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-        final String etag = getETag(resource);
 
-        final String body2 = doGet(locationHeader).asString();
+        final Response getResponse = doGet(locationHeader);
+        final String body2 = getResponse.asString();
+        final String etag = getETag(getResponse);
 
         final String newBody = body2.replace("Put class Container", "some-title");
 
@@ -117,7 +118,7 @@ public class HttpPut extends AbstractTest {
             ps.append("Using entityTag");
             headers = new Headers(
                     new Header("Content-Type", "text/turtle"),
-                    new Header("If-Match", entityTag.getValue())
+                    new Header("If-Match", "\"" + entityTag.getValue() + "\"")
             );
         } else {
             headers = new Headers(new Header("Content-Type", "text/turtle"));
