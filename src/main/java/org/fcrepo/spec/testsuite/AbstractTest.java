@@ -38,7 +38,10 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.hamcrest.BaseMatcher;
+import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -292,7 +295,7 @@ public class AbstractTest {
     protected Response doPatch(final String uri, final Headers headers, final String body) {
         final Response response = doPatchUnverified(uri, headers, body);
 
-        response.then().statusCode(204);
+        response.then().statusCode(successRange());
 
         return response;
     }
@@ -339,6 +342,16 @@ public class AbstractTest {
             final String msg = expectMatch ? "To contain triple: " : "Not to contain triple: ";
             description.appendText(msg).appendText(triple.toString());
         }
+    }
+
+    // Matcher for 2xx status codes
+    private Matcher<Integer> successRange() {
+        return CoreMatchers.both(Matchers.greaterThanOrEqualTo(200)).and(Matchers.lessThan(300));
+    }
+
+    // Matcher for 4xx status codes
+    protected Matcher<Integer> clientErrorRange() {
+        return CoreMatchers.both(Matchers.greaterThanOrEqualTo(400)).and(Matchers.lessThan(500));
     }
 
 }
