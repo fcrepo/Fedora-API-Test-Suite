@@ -157,7 +157,7 @@ public class HttpPut extends AbstractTest {
 
         doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
                 .then()
-                .statusCode(409);
+                .statusCode(clientErrorRange());
     }
 
     /**

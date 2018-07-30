@@ -127,7 +127,7 @@ public class HttpPatch extends AbstractTest {
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         doPatchUnverified(locationHeader, headers, serverProps)
                 .then()
-                .statusCode(409);
+                .statusCode(clientErrorRange());
     }
 
     /**
@@ -148,7 +148,7 @@ public class HttpPatch extends AbstractTest {
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         doPatchUnverified(locationHeader, headers, serverProps)
                 .then()
-                .statusCode(409)
+                .statusCode(clientErrorRange())
                 .body(containsString("lastModified"));
     }
 
@@ -171,7 +171,7 @@ public class HttpPatch extends AbstractTest {
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         doPatchUnverified(locationHeader, headers, serverProps)
                 .then()
-                .statusCode(409)
+                .statusCode(clientErrorRange())
                 .header("Link", containsString("constrainedBy"));
     }
 
