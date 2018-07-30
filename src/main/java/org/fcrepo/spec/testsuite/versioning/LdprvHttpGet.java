@@ -67,7 +67,12 @@ public class LdprvHttpGet extends AbstractVersioningTest {
                                         ps);
 
         //create ldprv
-        final Response response = createVersionedResource(uri, info);
+        final Response creationResponse = createVersionedResource(uri, info);
+
+        //get location of new resource
+        final String resourceUri = getLocation(creationResponse);
+
+        final Response response = doGet(resourceUri);
 
         //confirm presence of timegate link
         confirmPresenceOfTimeGateLink(response);
@@ -101,10 +106,15 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
 
-        final URI timeMapURI = getTimeMapUri(createResponse);
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
 
         //get timegate uri
-        final URI timeGateUri = getTimeGateUri(createResponse);
+        final URI timeGateUri = getTimeGateUri(response);
 
         final Response newMementoResponse = doPost(timeMapURI.toString());
         final String newMementoUri = getLocation(newMementoResponse);

@@ -56,9 +56,14 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(createResponse);
-        final Response response = doGet(timeMapURI.toString());
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "OPTIONS", response);
+
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response timeMapResponse = doGet(timeMapURI.toString());
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "OPTIONS", timeMapResponse);
     }
 
     /**
@@ -77,11 +82,16 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(createResponse);
-        final Response response = doOptions(timeMapURI.toString());
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "GET", response);
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "HEAD", response);
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "OPTIONS", response);
+
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response optionsResponse = doOptions(timeMapURI.toString());
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "GET", optionsResponse);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "HEAD", optionsResponse);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "OPTIONS", optionsResponse);
 
     }
 
@@ -100,9 +110,14 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(createResponse);
-        final Response response = doOptions(timeMapURI.toString());
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "DELETE", response);
+
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response optionsResponse = doOptions(timeMapURI.toString());
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "DELETE", optionsResponse);
     }
 
     /**
@@ -120,9 +135,14 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(createResponse);
-        final Response response = doOptions(timeMapURI.toString());
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "PATCH", response);
+
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response optionsResponse = doOptions(timeMapURI.toString());
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "PATCH", optionsResponse);
     }
 
     /**
@@ -140,9 +160,14 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(createResponse);
-        final Response response = doOptions(timeMapURI.toString());
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "POST", response);
+
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response optionsResponse = doOptions(timeMapURI.toString());
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "POST", optionsResponse);
     }
 
     /**
@@ -161,10 +186,15 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(createResponse);
-        final Response response = doOptions(timeMapURI.toString());
-        if (hasHeaderValueInMultiValueHeader("Allow", "POST", response)) {
-            Assert.assertTrue(getHeaders(response, "Accept-Post").count() > 0,
+
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response optionsResponse = doOptions(timeMapURI.toString());
+        if (hasHeaderValueInMultiValueHeader("Allow", "POST", optionsResponse)) {
+            Assert.assertTrue(getHeaders(optionsResponse, "Accept-Post").count() > 0,
                               "If an LDPCv supports POST, the response to an OPTIONS request " +
                               " MUST include the \"Accept-Post\" header");
 
@@ -187,10 +217,15 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         //create ldprv
         final Response createResponse = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(createResponse);
-        final Response response = doOptions(timeMapURI.toString());
-        if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", response)) {
-            Assert.assertTrue(getHeaders(response, "Accept-Patch").count() > 0,
+
+        //get location of new resource
+        final String resourceUri = getLocation(createResponse);
+        final Response response = doGet(resourceUri);
+
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response optionsResponse = doOptions(timeMapURI.toString());
+        if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", optionsResponse)) {
+            Assert.assertTrue(getHeaders(optionsResponse, "Accept-Patch").count() > 0,
                               "If an LDPCv supports PATCH, the response to an OPTIONS request " +
                               " MUST include the \"Accept-Patch\" header");
 
