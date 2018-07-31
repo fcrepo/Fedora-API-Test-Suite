@@ -62,9 +62,10 @@ public class AbstractVersioningTest extends AbstractTest {
 
     protected Stream<Link> getLinksOfRelType(final Response response, final String relType) {
         return getHeaders(response, "Link")
+                // Link header may include multiple, comma-separated link values
             .flatMap(header -> Arrays.stream(header.getValue().split(",")).map(linkStr -> Link.valueOf(linkStr)))
-            .filter(link -> link.getRel().equalsIgnoreCase(relType));
-
+                // Each link value may contain multiple "rel" values
+            .filter(link -> link.getRels().stream().anyMatch(rel -> rel.equalsIgnoreCase(relType)));
     }
 
     protected Stream<URI> getLinksOfRelTypeAsUris(final Response response, final String relType) {
