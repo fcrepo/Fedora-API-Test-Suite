@@ -151,11 +151,27 @@ public class HttpPut extends AbstractTest {
 
         createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
-        final String body2 = doGet(locationHeader).asString();
+        final Response getResponse = doGet(locationHeader);
+        final String body2 = getResponse.asString();
+        final String etag = getETag(getResponse);
 
         final String newBody = body2.replace("containedFolderSlug", "some-name");
 
-        doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
+        // Add 'If-Match' header if ETag is available
+        final EntityTag entityTag = etag == null ? null : EntityTag.valueOf(etag);
+        final Headers headers;
+        if (entityTag != null && !entityTag.isWeak()) {
+            ps.append("Using entityTag: ");
+            ps.append(entityTag.getValue());
+            headers = new Headers(
+                    new Header("Content-Type", "text/turtle"),
+                    new Header("If-Match", "\"" + entityTag.getValue() + "\"")
+            );
+        } else {
+            headers = new Headers(new Header("Content-Type", "text/turtle"));
+        }
+
+        doPutUnverified(locationHeader, headers, newBody)
                 .then()
                 .statusCode(clientErrorRange());
     }
@@ -178,12 +194,28 @@ public class HttpPut extends AbstractTest {
 
         createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
-        final String body2 = doGet(locationHeader).asString();
+        final Response getResponse = doGet(locationHeader);
+        final String body2 = getResponse.asString();
+        final String etag = getETag(getResponse);
 
         final String newBody = body2.replace("containedFolderSlug", "conflicting-contained-resource");
 
         ps.append("PUT Request: \n");
-        doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
+
+        // Add 'If-Match' header if ETag is available
+        final EntityTag entityTag = etag == null ? null : EntityTag.valueOf(etag);
+        final Headers headers;
+        if (entityTag != null && !entityTag.isWeak()) {
+            ps.append("Using entityTag: ");
+            ps.append(entityTag.getValue());
+            headers = new Headers(
+                    new Header("Content-Type", "text/turtle"),
+                    new Header("If-Match", "\"" + entityTag.getValue() + "\"")
+            );
+        } else {
+            headers = new Headers(new Header("Content-Type", "text/turtle"));
+        }
+        doPutUnverified(locationHeader, headers, newBody)
                 .then()
                 .statusCode(409)
                 .body(containsString("contains"))
@@ -213,11 +245,26 @@ public class HttpPut extends AbstractTest {
 
         createBasicContainer(locationHeader, containedFolderSlug);
 
-        final String body2 = doGet(locationHeader).asString();
+        final Response getResponse = doGet(locationHeader);
+        final String body2 = getResponse.asString();
+        final String etag = getETag(getResponse);
 
         final String newBody = body2.replace(containedFolderSlug, "some-name");
 
-        doPutUnverified(locationHeader, new Headers(new Header("Content-Type", "text/turtle")), newBody)
+        // Add 'If-Match' header if ETag is available
+        final EntityTag entityTag = etag == null ? null : EntityTag.valueOf(etag);
+        final Headers headers;
+        if (entityTag != null && !entityTag.isWeak()) {
+            ps.append("Using entityTag: ");
+            ps.append(entityTag.getValue());
+            headers = new Headers(
+                    new Header("Content-Type", "text/turtle"),
+                    new Header("If-Match", "\"" + entityTag.getValue() + "\"")
+            );
+        } else {
+            headers = new Headers(new Header("Content-Type", "text/turtle"));
+        }
+        doPutUnverified(locationHeader, headers, newBody)
                 .then()
                 .statusCode(409)
                 .header("Link", containsString("constrainedBy"));
@@ -239,9 +286,25 @@ public class HttpPut extends AbstractTest {
                 new Header(SLUG, info.getId()));
         final Response resource = doPost(uri, headers, "TestString.");
         final String locationHeader = getLocation(resource);
-        doPut(locationHeader,
-                new Headers(new Header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\"")),
-                "TestString2.");
+
+        final Response getResponse = doGet(locationHeader);
+        final String etag = getETag(getResponse);
+
+        // Add 'If-Match' header if ETag is available
+        final EntityTag entityTag = etag == null ? null : EntityTag.valueOf(etag);
+        final Headers headers2;
+        if (entityTag != null && !entityTag.isWeak()) {
+            ps.append("Using entityTag: ");
+            ps.append(entityTag.getValue());
+            headers2 = new Headers(
+                    new Header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\""),
+                    new Header("If-Match", "\"" + entityTag.getValue() + "\"")
+            );
+        } else {
+            headers2 = new Headers(new Header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\""));
+        }
+
+        doPut(locationHeader, headers2, "TestString2.");
     }
 
     /**
