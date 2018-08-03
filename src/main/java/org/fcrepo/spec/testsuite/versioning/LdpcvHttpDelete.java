@@ -17,8 +17,13 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
+import static org.testng.AssertJUnit.assertEquals;
+
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 /**
  * Tests for DELETE requests on LDP Version Container Resources
@@ -39,11 +44,11 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
     }
 
     /**
-     * 4.3.6
+     * Tests section 4.3.6
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos(final String uri) {
         final TestInfo info = setupTest("4.3.6", "ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos",
@@ -53,6 +58,25 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-delete",
                                         ps);
 
+        //create a versioned resource
+        final Response response = createVersionedResource(uri, info);
+        final String versionedResource = getLocation(response);
+        final String timeMap = getTimeMapUri(response).toString();
+
+        final Response optionsResponse = doOptions(timeMap);
+
+        //check that delete is supported
+        if (hasHeaderValueInMultiValueHeader("Allow", "DELETE", optionsResponse)) {
+            //delete the ldpcv
+            final Response deleteResponse = doDelete(timeMap);
+            assertEquals("Timemap DELETE command failed.", deleteResponse.getStatusCode(), 204);
+            //verify that ldpcv is gone
+            final Response timeMapGet = doGetUnverified(timeMap);
+            assertEquals("Timemap was not deleted", timeMapGet.getStatusCode(), 404);
+            //verify that versioning model is gone
+            final Response getResponse = doGet(versionedResource);
+            confirmAbsenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, getResponse);
+        }
     }
 
 }

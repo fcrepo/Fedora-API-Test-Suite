@@ -99,4 +99,22 @@ public class AbstractVersioningTest extends AbstractTest {
 
     }
 
+    protected void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
+        final Link link = Link.valueOf(linkValue);
+        final String relType = link.getRel();
+        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
+                                                                      .count(),
+                            1,
+                            "Link header with a value of " + linkValue + " must be present but is not!");
+    }
+
+    protected void confirmAbsenceOfLinkValue(final String linkValue, final Response response) {
+        final Link link = Link.valueOf(linkValue);
+        final String relType = link.getRel();
+        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
+                                                                      .count(),
+                            0,
+                            "Link header with a value of " + linkValue + " must not be present (but it is)!");
+    }
+
 }
