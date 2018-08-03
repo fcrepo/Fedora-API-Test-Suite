@@ -17,8 +17,15 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import io.restassured.http.Header;
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import static org.fcrepo.spec.testsuite.Constants.CONTAINER_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.TIME_MAP_LINK_HEADER;
+import static org.testng.AssertJUnit.assertNotNull;
 
 /**
  * Tests for GET requests on LDP Version Container Resources
@@ -43,7 +50,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustSupportGet(final String uri) {
         final TestInfo info = setupTest("4.3.1-A", "ldpcvMustSupportGet",
@@ -51,9 +58,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
 
-        //create a versioned resource
-        //get the timemap
+        final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
         //perform a GET and verify that it is successful.
+        doGet(timeMap);
     }
 
     /**
@@ -61,7 +68,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustHaveTimeMapLinkHeader(final String uri) {
         final TestInfo info = setupTest("4.3.1-B", "ldpcvMustHaveTimeMapLinkHeader",
@@ -69,9 +76,15 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
 
-        //create a versioned resource
-        //get the timemap
+        final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
         //perform a GET and verify it has the proper header.
+        confirmPresenceOfLinkValue(TIME_MAP_LINK_HEADER, doGet(timeMap));
+    }
+
+    private String createVersionedResourceAndGetTimeMapURL(final String uri, final TestInfo info) {
+        final Response resource = createVersionedResource(uri, info);
+        //get the timemap
+        return getTimeMapUri(doGet(getLocation(resource))).toString();
     }
 
     /**
@@ -79,7 +92,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustRespondToGetWithApplicationLinkAcceptHeader(final String uri) {
         final TestInfo info = setupTest("4.3.1-C", "ldpcvMustRespondToGetWithApplicationLinkAcceptHeader",
@@ -88,7 +101,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
 
-
+        final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
+        //ensure timemap can be retrieved with the Accept: application/link-format
+        doGet(timeMap, new Header("Accept", "application/link-format"));
     }
 
     /**
@@ -96,7 +111,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void lpcvMustIncludeAllowHeader(final String uri) {
         final TestInfo info = setupTest("4.3.1-D", "lpcvMustIncludeAllowHeader",
@@ -104,7 +119,12 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
 
-
+        final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
+        //perform a GET and verify it has the proper header.
+        final Response timeMapResponse = doGet(timeMap);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "GET", timeMapResponse);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "HEAD", timeMapResponse);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "OPTIONS", timeMapResponse);
     }
 
     /**
@@ -112,16 +132,20 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustIncludeAcceptPostIfPostAllowed(final String uri) {
         final TestInfo info = setupTest("4.3.1-E", "ldpcvMustIncludeAcceptPostIfPostAllowed",
                                         "If an LDPCv supports POST, then it must include the Accept-Post header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
+        final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
+        final Response timeMapResponse = doGet(timeMap);
         //check if LDPCv allows "POST"
-        //If so,  check for presence of Accept-Post header.
-
+        if (hasHeaderValueInMultiValueHeader("Allow", "POST", timeMapResponse)) {
+            //If so,  check for presence of Accept-Post header.
+            assertNotNull("Accept-Post must be present if POST is allowed", timeMapResponse.getHeader("Accept-Post"));
+        }
     }
 
     /**
@@ -129,15 +153,21 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustIncludeAcceptPatchIfPatchAllowed(final String uri) {
         final TestInfo info = setupTest("4.3.1-F", "ldpcvMustIncludeAcceptPatchIfPatchAllowed",
                                         "If an LDPCv supports PATCH, then it must include the Accept-Patch header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
+        final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
+        final Response timeMapResponse = doGet(timeMap);
         //check if LDPCv allows "PATCH"
-        //If so,  check for presence of Accept-Patch header.
+        if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", timeMapResponse)) {
+            //If so,  check for presence of Accept-Patch header.
+            assertNotNull("Accept-Patch must be present if PATCH is allowed",
+                          timeMapResponse.getHeader("Accept-Patch"));
+        }
 
     }
 
@@ -146,7 +176,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustHaveContainerLinkHeader(final String uri) {
         final TestInfo info = setupTest("4.3.1-G", "ldpcvMustHaveContainerLinkHeader",
@@ -155,12 +185,11 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
 
-        //create a versioned resource
-        //get the timemap
+        final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
         //perform a GET and verify it has the proper header.
+        final Response timeMapResponse = doGet(timeMap);
+        confirmPresenceOfLinkValue(CONTAINER_LINK_HEADER, timeMapResponse);
     }
-
-
 
 }
 

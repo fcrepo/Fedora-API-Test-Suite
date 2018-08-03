@@ -22,6 +22,7 @@ package org.fcrepo.spec.testsuite;
  */
 public class Constants {
     public static final String NON_RDF_SOURCE_LINK_HEADER = "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\"";
+    public static final String CONTAINER_LINK_HEADER = "<http://www.w3.org/ns/ldp#Container>; rel=\"type\"";
     public static final String BASIC_CONTAINER_LINK_HEADER = "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"";
     public static final String BASIC_CONTAINER_BODY = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                                       + "@prefix dcterms: <http://purl.org/dc/terms/> ."
