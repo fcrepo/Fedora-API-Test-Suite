@@ -102,8 +102,8 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
-    public void ldpcvMaySupportDelete(final String uri) {
-        final TestInfo info = setupTest("4.3.2-C", "ldpcvMaySupportDelete",
+    public void ldpcvMaySupportDeleteOption(final String uri) {
+        final TestInfo info = setupTest("4.3.2-C", "ldpcvMaySupportDeleteOption",
                                         "LDPCv (version containers) MAY support DELETE.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
                                         ps);

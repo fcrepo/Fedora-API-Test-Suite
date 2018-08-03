@@ -27,7 +27,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import javax.ws.rs.core.Link;
 
 import io.restassured.http.Header;
 import io.restassured.response.Response;
@@ -285,15 +284,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         Assert.assertEquals(getLinksOfRelType(response, relType).count(),
                             1,
                             "Link with rel type '" + relType + "' must be present but is not!");
-    }
-
-    private void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
-        final Link link = Link.valueOf(linkValue);
-        final String relType = link.getRel();
-        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
-                                                                      .count(),
-                            1,
-                            "Link header with a value of " + linkValue + " must be present but is not!");
     }
 
     private URI getTimeGateUri(final Response response) {
