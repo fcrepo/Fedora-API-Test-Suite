@@ -44,14 +44,36 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
     }
 
     /**
-     * Tests section 4.3.6
+     * Tests section 4.3.6-A
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void ldpcvMaySupportDelete(final String uri) {
+        final TestInfo info = setupTest("4.3.6-A", "ldpcvMaySupportDelete",
+                                        "An implementation MAY support DELETION of LDPCvs.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-delete",
+                                        ps);
+        //create a versioned resource
+        final Response response = createVersionedResource(uri, info);
+        final String versionedResource = getLocation(response);
+        final String timeMap = getTimeMapUri(doGet(versionedResource)).toString();
+        final Response timeMapGet = doGet(timeMap);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "DELETE", timeMapGet);
+        //delete the ldpcv
+        doDelete(timeMap);
+    }
+
+    /**
+     * Tests section 4.3.6-B
      *
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos(final String uri) {
-        final TestInfo info = setupTest("4.3.6", "ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos",
+        final TestInfo info = setupTest("4.3.6-B", "ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos",
                                         "An implementation that does support DELETE should do so by both " +
                                         "removing the LDPCv and removing the versioning interaction model from the " +
                                         "original LDPRv.",
@@ -61,7 +83,7 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
         //create a versioned resource
         final Response response = createVersionedResource(uri, info);
         final String versionedResource = getLocation(response);
-        final String timeMap = getTimeMapUri(response).toString();
+        final String timeMap = getTimeMapUri(doGet(versionedResource)).toString();
 
         final Response optionsResponse = doOptions(timeMap);
 
@@ -69,7 +91,6 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
         if (hasHeaderValueInMultiValueHeader("Allow", "DELETE", optionsResponse)) {
             //delete the ldpcv
             final Response deleteResponse = doDelete(timeMap);
-            assertEquals("Timemap DELETE command failed.", deleteResponse.getStatusCode(), 204);
             //verify that ldpcv is gone
             final Response timeMapGet = doGetUnverified(timeMap);
             assertEquals("Timemap was not deleted", timeMapGet.getStatusCode(), 404);
