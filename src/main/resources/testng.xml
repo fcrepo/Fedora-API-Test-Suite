@@ -69,7 +69,9 @@
       <class name="org.fcrepo.spec.testsuite.authz.WebACCrossDomain"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACGeneral"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACLinkHeaders"/>
+      -->
       <class name="org.fcrepo.spec.testsuite.authz.WebACLinking"/>
+      <!--
       <class name="org.fcrepo.spec.testsuite.authz.WebACModes"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACRdfSources"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACRepresentation"/>
