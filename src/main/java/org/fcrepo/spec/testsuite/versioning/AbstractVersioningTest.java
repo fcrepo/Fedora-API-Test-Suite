@@ -80,6 +80,27 @@ public class AbstractVersioningTest extends AbstractTest {
         return doPost(uri, headers);
     }
 
+    protected Response putVersionedResourceUnverified(final String uri, final TestInfo info) {
+        return putVersionedResourceUnverified(uri + "/" + info.getId());
+    }
+
+    protected Response putVersionedResourceWithBodyUnverified(final String uri, final TestInfo info,
+                                                              final String body) {
+        return putVersionedResourceWithBodyUnverified(uri + "/" + info.getId(), body);
+    }
+
+    protected Response putVersionedResourceUnverified(final String uri) {
+        final Headers headers = new Headers(
+            new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER));
+        return doPutUnverified(uri, headers);
+    }
+
+    protected Response putVersionedResourceWithBodyUnverified(final String uri, final String body) {
+        final Headers headers = new Headers(
+            new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER));
+        return doPutUnverified(uri, headers, body);
+    }
+
     protected void confirmPresenceOfHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
                                                                   final Response response) {
         Assert

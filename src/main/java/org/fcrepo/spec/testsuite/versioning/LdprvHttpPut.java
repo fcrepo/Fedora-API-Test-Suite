@@ -17,8 +17,18 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.Constants.NON_RDF_SOURCE_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 /**
  * @author Daniel Bernstein
@@ -41,7 +51,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprvMustSupportPUT(final String uri) {
         final TestInfo info = setupTest("4.1.2-A", "ldprvMustSupportPUT",
@@ -50,8 +60,12 @@ public class LdprvHttpPut extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPRv using a put
+        final Response response = putVersionedResourceUnverified(uri, info);
+        assertEquals(response.getStatusCode(), 201);
         //verify that it is a TimeGate and has a TimeMap
-
+        final Response getResponse = doGet(getLocation(response));
+        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, getResponse);
+        confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, getResponse);
     }
 
     /**
@@ -59,7 +73,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprvMustSupportPUTForExistingResources(final String uri) {
         final TestInfo info = setupTest("4.1.2-B", "ldprvMustSupportPUTForExistingResources",
@@ -67,10 +81,28 @@ public class LdprvHttpPut extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
                                         ps);
         //create an LDPRv
-        //verify that "Allow: PUT" header is present
-        //update an existing LDPRv using a put
-        //verify that it is a TimeGate and has a TimeMap
+        final Response response = putVersionedResourceUnverified(uri, info);
+        assertEquals(response.getStatusCode(), 201);
 
+        final String resourceUri = getLocation(response);
+        final Response getResponse = doGet(resourceUri);
+        //verify that "Allow: PUT" header is present
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "PUT", getResponse);
+
+        final String body = getResponse.getBody().asString();
+
+        //update an existing LDPRv using a put
+        final Headers headers = new Headers(
+            new Header("Content-Type", "text/turtle"),
+            new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER));
+
+        //add a triple to the body
+        final String newBody = body +  "\n\n<" + resourceUri + "> dc:title \"title test\" .";
+        final Response response2 = doPutUnverified(resourceUri, headers, newBody);
+        assertEquals(response2.getStatusCode(), 204);
+        final Response getResponse2 = doGet(resourceUri);
+        //verify that it was changed.
+        assertTrue(getResponse2.getBody().prettyPrint().contains("title test"));
     }
 
     /**
@@ -78,7 +110,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpnrvMustSupportPUT(final String uri) {
         final TestInfo info = setupTest("4.1.2-C", "ldpnrvMustSupportPUT",
@@ -87,7 +119,14 @@ public class LdprvHttpPut extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPNRv using a put
+        final Response response = putVersionedResourceWithBodyUnverified(uri, info, "test");
+        assertEquals(response.getStatusCode(), 201);
+
         //verify that it is a TimeGate and has a TimeMap
+        final Response getResponse = doGet(getLocation(response));
+        confirmPresenceOfLinkValue(NON_RDF_SOURCE_LINK_HEADER, getResponse);
+        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, getResponse);
+        confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, getResponse);
 
     }
 
@@ -96,7 +135,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpnrvMustSupportPUTForExistingResources(final String uri) {
         final TestInfo info = setupTest("4.1.2-D", "ldpnrvMustSupportPUTForExistingResources",
@@ -104,9 +143,14 @@ public class LdprvHttpPut extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
                                         ps);
         //create an LDPNRv
+        final Response response = putVersionedResourceWithBodyUnverified(uri, info, "test");
+        assertEquals(response.getStatusCode(), 201);
+        final String resourceUri = getLocation(response);
+        final Response getResponse = doGet(resourceUri);
         //verify that "Allow: PUT" header is present
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "PUT", getResponse);
         //update an existing LDPNRv using a put
-        //verify that it is a TimeGate and has a TimeMap
-
+        final Response response2 = putVersionedResourceWithBodyUnverified(resourceUri,"test2");
+        assertEquals(response2.getStatusCode(), 204);
     }
-  }
+}
