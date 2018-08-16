@@ -363,7 +363,6 @@ public class AbstractTest {
 
     protected void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
         final Link link = Link.valueOf(linkValue);
-        final String relType = link.getRel();
         Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
                                                                       .count(),
                             1,
