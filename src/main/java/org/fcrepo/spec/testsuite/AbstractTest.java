@@ -352,7 +352,7 @@ public class AbstractTest {
     }
 
     // Matcher for 2xx status codes
-    private Matcher<Integer> successRange() {
+    protected Matcher<Integer> successRange() {
         return CoreMatchers.both(Matchers.greaterThanOrEqualTo(200)).and(Matchers.lessThan(300));
     }
 

@@ -17,11 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThan;
-import static org.testng.Assert.assertTrue;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -106,8 +101,7 @@ public class WebACLinking extends AbstractTest {
         if (resource.getStatusCode() >= 400) {
             confirmPresenceOfConstrainedByLink(resource);
         } else {
-            assertTrue(allOf(greaterThanOrEqualTo(200), lessThan(300)).matches(resource.getStatusCode()),
-                       "Status code should be in the 2xx range.");
+            resource.then().statusCode(successRange());
         }
 
     }
