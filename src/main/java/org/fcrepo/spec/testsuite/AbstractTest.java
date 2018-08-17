@@ -22,9 +22,15 @@ import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import javax.ws.rs.core.Link;
 
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
@@ -42,6 +48,7 @@ import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -345,7 +352,7 @@ public class AbstractTest {
     }
 
     // Matcher for 2xx status codes
-    private Matcher<Integer> successRange() {
+    protected Matcher<Integer> successRange() {
         return CoreMatchers.both(Matchers.greaterThanOrEqualTo(200)).and(Matchers.lessThan(300));
     }
 
@@ -354,4 +361,36 @@ public class AbstractTest {
         return CoreMatchers.both(Matchers.greaterThanOrEqualTo(400)).and(Matchers.lessThan(500));
     }
 
+    protected void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
+        final Link link = Link.valueOf(linkValue);
+        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
+                                                                      .count(),
+                            1,
+                            "Link header with a value of " + linkValue + " must be present but is not!");
+    }
+
+    protected Stream<Link> getLinksOfRelType(final Response response, final String relType) {
+        return getHeaders(response, "Link")
+            // Link header may include multiple, comma-separated link values
+            .flatMap(header -> Arrays.stream(header.getValue().split(",")).map(linkStr -> Link.valueOf(linkStr)))
+            // Each link value may contain multiple "rel" values
+            .filter(link -> link.getRels().stream().anyMatch(rel -> rel.equalsIgnoreCase(relType)));
+    }
+
+    protected Stream<URI> getLinksOfRelTypeAsUris(final Response response, final String relType) {
+        return getLinksOfRelType(response, relType)
+            .map(link -> link.getUri());
+    }
+
+    protected Stream<Header> getHeaders(final Response response, final String headerName) {
+        return response.getHeaders()
+                       .getList(headerName)
+                       .stream();
+    }
+
+    protected void confirmPresenceOfConstrainedByLink(final Response response) {
+        final String contrainedByUri = "http://www.w3.org/ns/ldp#constrainedBy";
+        assertTrue("Response does not contain link of rel type = " + contrainedByUri,
+                   getLinksOfRelType(response, contrainedByUri).count() > 0);
+    }
 }

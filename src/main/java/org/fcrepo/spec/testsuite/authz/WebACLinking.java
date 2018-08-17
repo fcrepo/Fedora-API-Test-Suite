@@ -17,6 +17,9 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -27,7 +30,6 @@ import org.testng.annotations.Test;
  * @since 2018-07-16
  */
 public class WebACLinking extends AbstractTest {
-
 
     /**
      * Constructor
@@ -49,9 +51,23 @@ public class WebACLinking extends AbstractTest {
     @Parameters({"param1"})
     public void linkToAclOnCreation(final String uri) {
         final TestInfo info = setupTest("5.4-A", "linkToAclOnCreation",
-                "A client HTTP POST or PUT request to create a new LDPR may include a rel=\"acl\" link in the " +
-                        "Link header referencing an existing LDP-RS to use as the ACL for the new LDPR.",
-                "https://fedora.info/2018/06/25/spec/#link-acl-on-create", ps);
+                                        "A client HTTP POST or PUT request to create a new LDPR may include a " +
+                                        "rel=\"acl\" link in the " +
+                                        "Link header referencing an existing LDP-RS to use as the ACL for the new " +
+                                        "LDPR.",
+                                        "https://fedora.info/2018/06/25/spec/#link-acl-on-create", ps);
+
+        //create a resource to be used for the acl link
+        final Response aclResponse = createBasicContainer(uri, info.getId() + "-acl");
+        final String aclUri = getLocation(aclResponse);
+
+        //PUT the new Resource
+        final String aclLinkValue = "<" + aclUri + ">; rel=\"acl\"";
+        final Response resource = doPut(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
+        final String resourceUri = getLocation(resource);
+        final Response getResource = doGet(resourceUri);
+        confirmPresenceOfLinkValue(aclLinkValue, getResource);
+
     }
 
     /**
@@ -63,26 +79,31 @@ public class WebACLinking extends AbstractTest {
     @Parameters({"param1"})
     public void conflictIfNotSupportingAclLink(final String uri) {
         final TestInfo info = setupTest("5.4-B", "conflictIfNotSupportingAclLink",
-                "The server must reject the request and respond with a 4xx or 5xx range status code, such as " +
-                        "409 (Conflict) if it isn't able to create the LDPR with the specified LDP-RS as the ACL.",
-                "https://fedora.info/2018/06/25/spec/#link-acl-on-create", ps);
-    }
+                                        "The server must reject the request and respond with a 4xx or 5xx range " +
+                                        "status code, such as " +
+                                        "409 (Conflict) if it isn't able to create the LDPR with the specified LDP-RS" +
+                                        " as the ACL. " +
+                                        "In that response, the restrictions causing the request to fail must be " +
+                                        "described in a " +
+                                        "resource indicated by a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link " +
+                                        "in the Link " +
+                                        "response header",
+                                        "https://fedora.info/2018/06/25/spec/#link-acl-on-create", ps);
 
-    /**
-     * 5.4-C - Providing constraints document if Linking to client-provided ACL is not supported
-     *
-     * @param uri of base container of Fedora server
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void conflictIfNotSupportingAclLinkConstraints(final String uri) {
-        final TestInfo info = setupTest("5.4-C", "conflictIfNotSupportingAclLinkConstraints",
-                "The server must reject the request and respond with a 4xx or 5xx range status code, such as " +
-                        "409 (Conflict) if it isn't able to create the LDPR with the specified LDP-RS as the ACL. " +
-                        "In that response, the restrictions causing the request to fail must be described in a " +
-                        "resource indicated by a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link " +
-                        "response header",
-                "https://fedora.info/2018/06/25/spec/#link-acl-on-create", ps);
+        //create a resource to be used for the acl link
+        final Response aclResponse = createBasicContainer(uri, info.getId() + "-acl");
+        final String aclUri = getLocation(aclResponse);
+
+        //PUT the new Resource
+        final String aclLinkValue = "<" + aclUri + ">; rel=\"acl\"";
+        final Response resource = doPutUnverified(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
+
+        if (resource.getStatusCode() >= 400) {
+            confirmPresenceOfConstrainedByLink(resource);
+        } else {
+            resource.then().statusCode(successRange());
+        }
+
     }
 
 }

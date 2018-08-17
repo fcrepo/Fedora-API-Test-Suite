@@ -23,7 +23,6 @@ import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.stream.Stream;
 import javax.ws.rs.core.Link;
 
 import io.restassured.http.Header;
@@ -54,25 +53,6 @@ public class AbstractVersioningTest extends AbstractTest {
         return getLinksOfRelTypeAsUris(response, "timemap").findFirst().get();
     }
 
-    protected Stream<Header> getHeaders(final Response response, final String headerName) {
-        return response.getHeaders()
-                       .getList(headerName)
-                       .stream();
-    }
-
-    protected Stream<Link> getLinksOfRelType(final Response response, final String relType) {
-        return getHeaders(response, "Link")
-                // Link header may include multiple, comma-separated link values
-            .flatMap(header -> Arrays.stream(header.getValue().split(",")).map(linkStr -> Link.valueOf(linkStr)))
-                // Each link value may contain multiple "rel" values
-            .filter(link -> link.getRels().stream().anyMatch(rel -> rel.equalsIgnoreCase(relType)));
-    }
-
-    protected Stream<URI> getLinksOfRelTypeAsUris(final Response response, final String relType) {
-        return getLinksOfRelType(response, relType)
-            .map(link -> link.getUri());
-    }
-
     protected Response createVersionedResource(final String uri, final TestInfo info) {
         final Headers headers = new Headers(
             new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
@@ -97,15 +77,6 @@ public class AbstractVersioningTest extends AbstractTest {
                                                    return val.equalsIgnoreCase(headerValue);
                                                }).count() > 0;
 
-    }
-
-    protected void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
-        final Link link = Link.valueOf(linkValue);
-        final String relType = link.getRel();
-        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
-                                                                      .count(),
-                            1,
-                            "Link header with a value of " + linkValue + " must be present but is not!");
     }
 
     protected void confirmAbsenceOfLinkValue(final String linkValue, final Response response) {
