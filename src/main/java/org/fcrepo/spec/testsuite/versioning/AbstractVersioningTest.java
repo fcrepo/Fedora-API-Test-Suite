@@ -61,10 +61,17 @@ public class AbstractVersioningTest extends AbstractTest {
     }
 
     protected void confirmPresenceOfHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
-                                                                  final Response response) {
+                                                                       final Response response) {
         Assert
             .assertTrue(hasHeaderValueInMultiValueHeader(headerName, headerValue, response),
                         headerName + " with a value of " + headerValue + " must be present but is not!");
+    }
+
+    protected void confirmAbsenceOfHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
+                                                                  final Response response) {
+        Assert
+            .assertFalse(hasHeaderValueInMultiValueHeader(headerName, headerValue, response),
+                        headerName + " with a value of " + headerValue + " must be not present but it is!");
     }
 
     protected boolean hasHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
