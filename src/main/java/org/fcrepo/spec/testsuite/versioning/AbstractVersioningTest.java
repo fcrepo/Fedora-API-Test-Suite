@@ -18,6 +18,7 @@
 
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
@@ -58,6 +59,14 @@ public class AbstractVersioningTest extends AbstractTest {
             new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
             new Header(SLUG, info.getId()));
         return doPost(uri, headers);
+    }
+
+    protected Response createVersionedNonRDFResource(final String uri, final TestInfo info) {
+        final Headers headers = new Headers(
+            new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
+            new Header(CONTENT_DISPOSITION, "attachment; filename=\"postNonRDFSource.txt\""),
+            new Header(SLUG, info.getId()));
+        return doPost(uri, headers, "Test String.");
     }
 
     protected Response putVersionedResourceUnverified(final String uri, final TestInfo info) {
@@ -105,6 +114,20 @@ public class AbstractVersioningTest extends AbstractTest {
                                                    return val.equalsIgnoreCase(headerValue);
                                                }).count() > 0;
 
+    }
+
+    protected void confirmPresenceOfVersionLocationHeader(final Response response) {
+        final String location = response.getHeader("Location");
+        Assert.assertTrue(location.contains("fcr:versions"));
+    }
+
+    protected void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
+        final Link link = Link.valueOf(linkValue);
+        final String relType = link.getRel();
+        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
+                                                                      .count(),
+                            1,
+                            "Link header with a value of " + linkValue + " must be present but is not!");
     }
 
     protected void confirmAbsenceOfLinkValue(final String linkValue, final Response response) {

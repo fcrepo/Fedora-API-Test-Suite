@@ -17,8 +17,12 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
+
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 /**
  * Tests for POST requests on LDP Version Container Resources
@@ -43,7 +47,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpcvOfLdprsMustSupportPostWithoutMementoDatetimeHeader(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-A", "ldpcvOfLdprsMustSupportPostWithoutMementoDatetimeHeader",
@@ -54,6 +58,12 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
 
+        // create the versioned resource
+        final String newResource = createVersionedResource(uri, info).body().asString();
+        // create a memento for the current time
+        final Response versionResponse = doPost(newResource + "/fcr:versions");
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
+        confirmPresenceOfVersionLocationHeader(versionResponse);
     }
 
     /**
@@ -61,7 +71,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpcvOfLdpnrsMustSupportPostWithoutMementoDatetimeHeader(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-B", "ldpcvOfLdpnrsMustSupportPostWithoutMementoDatetimeHeader",
@@ -73,6 +83,12 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         ps);
 
         //same as previous test but with LDP-NR
+        // create the versioned resource
+        final String newResource = createVersionedNonRDFResource(uri, info).body().asString();
+        // create a memento for the current time
+        final Response versionResponse = doPost(newResource + "/fcr:versions");
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
+        confirmPresenceOfVersionLocationHeader(versionResponse);
     }
 
     /**
@@ -80,7 +96,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postToldpcvOfLdprsWithoutMementoDatetimeMustIgnoreBody(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-C", "postToldpcvOfLdprsWithoutMementoDatetimeMustIgnoreBody",
@@ -89,7 +105,12 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "Memento-Datetime header MUST ignore any request body.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
-
+        // create the versioned resource
+        final String newResource = createVersionedResource(uri, info).body().asString();
+        // create a memento for the current time
+        final Response versionResponse = doPost(newResource + "/fcr:versions", "Send some random data here");
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
+        confirmPresenceOfVersionLocationHeader(versionResponse);
     }
 
     /**
@@ -97,7 +118,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postToldpcvOfLdpnrWithoutMementoDatetimeMustIgnoreBody(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-D", "postToldpcvOfLdpnrWithoutMementoDatetimeMustIgnoreBody",
@@ -107,6 +128,12 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
         //same as previous but with LDP-NR
+        // create the versioned resource
+        final String newResource = createVersionedNonRDFResource(uri, info).body().asString();
+        // create a memento for the current time
+        final Response versionResponse = doPost(newResource + "/fcr:versions", "Send some random data here");
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
+        confirmPresenceOfVersionLocationHeader(versionResponse);
     }
 
     /**

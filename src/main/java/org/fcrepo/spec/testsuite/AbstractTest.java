@@ -171,6 +171,13 @@ public class AbstractTest {
                 .post(uri);
     }
 
+    protected Response doPostUnverified(final String uri, final String body) {
+        return createRequest()
+                .body(body)
+                .when()
+                .post(uri);
+    }
+
     private Response doPostUnverified(final String uri, final Headers headers) {
         return createRequest().headers(headers)
                 .when()
@@ -190,6 +197,15 @@ public class AbstractTest {
 
         return response;
     }
+
+    protected Response doPost(final String uri, final String body) {
+        final Response response = doPostUnverified(uri, body);
+
+        response.then().statusCode(201);
+        return response;
+    }
+
+
 
     protected Response doPost(final String uri) {
         final Response response = doPostUnverified(uri);
