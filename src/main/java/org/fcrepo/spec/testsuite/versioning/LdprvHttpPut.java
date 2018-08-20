@@ -85,7 +85,9 @@ public class LdprvHttpPut extends AbstractVersioningTest {
         assertEquals(response.getStatusCode(), 201);
 
         final String resourceUri = getLocation(response);
-        final Response getResponse = doGet(resourceUri);
+
+        final Header acceptTurtleHeader = new Header("Accept", "text/turtle");
+        final Response getResponse = doGet(resourceUri, acceptTurtleHeader);
         //verify that "Allow: PUT" header is present
         confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "PUT", getResponse);
 
@@ -100,7 +102,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
         final String newBody = body +  "\n\n<" + resourceUri + "> dc:title \"title test\" .";
         final Response response2 = doPutUnverified(resourceUri, headers, newBody);
         assertEquals(response2.getStatusCode(), 204);
-        final Response getResponse2 = doGet(resourceUri);
+        final Response getResponse2 = doGet(resourceUri, acceptTurtleHeader);
         //verify that it was changed.
         assertTrue(getResponse2.getBody().prettyPrint().contains("title test"));
     }
@@ -152,5 +154,12 @@ public class LdprvHttpPut extends AbstractVersioningTest {
         //update an existing LDPNRv using a put
         final Response response2 = putVersionedResourceWithBodyUnverified(resourceUri,"test2");
         assertEquals(response2.getStatusCode(), 204);
+
+        final Response getResponse2 = doGet(resourceUri);
+        //verify that it was changed.
+        assertTrue(getResponse2.getBody().asString().contains("test2"));
+        confirmPresenceOfLinkValue(NON_RDF_SOURCE_LINK_HEADER, getResponse2);
+        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, getResponse2);
+        confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, getResponse2);
     }
 }

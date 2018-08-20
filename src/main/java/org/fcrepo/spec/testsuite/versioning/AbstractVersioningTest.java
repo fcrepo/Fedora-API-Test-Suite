@@ -89,7 +89,7 @@ public class AbstractVersioningTest extends AbstractTest {
         return putVersionedResourceWithBodyUnverified(uri + "/" + info.getId(), body);
     }
 
-    protected Response putVersionedResourceUnverified(final String uri) {
+    private Response putVersionedResourceUnverified(final String uri) {
         final Headers headers = new Headers(
             new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER));
         return doPutUnverified(uri, headers);

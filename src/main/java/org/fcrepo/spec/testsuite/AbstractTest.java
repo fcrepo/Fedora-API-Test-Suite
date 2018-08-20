@@ -213,14 +213,6 @@ public class AbstractTest {
                               .put(uri);
     }
 
-    protected Response doPut(final String uri, final Headers headers) {
-        final Response response = doPutUnverified(uri, headers);
-
-        response.then().statusCode(204);
-
-        return response;
-    }
-
     protected Response doPut(final String uri, final Headers headers, final String body) {
         final Response response = doPutUnverified(uri, headers, body);
 
