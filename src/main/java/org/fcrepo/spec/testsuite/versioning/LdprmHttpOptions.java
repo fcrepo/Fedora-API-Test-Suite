@@ -19,8 +19,6 @@ package org.fcrepo.spec.testsuite.versioning;
 
 import static org.testng.Assert.assertEquals;
 
-import java.net.URI;
-
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -67,10 +65,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     private String createMemento(final String uri, final TestInfo info) {
         final Response createResponse = createVersionedResource(uri, info);
         final String resourceUri = getLocation(createResponse);
-        final Response response = doGet(resourceUri);
-        final URI timeMapURI = getTimeMapUri(response);
-        final Response timeMapResponse = doPost(timeMapURI.toString());
-        return getLocation(timeMapResponse);
+        return createMemento(resourceUri);
     }
 
     /**
