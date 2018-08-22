@@ -177,7 +177,7 @@ public class AbstractTest {
                 .post(uri);
     }
 
-    private Response doPostUnverified(final String uri) {
+    protected Response doPostUnverified(final String uri) {
         return createRequest()
                 .when()
                 .post(uri);
@@ -212,6 +212,11 @@ public class AbstractTest {
                 .body(body)
                 .when()
                 .put(uri);
+    }
+
+    protected Response doPutUnverified(final String uri) {
+        return createRequest().when()
+                              .put(uri);
     }
 
     protected Response doPut(final String uri, final Headers headers, final String body) {
@@ -312,6 +317,13 @@ public class AbstractTest {
                 RestAssured.config().encoderConfig(
                         new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)))
                 .headers(headers).body(body).when().patch(uri);
+    }
+
+    protected Response doPatchUnverified(final String uri) {
+        return createRequest().config(
+            RestAssured.config().encoderConfig(
+                new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)))
+                              .when().patch(uri);
     }
 
     protected String getLocation(final Response response) {

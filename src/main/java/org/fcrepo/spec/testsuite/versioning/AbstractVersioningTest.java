@@ -67,6 +67,13 @@ public class AbstractVersioningTest extends AbstractTest {
                         headerName + " with a value of " + headerValue + " must be present but is not!");
     }
 
+    protected void confirmAbsenceOfHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
+                                                                 final Response response) {
+        Assert
+            .assertFalse(hasHeaderValueInMultiValueHeader(headerName, headerValue, response),
+                        headerName + " with a value of " + headerValue + " must be not present but it is!");
+    }
+
     protected boolean hasHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
                                                        final Response response) {
         return getHeaders(response, headerName).flatMap(header -> {
@@ -86,6 +93,19 @@ public class AbstractVersioningTest extends AbstractTest {
                                                                       .count(),
                             0,
                             "Link header with a value of " + linkValue + " must not be present (but it is)!");
+    }
+
+    /**
+     * Given the URI of the original resource, create a memento based on the
+     * current state of the reosurce.
+     * @param originalResourceUri The resource to be memento-ized.
+     * @return
+     */
+    protected String createMemento(final String originalResourceUri) {
+        final Response response = doGet(originalResourceUri);
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response timeMapResponse = doPost(timeMapURI.toString());
+        return getLocation(timeMapResponse);
     }
 
 }
