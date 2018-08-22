@@ -214,6 +214,12 @@ public class AbstractTest {
                 .put(uri);
     }
 
+    protected Response doPutUnverified(final String uri, final Headers headers) {
+        return createRequest().headers(headers)
+                              .when()
+                              .put(uri);
+    }
+
     protected Response doPutUnverified(final String uri) {
         return createRequest().when()
                               .put(uri);
