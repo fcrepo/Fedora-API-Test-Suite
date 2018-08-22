@@ -17,8 +17,12 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.testng.Assert.assertEquals;
+
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 /**
  * Tests for OPTIONS requests on LDP Memento Resources
@@ -43,7 +47,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprmMustSupportOptions(final String uri) {
         final TestInfo info = setupTest("4.2.2-A", "ldprmMustSupportOptions",
@@ -52,8 +56,16 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPRm
+        final String mementoURI = createMemento(uri, info);
+        final Response mementoResponse = doGet(mementoURI);
         //verify that a subsequent GET returns OPTIONS in "Allow" header.
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "OPTIONS", mementoResponse);
+    }
 
+    private String createMemento(final String uri, final TestInfo info) {
+        final Response createResponse = createVersionedResource(uri, info);
+        final String resourceUri = getLocation(createResponse);
+        return createMemento(resourceUri);
     }
 
     /**
@@ -61,7 +73,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprmOptionsMustSupportGetHeadAndOptions(final String uri) {
         final TestInfo info = setupTest("4.2.2-B", "ldprmOptionsMustSupportGetHeadAndOptions",
@@ -70,8 +82,12 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPRm
+        final String mementoURI = createMemento(uri, info);
+        final Response mementoResponse = doGet(mementoURI);
         //verify that a subsequent OPTIONS return "GET", "HEAD", and "OPTIONS" in "Allow" header.
-
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "OPTIONS", mementoResponse);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "GET", mementoResponse);
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "HEAD", mementoResponse);
     }
 
     /**
@@ -79,7 +95,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MAY"})
+    @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldprmOptionsMaySupportDelete(final String uri) {
         final TestInfo info = setupTest("4.2.2-C", "ldprmOptionsMaySupportDelete",
@@ -88,7 +104,11 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPRm
+        final String mementoURI = createMemento(uri, info);
+        final Response mementoResponse = doGet(mementoURI);
         //verify that a subsequent OPTIONS return "DELETE"
+        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "DELETE", mementoResponse);
+
     }
 
     /**
@@ -96,17 +116,21 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprmMustNotSupportPost(final String uri) {
         final TestInfo info = setupTest("4.2.3", "ldprmMustNotSupportPost",
                                         "An LDPRm must not support POST",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-post",
                                         ps);
-
         //create an LDPRm
+        final String mementoURI = createMemento(uri, info);
+        final Response mementoResponse = doGet(mementoURI);
         //verify that a subsequent OPTIONS does not return POST
+        confirmAbsenceOfHeaderValueInMultiValueHeader("Allow", "POST", mementoResponse);
         //verify that issuing a POST returns a 405 (method not allowed).
+        final Response response = doPostUnverified(mementoURI);
+        assertEquals(response.getStatusCode(), 405, "Response to a POST should be 405");
     }
 
     /**
@@ -114,7 +138,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprmMustNotSupportPut(final String uri) {
         final TestInfo info = setupTest("4.2.4", "ldprmMustNotSupportPut",
@@ -123,8 +147,14 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPRm
+        final String mementoURI = createMemento(uri, info);
+        final Response mementoResponse = doGet(mementoURI);
         //verify that a subsequent OPTIONS does not return PUT
+        confirmAbsenceOfHeaderValueInMultiValueHeader("Allow", "PUT", mementoResponse);
         //verify that issuing a PUT returns a 405 (method not allowed).
+        final Response response = doPutUnverified(mementoURI);
+        assertEquals(response.getStatusCode(), 405, "Response to a PUT should be 405");
+
     }
 
     /**
@@ -132,7 +162,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprmMustNotSupportPatch(final String uri) {
         final TestInfo info = setupTest("4.2.5", "ldprmMustNotSupportPatch",
@@ -141,8 +171,14 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPRm
+        final String mementoURI = createMemento(uri, info);
+        final Response mementoResponse = doGet(mementoURI);
         //verify that a subsequent OPTIONS does not return PATCH
+        confirmAbsenceOfHeaderValueInMultiValueHeader("Allow", "PATCH", mementoResponse);
         //verify that issuing a PATCH returns a 405 (method not allowed).
+        final Response response = doPatchUnverified(mementoURI);
+        assertEquals(response.getStatusCode(), 405, "Response to a PATCH should be 405");
+
     }
 
 }

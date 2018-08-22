@@ -23,7 +23,6 @@ import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import java.net.URI;
 import java.util.Arrays;
-import java.util.stream.Stream;
 import javax.ws.rs.core.Link;
 
 import io.restassured.http.Header;
@@ -52,25 +51,6 @@ public class AbstractVersioningTest extends AbstractTest {
 
     protected URI getTimeMapUri(final Response response) {
         return getLinksOfRelTypeAsUris(response, "timemap").findFirst().get();
-    }
-
-    protected Stream<Header> getHeaders(final Response response, final String headerName) {
-        return response.getHeaders()
-                       .getList(headerName)
-                       .stream();
-    }
-
-    protected Stream<Link> getLinksOfRelType(final Response response, final String relType) {
-        return getHeaders(response, "Link")
-                // Link header may include multiple, comma-separated link values
-            .flatMap(header -> Arrays.stream(header.getValue().split(",")).map(linkStr -> Link.valueOf(linkStr)))
-                // Each link value may contain multiple "rel" values
-            .filter(link -> link.getRels().stream().anyMatch(rel -> rel.equalsIgnoreCase(relType)));
-    }
-
-    protected Stream<URI> getLinksOfRelTypeAsUris(final Response response, final String relType) {
-        return getLinksOfRelType(response, relType)
-            .map(link -> link.getUri());
     }
 
     protected Response createVersionedResource(final String uri, final TestInfo info) {
@@ -108,6 +88,13 @@ public class AbstractVersioningTest extends AbstractTest {
                         headerName + " with a value of " + headerValue + " must be present but is not!");
     }
 
+    protected void confirmAbsenceOfHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
+                                                                 final Response response) {
+        Assert
+            .assertFalse(hasHeaderValueInMultiValueHeader(headerName, headerValue, response),
+                        headerName + " with a value of " + headerValue + " must be not present but it is!");
+    }
+
     protected boolean hasHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
                                                        final Response response) {
         return getHeaders(response, headerName).flatMap(header -> {
@@ -120,15 +107,6 @@ public class AbstractVersioningTest extends AbstractTest {
 
     }
 
-    protected void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
-        final Link link = Link.valueOf(linkValue);
-        final String relType = link.getRel();
-        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
-                                                                      .count(),
-                            1,
-                            "Link header with a value of " + linkValue + " must be present but is not!");
-    }
-
     protected void confirmAbsenceOfLinkValue(final String linkValue, final Response response) {
         final Link link = Link.valueOf(linkValue);
         final String relType = link.getRel();
@@ -136,6 +114,19 @@ public class AbstractVersioningTest extends AbstractTest {
                                                                       .count(),
                             0,
                             "Link header with a value of " + linkValue + " must not be present (but it is)!");
+    }
+
+    /**
+     * Given the URI of the original resource, create a memento based on the
+     * current state of the reosurce.
+     * @param originalResourceUri The resource to be memento-ized.
+     * @return
+     */
+    protected String createMemento(final String originalResourceUri) {
+        final Response response = doGet(originalResourceUri);
+        final URI timeMapURI = getTimeMapUri(response);
+        final Response timeMapResponse = doPost(timeMapURI.toString());
+        return getLocation(timeMapResponse);
     }
 
 }
