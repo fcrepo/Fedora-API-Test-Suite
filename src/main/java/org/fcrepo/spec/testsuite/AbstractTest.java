@@ -171,7 +171,7 @@ public class AbstractTest {
                 .post(uri);
     }
 
-    protected Response doPostUnverified(final String uri, final String body) {
+    private Response doPostUnverified(final String uri, final String body) {
         return createRequest()
                 .body(body)
                 .when()
