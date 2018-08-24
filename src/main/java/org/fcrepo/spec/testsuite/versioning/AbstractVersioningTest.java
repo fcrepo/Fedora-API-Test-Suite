@@ -18,9 +18,9 @@
 
 package org.fcrepo.spec.testsuite.versioning;
 
+import static java.util.Arrays.sort;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
-import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -57,7 +57,7 @@ public class AbstractVersioningTest extends AbstractTest {
     protected Response createVersionedResource(final String uri, final TestInfo info) {
         final Headers headers = new Headers(
             new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
-            new Header(SLUG, info.getId()));
+            new Header("Content-Type", "text/turtle"));
         return doPost(uri, headers);
     }
 
@@ -65,7 +65,7 @@ public class AbstractVersioningTest extends AbstractTest {
         final Headers headers = new Headers(
             new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
             new Header(CONTENT_DISPOSITION, "attachment; filename=\"postNonRDFSource.txt\""),
-            new Header(SLUG, info.getId()));
+            new Header("Content-Type", "text/plain"));
         return doPost(uri, headers, "Test String.");
     }
 
@@ -129,6 +129,21 @@ public class AbstractVersioningTest extends AbstractTest {
                                                                       .count(),
                             0,
                             "Link header with a value of " + linkValue + " must not be present (but it is)!");
+    }
+
+    protected void confirmResponseBodyNonRDFSourcesAreEqual(final Response resourceA, final Response resourceB) {
+        Assert.assertTrue(Arrays.equals(resourceA.body().asByteArray(), resourceB.body().asByteArray()));
+    }
+
+    protected void confirmResponseBodyNTriplesAreEqual(final Response resourceA, final Response resourceB) {
+
+        final String[] aTriples = resourceA.body().asString().split(".(\\r\\n|\\r|\\n)");
+        final String[] bTriples = resourceB.body().asString().split(".(\\r\\n|\\r|\\n)");
+
+        sort(aTriples);
+        sort(bTriples);
+
+        Assert.assertTrue(Arrays.equals(aTriples, bTriples));
     }
 
     /**

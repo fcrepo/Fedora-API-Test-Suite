@@ -19,7 +19,9 @@ package org.fcrepo.spec.testsuite.versioning;
 
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
 
+import io.restassured.http.Header;
 import io.restassured.response.Response;
+import java.net.URI;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -59,11 +61,27 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         ps);
 
         // create the versioned resource
-        final String newResource = createVersionedResource(uri, info).body().asString();
-        // create a memento for the current time
-        final Response versionResponse = doPost(newResource + "/fcr:versions");
-        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
-        confirmPresenceOfVersionLocationHeader(versionResponse);
+        final Response response = createVersionedResource(uri, info);
+        final URI timeMapURI = getTimeMapUri(response);
+
+        final Response testResponse = doGet(getLocation(response));
+
+        // create a version on the resource
+        final Response timeMapResponse = doPost(timeMapURI.toString());
+
+        // should have location in header information
+        confirmPresenceOfVersionLocationHeader(timeMapResponse);
+
+        // get the new memento
+        final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
+
+        final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader);
+        final Response origResponse = doGet(getLocation(response), acceptNTriplesHeader);
+
+        // is the memento exactly the same as the original?
+        confirmResponseBodyNTriplesAreEqual(origResponse, versionResponse);
+        // is the version marked as a memento?
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, timeMapResponse);
     }
 
     /**
@@ -82,13 +100,25 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
 
-        //same as previous test but with LDP-NR
+        // same as previous test but with LDP-NR
         // create the versioned resource
-        final String newResource = createVersionedNonRDFResource(uri, info).body().asString();
+        final Response response = createVersionedNonRDFResource(uri, info);
+        final URI timeMapURI = getTimeMapUri(response);
+
         // create a memento for the current time
-        final Response versionResponse = doPost(newResource + "/fcr:versions");
+        final Response timeMapResponse = doPost(timeMapURI.toString());
+
+        // should have location in header information
+        confirmPresenceOfVersionLocationHeader(timeMapResponse);
+
+        // get the new memento
+        final Response versionResponse = doGet(getLocation(timeMapResponse));
+        final Response origResponse = doGet(getLocation(response));
+
+        // is the memento exactly the same as the original?
+        confirmResponseBodyNonRDFSourcesAreEqual(origResponse, versionResponse);
+        // is the version marked as a memento?
         confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
-        confirmPresenceOfVersionLocationHeader(versionResponse);
     }
 
     /**
@@ -106,11 +136,24 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
         // create the versioned resource
-        final String newResource = createVersionedResource(uri, info).body().asString();
+        final Response response = createVersionedResource(uri, info);
+        final URI timeMapURI = getTimeMapUri(response);
+
         // create a memento for the current time
-        final Response versionResponse = doPost(newResource + "/fcr:versions", "Send some random data here");
+        final Response timeMapResponse = doPost(timeMapURI.toString(), "<> dc:title \"HelloThere\".");
+
+        // should have location header information of new memento
+        confirmPresenceOfVersionLocationHeader(timeMapResponse);
+
+        final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
+        final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader);
+        final Response origResponse = doGet(getLocation(response), acceptNTriplesHeader);
+
+        // does the version look like the original still?
+        confirmResponseBodyNTriplesAreEqual(origResponse, versionResponse);
+
+        // is version marked as memento?
         confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
-        confirmPresenceOfVersionLocationHeader(versionResponse);
     }
 
     /**
@@ -129,11 +172,23 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         ps);
         //same as previous but with LDP-NR
         // create the versioned resource
-        final String newResource = createVersionedNonRDFResource(uri, info).body().asString();
+        final Response response = createVersionedNonRDFResource(uri, info);
+        final URI timeMapURI = getTimeMapUri(response);
+
         // create a memento for the current time
-        final Response versionResponse = doPost(newResource + "/fcr:versions", "Send some random data here");
+        final Response timeMapResponse = doPost(timeMapURI.toString(), "Send some random data here");
+
+        //should have location header information of new memento
+        confirmPresenceOfVersionLocationHeader(timeMapResponse);
+
+        // get the new memento
+        final Response versionResponse = doGet(getLocation(timeMapResponse));
+        final Response origResponse = doGet(getLocation(response));
+
+        // is the memento exactly the same as the original?
+        confirmResponseBodyNonRDFSourcesAreEqual(origResponse, versionResponse);
+        // is version marked as memento?
         confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
-        confirmPresenceOfVersionLocationHeader(versionResponse);
     }
 
     /**
