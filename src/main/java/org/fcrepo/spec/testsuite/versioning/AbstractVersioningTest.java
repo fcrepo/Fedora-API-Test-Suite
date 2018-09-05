@@ -57,7 +57,7 @@ public class AbstractVersioningTest extends AbstractTest {
     protected Response createVersionedResource(final String uri, final TestInfo info) {
         final Headers headers = new Headers(
             new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER),
-            new Header("Content-Type", "text/turtle"));
+            new Header("Content-Type", "text/turtle"));  // this line keeps it from becoming a LDP-NR
         return doPost(uri, headers);
     }
 

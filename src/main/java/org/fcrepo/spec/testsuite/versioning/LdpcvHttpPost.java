@@ -60,11 +60,14 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
 
-        // create the versioned resource
-        final Response response = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(response);
+        final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
 
-        final Response testResponse = doGet(getLocation(response));
+        // create the versioned resource
+        final Response createResponse = createVersionedResource(uri, info);
+
+        // get the new resource, which should have all the proper memento headers
+        final Response origResponse = doGet(getLocation(createResponse), acceptNTriplesHeader);
+        final URI timeMapURI = getTimeMapUri(origResponse);
 
         // create a version on the resource
         final Response timeMapResponse = doPost(timeMapURI.toString());
@@ -73,15 +76,13 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         confirmPresenceOfVersionLocationHeader(timeMapResponse);
 
         // get the new memento
-        final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
-
         final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader);
-        final Response origResponse = doGet(getLocation(response), acceptNTriplesHeader);
 
         // is the memento exactly the same as the original?
         confirmResponseBodyNTriplesAreEqual(origResponse, versionResponse);
+
         // is the version marked as a memento?
-        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, timeMapResponse);
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, versionResponse);
     }
 
     /**
@@ -102,8 +103,11 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
 
         // same as previous test but with LDP-NR
         // create the versioned resource
-        final Response response = createVersionedNonRDFResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(response);
+        final Response createResponse = createVersionedNonRDFResource(uri, info);
+
+        // get the new resource, which should have all the proper memento headers
+        final Response origResponse = doGet(getLocation(createResponse));
+        final URI timeMapURI = getTimeMapUri(origResponse);
 
         // create a memento for the current time
         final Response timeMapResponse = doPost(timeMapURI.toString());
@@ -113,7 +117,6 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
 
         // get the new memento
         final Response versionResponse = doGet(getLocation(timeMapResponse));
-        final Response origResponse = doGet(getLocation(response));
 
         // is the memento exactly the same as the original?
         confirmResponseBodyNonRDFSourcesAreEqual(origResponse, versionResponse);
@@ -135,9 +138,15 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "Memento-Datetime header MUST ignore any request body.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
+
+        final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
+
         // create the versioned resource
-        final Response response = createVersionedResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(response);
+        final Response createResponse = createVersionedResource(uri, info);
+
+        // get the new resource, which should have all the proper memento headers
+        final Response origResponse = doGet(getLocation(createResponse), acceptNTriplesHeader);
+        final URI timeMapURI = getTimeMapUri(origResponse);
 
         // create a memento for the current time
         final Response timeMapResponse = doPost(timeMapURI.toString(), "<> dc:title \"HelloThere\".");
@@ -145,9 +154,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         // should have location header information of new memento
         confirmPresenceOfVersionLocationHeader(timeMapResponse);
 
-        final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
         final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader);
-        final Response origResponse = doGet(getLocation(response), acceptNTriplesHeader);
 
         // does the version look like the original still?
         confirmResponseBodyNTriplesAreEqual(origResponse, versionResponse);
@@ -172,8 +179,11 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         ps);
         //same as previous but with LDP-NR
         // create the versioned resource
-        final Response response = createVersionedNonRDFResource(uri, info);
-        final URI timeMapURI = getTimeMapUri(response);
+        final Response createResponse = createVersionedNonRDFResource(uri, info);
+
+        // get the new resource, which should have all the proper memento headers
+        final Response origResponse = doGet(getLocation(createResponse));
+        final URI timeMapURI = getTimeMapUri(origResponse);
 
         // create a memento for the current time
         final Response timeMapResponse = doPost(timeMapURI.toString(), "Send some random data here");
@@ -183,7 +193,6 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
 
         // get the new memento
         final Response versionResponse = doGet(getLocation(timeMapResponse));
-        final Response origResponse = doGet(getLocation(response));
 
         // is the memento exactly the same as the original?
         confirmResponseBodyNonRDFSourcesAreEqual(origResponse, versionResponse);
