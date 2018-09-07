@@ -51,7 +51,8 @@ public class Constants {
     public static final String DIGEST = "Digest";
     public static final String APPLICATION_SPARQL_UPDATE = "application/sparql-update";
 
-    public static final String ORIGINAL_RESOURCE_LINK_HEADER = "<http://mementoweb.org/ns#OriginalResource>; " +
+    public static final String MEMENTO_LINK_HEADER = "<http://mementoweb.org/ns#Memento>; rel=\"type\"";
+    public static final String ORIGINAL_RESOURCE_LINK_HEADER = "<http://mementoweb.org/ns#OriginalResource>;" +
                                                                "rel=\"type\"";
     public static final String TIME_GATE_LINK_HEADER = "<http://mementoweb.org/ns#TimeGate>; " +
                                                                "rel=\"type\"";
