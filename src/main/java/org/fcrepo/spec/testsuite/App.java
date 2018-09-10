@@ -52,12 +52,19 @@ public class App {
         final Option baseurl = new Option("b", "baseurl", true, "base url");
         baseurl.setRequired(true);
         options.addOption(baseurl);
-        final Option user = new Option("u", "user", true, "user login");
-        user.setRequired(false);
+        final Option user = new Option("u", "user", true, "Username of user with basic user role");
+        user.setRequired(true);
         options.addOption(user);
-        final Option password = new Option("p", "password", true, "user's password");
-        password.setRequired(false);
+        final Option password = new Option("p", "password", true, "Password of user with basic user role");
+        password.setRequired(true);
         options.addOption(password);
+        final Option adminUser = new Option("a", "admin-user", true, "Username of user with admin role");
+        adminUser.setRequired(true);
+        options.addOption(adminUser);
+        final Option adminPassword = new Option("s", "admin-password", true, "Password of user with basic admin role");
+        adminPassword.setRequired(true);
+        options.addOption(adminPassword);
+
         final Option testngxml = new Option("x", "testngxml", true, "TestNG XML file");
         testngxml.setRequired(false);
         options.addOption(testngxml);
@@ -82,14 +89,20 @@ public class App {
         final String inputUrl = cmd.getOptionValue("baseurl");
         final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
         final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
+        final String inputAdminUser = cmd.getOptionValue("admin-user") == null ? "" : cmd.getOptionValue("admin-user");
+        final String inputAdminPassword =
+            cmd.getOptionValue("admin-password") == null ? "" : cmd.getOptionValue("admin-password");
+
         final String inputXml = cmd.getOptionValue("testngxml");
         final String[] requirements = cmd.getOptionValues("requirements");
 
         //Create the default container
         final Map<String, String> params = new HashMap<>();
         params.put("param1", TestSuiteGlobals.containerTestSuite(inputUrl, inputUser, inputPassword));
-        params.put("param2", inputUser);
-        params.put("param3", inputPassword);
+        params.put("param2", inputAdminUser);
+        params.put("param3", inputAdminPassword);
+        params.put("param4", inputUser);
+        params.put("param5", inputPassword);
 
         InputStream inputStream = null;
         if (inputXml == null) {
