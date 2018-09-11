@@ -49,6 +49,8 @@ public class Constants {
     public static final String CONTENT_DISPOSITION = "Content-Disposition";
     public static final String SLUG = "slug";
     public static final String DIGEST = "Digest";
+
+    public static final String LINK = "Link";
     public static final String APPLICATION_SPARQL_UPDATE = "application/sparql-update";
 
     public static final String MEMENTO_LINK_HEADER = "<http://mementoweb.org/ns#Memento>; rel=\"type\"";
@@ -59,6 +61,7 @@ public class Constants {
     public static final String TIME_MAP_LINK_HEADER = "<http://mementoweb.org/ns#TimeMap>; " +
                                                        "rel=\"type\"";
 
+    public static final String EXTERNAL_CONTENT_LINK_REL = "http://fedora.info/definitions/fcrepo#ExternalContent";
 
     private Constants() {
 
