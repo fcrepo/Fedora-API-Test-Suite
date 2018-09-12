@@ -70,12 +70,12 @@ public class AbstractVersioningTest extends AbstractTest {
     }
 
     protected Response putVersionedResourceUnverified(final String uri, final TestInfo info) {
-        return putVersionedResourceUnverified(uri + "/" + info.getId());
+        return putVersionedResourceUnverified(joinLocation(uri, info.getId()));
     }
 
     protected Response putVersionedResourceWithBodyUnverified(final String uri, final TestInfo info,
                                                               final String body) {
-        return putVersionedResourceWithBodyUnverified(uri + "/" + info.getId(), body);
+        return putVersionedResourceWithBodyUnverified(joinLocation(uri, info.getId()), body);
     }
 
     private Response putVersionedResourceUnverified(final String uri) {

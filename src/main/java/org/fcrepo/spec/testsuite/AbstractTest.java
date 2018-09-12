@@ -199,7 +199,7 @@ public class AbstractTest {
                 .post(uri);
     }
 
-    private Response doPostUnverified(final String uri, final Headers headers) {
+    protected Response doPostUnverified(final String uri, final Headers headers) {
         return createRequest().headers(headers)
                 .when()
                 .post(uri);
@@ -267,6 +267,14 @@ public class AbstractTest {
     protected Response doPutUnverified(final String uri) {
         return createRequest().when()
                               .put(uri);
+    }
+
+    protected Response doPut(final String uri, final Headers headers) {
+        final Response response = doPutUnverified(uri, headers);
+
+        response.then().statusCode(204);
+
+        return response;
     }
 
     protected Response doPut(final String uri, final Headers headers, final String body) {
@@ -366,7 +374,7 @@ public class AbstractTest {
         return response;
     }
 
-    private Response doHeadUnverified(final String uri, final boolean admin) {
+    protected Response doHeadUnverified(final String uri, final boolean admin) {
         return createRequest(admin).when().head(uri);
     }
 
@@ -491,5 +499,11 @@ public class AbstractTest {
         final String contrainedByUri = "http://www.w3.org/ns/ldp#constrainedBy";
         assertTrue("Response does not contain link of rel type = " + contrainedByUri,
                    getLinksOfRelType(response, contrainedByUri).count() > 0);
+    }
+
+    protected String joinLocation(final String uri, final String... subpaths) {
+        final StringBuilder builder = new StringBuilder(uri);
+        builder.append(String.join("/", subpaths));
+        return builder.toString();
     }
 }

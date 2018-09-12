@@ -57,20 +57,20 @@ public abstract class TestSuiteGlobals {
      */
     public static String containerTestSuite(final String baseurl, final String user, final String pass) {
         final String name = outputName + "container" + today();
-        String containerUrl = baseurl + "/" + name;
+        final String base = baseurl.endsWith("/") ? baseurl : baseurl + '/';
+        String containerUrl = base + name + "/";
         containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
         final Response res = RestAssured.given()
                                         .auth().basic(user, pass)
                                         .contentType("text/turtle")
                                         .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                         .header(SLUG, name)
-                                        .body(BASIC_CONTAINER_LINK_HEADER)
                                         .when()
-                                        .post(baseurl);
+                                        .post(base);
         if (res.getStatusCode() == 201) {
             return containerUrl;
         } else {
-            return baseurl;
+            return base;
         }
     }
 
@@ -132,7 +132,7 @@ public abstract class TestSuiteGlobals {
                                                                        TestSuiteGlobals.outputName + "-execution.log"),
                                                               true);
             return new PrintStream(fos);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new RuntimeException(ex);
         }
     }
