@@ -22,8 +22,8 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.EXTERNAL_CONTENT_LINK_REL;
 import static org.fcrepo.spec.testsuite.Constants.LINK;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
-import static org.hamcrest.CoreMatchers.containsString;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,6 +67,8 @@ public class ExternalBinaryContent extends AbstractTest {
     private WireMockServer wireMockServer;
     private String externalUri;
 
+    private String externalFileUri;
+
     private String externalUriWithNoType;
 
     private Boolean extContentSupported;
@@ -76,15 +78,20 @@ public class ExternalBinaryContent extends AbstractTest {
      *
      * @param username The repository username
      * @param password The repository password
+     * @throws IOException
      */
     @Parameters({"param2", "param3"})
-    public ExternalBinaryContent(final String username, final String password) {
+    public ExternalBinaryContent(final String username, final String password) throws IOException {
         super(username, password);
 
         wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
         externalUri = mockHttpResource("file.txt", "text/plain", "binary content");
         externalUriWithNoType = mockHttpResourceNoType("notype2", "other content");
+
+        final File tempFile = File.createTempFile("ext", null);
+        tempFile.deleteOnExit();
+        externalFileUri = tempFile.toURI().toString();
     }
 
     /**
@@ -117,6 +124,27 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
+     * 3.9-A-1b PostCreate Copy
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void postCreateExternalFileUriBinaryCopy(final String uri) {
+        final TestInfo info = setupTest("3.9-A-1b", "postCreateExternalFileUriBinaryCopy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final Headers headers = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "copy")),
+                new Header(SLUG, info.getId()));
+
+        doPost(uri, headers);
+    }
+
+    /**
      * 3.9-A-2 PostCreate Redirect
      *
      * @param uri of base container of Fedora server
@@ -132,6 +160,26 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "redirect")),
+                new Header(SLUG, info.getId()));
+        doPost(uri, headers);
+    }
+
+    /**
+     * 3.9-A-2b PostCreate Redirect
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void postCreateExternalFileUriBinaryRedirect(final String uri) {
+        final TestInfo info = setupTest("3.9-A-2b", "postCreateExternalFileUriBinaryRedirect",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final Headers headers = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "redirect")),
                 new Header(SLUG, info.getId()));
         doPost(uri, headers);
     }
@@ -157,6 +205,26 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
+     * 3.9-A-3b PostCreate Proxy
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void postCreateExternalFileUriBinaryProxy(final String uri) {
+        final TestInfo info = setupTest("3.9-A-3b", "postCreateExternalFileUriBinaryProxy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final Headers headers = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "proxy")),
+                new Header(SLUG, info.getId()));
+        doPost(uri, headers);
+    }
+
+    /**
      * 3.9-B-1 PutCreate Copy
      *
      * @param uri of base container of Fedora server
@@ -173,7 +241,29 @@ public class ExternalBinaryContent extends AbstractTest {
         final String location = uri + info.getId();
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "copy")));
-        doPut(location, headers);
+        doPutUnverified(location, headers).then()
+                .statusCode(201);
+    }
+
+    /**
+     * 3.9-B-1b PutCreate Copy
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void putCreateExternalFileUriBinaryCopy(final String uri) {
+        final TestInfo info = setupTest("3.9-B-1b", "putCreateExternalFileUriBinaryCopy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final String location = uri + info.getId();
+        final Headers headers = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "copy")));
+        doPutUnverified(location, headers).then()
+                .statusCode(201);
     }
 
     /**
@@ -193,7 +283,29 @@ public class ExternalBinaryContent extends AbstractTest {
         final String location = uri + info.getId();
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "redirect")));
-        doPut(location, headers);
+        doPutUnverified(location, headers).then()
+                .statusCode(201);
+    }
+
+    /**
+     * 3.9-B-2b PutCreate Redirect
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void putCreateExternalFileUriBinaryRedirect(final String uri) {
+        final TestInfo info = setupTest("3.9-B-2b", "putCreateExternalFileUriBinaryRedirect",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final String location = uri + info.getId();
+        final Headers headers = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "redirect")));
+        doPutUnverified(location, headers).then()
+                .statusCode(201);
     }
 
     /**
@@ -213,7 +325,29 @@ public class ExternalBinaryContent extends AbstractTest {
         final String location = uri + info.getId();
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy")));
-        doPut(location, headers);
+        doPutUnverified(location, headers).then()
+                .statusCode(201);
+    }
+
+    /**
+     * 3.9-B-3b PutCreate Proxy
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void putCreateExternalFileUriBinaryProxy(final String uri) {
+        final TestInfo info = setupTest("3.9-B-3b", "putCreateExternalFileUriBinaryProxy",
+                "Fedora servers should support the creation of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final String location = uri + info.getId();
+        final Headers headers = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "proxy")));
+        doPutUnverified(location, headers).then()
+                .statusCode(201);
     }
 
     /**
@@ -238,6 +372,31 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "copy")));
+        doPut(locationHeader, headers2);
+    }
+
+    /**
+     * 3.9-C-1b PutUpdate Copy
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void putUpdateExternalFileUriBinaryCopy(final String uri) {
+        final TestInfo info = setupTest("3.9-C-1b", "putUpdateExternalFileUriBinaryCopy",
+                "Fedora servers should support the update of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
+        final String locationHeader = getLocation(resource);
+
+        final Headers headers2 = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "copy")));
         doPut(locationHeader, headers2);
     }
 
@@ -267,6 +426,31 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
+     * 3.9-C-2b PutUpdate Redirect
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void putUpdateExternalFileUriBinaryRedirect(final String uri) {
+        final TestInfo info = setupTest("3.9-C-2b", "putUpdateExternalFileUriBinaryRedirect",
+                "Fedora servers should support the update of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
+        final String locationHeader = getLocation(resource);
+
+        final Headers headers2 = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "redirect")));
+        doPut(locationHeader, headers2);
+    }
+
+    /**
      * 3.9-C-3 PutUpdate Proxy
      *
      * @param uri of base container of Fedora server
@@ -288,6 +472,31 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy")));
+        doPut(locationHeader, headers2);
+    }
+
+    /**
+     * 3.9-C-3b PutUpdate Proxy
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void putUpdateExternalFileUriBinaryProxy(final String uri) {
+        final TestInfo info = setupTest("3.9-C-3b", "putUpdateExternalFileUriBinaryProxy",
+                "Fedora servers should support the update of LDP-NRs with content external to the " +
+                        "request entity, as indicated by a link with " +
+                        "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
+                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString.");
+        final String locationHeader = getLocation(resource);
+
+        final Headers headers2 = new Headers(
+                new Header(LINK, externalContentHeader(externalFileUri, "proxy")));
         doPut(locationHeader, headers2);
     }
 
@@ -338,9 +547,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 new Header(LINK, externalContentHeader(externalUri, "proxy")),
                 new Header(SLUG, info.getId()));
 
-        doPostUnverified(uri, headers)
-                .then()
-                .header("Link", containsString("constrainedBy"));
+        confirmPresenceOfConstrainedByLink(doPostUnverified(uri, headers));
     }
 
     /**
@@ -419,9 +626,9 @@ public class ExternalBinaryContent extends AbstractTest {
                 new Header(LINK, externalContentHeader(externalUri, "unsupported")),
                 new Header(SLUG, info.getId()));
 
-        doPostUnverified(uri, headers)
-                .then()
-                .statusCode(clientErrorRange());
+        final Response resp = doPostUnverified(uri, headers);
+        resp.then().statusCode(clientErrorRange());
+        confirmPresenceOfConstrainedByLink(resp);
     }
 
     /**
@@ -457,9 +664,9 @@ public class ExternalBinaryContent extends AbstractTest {
     public void binaryContentNoTypeExternalType(final String uri) {
         final TestInfo info = setupTest("3.9-F-2", "binaryContentNoTypeExternalType",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
-                        "type of the external content, if provided. Servers may use the media type obtained when " +
-                        "accessing the external content via the specified scheme (e.g. the Content-Type header for " +
-                        "external content accessed via http).",
+                        "type of the external content, if provided. If there is no type attribute: " +
+                        "Servers may use the media type obtained when accessing the external content via the " +
+                        "specified scheme (e.g. the Content-Type header for external content accessed via http).",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Headers headers = new Headers(
@@ -481,7 +688,8 @@ public class ExternalBinaryContent extends AbstractTest {
     public void binaryContentNoTypeDefault(final String uri) {
         final TestInfo info = setupTest("3.9-F-3", "binaryContentNoTypeDefault",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
-                        "type of the external content, if provided. Servers may use a default media type.",
+                        "type of the external content, if provided. If there is no type attribute: " +
+                        "Servers may use a default media type.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Headers headers = new Headers(
@@ -504,8 +712,8 @@ public class ExternalBinaryContent extends AbstractTest {
     public void binaryContentNoTypeUnsupported(final String uri) {
         final TestInfo info = setupTest("3.9-F-4", "binaryContentNoTypeUnsupported",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
-                        "type of the external content, if provided. Servers may reject the request with a 4xx range " +
-                        "status code.",
+                        "type of the external content, if provided. If there is no type attribute: " +
+                        "Servers may reject the request with a 4xx range status code.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         final Headers headers = new Headers(
@@ -659,7 +867,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final String location = getLocation(doPost(uri, headers));
 
         final String checksum = "md5;q=0.3,sha;q=1";
-        final Response wantDigestResponse = doGet(location, new Header("Want-Digest", checksum));
+        final Response wantDigestResponse = doGetUnverified(location, new Header("Want-Digest", checksum));
 
         final Headers responseHeaders = wantDigestResponse.getHeaders();
         assertTrue(responseHeaders.getValue(DIGEST).contains("md5") ||
@@ -710,7 +918,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 new Header(SLUG, info.getId()));
         final String location = getLocation(doPostUnverified(uri, headers));
 
-        doGet(location).then()
+        doGetUnverified(location).then()
                 .statusCode(anyOf(is(302), is(307)));
     }
 
@@ -732,7 +940,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 new Header(SLUG, info.getId()));
         final String location = getLocation(doPostUnverified(uri, headers));
 
-        doHead(location).then()
+        doHeadUnverified(location).then()
                 .statusCode(anyOf(is(302), is(307)));
     }
 
