@@ -79,7 +79,7 @@ public class ExternalBinaryContent extends AbstractTest {
      *
      * @param username The repository username
      * @param password The repository password
-     * @throws IOException
+     * @throws IOException thrown if unable to create temp file
      */
     @Parameters({"param2", "param3"})
     public ExternalBinaryContent(final String username, final String password) throws IOException {
@@ -239,7 +239,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String location = uri + info.getId();
+        final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "copy")));
         doPutUnverified(location, headers).then()
@@ -260,7 +260,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String location = uri + info.getId();
+        final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "copy")));
         doPutUnverified(location, headers).then()
@@ -281,7 +281,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String location = uri + info.getId();
+        final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "redirect")));
         doPutUnverified(location, headers).then()
@@ -302,7 +302,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String location = uri + info.getId();
+        final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "redirect")));
         doPutUnverified(location, headers).then()
@@ -323,7 +323,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String location = uri + info.getId();
+        final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy")));
         doPutUnverified(location, headers).then()
@@ -344,7 +344,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final String location = uri + info.getId();
+        final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "proxy")));
         doPutUnverified(location, headers).then()
@@ -550,16 +550,13 @@ public class ExternalBinaryContent extends AbstractTest {
         assertThat("Accept-External-Content-Handling header contains at least one expected handling",
                 acceptedAndExpected.size(), greaterThanOrEqualTo(1));
 
-        // Test that at least one of the handlings specified by the serve is supported
+        // Test that all of the handlings specified by the server are supported
         for (final String handling : acceptedAndExpected) {
             final Headers headers = new Headers(
                     new Header(LINK, externalContentHeader(externalUri, handling)),
                     new Header(SLUG, info.getId()));
 
-            final Response resp = doPostUnverified(uri, headers);
-            if (resp.statusCode() == 201) {
-                return;
-            }
+            doPost(uri, headers);
         }
     }
 
@@ -697,7 +694,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 new Header(LINK, externalContentHeader(externalUriWithNoType, "proxy")),
                 new Header(SLUG, info.getId()));
         doPostUnverified(uri, headers).then()
-                .statusCode(clientErrorRange());
+                .statusCode(anyOf(clientErrorRange(), successRange()));
     }
 
     /**
@@ -716,6 +713,7 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy", "text/special")),
+                new Header("Content-Type", "text/plain"),
                 new Header(SLUG, info.getId()));
         final String location = getLocation(doPost(uri, headers));
 
@@ -742,6 +740,7 @@ public class ExternalBinaryContent extends AbstractTest {
         // Providing external content which does not return Content-Type
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUriWithNoType, "proxy", "text/special")),
+                new Header("Content-Type", "text/plain"),
                 new Header(SLUG, info.getId()));
         final String location = getLocation(doPost(uri, headers));
 
@@ -750,14 +749,14 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-G-1 Guaranteed headers - describedby
+     * 3.9-G-1 Guaranteed headers
      *
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void binaryContentGuaranteeHeadersDescribedBy(final String uri) {
-        final TestInfo info = setupTest("3.9-G-1", "binaryContentGuaranteeHeadersDescribedBy",
+    public void binaryContentGuaranteeHeaders(final String uri) {
+        final TestInfo info = setupTest("3.9-G-1", "binaryContentGuaranteeHeaders",
                 "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
                         "required by the LDP-NR interaction model in this specification.",
@@ -766,68 +765,15 @@ public class ExternalBinaryContent extends AbstractTest {
         final String location = createExternalBinary(uri, info.getId(), "proxy", null);
 
         final Response resp = doGet(location);
-        assertTrue("Response does not contain link of rel type = describedby",
-                getLinksOfRelType(resp, "describedby").count() > 0);
-    }
 
-    /**
-     * 3.9-G-2 Guaranteed headers - Content-Type
-     *
-     * @param uri of base container of Fedora server
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentGuaranteeHeadersContentType(final String uri) {
-        final TestInfo info = setupTest("3.9-G-2", "binaryContentGuaranteeHeadersContentType",
-                "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
-                        "the request entity must reject request if it cannot guarantee all of the response headers " +
-                        "required by the LDP-NR interaction model in this specification.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String location = createExternalBinary(uri, info.getId(), "proxy", "text/plain");
-
-        doGet(location).then().header("Content-Type", "text/plain");
-    }
-
-    /**
-     * 3.9-G-3 Guaranteed headers - Content-Length
-     *
-     * @param uri of base container of Fedora server
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentGuaranteeHeadersContentLength(final String uri) {
-        final TestInfo info = setupTest("3.9-G-3", "binaryContentGuaranteeHeadersContentLength",
-                "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
-                        "the request entity must reject request if it cannot guarantee all of the response headers " +
-                        "required by the LDP-NR interaction model in this specification.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String location = createExternalBinary(uri, info.getId(), "proxy", "text/plain");
-
-        doGet(location).then().header("Content-Length", is(notNullValue()));
-    }
-
-    /**
-     * 3.9-G-4 Guaranteed headers - interaction model
-     *
-     * @param uri of base container of Fedora server
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentGuaranteeHeadersInteractionModel(final String uri) {
-        final TestInfo info = setupTest("3.9-G-4", "binaryContentGuaranteeHeadersInteractionModel",
-                "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
-                        "the request entity must reject request if it cannot guarantee all of the response headers " +
-                        "required by the LDP-NR interaction model in this specification.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
-
-        final String location = createExternalBinary(uri, info.getId(), "proxy", "text/plain");
-
-        final Response resp = doGet(location);
+        resp.then()
+                .header("Content-Type", "text/plain")
+                .header("Content-Length", is(notNullValue()));
         assertTrue(getLinksOfRelTypeAsUris(resp, "type")
                 .anyMatch(p -> p.toString().equals(NON_RDF_SOURCE_INTERACTION_MODEL)),
                 "Interaction model link header of rel=type is required");
+        assertTrue("Response does not contain link of rel type = describedby",
+                getLinksOfRelType(resp, "describedby").count() > 0);
     }
 
     /**
@@ -867,7 +813,8 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Headers responseHeaders = wantDigestResponse.getHeaders();
         assertTrue(responseHeaders.getValue(DIGEST).contains("md5") ||
-                responseHeaders.getValue(DIGEST).contains("sha"), "OK");
+                responseHeaders.getValue(DIGEST).contains("sha"),
+                "Expected Want-Digest value not found");
     }
 
     /**
@@ -890,7 +837,8 @@ public class ExternalBinaryContent extends AbstractTest {
 
         final Headers responseHeaders = wantDigestResponse.getHeaders();
         assertTrue(responseHeaders.getValue(DIGEST).contains("md5") ||
-                responseHeaders.getValue(DIGEST).contains("sha"), "OK");
+                responseHeaders.getValue(DIGEST).contains("sha"),
+                "Expected Want-Digest value not found");
     }
 
     /**

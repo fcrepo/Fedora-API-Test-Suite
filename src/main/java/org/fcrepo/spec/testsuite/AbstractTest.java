@@ -500,4 +500,13 @@ public class AbstractTest {
         assertTrue("Response does not contain link of rel type = " + contrainedByUri,
                    getLinksOfRelType(response, contrainedByUri).count() > 0);
     }
+
+    protected String joinLocation(final String uri, final String... subpaths) {
+        final StringBuilder builder = new StringBuilder(uri);
+        if (!uri.endsWith("/")) {
+            builder.append('/');
+        }
+        builder.append(String.join("/", subpaths));
+        return builder.toString();
+    }
 }
