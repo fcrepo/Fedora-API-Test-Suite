@@ -54,7 +54,7 @@ public class AbstractAuthzTest extends AbstractTest {
         if (acls.size() > 0) {
             return acls.get(0).getUri().toString();
         } else {
-            return resourceUri + ".acl";
+            throw new RuntimeException("No link of type rel=\"acl\" found on resource: " + resourceUri);
         }
     }
 

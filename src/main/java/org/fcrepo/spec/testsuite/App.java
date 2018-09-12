@@ -61,7 +61,7 @@ public class App {
         final Option adminUser = new Option("a", "admin-user", true, "Username of user with admin role");
         adminUser.setRequired(true);
         options.addOption(adminUser);
-        final Option adminPassword = new Option("s", "admin-password", true, "Password of user with basic admin role");
+        final Option adminPassword = new Option("s", "admin-password", true, "Password of user with admin role");
         adminPassword.setRequired(true);
         options.addOption(adminPassword);
 

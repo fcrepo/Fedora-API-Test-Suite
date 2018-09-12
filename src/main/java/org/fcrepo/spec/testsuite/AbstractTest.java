@@ -60,8 +60,8 @@ public class AbstractTest {
 
     protected PrintStream ps;
 
-    protected final String adminUsername;
-    protected final String adminPassword;
+    private final String adminUsername;
+    private final String adminPassword;
     protected final String username;
     protected final String password;
 
@@ -84,11 +84,11 @@ public class AbstractTest {
     /**
      * Constructor
      *
-     * @param username username
-     * @param password password
+     * @param adminUsername admin username
+     * @param adminPassword admin password
      */
-    public AbstractTest(final String username, final String password) {
-        this(username, password, username, password);
+    public AbstractTest(final String adminUsername, final String adminPassword) {
+        this(adminPassword, adminPassword, null, null);
     }
 
     /**
@@ -305,10 +305,6 @@ public class AbstractTest {
         return createRequest().header(SLUG, slug).contentType(contentType);
     }
 
-    private RequestSpecification createRequestAuthOnly() {
-        return createRequestAuthOnly(true);
-    }
-
     private RequestSpecification createRequestAuthOnly(final boolean admin) {
         if (admin) {
             return createRequestAuthOnly(this.adminUsername, this.adminPassword);
@@ -368,10 +364,6 @@ public class AbstractTest {
         response.then().statusCode(204);
 
         return response;
-    }
-
-    private Response doHeadUnverified(final String uri) {
-       return doHeadUnverified(uri, true);
     }
 
     private Response doHeadUnverified(final String uri, final boolean admin) {

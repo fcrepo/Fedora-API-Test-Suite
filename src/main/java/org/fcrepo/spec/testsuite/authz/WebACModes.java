@@ -63,7 +63,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
         //perform verified head as non-admin
         doHead(resourceUri, false);
     }
@@ -83,7 +83,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
         //perform GET as non-admin
         doGet(resourceUri, false);
     }
@@ -105,7 +105,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", "not-" + this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", "not-" + this.username);
         //perform GET as non-admin
         final Response getResponse = doGetUnverified(resourceUri, false);
         //verify unauthorized
@@ -128,7 +128,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
         //perform PUT  to child resource as non-admin
         final Response putResponse =
             doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
@@ -154,10 +154,9 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
         //perform POST  to child resource as non-admin
-        doPost(resourceUri, new Headers(new Header("Content-Type", "text/plain"),
-                                        new Header("Slug", "child2")),
+        doPost(resourceUri, new Headers(new Header("Content-Type", "text/plain")),
                "test", false);
     }
 
@@ -176,7 +175,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
         //perform DELETE  to child resource as non-admin
         doDelete(resourceUri, false);
     }
@@ -202,7 +201,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
         //perform PATCH  to child resource as non-admin
         doPatch(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
 
@@ -223,7 +222,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
         //perform PUT  to child resource as non-admin with read only prives
         final Response putResponse =
             doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
@@ -246,10 +245,9 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
         //perform POST  to child resource as non-admin
-        final Response postResponse = doPostUnverified(resourceUri, new Headers(
-                                                           new Header("Slug", "child2")),
+        final Response postResponse = doPostUnverified(resourceUri, new Headers(),
                                                        "test", false);
         postResponse.then().statusCode(403);
     }
@@ -268,7 +266,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
         //perform DELETE  to child resource as non-admin
         final Response deleteResponse = doDeleteUnverified(resourceUri, false);
         deleteResponse.then().statusCode(403);
@@ -294,7 +292,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
         //perform PATCH  to child resource as non-admin
         final Response patchResponse =
             doPatchUnverified(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body,
@@ -317,9 +315,9 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
         //perform POST  to child resource as non-admin
-        doPost(resourceUri, new Headers(new Header("Slug", "child")),
+        doPost(resourceUri, new Headers(),
                "test", false);
 
     }
@@ -344,7 +342,7 @@ public class WebACModes extends AbstractAuthzTest {
                             + " WHERE { }";
 
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
         //perform PATCH  to child resource as non-admin
         doPatch(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
     }
@@ -372,7 +370,7 @@ public class WebACModes extends AbstractAuthzTest {
                             + " WHERE { }";
 
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
         //perform PATCH  to child resource as non-admin
         final Response patchResponse =
             doPatchUnverified(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body,
