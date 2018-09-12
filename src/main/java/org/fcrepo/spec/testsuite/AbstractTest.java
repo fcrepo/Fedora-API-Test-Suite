@@ -29,7 +29,6 @@ import java.io.StringReader;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.stream.Stream;
-
 import javax.ws.rs.core.Link;
 
 import io.restassured.RestAssured;
@@ -55,24 +54,41 @@ import org.testng.annotations.BeforeMethod;
 /**
  * A crud base class for common crud functions.
  *
- * @author Daniel Berntein
+ * @author dbernstein
  */
 public class AbstractTest {
 
     protected PrintStream ps;
 
+    private final String adminUsername;
+    private final String adminPassword;
     protected final String username;
     protected final String password;
 
     /**
      * Constructor
      *
+     * @param adminUsername admin password
+     * @param adminPassword admin username
      * @param username username
      * @param password password
      */
-    public AbstractTest(final String username, final String password) {
+    public AbstractTest(final String adminUsername, final String adminPassword, final String username,
+                        final String password) {
+        this.adminUsername = adminUsername;
+        this.adminPassword = adminPassword;
         this.username = username;
         this.password = password;
+    }
+
+    /**
+     * Constructor
+     *
+     * @param adminUsername admin username
+     * @param adminPassword admin password
+     */
+    public AbstractTest(final String adminUsername, final String adminPassword) {
+        this(adminPassword, adminPassword, null, null);
     }
 
     /**
@@ -165,10 +181,15 @@ public class AbstractTest {
     }
 
     protected Response doPostUnverified(final String uri, final Headers headers, final String body) {
-        return createRequest().headers(headers)
-                .body(body)
-                .when()
-                .post(uri);
+        return doPostUnverified(uri,headers, body, true);
+    }
+
+    protected Response doPostUnverified(final String uri, final Headers headers, final String body,
+                                        final boolean admin) {
+        return createRequest(admin).headers(headers)
+                                   .body(body)
+                                   .when()
+                                   .post(uri);
     }
 
     private Response doPostUnverified(final String uri, final String body) {
@@ -216,18 +237,25 @@ public class AbstractTest {
     }
 
     protected Response doPost(final String uri, final Headers headers, final String body) {
-        final Response response = doPostUnverified(uri, headers, body);
+        return doPost(uri, headers, body, true);
+    }
 
+    protected Response doPost(final String uri, final Headers headers, final String body, final boolean admin) {
+        final Response response = doPostUnverified(uri, headers, body, admin);
         response.then().statusCode(201);
-
         return response;
     }
 
     protected Response doPutUnverified(final String uri, final Headers headers, final String body) {
-        return createRequest().headers(headers)
-                .body(body)
-                .when()
-                .put(uri);
+        return doPutUnverified(uri, headers, body, true);
+    }
+
+    protected Response doPutUnverified(final String uri, final Headers headers, final String body,
+                                       final boolean admin) {
+        return createRequest(admin).headers(headers)
+                                   .body(body)
+                                   .when()
+                                   .put(uri);
     }
 
     protected Response doPutUnverified(final String uri, final Headers headers) {
@@ -261,21 +289,33 @@ public class AbstractTest {
         return response;
     }
 
-
     private RequestSpecification createRequest() {
-        return createRequestAuthOnly().config(RestAssured.config().redirect(redirectConfig().followRedirects(false))
-                                      .logConfig(new LogConfig().defaultStream(ps)
-                                                                .enableLoggingOfRequestAndResponseIfValidationFails()))
-                                      .log().all();
+        return createRequest(true);
+    }
+
+    private RequestSpecification createRequest(final boolean admin) {
+        return createRequestAuthOnly(admin)
+            .config(RestAssured.config().redirect(redirectConfig().followRedirects(false))
+                               .logConfig(new LogConfig().defaultStream(ps)
+                                                         .enableLoggingOfRequestAndResponseIfValidationFails()))
+            .log().all();
     }
 
     private RequestSpecification createRequest(final String slug, final String contentType) {
         return createRequest().header(SLUG, slug).contentType(contentType);
     }
 
-    private RequestSpecification createRequestAuthOnly() {
+    private RequestSpecification createRequestAuthOnly(final boolean admin) {
+        if (admin) {
+            return createRequestAuthOnly(this.adminUsername, this.adminPassword);
+        } else {
+            return createRequestAuthOnly(this.username, this.password);
+        }
+    }
+
+    private RequestSpecification createRequestAuthOnly(final String username, final String password) {
         return RestAssured.given()
-                          .auth().basic(this.username, this.password).urlEncodingEnabled(false);
+                          .auth().basic(username, password).urlEncodingEnabled(false);
     }
 
     protected Response doGet(final String uri, final Header header) {
@@ -286,12 +326,16 @@ public class AbstractTest {
         return response;
     }
 
-    protected Response doGet(final String uri) {
-        final Response response = doGetUnverified(uri);
+    protected Response doGet(final String uri, final boolean admin) {
+        final Response response = doGetUnverified(uri, admin);
 
         response.then().statusCode(200);
 
         return response;
+    }
+
+    protected Response doGet(final String uri) {
+        return doGet(uri, true);
     }
 
     protected Response doGetUnverified(final String uri, final Header header) {
@@ -299,35 +343,51 @@ public class AbstractTest {
     }
 
     protected Response doGetUnverified(final String uri) {
-        return createRequest().when().get(uri);
+        return doGetUnverified(uri,true);
     }
 
-    private Response doDeleteUnverified(final String uri) {
-        return createRequest().when().delete(uri);
+    protected Response doGetUnverified(final String uri, final boolean admin) {
+        return createRequest(admin).when().get(uri);
+    }
+
+    protected Response doDeleteUnverified(final String uri, final boolean admin) {
+        return createRequest(admin).when().delete(uri);
     }
 
     protected Response doDelete(final String uri) {
-        final Response response = doDeleteUnverified(uri);
+        return doDelete(uri, true);
+    }
+
+    protected Response doDelete(final String uri, final boolean admin) {
+        final Response response = doDeleteUnverified(uri, admin);
 
         response.then().statusCode(204);
 
         return response;
     }
 
-    private Response doHeadUnverified(final String uri) {
-        return createRequest().when().head(uri);
+    private Response doHeadUnverified(final String uri, final boolean admin) {
+        return createRequest(admin).when().head(uri);
     }
 
-    protected Response doHead(final String uri) {
-        final Response response = doHeadUnverified(uri);
+    protected Response doHead(final String uri, final boolean admin) {
+        final Response response = doHeadUnverified(uri, admin);
 
         response.then().statusCode(200);
 
         return response;
     }
 
+    protected Response doHead(final String uri) {
+        return doHead(uri, true);
+    }
+
     protected Response doPatch(final String uri, final Headers headers, final String body) {
-        final Response response = doPatchUnverified(uri, headers, body);
+        return doPatch(uri, headers, body, true);
+    }
+
+    protected Response doPatch(final String uri, final Headers headers, final String body, final boolean admin) {
+        final Response response = doPatchUnverified(uri, headers, body, admin);
 
         response.then().statusCode(successRange());
 
@@ -335,10 +395,15 @@ public class AbstractTest {
     }
 
     protected Response doPatchUnverified(final String uri, final Headers headers, final String body) {
-        return createRequest().config(
-                RestAssured.config().encoderConfig(
-                        new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)))
-                .headers(headers).body(body).when().patch(uri);
+        return doPatchUnverified(uri, headers, body, true);
+    }
+
+    protected Response doPatchUnverified(final String uri, final Headers headers, final String body,
+                                         final boolean admin) {
+        return createRequest(admin).config(
+            RestAssured.config().encoderConfig(
+                new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)))
+                                   .headers(headers).body(body).when().patch(uri);
     }
 
     protected Response doPatchUnverified(final String uri) {
