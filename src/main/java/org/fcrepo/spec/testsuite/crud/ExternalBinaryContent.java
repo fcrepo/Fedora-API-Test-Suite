@@ -22,6 +22,7 @@ import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.EXTERNAL_CONTENT_LINK_REL;
 import static org.fcrepo.spec.testsuite.Constants.LINK;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
+import static org.fcrepo.spec.testsuite.Constants.NON_RDF_SOURCE_INTERACTION_MODEL;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -53,7 +54,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.testng.Assert.assertTrue;
-
+import static org.testng.AssertJUnit.assertTrue;
 import static java.util.Collections.emptyList;
 
 /**
@@ -87,7 +88,7 @@ public class ExternalBinaryContent extends AbstractTest {
         wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
         externalUri = mockHttpResource("file.txt", "text/plain", "binary content");
-        externalUriWithNoType = mockHttpResourceNoType("notype2", "other content");
+        externalUriWithNoType = mockHttpResourceNoType("notype", "other content");
 
         final File tempFile = File.createTempFile("ext", null);
         tempFile.deleteOnExit();
@@ -124,7 +125,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-A-1b PostCreate Copy
+     * 3.9-A-1b PostCreate Copy File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -165,7 +166,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-A-2b PostCreate Redirect
+     * 3.9-A-2b PostCreate Redirect File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -205,7 +206,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-A-3b PostCreate Proxy
+     * 3.9-A-3b PostCreate Proxy File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -246,7 +247,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-B-1b PutCreate Copy
+     * 3.9-B-1b PutCreate Copy File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -288,7 +289,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-B-2b PutCreate Redirect
+     * 3.9-B-2b PutCreate Redirect File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -330,7 +331,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-B-3b PutCreate Proxy
+     * 3.9-B-3b PutCreate Proxy File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -364,11 +365,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
-                new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers, "TestString.");
-        final String locationHeader = getLocation(resource);
+        final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "copy")));
@@ -376,7 +373,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-C-1b PutUpdate Copy
+     * 3.9-C-1b PutUpdate Copy File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -389,11 +386,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
-                new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers, "TestString.");
-        final String locationHeader = getLocation(resource);
+        final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "copy")));
@@ -414,11 +407,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
-                new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers, "TestString.");
-        final String locationHeader = getLocation(resource);
+        final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "redirect")));
@@ -426,7 +415,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-C-2b PutUpdate Redirect
+     * 3.9-C-2b PutUpdate Redirect File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -439,11 +428,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
-                new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers, "TestString.");
-        final String locationHeader = getLocation(resource);
+        final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "redirect")));
@@ -464,11 +449,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
-                new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers, "TestString.");
-        final String locationHeader = getLocation(resource);
+        final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy")));
@@ -476,7 +457,7 @@ public class ExternalBinaryContent extends AbstractTest {
     }
 
     /**
-     * 3.9-C-3b PutUpdate Proxy
+     * 3.9-C-3b PutUpdate Proxy File URI
      *
      * @param uri of base container of Fedora server
      */
@@ -489,11 +470,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
-        final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
-                new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers, "TestString.");
-        final String locationHeader = getLocation(resource);
+        final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "proxy")));
@@ -742,6 +719,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 new Header(SLUG, info.getId()));
         final String location = getLocation(doPost(uri, headers));
 
+
         // Type attribute supersedes Content-Type from external server
         doHead(location).then()
                 .header("Content-Type", "text/special");
@@ -784,6 +762,12 @@ public class ExternalBinaryContent extends AbstractTest {
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
                         "required by the LDP-NR interaction model in this specification.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final String location = createExternalBinary(uri, info.getId(), "proxy", null);
+
+        final Response resp = doGet(location);
+        assertTrue("Response does not contain link of rel type = describedby",
+                getLinksOfRelType(resp, "describedby").count() > 0);
     }
 
     /**
@@ -799,6 +783,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
                         "required by the LDP-NR interaction model in this specification.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final String location = createExternalBinary(uri, info.getId(), "proxy", "text/plain");
+
+        doGet(location).then().header("Content-Type", "text/plain");
     }
 
     /**
@@ -814,6 +802,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
                         "required by the LDP-NR interaction model in this specification.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final String location = createExternalBinary(uri, info.getId(), "proxy", "text/plain");
+
+        doGet(location).then().header("Content-Length", is(notNullValue()));
     }
 
     /**
@@ -829,6 +821,13 @@ public class ExternalBinaryContent extends AbstractTest {
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
                         "required by the LDP-NR interaction model in this specification.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        final String location = createExternalBinary(uri, info.getId(), "proxy", "text/plain");
+
+        final Response resp = doGet(location);
+        assertTrue(getLinksOfRelTypeAsUris(resp, "type")
+                .anyMatch(p -> p.toString().equals(NON_RDF_SOURCE_INTERACTION_MODEL)),
+                "Interaction model link header of rel=type is required");
     }
 
     /**
@@ -861,10 +860,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "\"Want-Digest\" header.",
                 "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
 
-        final Headers headers = new Headers(
-                new Header(LINK, externalContentHeader(externalUri, "redirect")),
-                new Header(SLUG, info.getId()));
-        final String location = getLocation(doPost(uri, headers));
+        final String location = createExternalBinary(uri, info.getId(), "redirect", null);
 
         final String checksum = "md5;q=0.3,sha;q=1";
         final Response wantDigestResponse = doGetUnverified(location, new Header("Want-Digest", checksum));
@@ -887,10 +883,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "\"Want-Digest\" header.",
                 "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
 
-        final Headers headers = new Headers(
-                new Header(LINK, externalContentHeader(externalUri, "proxy")),
-                new Header(SLUG, info.getId()));
-        final String location = getLocation(doPost(uri, headers));
+        final String location = createExternalBinary(uri, info.getId(), "proxy", null);
 
         final String checksum = "md5;q=0.3,sha;q=1";
         final Response wantDigestResponse = doGet(location, new Header("Want-Digest", checksum));
@@ -940,7 +933,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 new Header(SLUG, info.getId()));
         final String location = getLocation(doPostUnverified(uri, headers));
 
-        doHeadUnverified(location).then()
+        doHeadUnverified(location, true).then()
                 .statusCode(anyOf(is(302), is(307)));
     }
 
@@ -1000,5 +993,21 @@ public class ExternalBinaryContent extends AbstractTest {
             link += "; type=\"" + type + "\"";
         }
         return link;
+    }
+
+    private String createExternalBinary(final String uri, final String id, final String handling,
+            final String contentType) {
+        final Headers headers = new Headers(
+                new Header(LINK, externalContentHeader(externalUri, handling, contentType)),
+                new Header(SLUG, id));
+        return getLocation(doPost(uri, headers));
+    }
+
+    private String createNonRdfSource(final String uri, final String id) {
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header(SLUG, id));
+        final Response resource = doPost(uri, headers, "TestString.");
+        return getLocation(resource);
     }
 }

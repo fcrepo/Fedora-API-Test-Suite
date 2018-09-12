@@ -132,7 +132,7 @@ public abstract class TestSuiteGlobals {
                                                                        TestSuiteGlobals.outputName + "-execution.log"),
                                                               true);
             return new PrintStream(fos);
-        } catch (final Exception ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
