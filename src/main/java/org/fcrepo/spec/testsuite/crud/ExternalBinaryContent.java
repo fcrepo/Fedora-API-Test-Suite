@@ -899,7 +899,7 @@ public class ExternalBinaryContent extends AbstractTest {
         if (header == null) {
             return emptyList();
         }
-        return Arrays.asList(header.split("\\s+,\\s+"));
+        return Arrays.asList(header.split("\\s*,\\s*"));
     }
 
     private String mockHttpResource(final String filename, final String type, final String content) {
