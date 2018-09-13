@@ -62,7 +62,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
         //verify that the link does not exist already
         doGetUnverified(getAclLocation(resourceUri)).then().statusCode(404);
         //create the acl for the resource
-        final String aclResource = createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
+        createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
         //verify that it now exists.
         doGet(getAclLocation(resourceUri));
     }
