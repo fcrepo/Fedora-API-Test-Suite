@@ -75,8 +75,8 @@ public class WebACRepresentation extends AbstractAuthzTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void onlyAclStatements(final String uri) {
-        final TestInfo info = setupTest("5.2-B", "onlyAclStatements",
+    public void onlyAuthorizationStatementsUsed(final String uri) {
+        final TestInfo info = setupTest("5.2-B", "onlyAuthorizationStatementsUsed",
                                         "Implementations must use only statements associated with an authorization in" +
                                         " the ACL RDF to determine access, except in the case of acl:agentGroup " +
                                         "statements where the group listing document is dereferenced.",
@@ -85,9 +85,11 @@ public class WebACRepresentation extends AbstractAuthzTest {
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "acl-without-authorization-type-triple.ttl", this.username);
-        //perform GET as non-admin
-        final Response getResponse = doGetUnverified(resourceUri, false);
-        getResponse.then().statusCode(403);
+        //GET as non-admin should succeed
+        doGet(resourceUri);
+        //POST as non-admin return 403
+        final Response postResponse = doPostUnverified(resourceUri, new Headers(), "test-body", false);
+        postResponse.then().statusCode(403);
     }
 
     /**

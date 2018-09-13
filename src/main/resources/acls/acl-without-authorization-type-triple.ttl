@@ -1,7 +1,12 @@
 @prefix acl: <http://www.w3.org/ns/auth/acl#> .
-@prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
-<#restricted> acl:agent "${user}" ;
-              acl:mode acl:Read;
+<#relevant> a acl:Authorization ;
+              acl:acl:agent "${user}" ;
+              acl:mode acl:Read ;
               acl:default <${resource}> ;
               acl:accessTo <${resource}> .
+<#irrelevant> acl:agent "${user}" ;
+              acl:mode acl:Write ;
+              acl:default <${resource}> ;
+              acl:accessTo <${resource}> .
+
