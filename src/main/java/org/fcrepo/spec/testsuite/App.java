@@ -79,7 +79,7 @@ public class App {
         CommandLine cmd;
         try {
             cmd = parser.parse(options, args);
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             System.out.println(e.getMessage());
             formatter.printHelp("Fedora Test Suite", options);
             System.exit(1);
@@ -110,7 +110,7 @@ public class App {
         } else {
             try {
                 inputStream = new FileInputStream(inputXml);
-            } catch (FileNotFoundException e) {
+            } catch (final FileNotFoundException e) {
                 System.err.println("Unable to open '" + inputXml + "'." + e.getMessage());
                 System.exit(1);
             }
@@ -129,6 +129,10 @@ public class App {
             testng.setGroups(Joiner.on(',').join(requirements).toLowerCase());
         }
 
-        testng.run();
+        try {
+            testng.run();
+        } finally {
+            TestSuiteGlobals.cleanupTestResources();
+        }
     }
 }
