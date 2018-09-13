@@ -17,7 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.fcrepo.spec.testsuite.Constants.CONTAINER_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.RDF_SOURCE_LINK_HEADER;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -69,7 +69,7 @@ public class WebACRdfSources extends AbstractAuthzTest {
 
         //successfully create an rdf acl
         final String aclUri2 = createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
-        confirmPresenceOfLinkValue(CONTAINER_LINK_HEADER, doHead(aclUri2));
+        confirmPresenceOfLinkValue(RDF_SOURCE_LINK_HEADER, doHead(aclUri2));
     }
 
 }
