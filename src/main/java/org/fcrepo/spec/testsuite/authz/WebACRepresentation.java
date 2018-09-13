@@ -17,7 +17,12 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import org.fcrepo.spec.testsuite.AbstractTest;
+import java.util.HashMap;
+import java.util.Map;
+
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -26,20 +31,21 @@ import org.testng.annotations.Test;
  * @author awoods
  * @since 2018-07-15
  */
-public class WebACRepresentation extends AbstractTest {
-
+public class WebACRepresentation extends AbstractAuthzTest {
 
     /**
      * Constructor
      *
-     * @param username username
-     * @param password password
+     * @param adminUsername admin username
+     * @param adminPassword admin password
+     * @param username      username
+     * @param password      password
      */
-    @Parameters({"param2", "param3"})
-    public WebACRepresentation(final String username, final String password) {
-        super(username, password);
+    @Parameters({"param2", "param3", "param4", "param5"})
+    public WebACRepresentation(final String adminUsername, final String adminPassword, final String username,
+                      final String password) {
+        super(adminUsername, adminPassword, username, password);
     }
-
     /**
      * 5.2-A - Authz type and URI as subject of triples
      *
@@ -49,10 +55,17 @@ public class WebACRepresentation extends AbstractTest {
     @Parameters({"param1"})
     public void aclRepresentation(final String uri) {
         final TestInfo info = setupTest("5.2-A", "aclRepresentation",
-                "Implementations must inspect the ACL RDF for authorizations. Authorizations are identified by " +
-                        "type definition triples of the form authorization_N rdf:type acl:Authorization, where " +
-                        "authorization_N is the URI of an authorization.",
-                "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+                                        "Implementations must inspect the ACL RDF for authorizations. Authorizations " +
+                                        "are identified by type definition triples of the form authorization_N " +
+                                        "rdf:type acl:Authorization, where authorization_N is the URI of an " +
+                                        "authorization.",
+                                        "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+
+        //create a resource
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        //perform GET as non-admin
+        doGet(resourceUri, false);
     }
 
     /**
@@ -62,12 +75,21 @@ public class WebACRepresentation extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void onlyAclStatements(final String uri) {
-        final TestInfo info = setupTest("5.2-B", "onlyAclStatements",
-                "Implementations must use only statements associated with an authorization in the ACL RDF to " +
-                        "determine access, except in the case of acl:agentGroup statements where the group listing " +
-                        "document is dereferenced.",
-                "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+    public void onlyAuthorizationStatementsUsed(final String uri) {
+        final TestInfo info = setupTest("5.2-B", "onlyAuthorizationStatementsUsed",
+                                        "Implementations must use only statements associated with an authorization in" +
+                                        " the ACL RDF to determine access, except in the case of acl:agentGroup " +
+                                        "statements where the group listing document is dereferenced.",
+                                        "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+
+        //create a resource
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "acl-without-authorization-type-triple.ttl", this.username);
+        //GET as non-admin should succeed
+        doGet(resourceUri);
+        //POST as non-admin return 403
+        final Response postResponse = doPostUnverified(resourceUri, new Headers(), "test-body", false);
+        postResponse.then().statusCode(403);
     }
 
     /**
@@ -83,6 +105,26 @@ public class WebACRepresentation extends AbstractTest {
                         "determine access, except in the case of acl:agentGroup statements where the group listing " +
                         "document is dereferenced.",
                 "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+
+        //create test container
+        final String testContainerUri = createResource(uri, info.getId());
+
+        //create agent-group list
+        final String groupListUri = testContainerUri + "/agent-group";
+        final Map<String,String> params = new HashMap<>();
+        params.put("user", "testuser");
+        final Response response  = doPutUnverified(groupListUri,
+            new Headers(new Header("Content-Type", "text/turtle")),
+            filterFileAndConvertToString("agent-group.ttl", params));
+        response.then().statusCode(201);
+
+        final String resourceUri = createResource(testContainerUri, "group-test");
+        //create a resource
+        final Map<String,String> aclParams = new HashMap<>();
+        aclParams.put("resource", resourceUri);
+        aclParams.put("groupListResource", groupListUri + "#allowed-users");
+        createAclForResource(resourceUri, "group-authorization.ttl", aclParams);
+        doGet(resourceUri, false);
     }
 
     /**
@@ -94,9 +136,16 @@ public class WebACRepresentation extends AbstractTest {
     @Parameters({"param1"})
     public void aclExamined(final String uri) {
         final TestInfo info = setupTest("5.2-D", "aclExamined",
-                "The authorizations must be examined to see whether they grant the requested access to the " +
-                        "controlled resource.",
-                "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+                                        "The authorizations must be examined to see whether they grant the requested " +
+                                        "access to the controlled resource.",
+                                        "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+        //create a resource
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "user-read-write-in-multiple-authorizations.ttl", this.username);
+        //perform GET as non-admin
+        doGet(resourceUri, false);
+        doPost(resourceUri, new Headers(new Header("Content-Type", "text/plain")), "test body", false).then()
+                                                                                                      .statusCode(201);
     }
 
     /**
@@ -110,6 +159,14 @@ public class WebACRepresentation extends AbstractTest {
         final TestInfo info = setupTest("5.2-E", "accessDenied",
                 "If none of the authorizations grant the requested access then the request must be denied.",
                 "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+
+        //create a resource
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "empty-acl.ttl", this.username);
+        //perform GET as non-admin
+        final Response getResponse = doGetUnverified(resourceUri, false);
+        //verify unauthorized
+        getResponse.then().statusCode(403);
     }
 
 }

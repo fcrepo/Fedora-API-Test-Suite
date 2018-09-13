@@ -18,7 +18,9 @@
 package org.fcrepo.spec.testsuite.authz;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.ws.rs.core.Link;
 
@@ -47,6 +49,25 @@ public class AbstractAuthzTest extends AbstractTest {
         super(adminUsername, adminPassword, username, password);
     }
 
+    protected String filterFileAndConvertToString(final String fileName, final Map<String, String> params) {
+        try (InputStream is = getClass().getResourceAsStream("/acls/" + fileName)) {
+            String str = IOUtils.toString(is, "UTF-8");
+            for (String key : params.keySet()) {
+                str = str.replace("${" + key + "}", params.get(key));
+            }
+            return str;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    protected String getAclAsString(final String fileName, final String resourceUri, final String username) {
+        final Map<String, String> params = new HashMap<>();
+        params.put("resource", resourceUri);
+        params.put("user", username);
+        return filterFileAndConvertToString(fileName, params);
+    }
+
     protected String getAclLocation(final String resourceUri) {
         //get or create the resource
         final Response resourceResponse = doGet(resourceUri);
@@ -55,14 +76,6 @@ public class AbstractAuthzTest extends AbstractTest {
             return acls.get(0).getUri().toString();
         } else {
             throw new RuntimeException("No link of type rel=\"acl\" found on resource: " + resourceUri);
-        }
-    }
-
-    protected String getAclAsString(final String fileName, final String resourceUri, final String username) {
-        try (InputStream is = getClass().getResourceAsStream("/acls/" + fileName)) {
-            return IOUtils.toString(is, "UTF-8").replace("${resource}", resourceUri).replace("${user}", username);
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
         }
     }
 
@@ -81,7 +94,16 @@ public class AbstractAuthzTest extends AbstractTest {
         return aclUri;
     }
 
-
+    protected String createAclForResource(final String resourceUri, final String aclFileName,
+                                          final Map<String, String> aclParams) {
+        //get acl handle
+        final String aclUri = getAclLocation(resourceUri);
+        //create read acl for user role
+        final Response response = doPutUnverified(aclUri, new Headers(new Header("Content-Type", "text/turtle")),
+                                                  filterFileAndConvertToString(aclFileName, aclParams));
+        response.then().statusCode(201);
+        return aclUri;
+    }
 
 }
 
