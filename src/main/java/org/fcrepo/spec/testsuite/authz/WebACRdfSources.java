@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import static org.fcrepo.spec.testsuite.Constants.CONTAINER_LINK_HEADER;
+
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -56,7 +58,6 @@ public class WebACRdfSources extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#solid-ldp-acls", ps);
 
         //attempt to create a LDP-NR at an acl location and confirm that it fails.
-
         //create resource
         final String resourceUri = createResource(uri, info.getId());
         //get acl handle
@@ -65,6 +66,10 @@ public class WebACRdfSources extends AbstractAuthzTest {
         final Response response = doPutUnverified(aclUri, new Headers(new Header("Content-Type", "text/plain")),
                                                   "test");
         response.then().statusCode(clientErrorRange());
+
+        //successfully create an rdf acl
+        final String aclUri2 = createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
+        confirmPresenceOfLinkValue(CONTAINER_LINK_HEADER, doHead(aclUri2));
     }
 
 }
