@@ -104,7 +104,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
         assertEquals(response2.getStatusCode(), 204);
         final Response getResponse2 = doGet(resourceUri, acceptTurtleHeader);
         //verify that it was changed.
-        assertTrue(getResponse2.getBody().prettyPrint().contains("title test"));
+        assertTrue(getResponse2.getBody().asString().contains("title test"));
     }
 
     /**
