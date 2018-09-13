@@ -122,7 +122,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
         //create a resource
         final Map<String,String> aclParams = new HashMap<>();
         aclParams.put("resource", resourceUri);
-        aclParams.put("groupListResource", groupListUri + "#allowed-users");
+        aclParams.put("groupListResource", groupListUri);
         createAclForResource(resourceUri, "group-authorization.ttl", aclParams);
         doGet(resourceUri, false);
     }
