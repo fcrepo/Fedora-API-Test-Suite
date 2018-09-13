@@ -17,27 +17,30 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import org.fcrepo.spec.testsuite.AbstractTest;
+import static org.testng.AssertJUnit.assertEquals;
+
+import java.net.URI;
+
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
  * @author awoods
+ * @author dbernstein
  * @since 2018-07-16
  */
-public class WebACLinkHeaders extends AbstractTest {
-
+public class WebACLinkHeaders extends AbstractAuthzTest {
 
     /**
      * Constructor
      *
-     * @param username username
-     * @param password password
+     * @param adminUser admin user
+     * @param adminPassword admin password
      */
     @Parameters({"param2", "param3"})
-    public WebACLinkHeaders(final String username, final String password) {
-        super(username, password);
+    public WebACLinkHeaders(final String adminUser, final String adminPassword) {
+        super(adminUser, adminPassword, null, null);
     }
 
     /**
@@ -49,11 +52,19 @@ public class WebACLinkHeaders extends AbstractTest {
     @Parameters({"param1"})
     public void linkToAclExisting(final String uri) {
         final TestInfo info = setupTest("5.3-A", "linkToAclExisting",
-                "A conforming server must advertise the individual resource ACL for every controlled resource in " +
-                        "HTTP responses with a rel=\"acl\" link in the Link header, whether or not the ACL exists.",
-                "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
+                                        "A conforming server must advertise the individual resource ACL for every " +
+                                        "controlled resource in HTTP responses with a rel=\"acl\" link in the Link " +
+                                        "header, whether or not the ACL exists.",
+                                        "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
 
         // check for Link header with existing ACL.
+        final String resourceUri = createResource(uri, info.getId());
+        //verify that the link does not exist already
+        doGetUnverified(getAclLocation(resourceUri)).then().statusCode(404);
+        //create the acl for the resource
+        createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
+        //verify that it now exists.
+        doGet(getAclLocation(resourceUri));
     }
 
     /**
@@ -65,11 +76,15 @@ public class WebACLinkHeaders extends AbstractTest {
     @Parameters({"param1"})
     public void linkToAclNonexisting(final String uri) {
         final TestInfo info = setupTest("5.3-B", "linkToAclNonexisting",
-                "A conforming server must advertise the individual resource ACL for every controlled resource in " +
-                        "HTTP responses with a rel=\"acl\" link in the Link header, whether or not the ACL exists.",
-                "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
+                                        "A conforming server must advertise the individual resource ACL for every " +
+                                        "controlled resource in HTTP responses with a rel=\"acl\" link in the Link " +
+                                        "header, whether or not the ACL exists.",
+                                        "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
 
-        // check for Link header even if ACL does not exist.
+        // check for Link header with existing ACL.
+        final String resourceUri = createResource(uri, info.getId());
+        final String aclUri = getAclLocation(resourceUri);
+        doGetUnverified(aclUri).then().statusCode(404);
     }
 
     /**
@@ -81,8 +96,13 @@ public class WebACLinkHeaders extends AbstractTest {
     @Parameters({"param1"})
     public void aclOnSameServer(final String uri) {
         final TestInfo info = setupTest("5.3-C", "aclOnSameServer",
-                "The ACL resource should be located in the same server as the controlled resource.",
-                "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
+                                        "The ACL resource should be located in the same server as the controlled " +
+                                        "resource.",
+                                        "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
+        final String resourceUri = createResource(uri, info.getId());
+        final String aclUri = getAclLocation(resourceUri);
+        assertEquals("ACL should be on the same host as the controlled source", URI.create(uri).getHost(),
+                     URI.create(aclUri).getHost());
     }
 
 }
