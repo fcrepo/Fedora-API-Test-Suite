@@ -17,8 +17,19 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import java.net.URI;
+import java.util.NoSuchElementException;
+
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+import io.restassured.response.Response;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
+
+import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
 
 /**
  * Tests for GET requests on LDP Memento Resources
@@ -43,7 +54,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldprmMustSupportGet(final String uri) {
         final TestInfo info = setupTest("4.2.1-A", "ldprmMustSupportGet",
@@ -52,8 +63,12 @@ public class LdprmHttpGet extends AbstractVersioningTest {
                                         ps);
 
         //create an LDPRm
-        //verify that a subsequent GET returns 200.
+        final Response resp = createVersionedResource(uri, info);
+        final String location = getLocation(resp);
+        final String mementoUri = createMemento(location);
 
+        //verify that a subsequent GET returns 200.
+        doGet(mementoUri);
     }
 
     /**
@@ -61,7 +76,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldpnrmMustSupportGet(final String uri) {
         final TestInfo info = setupTest("4.2.1-B", "ldpnrmMustSupportGet",
@@ -70,7 +85,12 @@ public class LdprmHttpGet extends AbstractVersioningTest {
                                         ps);
 
         //create an LDP-NR memento
+        final Response resp = createVersionedNonRDFResource(uri, info);
+        final String location = getLocation(resp);
+        final String mementoUri = createMemento(location);
+
         //verify that a subsequent GET returns 200.
+        doGet(mementoUri);
 
     }
 
@@ -79,17 +99,27 @@ public class LdprmHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldprmMustHaveCorrectTimeGate(final String uri) {
         final TestInfo info = setupTest("4.2.1-C", "ldprmMustHaveCorrectTimeGate",
-                                        "TimeGate  for an  LDP-RS memento  is the original versioned LDP-RS",
+                "TimeGate for an  LDP-RS memento is the original versioned LDP-RS",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
                                         ps);
 
         //create an LDPR memento
-        //verify that the timegate matches that of the original LDPR
+        final Response resp = createVersionedResource(uri, info);
+        final String location = getLocation(resp);
+        final String mementoUri = createMemento(location);
 
+        //verify that the timegate matches that of the original LDPR
+        final Response getResp = doGet(mementoUri);
+        try {
+            final URI timegateUri = getLinksOfRelTypeAsUris(getResp, "timegate").findFirst().get();
+            assertEquals(location, timegateUri.toString());
+        } catch (final NoSuchElementException e) {
+            fail("Timegate link header was not returned by memento");
+        }
     }
 
     /**
@@ -97,7 +127,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldpnrmMustHaveCorrectTimeGate(final String uri) {
         final TestInfo info = setupTest("4.2.1-D", "ldpnrmMustHaveCorrectTimeGate",
@@ -106,8 +136,18 @@ public class LdprmHttpGet extends AbstractVersioningTest {
                                         ps);
 
         //create an LDP-NR memento
-        //verify that the timegate matches that of the original LDP-NR
+        final Response resp = createVersionedNonRDFResource(uri, info);
+        final String location = getLocation(resp);
+        final String mementoUri = createMemento(location);
 
+        // verify that the timegate matches that of the original LDPR
+        final Response getResp = doGet(mementoUri);
+        try {
+            final URI timegateUri = getLinksOfRelTypeAsUris(getResp, "timegate").findFirst().get();
+            assertEquals(location, timegateUri.toString());
+        } catch (final NoSuchElementException e) {
+            fail("Timegate link header was not returned by memento");
+        }
     }
 
     /**
@@ -115,7 +155,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldprmMustHaveMementoLinkHeader(final String uri) {
         final TestInfo info = setupTest("4.2.1-E", "ldprmMustHaveMementoLinkHeader",
@@ -125,8 +165,13 @@ public class LdprmHttpGet extends AbstractVersioningTest {
                                         ps);
 
         //create an LDP-NR memento
-        //verify that the appropriate link header is present
+        final Response resp = createVersionedResource(uri, info);
+        final String location = getLocation(resp);
+        final String mementoUri = createMemento(location);
 
+        //verify that the appropriate link header is present
+        final Response getResp = doGet(mementoUri);
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, getResp);
     }
 
     /**
@@ -134,7 +179,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldpnrmMustHaveMementoLinkHeader(final String uri) {
         final TestInfo info = setupTest("4.2.1-F", "ldpnrmMustHaveMementoLinkHeader",
@@ -144,7 +189,13 @@ public class LdprmHttpGet extends AbstractVersioningTest {
                                         ps);
 
         //create an LDP-NR memento
+        final Response resp = createVersionedNonRDFResource(uri, info);
+        final String location = getLocation(resp);
+        final String mementoUri = createMemento(location);
+
         //verify that the appropriate link header is present
+        final Response getResp = doGet(mementoUri);
+        confirmPresenceOfLinkValue(MEMENTO_LINK_HEADER, getResp);
 
     }
 }
