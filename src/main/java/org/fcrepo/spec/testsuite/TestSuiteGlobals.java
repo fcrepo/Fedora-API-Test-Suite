@@ -71,12 +71,11 @@ public abstract class TestSuiteGlobals {
                                         .header(SLUG, name)
                                         .when()
                                         .post(base);
-        if (res.getStatusCode() == 201) {
-            cleanupManager.setTestContainerUrl(containerUrl);
-            return containerUrl;
-        } else {
-            return base;
-        }
+        // Ensure that the container was able to be created
+        res.then().statusCode(201);
+
+        cleanupManager.setTestContainerUrl(containerUrl);
+        return containerUrl;
     }
 
     /**

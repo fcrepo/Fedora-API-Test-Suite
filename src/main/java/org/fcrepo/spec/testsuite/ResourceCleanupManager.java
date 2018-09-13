@@ -21,12 +21,15 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
+import javax.ws.rs.core.Link;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 /**
- * Service which cleans up Fedora resources created by during test runs.
+ * Service which cleans up Fedora resources created during test runs.
  *
  * @author bbpennel
  */
@@ -108,16 +111,32 @@ public class ResourceCleanupManager {
                 .when()
                 .delete(url);
 
-        if (resp.statusCode() != 204 || resp.statusCode() != 200) {
+        if (resp.statusCode() != 204 && resp.statusCode() != 200) {
             final PrintStream log = TestSuiteGlobals.logFile();
-            log.append("Failed to cleanup test resource: ").append(url);
+            log.append("Failed to cleanup test resource:\n").append(url).append('\n');
             return false;
         } else {
-            // Also delete the tombstone if it exists
-            RestAssured.given()
+            final Response headResp = RestAssured.given()
                     .auth().basic(user, password)
                     .when()
-                    .delete(url + "/fcr:tombstone");
+                    .head(url);
+
+            final Optional<Link> tombstoneOption = headResp.headers().getValues("Link").stream()
+                    .map(l -> Link.valueOf(l))
+                    .filter(l -> l.getRel().equals("hasTombstone"))
+                    .findFirst();
+
+            if (tombstoneOption.isPresent()) {
+                // Also delete the tombstone if it exists
+                String path = tombstoneOption.get().getUri().toString();
+                // Remove duplicate slashes (aside from ://) due to RestAssured issue #867
+                path = path.replaceAll("(?<!:)//", "/");
+                final Response dResp = RestAssured.given()
+                        .log().all()
+                        .auth().basic(user, password)
+                        .when()
+                        .delete(path);
+            }
         }
         return true;
     }
