@@ -79,6 +79,12 @@ public abstract class TestSuiteGlobals {
         }
     }
 
+    /**
+     * Register the URI of any Fedora resource created in the given response for future cleanup.
+     *
+     * @param response response from which to register resource
+     * @return the response
+     */
     public static Response registerTestResource(final Response response) {
         if (response != null && response.statusCode() == 201) {
             cleanupManager.registerResource(response.getHeader("Location"));
@@ -86,6 +92,9 @@ public abstract class TestSuiteGlobals {
         return response;
     }
 
+    /**
+     * Deletes all Fedora resources registered for cleanup from testing.
+     */
     public static void cleanupTestResources() {
         cleanupManager.cleanup();
     }
