@@ -132,7 +132,6 @@ public class ResourceCleanupManager {
                 // Remove duplicate slashes (aside from ://) due to RestAssured issue #867
                 path = path.replaceAll("(?<!:)//", "/");
                 final Response dResp = RestAssured.given()
-                        .log().all()
                         .auth().basic(user, password)
                         .when()
                         .delete(path);
