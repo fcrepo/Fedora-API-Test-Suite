@@ -17,29 +17,32 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import org.fcrepo.spec.testsuite.AbstractTest;
+import static org.fcrepo.spec.testsuite.Constants.RDF_SOURCE_LINK_HEADER;
+
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
  * @author awoods
+ * @author dbernstein
  * @since 2018-07-15
  */
-public class WebACRdfSources extends AbstractTest {
-
+public class WebACRdfSources extends AbstractAuthzTest {
 
     /**
      * Constructor
      *
-     * @param username username
-     * @param password password
+     * @param adminUser     admin username
+     * @param adminPassword admin password
      */
     @Parameters({"param2", "param3"})
-    public WebACRdfSources(final String username, final String password) {
-        super(username, password);
+    public WebACRdfSources(final String adminUser, final String adminPassword) {
+        super(adminUser, adminPassword, null, null);
     }
-
 
     /**
      * 5.1 - ACL is LDPRS
@@ -50,8 +53,23 @@ public class WebACRdfSources extends AbstractTest {
     @Parameters({"param1"})
     public void aclIsLDPRS(final String uri) {
         final TestInfo info = setupTest("5.1", "aclIsLDPRS",
-                "An ACL for a controlled resource on a conforming server must itself be an LDP-RS.",
-                "https://fedora.info/2018/06/25/spec/#solid-ldp-acls", ps);
+                                        "An ACL for a controlled resource on a conforming server must itself be an " +
+                                        "LDP-RS.",
+                                        "https://fedora.info/2018/06/25/spec/#solid-ldp-acls", ps);
+
+        //attempt to create a LDP-NR at an acl location and confirm that it fails.
+        //create resource
+        final String resourceUri = createResource(uri, info.getId());
+        //get acl handle
+        final String aclUri = getAclLocation(resourceUri);
+        //create non-rdf acl
+        final Response response = doPutUnverified(aclUri, new Headers(new Header("Content-Type", "text/plain")),
+                                                  "test");
+        response.then().statusCode(clientErrorRange());
+
+        //successfully create an rdf acl
+        final String aclUri2 = createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
+        confirmPresenceOfLinkValue(RDF_SOURCE_LINK_HEADER, doHead(aclUri2));
     }
 
 }
