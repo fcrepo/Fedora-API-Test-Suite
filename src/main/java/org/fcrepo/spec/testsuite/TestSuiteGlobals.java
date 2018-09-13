@@ -49,6 +49,8 @@ public abstract class TestSuiteGlobals {
     private static final String[] membershipTriples = {"hasMemberRelation", "isMemberOfRelation", "membershipResource",
                                                 "insertedContentRelation"};
 
+    private static ResourceCleanupManager cleanupManager;
+
     /**
      * Get or create the default container for all tests resources to be created
      *
@@ -56,6 +58,8 @@ public abstract class TestSuiteGlobals {
      * @return containerUrl
      */
     public static String containerTestSuite(final String baseurl, final String user, final String pass) {
+        cleanupManager = new ResourceCleanupManager(user, pass);
+
         final String name = outputName + "container" + today();
         final String base = baseurl.endsWith("/") ? baseurl : baseurl + '/';
         String containerUrl = base + name + "/";
@@ -67,11 +71,31 @@ public abstract class TestSuiteGlobals {
                                         .header(SLUG, name)
                                         .when()
                                         .post(base);
-        if (res.getStatusCode() == 201) {
-            return containerUrl;
-        } else {
-            return base;
+        // Ensure that the container was able to be created
+        res.then().statusCode(201);
+
+        cleanupManager.setTestContainerUrl(containerUrl);
+        return containerUrl;
+    }
+
+    /**
+     * Register the URI of any Fedora resource created in the given response for future cleanup.
+     *
+     * @param response response from which to register resource
+     * @return the response
+     */
+    public static Response registerTestResource(final Response response) {
+        if (response != null && response.statusCode() == 201) {
+            cleanupManager.registerResource(response.getHeader("Location"));
         }
+        return response;
+    }
+
+    /**
+     * Deletes all Fedora resources registered for cleanup from testing.
+     */
+    public static void cleanupTestResources() {
+        cleanupManager.cleanup();
     }
 
     /**

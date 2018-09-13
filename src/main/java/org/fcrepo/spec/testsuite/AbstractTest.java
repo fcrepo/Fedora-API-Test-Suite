@@ -23,6 +23,7 @@ import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.testng.AssertJUnit.assertTrue;
+import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
 
 import java.io.PrintStream;
 import java.io.StringReader;
@@ -161,6 +162,7 @@ public class AbstractTest {
             .post(uri);
 
         response.then().statusCode(201);
+        registerTestResource(response);
 
         return response;
     }
@@ -169,6 +171,7 @@ public class AbstractTest {
         final Response response = createDirectContainerUnverifed(uri, body);
 
         response.then().statusCode(201);
+        registerTestResource(response);
 
         return response;
     }
@@ -186,29 +189,35 @@ public class AbstractTest {
 
     protected Response doPostUnverified(final String uri, final Headers headers, final String body,
                                         final boolean admin) {
-        return createRequest(admin).headers(headers)
-                                   .body(body)
-                                   .when()
-                                   .post(uri);
+        return registerTestResource(
+                createRequest(admin)
+                        .headers(headers)
+                        .body(body)
+                        .when()
+                        .post(uri));
     }
 
     private Response doPostUnverified(final String uri, final String body) {
-        return createRequest()
-                .body(body)
-                .when()
-                .post(uri);
+        return registerTestResource(
+                createRequest()
+                        .body(body)
+                        .when()
+                        .post(uri));
     }
 
     protected Response doPostUnverified(final String uri, final Headers headers) {
-        return createRequest().headers(headers)
-                .when()
-                .post(uri);
+        return registerTestResource(
+                createRequest()
+                        .headers(headers)
+                        .when()
+                        .post(uri));
     }
 
     protected Response doPostUnverified(final String uri) {
-        return createRequest()
-                .when()
-                .post(uri);
+        return registerTestResource(
+                createRequest()
+                        .when()
+                        .post(uri));
     }
 
     protected Response doPost(final String uri, final Headers headers) {
@@ -252,21 +261,24 @@ public class AbstractTest {
 
     protected Response doPutUnverified(final String uri, final Headers headers, final String body,
                                        final boolean admin) {
-        return createRequest(admin).headers(headers)
+        return registerTestResource(
+                createRequest(admin).headers(headers)
                                    .body(body)
                                    .when()
-                                   .put(uri);
+                                   .put(uri));
     }
 
     protected Response doPutUnverified(final String uri, final Headers headers) {
-        return createRequest().headers(headers)
+        return registerTestResource(
+                createRequest().headers(headers)
                               .when()
-                              .put(uri);
+                              .put(uri));
     }
 
     protected Response doPutUnverified(final String uri) {
-        return createRequest().when()
-                              .put(uri);
+        return registerTestResource(
+                createRequest().when()
+                              .put(uri));
     }
 
     protected Response doPut(final String uri, final Headers headers) {
