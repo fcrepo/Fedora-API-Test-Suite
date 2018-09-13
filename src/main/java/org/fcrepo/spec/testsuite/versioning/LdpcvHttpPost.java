@@ -17,11 +17,15 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
+import static org.testng.AssertJUnit.fail;
+
+import java.net.URI;
 
 import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
-import java.net.URI;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -51,8 +55,8 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void ldpcvOfLdprsMustSupportPostWithoutMementoDatetimeHeader(final String uri) {
-        final TestInfo info = setupTest("4.3.3.1-A", "ldpcvOfLdprsMustSupportPostWithoutMementoDatetimeHeader",
+    public void ldpcvOfLdprsShouldSupportPostWithoutMementoDatetimeHeader(final String uri) {
+        final TestInfo info = setupTest("4.3.3.1-A", "ldpcvOfLdprsShouldSupportPostWithoutMementoDatetimeHeader",
                                         "If an LDPCv of an LDP-RS supports POST, a POST request that does not contain" +
                                         " a Memento-Datetime header should be understood to create a new LDPRm " +
                                         "contained by the LDPCv, reflecting the state of the LDPRv at the time of " +
@@ -92,8 +96,8 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
-    public void ldpcvOfLdpnrsMustSupportPostWithoutMementoDatetimeHeader(final String uri) {
-        final TestInfo info = setupTest("4.3.3.1-B", "ldpcvOfLdpnrsMustSupportPostWithoutMementoDatetimeHeader",
+    public void ldpcvOfLdpnrsShouldSupportPostWithoutMementoDatetimeHeader(final String uri) {
+        final TestInfo info = setupTest("4.3.3.1-B", "ldpcvOfLdpnrsShouldSupportPostWithoutMementoDatetimeHeader",
                                         "If an LDPCv of an LDP-NR supports POST, a POST request that does not contain" +
                                         " a Memento-Datetime header should be understood to create a new LDPRm " +
                                         "contained by the LDPCv, reflecting the state of the LDPRv at the time of " +
@@ -205,7 +209,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    // @Test(groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postToldpcvOfLdprWithMementoDatetimeShouldCreateNewResource(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-E", "postToldpcvOfLdprWithMementoDatetimeShouldCreateNewResource",
@@ -214,7 +218,21 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "state given in the request body.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
+        //create a versioned resource
+        final Response createResponse = createVersionedResource(uri, info);
+        //if post is supported on the ldpcv
+        // get the new resource, which should have all the proper memento headers
+        final String originalResource = getLocation(createResponse);
+        final Response originalResponse = doGet(originalResource);
+        final String body = originalResponse.getBody().asString();
+        final URI timeMapURI = getTimeMapUri(originalResponse);
+        if (hasHeaderValueInMultiValueHeader("Allow", "POST", doGet(timeMapURI.toString()))) {
+            //create a memento using the Memento-Datetime and a body
+            final String mementoUri = createMemento(originalResource, "Sat, 1 Jan 2000 00:00:00 GMT", body);
+            // is the memento exactly the same as the original?
+            confirmResponseBodyNTriplesAreEqual(originalResponse, doGet(mementoUri));
 
+        }
     }
 
     /**
@@ -222,7 +240,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"SHOULD"})
+    @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void mementoDatetimeHeaderShouldMatchThatUsedWhenMementoCreated(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-F", "mementoDatetimeHeaderShouldMatchThatUsedWhenMementoCreated",
@@ -232,6 +250,22 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
 
+        final String mementoDateTime = "Sat, 1 Jan 2000 00:00:00 GMT";
+        //create a versioned resource
+        final Response createResponse = createVersionedResource(uri, info);
+        //if post is supported on the ldpcv
+        // get the new resource, which should have all the proper memento headers
+        final String originalResource = getLocation(createResponse);
+        final Response originalResponse = doGet(originalResource);
+        final String body = originalResponse.getBody().asString();
+        final URI timeMapURI = getTimeMapUri(originalResponse);
+        if (hasHeaderValueInMultiValueHeader("Allow", "POST", doGet(timeMapURI.toString()))) {
+            //create a memento using the Memento-Datetime and a body
+            final String mementoUri = createMemento(originalResource, mementoDateTime, body);
+            //verify Memento-Datetime- is in the request header
+            confirmPresenceOfMementoDatetimeHeader(mementoDateTime, doGet(mementoUri));
+        }
+
     }
 
     /**
@@ -239,7 +273,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MUST"})
+    @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvDoesNotSupportPost(final String uri) {
         final TestInfo info = setupTest("4.3.3.2", "ldpcvDoesNotSupportPost",
@@ -249,6 +283,29 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
                                         ps);
 
+        final Response createResponse = createVersionedResource(uri, info);
+        final String originalResource = getLocation(createResponse);
+        final Response originalResponse = doGet(originalResource);
+        final String timeMapURI = getTimeMapUri(originalResponse).toString();
+        final Response getResponse = doGet(timeMapURI);
+        if (!hasHeaderValueInMultiValueHeader("Allow", "POST", getResponse)) {
+            //if post is supported on the ldpcv, try posting
+            final Response postResponse = doPostUnverified(timeMapURI);
+            //verify correct error range
+            postResponse.then().statusCode(clientErrorRange());
+            //verify presence of constraints link
+            confirmPresenceOfConstrainedByLink(postResponse);
+        } else {
+            //if it supports post but not with the Memento-Datetime header
+            if (!hasHeaderValueInMultiValueHeader("Vary-Post", MEMENTO_DATETIME_HEADER, getResponse)) {
+                final Response postResponse = doPostUnverified(timeMapURI, new Headers(
+                    new Header(MEMENTO_DATETIME_HEADER, "Sat, 1 Jan 2000 00:00:00 GMT")));
+                //verify correct error range
+                postResponse.then().statusCode(clientErrorRange());
+                //verify presence of constraints link
+                confirmPresenceOfConstrainedByLink(postResponse);
+            }
+        }
     }
 
     /**
@@ -256,13 +313,22 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MAY"})
+    @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpcvMayDisallowPut(final String uri) {
         final TestInfo info = setupTest("4.3.4", "ldpcvMayDisallowPut",
                                         "Implementations MAY disallow PUT.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-put",
                                         ps);
+
+        final Response createResponse = createVersionedResource(uri, info);
+        final String originalResource = getLocation(createResponse);
+        final Response originalResponse = doGet(originalResource);
+        final String timeMapURI = getTimeMapUri(originalResponse).toString();
+        final Response getResponse = doGet(timeMapURI);
+        if (hasHeaderValueInMultiValueHeader("Allow", "PUT", getResponse)) {
+            fail("This Fedora implementation allows PUTs on LDPCv.");
+        }
 
     }
 
@@ -271,13 +337,21 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    //@Test(groups = {"MAY"})
+    @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpcvMayDisallowPatch(final String uri) {
         final TestInfo info = setupTest("4.3.5", "ldpcvMayDisallowPatch",
                                         "Implementations MAY disallow PATCH",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-patch",
                                         ps);
+        final Response createResponse = createVersionedResource(uri, info);
+        final String originalResource = getLocation(createResponse);
+        final Response originalResponse = doGet(originalResource);
+        final String timeMapURI = getTimeMapUri(originalResponse).toString();
+        final Response getResponse = doGet(timeMapURI);
+        if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", getResponse)) {
+            fail("This Fedora implementation allows PUTs on LDPCv.");
+        }
 
     }
 

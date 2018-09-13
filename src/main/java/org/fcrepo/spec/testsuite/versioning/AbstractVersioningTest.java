@@ -20,7 +20,9 @@ package org.fcrepo.spec.testsuite.versioning;
 
 import static java.util.Arrays.sort;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
+import static org.testng.AssertJUnit.assertEquals;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -116,6 +118,12 @@ public class AbstractVersioningTest extends AbstractTest {
 
     }
 
+    protected void confirmPresenceOfMementoDatetimeHeader(final String mementoDateTime, final Response response) {
+        final String dateTime = response.getHeader(MEMENTO_DATETIME_HEADER);
+        assertEquals(mementoDateTime, dateTime, "Memento-Datetime header does not match expected");
+    }
+
+
     protected void confirmPresenceOfVersionLocationHeader(final Response response) {
         final String location = response.getHeader("Location");
         Assert.assertTrue(location.contains("fcr:versions"));
@@ -152,11 +160,19 @@ public class AbstractVersioningTest extends AbstractTest {
      * @param originalResourceUri The resource to be memento-ized.
      * @return
      */
+    protected String createMemento(final String originalResourceUri, final String mementoDateTime, final String body) {
+        final Response response = doGet(originalResourceUri);
+        final URI timeMapURI = getTimeMapUri(response);
+        final Headers headers = new Headers(new Header(MEMENTO_DATETIME_HEADER, mementoDateTime));
+
+        final Response timeMapResponse = doPost(timeMapURI.toString(),headers, body);
+        return getLocation(timeMapResponse);
+    }
+
     protected String createMemento(final String originalResourceUri) {
         final Response response = doGet(originalResourceUri);
         final URI timeMapURI = getTimeMapUri(response);
         final Response timeMapResponse = doPost(timeMapURI.toString());
         return getLocation(timeMapResponse);
     }
-
 }
