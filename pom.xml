@@ -26,7 +26,6 @@
     <sesame.model.version>4.1.0</sesame.model.version>
     <jena.arq.version>3.4.0</jena.arq.version>
     <rendersnake.version>1.8</rendersnake.version>
-    <slf4j.simple.version>1.7.25</slf4j.simple.version>
     <slf4j.api.version>1.7.5</slf4j.api.version>
     <checkstyle.plugin.version>2.15</checkstyle.plugin.version>
     <fcrepo-build-tools.version>4.4.2</fcrepo-build-tools.version>
@@ -200,8 +199,8 @@
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>${slf4j.simple.version}</version>
+      <artifactId>slf4j-nop</artifactId>
+      <version>${slf4j.api.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
