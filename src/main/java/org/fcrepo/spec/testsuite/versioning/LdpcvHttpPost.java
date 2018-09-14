@@ -224,13 +224,16 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         // get the new resource, which should have all the proper memento headers
         final String originalResource = getLocation(createResponse);
         final Response originalResponse = doGet(originalResource);
-        final String body = originalResponse.getBody().asString();
+        //get the original resource and add a triple
+        final String body =
+            originalResponse.getBody().asString() + "\n<" + originalResource + "> dc:description \"test\" .";
         final URI timeMapURI = getTimeMapUri(originalResponse);
         if (hasHeaderValueInMultiValueHeader("Allow", "POST", doGet(timeMapURI.toString()))) {
             //create a memento using the Memento-Datetime and a body
-            final String mementoUri = createMemento(originalResource, "Sat, 1 Jan 2000 00:00:00 GMT", body);
-            // is the memento exactly the same as the original?
-            confirmResponseBodyNTriplesAreEqual(originalResponse, doGet(mementoUri));
+            final String mementoUri =
+                createMemento(originalResource, "Sat, 1 Jan 2000 00:00:00 GMT", "text/turtle", body);
+            // is the memento exactly the same as provided?
+            confirmResponseBodyNTriplesAreEqual(body, doGet(mementoUri).getBody().asString());
 
         }
     }
@@ -261,7 +264,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         final URI timeMapURI = getTimeMapUri(originalResponse);
         if (hasHeaderValueInMultiValueHeader("Allow", "POST", doGet(timeMapURI.toString()))) {
             //create a memento using the Memento-Datetime and a body
-            final String mementoUri = createMemento(originalResource, mementoDateTime, body);
+            final String mementoUri = createMemento(originalResource, mementoDateTime, "text/turtle", body);
             //verify Memento-Datetime- is in the request header
             confirmPresenceOfMementoDatetimeHeader(mementoDateTime, doGet(mementoUri));
         }
@@ -326,10 +329,10 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         final Response originalResponse = doGet(originalResource);
         final String timeMapURI = getTimeMapUri(originalResponse).toString();
         final Response getResponse = doGet(timeMapURI);
-        if (hasHeaderValueInMultiValueHeader("Allow", "PUT", getResponse)) {
+        if (hasHeaderValueInMultiValueHeader("Allow", "PUT", getResponse)
+            || doPutUnverified(timeMapURI).statusCode() != 405) {
             fail("This Fedora implementation allows PUTs on LDPCv.");
         }
-
     }
 
     /**
@@ -349,8 +352,9 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         final Response originalResponse = doGet(originalResource);
         final String timeMapURI = getTimeMapUri(originalResponse).toString();
         final Response getResponse = doGet(timeMapURI);
-        if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", getResponse)) {
-            fail("This Fedora implementation allows PUTs on LDPCv.");
+        if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", getResponse)
+            || doPatchUnverified(timeMapURI).statusCode() != 405) {
+            fail("This Fedora implementation allows PATCHs on LDPCv.");
         }
 
     }
