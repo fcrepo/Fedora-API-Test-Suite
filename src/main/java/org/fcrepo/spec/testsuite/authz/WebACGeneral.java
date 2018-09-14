@@ -178,14 +178,35 @@ public class WebACGeneral extends AbstractAuthzTest {
     }
 
     /**
-     * 5.0-E - Access to a specific resource
+     * 5.0-E - Authenticated access
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void allAuthenticatedAgents(final String uri) {
+        final TestInfo info = setupTest("5.0-E", "allAuthenticatedAgents",
+                                        "To specify that you're giving a particular mode of access to all " +
+                                        "authenticated users, you can use acl:agentClass acl:AuthenticatedAgent to " +
+                                        "denote that you're giving access to the class of all authenticated agents.",
+                                        "https://github" +
+                                        ".com/solid/web-access-control-spec#authenticated-agents-anyone-logged-on",
+                                        ps);
+
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "all-authenticated-read-only.ttl", "");
+        doGet(resourceUri, false);
+    }
+
+    /**
+     * 5.0-F - Access to a specific resource
      *
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void resourceSingle(final String uri) {
-        final TestInfo info = setupTest("5.0-E", "resourceSingle",
+        final TestInfo info = setupTest("5.0-F", "resourceSingle",
                                         "The acl:accessTo predicate specifies which resources you're giving access " +
                                         "to, using their URLs as " +
                                         "the subjects.",
