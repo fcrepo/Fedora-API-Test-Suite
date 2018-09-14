@@ -20,7 +20,9 @@ package org.fcrepo.spec.testsuite.versioning;
 
 import static java.util.Arrays.sort;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
+import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
+import static org.testng.AssertJUnit.assertEquals;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -116,6 +118,12 @@ public class AbstractVersioningTest extends AbstractTest {
 
     }
 
+    protected void confirmPresenceOfMementoDatetimeHeader(final String mementoDateTime, final Response response) {
+        final String dateTime = response.getHeader(MEMENTO_DATETIME_HEADER);
+        assertEquals(mementoDateTime, dateTime, "Memento-Datetime header does not match expected");
+    }
+
+
     protected void confirmPresenceOfVersionLocationHeader(final Response response) {
         final String location = response.getHeader("Location");
         Assert.assertTrue(location.contains("fcr:versions"));
@@ -135,28 +143,42 @@ public class AbstractVersioningTest extends AbstractTest {
         Assert.assertTrue(Arrays.equals(resourceA.body().asByteArray(), resourceB.body().asByteArray()));
     }
 
-    protected void confirmResponseBodyNTriplesAreEqual(final Response resourceA, final Response resourceB) {
-
-        final String[] aTriples = resourceA.body().asString().split(".(\\r\\n|\\r|\\n)");
-        final String[] bTriples = resourceB.body().asString().split(".(\\r\\n|\\r|\\n)");
-
+    protected void confirmResponseBodyNTriplesAreEqual(final String responseBodyA, final String responseBodyB) {
+        final String[] aTriples = responseBodyA.split(".(\\r\\n|\\r|\\n)");
+        final String[] bTriples = responseBodyB.split(".(\\r\\n|\\r|\\n)");
         sort(aTriples);
         sort(bTriples);
-
         Assert.assertTrue(Arrays.equals(aTriples, bTriples));
+    }
+
+    protected void confirmResponseBodyNTriplesAreEqual(final Response resourceA, final Response resourceB) {
+        confirmResponseBodyNTriplesAreEqual(resourceA.getBody().asString(), resourceB.getBody().asString());
     }
 
     /**
      * Given the URI of the original resource, create a memento based on the
-     * current state of the reosurce.
+     * specified body.
      * @param originalResourceUri The resource to be memento-ized.
-     * @return
+     * @param mementoDateTime the memento datetime
+     * @param contentType the content Type of the memento
+     * @param body the body of the memento
+     * @return The uri of the newly created memento
      */
+    protected String createMemento(final String originalResourceUri, final String mementoDateTime,
+                                   final String contentType, final String body) {
+        final Response response = doGet(originalResourceUri);
+        final URI timeMapURI = getTimeMapUri(response);
+        final Headers headers = new Headers(new Header("Content-Type", contentType),
+                                            new Header(MEMENTO_DATETIME_HEADER, mementoDateTime));
+
+        final Response timeMapResponse = doPost(timeMapURI.toString(),headers, body);
+        return getLocation(timeMapResponse);
+    }
+
     protected String createMemento(final String originalResourceUri) {
         final Response response = doGet(originalResourceUri);
         final URI timeMapURI = getTimeMapUri(response);
         final Response timeMapResponse = doPost(timeMapURI.toString());
         return getLocation(timeMapResponse);
     }
-
 }

@@ -66,6 +66,8 @@ public class Constants {
 
     public static final String EXTERNAL_CONTENT_LINK_REL = "http://fedora.info/definitions/fcrepo#ExternalContent";
 
+    public static final String MEMENTO_DATETIME_HEADER = "Memento-Datetime";
+
     private Constants() {
 
     }
