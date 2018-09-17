@@ -64,6 +64,7 @@
       <class name="org.fcrepo.spec.testsuite.versioning.LdpcvHttpPost"/>
       <class name="org.fcrepo.spec.testsuite.versioning.LdpcvHttpDelete"/>
       <class name="org.fcrepo.spec.testsuite.versioning.LdpcvHttpOptions"/>
+      <class name="org.fcrepo.spec.testsuite.versioning.ResourceVersioning"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACLinking"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACModes"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACLinkHeaders"/>

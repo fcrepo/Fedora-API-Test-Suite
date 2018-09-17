@@ -17,8 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
-import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_URI;
-import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_URI;
+import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
 import java.net.URI;
 
 import org.fcrepo.spec.testsuite.TestInfo;
@@ -51,7 +51,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postLdprWithType(final String uri) {
-        final TestInfo info = setupTest("4.0-A", "ldprvMustSupportPUT",
+        final TestInfo info = setupTest("4.0-A", "postLdprWithType",
                                         "When an LDPR is created with a rel=\"type\" link in the Link " +
                                         "header specifying type http://mementoweb.org/ns#OriginalResource " +
                                         "to indicate versioning, it MUST be created as an LDPRv and a version " +
@@ -62,8 +62,8 @@ public class ResourceVersioning extends AbstractVersioningTest {
         // create an LDPRv using a post
         final Response response = createVersionedResource(uri, info);
         // is a LDPRv: URI-R and Timegate
-        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_URI, response);
-        confirmPresenceOfLinkValue(TIME_GATE_LINK_URI, response);
+        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, response);
+        confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, response);
 
         // Verify timemap created
         final URI timemapUri = getTimeMapUri(response);
@@ -78,7 +78,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
     public void putLdprWithType(final String uri) {
-        final TestInfo info = setupTest("4.0-B", "ldprvMustSupportPUT",
+        final TestInfo info = setupTest("4.0-B", "putLdprWithType",
                 "When an LDPR is created with a rel=\"type\" link in the Link " +
                         "header specifying type http://mementoweb.org/ns#OriginalResource " +
                         "to indicate versioning, it MUST be created as an LDPRv and a version " +
@@ -93,8 +93,8 @@ public class ResourceVersioning extends AbstractVersioningTest {
             return;
         }
         // is a LDPRv: URI-R and Timegate
-        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_URI, response);
-        confirmPresenceOfLinkValue(TIME_GATE_LINK_URI, response);
+        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, response);
+        confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, response);
 
         // Verify timemap created
         final URI timemapUri = getTimeMapUri(response);
