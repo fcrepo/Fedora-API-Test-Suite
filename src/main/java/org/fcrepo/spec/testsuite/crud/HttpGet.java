@@ -24,11 +24,10 @@ import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
 import java.net.URI;
-import java.util.List;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.fcrepo.spec.testsuite.AbstractTest;
@@ -171,25 +170,16 @@ public class HttpGet extends AbstractTest {
 
         // Get Binary description (from community impl: /fcr:metadata)
         final Response getResponse = doGet(locationHeader);
-        final List<Header> linkHeaders = getResponse.getHeaders().getList("Link");
-        URI description = null;
 
-        // Loop individual Link headers
-        for (final Header header : linkHeaders) {
-            // Loop multi-valued Link headers
-            for (final String linkValue : header.getValue().split(",")) {
-                final Link link = Link.valueOf(linkValue);
-                if (link.getRel().equals("describedby")) {
-                    description = link.getUri();
-                    break;
-                }
-            }
-        }
+        final URI description = getLinksOfRelType(getResponse, "describedby").map(Link::getUri)
+                .findFirst()
+                .orElse(null);
+
         Assert.assertNotNull(description, "Description is null!");
 
-        doGet(description.toString())
-                .then()
-                .header("Link", containsString("<" + locationHeader + ">; rel=\"describes\""));
+        final Link expected = Link.fromUri(locationHeader).rel("describes").build();
+        confirmPresenceOfLinkValue(expected, doGet(description.toString()));
+
     }
 
     /**
@@ -244,7 +234,7 @@ public class HttpGet extends AbstractTest {
         final Headers responseHeaders = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
 
-        for (Header h : responseHeaders) {
+        for (final Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
@@ -280,7 +270,7 @@ public class HttpGet extends AbstractTest {
         final Headers responseHeaders = wantDigestResponse.getHeaders();
         ps.append(wantDigestResponse.getStatusLine());
 
-        for (Header h : responseHeaders) {
+        for (final Header h : responseHeaders) {
             ps.append(h.getName()).append(": ").append(h.getValue()).append("\n");
         }
 
