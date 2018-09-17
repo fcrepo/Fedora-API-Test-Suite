@@ -482,7 +482,11 @@ public class AbstractTest {
 
     protected void confirmPresenceOfLinkValue(final String linkValue, final Response response) {
         final Link link = Link.valueOf(linkValue);
-        Assert.assertEquals(getLinksOfRelType(response, link.getRel()).filter(l -> l.equals(link))
+        confirmPresenceOfLinkValue(link, response);
+    }
+
+    protected void confirmPresenceOfLinkValue(final Link linkValue, final Response response) {
+        Assert.assertEquals(getLinksOfRelType(response, linkValue.getRel()).filter(l -> l.equals(linkValue))
                                                                       .count(),
                             1,
                             "Link header with a value of " + linkValue + " must be present but is not!");
