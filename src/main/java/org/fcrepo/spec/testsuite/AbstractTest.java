@@ -261,32 +261,26 @@ public class AbstractTest {
 
     protected Response doPutUnverified(final String uri, final Headers headers, final String body,
                                        final boolean admin) {
-        return registerTestResource(
-                createRequest(admin).headers(headers)
-                                   .body(body)
-                                   .when()
-                                   .put(uri));
+        final RequestSpecification req = createRequest(admin);
+        if (headers != null) {
+            req.headers(headers);
+        }
+        if (body != null) {
+            req.body(body);
+        }
+        return registerTestResource(req.when().put(uri));
     }
 
     protected Response doPutUnverified(final String uri, final Headers headers) {
-        return registerTestResource(
-                createRequest().headers(headers)
-                              .when()
-                              .put(uri));
+        return doPutUnverified(uri, headers, null, true);
     }
 
     protected Response doPutUnverified(final String uri) {
-        return registerTestResource(
-                createRequest().when()
-                              .put(uri));
+        return doPutUnverified(uri, null, null, true);
     }
 
     protected Response doPut(final String uri, final Headers headers) {
-        final Response response = doPutUnverified(uri, headers);
-
-        response.then().statusCode(204);
-
-        return response;
+        return doPut(uri, headers, null);
     }
 
     protected Response doPut(final String uri, final Headers headers, final String body) {
