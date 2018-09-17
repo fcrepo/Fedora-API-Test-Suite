@@ -85,14 +85,14 @@ public class WebACGeneral extends AbstractAuthzTest {
     }
 
     /**
-     * 5.0-C-A - Access to an agent group
+     * 5.0-C-1 - Access to an agent group
      *
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void agentGroup(final String uri) {
-        final TestInfo info = setupTest("5.0-C-A", "agentGroup",
+        final TestInfo info = setupTest("5.0-C-1", "agentGroup",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
                                         "object of an " +
                                         "agentGroup statement is a link to a Group Listing document. The group " +
@@ -103,7 +103,7 @@ public class WebACGeneral extends AbstractAuthzTest {
         final String testContainerUri = createResource(uri, info.getId());
 
         //create agent-group list
-        final String groupListUri = testContainerUri + "/agent-group";
+        final String groupListUri = joinLocation(testContainerUri + "agent-group");
         final Map<String, String> params = new HashMap<>();
         params.put("user", "testuser");
         final Response response = doPutUnverified(groupListUri,
@@ -121,30 +121,29 @@ public class WebACGeneral extends AbstractAuthzTest {
     }
 
     /**
-     * 5.0-C-B - Access to an agent group with hash uris
+     * 5.0-C-2 - Access to an agent group with hash uris
      *
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void agentGroupWithHashUris(final String uri) {
-        final TestInfo info = setupTest("5.0-C-B", "agentGroupWithHashUris",
+        final TestInfo info = setupTest("5.0-C-2", "agentGroupWithHashUris",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
-                                        "object of an " +
-                                        "agentGroup statement is a link to a Group Listing document. The group " +
-                                        "members are " +
-                                        "listed in it, using the vcard:hasMember predicate.",
+                                        "object of an agentGroup statement is a link with a hash URI to a Group " +
+                                        "Listing document. The group members are listed in it, using the " +
+                                        "vcard:hasMember predicate. ",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create test container
         final String testContainerUri = createResource(uri, info.getId());
 
         //create agent-group list
-        final String groupListUri = testContainerUri + "/agent-group";
+        final String groupListUri = joinLocation(testContainerUri, "agent-group");
         final Map<String, String> params = new HashMap<>();
         params.put("user", "testuser");
         final Response response = doPutUnverified(groupListUri,
                                                   new Headers(new Header("Content-Type", "text/turtle")),
-                                                  filterFileAndConvertToString("agent-group-with-hash-uris.ttl",
+                                                  filterFileAndConvertToString("agent-group-using-hash-uris.ttl",
                                                                                params));
         response.then().statusCode(201);
 
