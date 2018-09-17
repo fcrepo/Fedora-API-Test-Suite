@@ -20,6 +20,7 @@ package org.fcrepo.spec.testsuite.versioning;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
 import static org.testng.AssertJUnit.fail;
+import static org.testng.Assert.assertFalse;
 
 import java.net.URI;
 
@@ -46,6 +47,27 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     @Parameters({"param2", "param3"})
     public LdpcvHttpPost(final String username, final String password) {
         super(username, password);
+    }
+
+    /**
+     * 4.3 may disallow post
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = { "MAY" })
+    @Parameters({ "param1" })
+    public void ldpcvMayDisallowPost(final String uri) {
+        final TestInfo info = setupTest("4.3", "ldpcvMayDisallowPost",
+                "Although an LDPCv is both a TimeMap and an LDPC, implementations MAY disallow POST requests.",
+                "https://fedora.info/2018/06/25/spec/#ldpcv-post",
+                ps);
+
+        // create the versioned resource
+        final Response createResponse = createVersionedResource(uri, info);
+
+        final URI timeMapURI = getTimeMapUri(createResponse);
+        final String allow = doOptions(timeMapURI.toString()).getHeader("Allow");
+        assertFalse(allow.contains("POST"));
     }
 
     /**
