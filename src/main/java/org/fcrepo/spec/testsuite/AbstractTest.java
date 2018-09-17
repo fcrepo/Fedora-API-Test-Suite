@@ -280,11 +280,7 @@ public class AbstractTest {
     }
 
     protected Response doPut(final String uri, final Headers headers) {
-        final Response response = doPutUnverified(uri, headers);
-
-        response.then().statusCode(204);
-
-        return response;
+        return doPut(uri, headers, null);
     }
 
     protected Response doPut(final String uri, final Headers headers, final String body) {
