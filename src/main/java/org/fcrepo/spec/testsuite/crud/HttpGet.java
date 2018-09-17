@@ -24,8 +24,6 @@ import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.containsString;
 
 import java.net.URI;
-import java.util.List;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -172,10 +170,10 @@ public class HttpGet extends AbstractTest {
 
         // Get Binary description (from community impl: /fcr:metadata)
         final Response getResponse = doGet(locationHeader);
-        final List<Header> linkHeaders = getResponse.getHeaders().getList("Link");
 
-        final URI description = linkHeaders.stream().map(Header::getValue).map(h -> new String(h)).map(Link::valueOf)
-                .filter(l -> l.getRel().equals("describedby")).map(Link::getUri).findFirst().orElse(null);
+        final URI description = getLinksOfRelType(getResponse, "describedby").map(Link::getUri)
+                .findFirst()
+                .orElse(null);
 
         Assert.assertNotNull(description, "Description is null!");
 
