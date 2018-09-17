@@ -32,6 +32,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.EntityTag;
+import javax.ws.rs.core.Link;
 
 /**
  * @author Jorge Abrego, Fernando Cardoza
@@ -366,4 +367,71 @@ public class HttpPut extends AbstractTest {
                 .statusCode(400);
     }
 
+    /**
+     * 3.6.3-A
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void putCreateRDFSource(final String uri) {
+        final TestInfo info = setupTest("3.6.3-A", "putCreateRDFSource",
+                "Implementations may accept HTTP PUT to create resources",
+                "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
+
+        final String location = joinLocation(uri, info.getId());
+
+        doPutUnverified(location)
+                .then()
+                .statusCode(201);
+    }
+
+    /**
+     * 3.6.3-B create non-rdf source
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void putCreateNonRDFSource(final String uri) {
+        final TestInfo info = setupTest("3.6.3-B", "putCreateNonRDFSource",
+                "Implementations may accept HTTP PUT to create non-RDF resources",
+                "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
+
+        final String location = joinLocation(uri, info.getId());
+
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"putCreate.txt\""));
+
+        doPutUnverified(location, headers)
+                .then()
+                .statusCode(201);
+    }
+
+    /**
+     * 3.6.3-C put create ldprs for non-rdf source
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = { "MUST" })
+    @Parameters({ "param1" })
+    public void putNonRDFSourceCreateLDPRS(final String uri) {
+        final TestInfo info = setupTest("3.6.3-C", "putNonRDFSourceCreateLDPRS",
+                "On creation of an LDP-NR with HTTP PUT, implementations MUST create " +
+                        "an associated LDP-RS describing that LDP-NR in the same way that it " +
+                        "would when 3.5.1 Creating LDP-NRs with HTTP POST",
+                "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
+
+        final String location = joinLocation(uri, info.getId());
+
+        final Headers headers = new Headers(
+                new Header(CONTENT_DISPOSITION, "attachment; filename=\"putCreate.txt\""));
+
+        final Response resp = doPutUnverified(location, headers, "content");
+        if (resp.statusCode() != 201) {
+            return;
+        }
+        final Link describedby = getLinksOfRelType(resp, "describedby").findFirst().get();
+        doGet(describedby.getUri().toString());
+    }
 }
