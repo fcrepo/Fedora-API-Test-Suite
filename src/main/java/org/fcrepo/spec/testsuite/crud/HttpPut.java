@@ -51,23 +51,46 @@ public class HttpPut extends AbstractTest {
     }
 
     /**
+     * 3.6-A
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = {"MAY"})
+    @Parameters({"param1"})
+    public void httpPutChangeTypeAllowed(final String uri) {
+        final TestInfo info = setupTest("3.6-A", "httpPutChangeTypeAllowed",
+                "Implementations MAY allow the interaction model of an existing " +
+                        "resource to be changed by specification of a new LDP type in a " +
+                        "rel=\"type\" link in the HTTP Link header",
+                "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
+
+        final Headers headers = new Headers(
+                new Header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\""),
+                new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers);
+
+        final String locationHeader = getLocation(resource);
+        final Headers headers1 = new Headers(
+                new Header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\""));
+        doPutUnverified(locationHeader, headers1)
+                .then()
+                .statusCode(successRange());
+    }
+
+    /**
      * 3.6-B
      *
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
-    public void httpPut(final String uri) {
-        final TestInfo info = setupTest("3.6-B", "httpPut",
+    public void httpPutChangeTypeNotAllowed(final String uri) {
+        final TestInfo info = setupTest("3.6-B", "httpPutChangeTypeNotAllowed",
                                         "When accepting a PUT request against an existant resource, an HTTP Link: " +
-                                        "rel=\"type\" header "
-                                        +
-                                        "may be included. If that type is a value in the LDP namespace and is not " +
-                                        "either a current "
-                                        +
-                                        "type of the resource or a subtype of a current type of the resource, the " +
-                                        "request must be "
-                                        + "rejected with a 409 Conflict response.",
+                                        "rel=\"type\" header may be included. If that type is a value in the LDP " +
+                                        "namespace and is not either a current type of the resource or a subtype " +
+                                        "of a current type of the resource, the request must be " +
+                                        "rejected with a 409 Conflict response.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
@@ -90,7 +113,7 @@ public class HttpPut extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void httpPutpdateTriples(final String uri) {
+    public void httpPutUpdateTriples(final String uri) {
         final TestInfo info = setupTest("3.6.1-A", "httpPutpdateTriples",
                                         "Any LDP-RS must support PUT to update statements that are not server-managed" +
                                         " triples (as defined "
