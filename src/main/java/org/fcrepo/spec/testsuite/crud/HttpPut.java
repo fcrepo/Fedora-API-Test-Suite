@@ -395,7 +395,7 @@ public class HttpPut extends AbstractTest {
     @Parameters({"param1"})
     public void putCreateNonRDFSource(final String uri) {
         final TestInfo info = setupTest("3.6.3-B", "putCreateNonRDFSource",
-                "Implementations may accept HTTP PUT to create resources",
+                "Implementations may accept HTTP PUT to create non-RDF resources",
                 "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
 
         final String location = joinLocation(uri, info.getId());
