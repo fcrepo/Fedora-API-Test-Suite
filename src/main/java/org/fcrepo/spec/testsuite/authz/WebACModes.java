@@ -549,8 +549,7 @@ public class WebACModes extends AbstractAuthzTest {
     public void appendNotWriteLdpRsMust(final String uri) {
         final TestInfo info = setupTest("5.7.1-A", "appendNotWriteLdpRsMust",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they MUST " +
-                        "not DELETE, not PATCH that deletes triples, not PUT on the resource, and " +
-                        "must be able to PUT a child resource",
+                        "not DELETE, not PATCH that deletes triples, not PUT on the resource",
                 "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
 
         final String resourceUri = createResource(uri, info.getId());
