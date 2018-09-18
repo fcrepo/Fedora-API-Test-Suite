@@ -414,17 +414,19 @@ public class AbstractTest {
 
     protected Response doPatchUnverified(final String uri, final Headers headers, final String body,
                                          final boolean admin) {
-        return createRequest(admin).config(
-            RestAssured.config().encoderConfig(
-                new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)))
-                                   .headers(headers).body(body).when().patch(uri);
+        final RequestSpecification req = createRequest(admin).config(RestAssured.config().encoderConfig(
+                new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)));
+        if (headers != null) {
+            req.headers(headers);
+        }
+        if (body != null) {
+            req.body(body);
+        }
+        return req.when().patch(uri);
     }
 
     protected Response doPatchUnverified(final String uri) {
-        return createRequest().config(
-            RestAssured.config().encoderConfig(
-                new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)))
-                              .when().patch(uri);
+        return doPatchUnverified(uri, null, null, true);
     }
 
     protected String getLocation(final Response response) {
