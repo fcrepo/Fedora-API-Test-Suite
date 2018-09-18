@@ -103,7 +103,7 @@ public class WebACGeneral extends AbstractAuthzTest {
         final String testContainerUri = createResource(uri, info.getId());
 
         //create agent-group list
-        final String groupListUri = joinLocation(testContainerUri + "agent-group");
+        final String groupListUri = joinLocation(testContainerUri, "agent-group");
         final Map<String, String> params = new HashMap<>();
         params.put("user", "testuser");
         final Response response = doPutUnverified(groupListUri,
