@@ -65,13 +65,13 @@ public class HttpPut extends AbstractTest {
                 "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
 
         final Headers headers = new Headers(
-                new Header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\""),
+                new Header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\""),
                 new Header(SLUG, info.getId()));
         final Response resource = doPost(uri, headers);
 
         final String locationHeader = getLocation(resource);
         final Headers headers1 = new Headers(
-                new Header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\""));
+                new Header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\""));
         doPutUnverified(locationHeader, headers1)
                 .then()
                 .statusCode(successRange());
