@@ -593,14 +593,39 @@ public class WebACModes extends AbstractAuthzTest {
     }
 
     /**
-     * 5.7.1-B acl:Append for LDP-RS SHOULD test conditions
+     * 5.7.1-B acl:Append for LDP-RS MUST if PUT to create test conditions
      *
-     * @param uri
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "MUST" })
+    @Parameters({ "param1" })
+    public void appendNotWritePutToCreate(final String uri) {
+        final TestInfo info = setupTest("5.7.1-B", "appendNotWritePutToCreate",
+                "When a client has acl:Append but not acl:Write for an LDP-RS and the " +
+                        "implementation supports PUT to create they MUST " +
+                        "allow the addition of a new child resource.",
+                "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
+
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        // perform PUT to child resource as non-admin succeeds.
+        final Response putChildResponse =
+                doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
+                        "test", false);
+        // verify successful
+        putChildResponse.then().statusCode(201);
+    }
+
+    /**
+     * 5.7.1-C acl:Append for LDP-RS SHOULD test conditions
+     *
+     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
     @Parameters({ "param1" })
     public void appendNotWriteLdpRsShould(final String uri) {
-        final TestInfo info = setupTest("5.7.1-B", "appendNotWriteLdpRsShould",
+        final TestInfo info = setupTest("5.7.1-C", "appendNotWriteLdpRsShould",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they SHOULD " +
                         "allow a PATCH request that only adds triples.",
                 "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
@@ -625,4 +650,5 @@ public class WebACModes extends AbstractAuthzTest {
         // Verify success.
         patchAddData.then().statusCode(204);
     }
+
 }
