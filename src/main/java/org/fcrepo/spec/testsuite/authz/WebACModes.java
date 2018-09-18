@@ -568,13 +568,6 @@ public class WebACModes extends AbstractAuthzTest {
         // verify failure.
         putResponse.then().statusCode(403);
 
-        // perform PUT to child resource as non-admin succeeds.
-        final Response putChildResponse =
-                doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
-                        "test", false);
-        // verify successful
-        putChildResponse.then().statusCode(201);
-
         // perform PATCH which also deletes.
         final Response patchDelete = doPatchUnverified(resourceUri, new Headers(new Header("Content-type",
                 "application/sparql-update")),
