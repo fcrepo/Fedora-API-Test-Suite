@@ -28,7 +28,10 @@ import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 import javax.ws.rs.core.Link;
 
@@ -199,65 +202,56 @@ public class AbstractTest {
         return doPostUnverified(uri, headers, body);
     }
 
-    protected Response doPostUnverified(final String uri, final Headers headers, final String body) {
-        return doPostUnverified(uri,headers, body, true);
-    }
-
+    /**
+     * Do a POST request.
+     *
+     * @param uri the URI of the request.
+     * @param headers the request headers.
+     * @param body the request body.
+     * @param admin use the admin user credentials.
+     * @return the response.
+     */
     protected Response doPostUnverified(final String uri, final Headers headers, final String body,
                                         final boolean admin) {
-        return registerTestResource(
-                createRequest(admin)
-                        .headers(headers)
-                        .body(body)
-                        .when()
-                        .post(uri));
+        final RequestSpecification req = createRequest(admin);
+        if (headers != null) {
+            req.headers(headers);
+        }
+        if (body != null) {
+            req.body(body);
+        }
+
+        return registerTestResource(req.when().post(uri));
     }
 
-    private Response doPostUnverified(final String uri, final String body) {
-        return registerTestResource(
-                createRequest()
-                        .body(body)
-                        .when()
-                        .post(uri));
+    protected Response doPostUnverified(final String uri, final Headers headers, final String body) {
+        return doPostUnverified(uri, headers, body, true);
+    }
+
+    protected Response doPostUnverified(final String uri, final String body) {
+        return doPostUnverified(uri, null, body, true);
     }
 
     protected Response doPostUnverified(final String uri, final Headers headers) {
-        return registerTestResource(
-                createRequest()
-                        .headers(headers)
-                        .when()
-                        .post(uri));
+        return doPostUnverified(uri, headers, null, true);
     }
 
     protected Response doPostUnverified(final String uri) {
-        return registerTestResource(
-                createRequest()
-                        .when()
-                        .post(uri));
+        return doPostUnverified(uri, null, null, true);
     }
 
-    protected Response doPost(final String uri, final Headers headers) {
-        final Response response = doPostUnverified(uri, headers);
-
+    /**
+     * Do a POST and confirm a 201 status code.
+     *
+     * @param uri the URI for the request.
+     * @param headers the request headers.
+     * @param body the request body.
+     * @param admin use the admin user credentials.
+     * @return the response.
+     */
+    protected Response doPost(final String uri, final Headers headers, final String body, final boolean admin) {
+        final Response response = doPostUnverified(uri, headers, body, admin);
         response.then().statusCode(201);
-
-        return response;
-    }
-
-    protected Response doPost(final String uri, final String body) {
-        final Response response = doPostUnverified(uri, body);
-
-        response.then().statusCode(201);
-        return response;
-    }
-
-
-
-    protected Response doPost(final String uri) {
-        final Response response = doPostUnverified(uri);
-
-        response.then().statusCode(201);
-
         return response;
     }
 
@@ -265,10 +259,16 @@ public class AbstractTest {
         return doPost(uri, headers, body, true);
     }
 
-    protected Response doPost(final String uri, final Headers headers, final String body, final boolean admin) {
-        final Response response = doPostUnverified(uri, headers, body, admin);
-        response.then().statusCode(201);
-        return response;
+    protected Response doPost(final String uri, final Headers headers) {
+        return doPost(uri, headers, null, true);
+    }
+
+    protected Response doPost(final String uri, final String body) {
+        return doPost(uri, null, body, true);
+    }
+
+    protected Response doPost(final String uri) {
+        return doPost(uri, null, null, true);
     }
 
     protected Response doPutUnverified(final String uri, final Headers headers, final String body) {
@@ -534,4 +534,25 @@ public class AbstractTest {
         builder.append(String.join("/", subpaths));
         return builder.toString();
     }
+
+    /**
+     * Confirm the response contains one of the 3 Container types.
+     *
+     * @param response the request response.
+     * @return whether the response was a LDP Container.
+     */
+    protected boolean confirmLDPContainer(final Response response) {
+        return getLinksOfRelTypeAsUris(response, "type").anyMatch(isLDPContainer);
+    }
+
+    /**
+     * Predicate for testing for one of the three container types.
+     */
+    private static Predicate<URI> isLDPContainer = (p -> {
+        final List<URI> containers = new ArrayList<>();
+        containers.add(URI.create("http://www.w3.org/ns/ldp#BasicContainer"));
+        containers.add(URI.create("http://www.w3.org/ns/ldp#IndirectContainer"));
+        containers.add(URI.create("http://www.w3.org/ns/ldp#DirectContainer"));
+        return containers.contains(p);
+    });
 }
