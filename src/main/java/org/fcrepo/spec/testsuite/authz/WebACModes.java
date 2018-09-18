@@ -539,4 +539,108 @@ public class WebACModes extends AbstractAuthzTest {
         childAclResponse.then().statusCode(403);
     }
 
+    /**
+     * 5.7.1-A acl:Append for LDP-RS MUST test conditions
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "MUST" })
+    @Parameters({ "param1" })
+    public void appendNotWriteLdpRsMust(final String uri) {
+        final TestInfo info = setupTest("5.7.1-A", "appendNotWriteLdpRsMust",
+                "When a client has acl:Append but not acl:Write for an LDP-RS they MUST " +
+                        "not DELETE, not PATCH that deletes triples, not PUT on the resource",
+                "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
+
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        // perform DELETE to resource as non-admin
+        final Response deleteResponse = doDeleteUnverified(resourceUri, false);
+        // verify failure.
+        deleteResponse.then().statusCode(403);
+
+        // perform PUT to resource as non-admin
+        final Response putResponse =
+                doPutUnverified(resourceUri, new Headers(new Header("Content-Type", "text/plain")),
+                        "test", false);
+        // verify failure.
+        putResponse.then().statusCode(403);
+
+        // perform PATCH which also deletes.
+        final Response patchDelete = doPatchUnverified(resourceUri, new Headers(new Header("Content-type",
+                "application/sparql-update")),
+                "prefix dc: <http://purl.org/dc/elements/1.1/> DELETE { <> dc:title ?o1 .}" +
+                        " INSERT { <> dc:title \"I made a change\" .} WHERE { <> dc:title ?o1 .}",
+                false);
+        // Verify failure.
+        patchDelete.then().statusCode(403);
+
+        final Response patchDeleteData = doPatchUnverified(resourceUri, new Headers(new Header("Content-type",
+                "application/sparql-update")),
+                "prefix dc: <http://purl.org/dc/elements/1.1/> DELETE DATA { <> dc:title \"Some title\" .}",
+                false);
+        // Verify failure.
+        patchDeleteData.then().statusCode(403);
+    }
+
+    /**
+     * 5.7.1-B acl:Append for LDP-RS MUST if PUT to create test conditions
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "MUST" })
+    @Parameters({ "param1" })
+    public void appendNotWritePutToCreate(final String uri) {
+        final TestInfo info = setupTest("5.7.1-B", "appendNotWritePutToCreate",
+                "When a client has acl:Append but not acl:Write for an LDP-RS and the " +
+                        "implementation supports PUT to create they MUST " +
+                        "allow the addition of a new child resource.",
+                "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
+
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        // perform PUT to child resource as non-admin succeeds.
+        final Response putChildResponse =
+                doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
+                        "test", false);
+        // verify successful
+        putChildResponse.then().statusCode(201);
+    }
+
+    /**
+     * 5.7.1-C acl:Append for LDP-RS SHOULD test conditions
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void appendNotWriteLdpRsShould(final String uri) {
+        final TestInfo info = setupTest("5.7.1-C", "appendNotWriteLdpRsShould",
+                "When a client has acl:Append but not acl:Write for an LDP-RS they SHOULD " +
+                        "allow a PATCH request that only adds triples.",
+                "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
+
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        // perform PATCH which only adds.
+        final Response patchAdd = doPatchUnverified(resourceUri, new Headers(new Header("Content-type",
+                "application/sparql-update")),
+                "prefix dc: <http://purl.org/dc/elements/1.1/> DELETE { } INSERT { <> dc:title \"I made a change\" .}" +
+                        " WHERE { }",
+                false);
+        // Verify success.
+        patchAdd.then().statusCode(204);
+
+        // perform PATCH which only adds.
+        final Response patchAddData = doPatchUnverified(resourceUri, new Headers(new Header("Content-type",
+                "application/sparql-update")),
+                "prefix dc: <http://purl.org/dc/elements/1.1/> INSERT DATA { <> dc:title \"I made a change\" .}",
+                false);
+        // Verify success.
+        patchAddData.then().statusCode(204);
+    }
+
 }
