@@ -98,6 +98,7 @@ public class App {
 
         //Create the default container
         final Map<String, String> params = new HashMap<>();
+        params.put("param0", inputUrl);
         params.put("param1", TestSuiteGlobals.containerTestSuite(inputUrl, inputAdminUser, inputAdminPassword));
         params.put("param2", inputAdminUser);
         params.put("param3", inputAdminPassword);
