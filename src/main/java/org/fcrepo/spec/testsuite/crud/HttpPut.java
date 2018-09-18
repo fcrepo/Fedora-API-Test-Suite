@@ -114,7 +114,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutUpdateTriples(final String uri) {
-        final TestInfo info = setupTest("3.6.1-A", "httpPutpdateTriples",
+        final TestInfo info = setupTest("3.6.1-A", "httpPutUpdateTriples",
                                         "Any LDP-RS must support PUT to update statements that are not server-managed" +
                                         " triples (as defined "
                                         + "in [LDP] 2). [LDP] 4.2.4.1 and 4.2.4.3 remain in effect.",
