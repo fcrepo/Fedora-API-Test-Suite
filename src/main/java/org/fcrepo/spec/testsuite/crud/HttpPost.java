@@ -53,7 +53,7 @@ public class HttpPost extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPost(final String uri) {
-        final TestInfo info = setupTest("3.5-A", "httpPost",
+        final TestInfo info = setupTest("3.5-A",
                                         "Any LDPC (except Version Containers (LDPCv)) must support POST ([LDP] 4.2.3 " +
                                         "/ 5.2.3). ",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
@@ -69,7 +69,7 @@ public class HttpPost extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void constrainedByResponseHeader(final String uri) {
-        final TestInfo info = setupTest("3.5-B", "constrainedByResponseHeader",
+        final TestInfo info = setupTest("3.5-B",
                                         "The default interaction model that will be assigned when there is no " +
                                         "explicit Link "
                                         + "header in the request must be recorded in the constraints"
@@ -89,7 +89,7 @@ public class HttpPost extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postNonRDFSource(final String uri) {
-        final TestInfo info = setupTest("3.5.1-A", "postNonRDFSource",
+        final TestInfo info = setupTest("3.5.1-A",
                                         "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
                                         " must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
@@ -107,7 +107,7 @@ public class HttpPost extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postResourceAndCheckAssociatedResource(final String uri) {
-        final TestInfo info = setupTest("3.5.1-B", "postResourceAndCheckAssociatedResource",
+        final TestInfo info = setupTest("3.5.1-B",
                                         "On creation of an LDP-NR, an implementation must create an associated LDP-RS" +
                                         " describing"
                                         + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
@@ -128,7 +128,7 @@ public class HttpPost extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderAuthentication(final String uri) {
-        final TestInfo info = setupTest("3.5.1-C", "postDigestResponseHeaderAuthentication",
+        final TestInfo info = setupTest("3.5.1-C",
                                         "An HTTP POST request that would create an LDP-NR and includes a Digest " +
                                         "header (as described"
                                         +
@@ -154,7 +154,7 @@ public class HttpPost extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void postDigestResponseHeaderVerification(final String uri) {
-        final TestInfo info = setupTest("3.5.1-D", "postDigestResponseHeaderVerification",
+        final TestInfo info = setupTest("3.5.1-D",
                                         "An HTTP POST request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), "
                                         + "should be rejected with a 400 Bad Request response.",

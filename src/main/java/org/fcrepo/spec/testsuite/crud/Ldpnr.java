@@ -54,7 +54,7 @@ public class Ldpnr extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationLinkType(final String uri) {
-        final TestInfo info = setupTest("3.1.2-A", "ldpnrCreationLinkType",
+        final TestInfo info = setupTest("3.1.2-A",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
                                         +
@@ -115,7 +115,7 @@ public class Ldpnr extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpnrCreationWrongLinkType(final String uri) {
-        final TestInfo info = setupTest("3.1.2-B", "ldpnrCreationWrongLinkType",
+        final TestInfo info = setupTest("3.1.2-B",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
                                         +

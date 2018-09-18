@@ -48,7 +48,7 @@ public class HttpOptions extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupport(final String uri) {
-        final TestInfo info = setupTest("3.4-A", "httpOptionsSupport",
+        final TestInfo info = setupTest("3.4-A",
                                         "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
                                         + "4.2.8.1 LDP servers must support the HTTP OPTIONS method.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-options",
@@ -64,7 +64,7 @@ public class HttpOptions extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpOptionsSupportAllow(final String uri) {
-        final TestInfo info = setupTest("3.4-B", "httpOptionsSupportAllow",
+        final TestInfo info = setupTest("3.4-B",
                                         "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
                                         + "LDP servers must indicate their support for HTTP Methods by responding to a"
                                         +

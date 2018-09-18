@@ -54,7 +54,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void aclRepresentation(final String uri) {
-        final TestInfo info = setupTest("5.2-A", "aclRepresentation",
+        final TestInfo info = setupTest("5.2-A",
                                         "Implementations must inspect the ACL RDF for authorizations. Authorizations " +
                                         "are identified by type definition triples of the form authorization_N " +
                                         "rdf:type acl:Authorization, where authorization_N is the URI of an " +
@@ -76,7 +76,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void onlyAuthorizationStatementsUsed(final String uri) {
-        final TestInfo info = setupTest("5.2-B", "onlyAuthorizationStatementsUsed",
+        final TestInfo info = setupTest("5.2-B",
                                         "Implementations must use only statements associated with an authorization in" +
                                         " the ACL RDF to determine access, except in the case of acl:agentGroup " +
                                         "statements where the group listing document is dereferenced.",
@@ -100,7 +100,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void dereferencingGroups(final String uri) {
-        final TestInfo info = setupTest("5.2-C", "dereferencingGroups",
+        final TestInfo info = setupTest("5.2-C",
                 "Implementations must use only statements associated with an authorization in the ACL RDF to " +
                         "determine access, except in the case of acl:agentGroup statements where the group listing " +
                         "document is dereferenced.",
@@ -135,7 +135,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void aclExamined(final String uri) {
-        final TestInfo info = setupTest("5.2-D", "aclExamined",
+        final TestInfo info = setupTest("5.2-D",
                                         "The authorizations must be examined to see whether they grant the requested " +
                                         "access to the controlled resource.",
                                         "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
@@ -156,7 +156,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void accessDenied(final String uri) {
-        final TestInfo info = setupTest("5.2-E", "accessDenied",
+        final TestInfo info = setupTest("5.2-E",
                 "If none of the authorizations grant the requested access then the request must be denied.",
                 "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
 

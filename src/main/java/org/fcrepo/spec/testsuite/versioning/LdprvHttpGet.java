@@ -59,7 +59,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void shouldReturn406WhenNoLdprm(final String uri) {
-        final TestInfo info = setupTest("4.1.1-A-1", "shouldReturn406WhenNoLdprm",
+        final TestInfo info = setupTest("4.1.1-A-1",
                                         "If no LDPRm is appropriate to the Accept-Datetime value, " +
                                         "implementations should return a 406 (Unacceptable).",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
@@ -95,7 +95,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void shouldReturn302WhenLdprmFromTimeGate(final String uri) {
-        final TestInfo info = setupTest("4.1.1-A-2", "shouldReturn302WhenLdprmFromTimeGate",
+        final TestInfo info = setupTest("4.1.1-A-2",
                                         "The Accept-Datetime header is used to request a past state, " +
                                         "exactly as per [RFC7089] section 2.1.1. A successful response must be a 302 " +
                                         "(Found) redirect to the appropriate LDPRm.",
@@ -141,7 +141,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpvGetMustReturnHeaderOriginalTypeLink(final String uri) {
-        final TestInfo info = setupTest("4.1.1-B", "ldpvGetMustReturnHeaderOriginalTypeLink",
+        final TestInfo info = setupTest("4.1.1-B",
                                         "The response to a GET request on an LDPRv must return " +
                                         " a rel=\"timegate\" Link header referencing itself ",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
@@ -162,7 +162,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpvGetMustReturnHeaderTimeGateTypeLink(final String uri) {
-        final TestInfo info = setupTest("4.1.1-C", "ldpvGetMustReturnHeaderTimeGateTypeLink",
+        final TestInfo info = setupTest("4.1.1-C",
                                         "The response to a GET request on an LDPRv must return " +
                                         " a rel=\"timegate\" Link header referencing itself",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
@@ -183,7 +183,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpvGetMustReturnOriginalResourceLink(final String uri) {
-        final TestInfo info = setupTest("4.1.1-D", "ldpvGetMustReturnOriginalResourceLink",
+        final TestInfo info = setupTest("4.1.1-D",
                                         "The response to a GET request on an LDPRv must return a " +
                                         "<http://mementoweb.org/ns#OriginalResource>; rel=\"type\" link in the " +
                                         "Link header.",
@@ -204,7 +204,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpvGetMustReturnTimeGateTypeLink(final String uri) {
-        final TestInfo info = setupTest("4.1.1-E", "ldpvGetMustReturnTimeGateTypeLink",
+        final TestInfo info = setupTest("4.1.1-E",
                                         "The response to a GET request on an LDPRv must return a " +
                                         "<http://mementoweb.org/ns#OriginalResource>; rel=\"type\" link in the " +
                                         "Link header.",
@@ -225,7 +225,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpvGetMustReturnTimeMapLink(final String uri) {
-        final TestInfo info = setupTest("4.1.1-F", "ldpvGetMustReturnTimeMapLink",
+        final TestInfo info = setupTest("4.1.1-F",
                                         "The response to a GET request on an LDPRv must return At least one " +
                                         "rel=\"timemap\" link in the Link header referencing an associated LDPCv",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
@@ -246,7 +246,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpvGetMustReturnVaryHeader(final String uri) {
-        final TestInfo info = setupTest("4.1.1-G", "ldpvGetMustReturnVaryHeader",
+        final TestInfo info = setupTest("4.1.1-G",
                                         "The response to a GET request on an LDPRv must return " +
                                         "a Vary: Accept-Datetime header, exactly as per [RFC7089] section 2.1.2.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",

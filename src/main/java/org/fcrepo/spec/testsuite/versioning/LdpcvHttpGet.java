@@ -53,7 +53,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustSupportGet(final String uri) {
-        final TestInfo info = setupTest("4.3.1-A", "ldpcvMustSupportGet",
+        final TestInfo info = setupTest("4.3.1-A",
                                         "LDPCv must support GET, as is the case for any LDPR",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
@@ -71,7 +71,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustHaveTimeMapLinkHeader(final String uri) {
-        final TestInfo info = setupTest("4.3.1-B", "ldpcvMustHaveTimeMapLinkHeader",
+        final TestInfo info = setupTest("4.3.1-B",
                                         "LDPCv contain TimeMap type link header.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
@@ -95,7 +95,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustRespondToGetWithApplicationLinkAcceptHeader(final String uri) {
-        final TestInfo info = setupTest("4.3.1-C", "ldpcvMustRespondToGetWithApplicationLinkAcceptHeader",
+        final TestInfo info = setupTest("4.3.1-C",
                                         "An LDPCv must respond to GET Accept: application/link-format as " +
                                         "indicated in [ RFC7089 ] section 5 and specified in [ RFC6690 ] section 7.3.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
@@ -114,7 +114,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void lpcvMustIncludeAllowHeader(final String uri) {
-        final TestInfo info = setupTest("4.3.1-D", "lpcvMustIncludeAllowHeader",
+        final TestInfo info = setupTest("4.3.1-D",
                                         "LDPCv resources must include the Allow header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
@@ -135,7 +135,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustIncludeAcceptPostIfPostAllowed(final String uri) {
-        final TestInfo info = setupTest("4.3.1-E", "ldpcvMustIncludeAcceptPostIfPostAllowed",
+        final TestInfo info = setupTest("4.3.1-E",
                                         "If an LDPCv supports POST, then it must include the Accept-Post header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
@@ -156,7 +156,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustIncludeAcceptPatchIfPatchAllowed(final String uri) {
-        final TestInfo info = setupTest("4.3.1-F", "ldpcvMustIncludeAcceptPatchIfPatchAllowed",
+        final TestInfo info = setupTest("4.3.1-F",
                                         "If an LDPCv supports PATCH, then it must include the Accept-Patch header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
                                         ps);
@@ -179,7 +179,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustHaveContainerLinkHeader(final String uri) {
-        final TestInfo info = setupTest("4.3.1-G", "ldpcvMustHaveContainerLinkHeader",
+        final TestInfo info = setupTest("4.3.1-G",
                                         "An LDPCv, being a container must have a \"Link: <http://www" +
                                         ".w3.org/ns/ldp#Container>;rel=\"type\"\"",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",

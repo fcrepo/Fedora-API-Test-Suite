@@ -54,7 +54,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprvMustSupportPUT(final String uri) {
-        final TestInfo info = setupTest("4.1.2-A", "ldprvMustSupportPUT",
+        final TestInfo info = setupTest("4.1.2-A",
                                         "Must support PUT for creating new LDPRv",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
                                         ps);
@@ -76,7 +76,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldprvMustSupportPUTForExistingResources(final String uri) {
-        final TestInfo info = setupTest("4.1.2-B", "ldprvMustSupportPUTForExistingResources",
+        final TestInfo info = setupTest("4.1.2-B",
                                         "Must support PUT for updating existing LDPRvs",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
                                         ps);
@@ -115,7 +115,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpnrvMustSupportPUT(final String uri) {
-        final TestInfo info = setupTest("4.1.2-C", "ldpnrvMustSupportPUT",
+        final TestInfo info = setupTest("4.1.2-C",
                                         "Must support PUT for creating new LDPNRv",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
                                         ps);
@@ -140,7 +140,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpnrvMustSupportPUTForExistingResources(final String uri) {
-        final TestInfo info = setupTest("4.1.2-D", "ldpnrvMustSupportPUTForExistingResources",
+        final TestInfo info = setupTest("4.1.2-D",
                                         "Must support PUT for updating existing  LDPNRvs",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
                                         ps);

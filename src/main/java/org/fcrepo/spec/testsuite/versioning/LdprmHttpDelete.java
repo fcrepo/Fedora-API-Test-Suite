@@ -55,7 +55,7 @@ public class LdprmHttpDelete extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldprmMustSupportDeleteIfAdvertised(final String uri) {
-        final TestInfo info = setupTest("4.2.6", "ldprmMustSupportDeleteIfAdvertised",
+        final TestInfo info = setupTest("4.2.6",
                                         "LDPRm resources must support DELETE if DELETE is advertised in OPTIONS",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-delete",
                                         ps);

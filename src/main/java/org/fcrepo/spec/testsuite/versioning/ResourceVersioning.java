@@ -51,7 +51,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void postLdprWithType(final String uri) {
-        final TestInfo info = setupTest("4.0-A", "postLdprWithType",
+        final TestInfo info = setupTest("4.0-A",
                                         "When an LDPR is created with a rel=\"type\" link in the Link " +
                                         "header specifying type http://mementoweb.org/ns#OriginalResource " +
                                         "to indicate versioning, it MUST be created as an LDPRv and a version " +
@@ -78,7 +78,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
     public void putLdprWithType(final String uri) {
-        final TestInfo info = setupTest("4.0-B", "putLdprWithType",
+        final TestInfo info = setupTest("4.0-B",
                 "When an LDPR is created with a rel=\"type\" link in the Link " +
                         "header specifying type http://mementoweb.org/ns#OriginalResource " +
                         "to indicate versioning, it MUST be created as an LDPRv and a version " +

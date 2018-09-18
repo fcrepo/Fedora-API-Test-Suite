@@ -57,7 +57,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldprmMustSupportGet(final String uri) {
-        final TestInfo info = setupTest("4.2.1-A", "ldprmMustSupportGet",
+        final TestInfo info = setupTest("4.2.1-A",
                                         "LDPR mementos must support GET",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
                                         ps);
@@ -79,7 +79,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldpnrmMustSupportGet(final String uri) {
-        final TestInfo info = setupTest("4.2.1-B", "ldpnrmMustSupportGet",
+        final TestInfo info = setupTest("4.2.1-B",
                                         "LDP-NR mementos must support GET",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
                                         ps);
@@ -102,7 +102,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldprmMustHaveCorrectTimeGate(final String uri) {
-        final TestInfo info = setupTest("4.2.1-C", "ldprmMustHaveCorrectTimeGate",
+        final TestInfo info = setupTest("4.2.1-C",
                 "TimeGate for an  LDP-RS memento is the original versioned LDP-RS",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
                                         ps);
@@ -130,7 +130,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldpnrmMustHaveCorrectTimeGate(final String uri) {
-        final TestInfo info = setupTest("4.2.1-D", "ldpnrmMustHaveCorrectTimeGate",
+        final TestInfo info = setupTest("4.2.1-D",
                                         "TimeGate  for an  LDP-NR memento  is the original versioned LDP-NR",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
                                         ps);
@@ -158,7 +158,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldprmMustHaveMementoLinkHeader(final String uri) {
-        final TestInfo info = setupTest("4.2.1-E", "ldprmMustHaveMementoLinkHeader",
+        final TestInfo info = setupTest("4.2.1-E",
                                         "Any response to a GET request on an LDP-RS Memento must include a " +
                                         "<http://mementoweb.org/ns#Memento>; rel=\"type\" link in the Link header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
@@ -182,7 +182,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     @Test(groups = { "MUST" })
     @Parameters({"param1"})
     public void ldpnrmMustHaveMementoLinkHeader(final String uri) {
-        final TestInfo info = setupTest("4.2.1-F", "ldpnrmMustHaveMementoLinkHeader",
+        final TestInfo info = setupTest("4.2.1-F",
                                         "Any response to a GET request on an LDP-NR Memento must include a " +
                                         "<http://mementoweb.org/ns#Memento>; rel=\"type\" link in the Link header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",

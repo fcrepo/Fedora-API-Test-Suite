@@ -49,7 +49,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustSupportOptions(final String uri) {
-        final TestInfo info = setupTest("4.3.2-A", "ldpcvMustSupportOptions",
+        final TestInfo info = setupTest("4.3.2-A",
                                         "LDPCv (version containers) MUST support OPTIONS.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
                                         ps);
@@ -74,7 +74,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvOptionsMustAllowHeadGetOptions(final String uri) {
-        final TestInfo info = setupTest("4.3.2-B", "ldpcvOptionsMustAllowHeadGetOptions",
+        final TestInfo info = setupTest("4.3.2-B",
                                         "LDPCv's response to an OPTIONS request MUST include \"Allow: GET, " +
                                         "HEAD, OPTIONS\" per LDP",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
@@ -103,7 +103,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpcvMaySupportDeleteOption(final String uri) {
-        final TestInfo info = setupTest("4.3.2-C", "ldpcvMaySupportDeleteOption",
+        final TestInfo info = setupTest("4.3.2-C",
                                         "LDPCv (version containers) MAY support DELETE.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
                                         ps);
@@ -128,7 +128,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpcvMaySupportPatch(final String uri) {
-        final TestInfo info = setupTest("4.3.2-D", "ldpcvMaySupportPatch",
+        final TestInfo info = setupTest("4.3.2-D",
                                         "LDPCv (version containers) MAY support PATCH.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
                                         ps);
@@ -153,7 +153,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpcvMaySupportPost(final String uri) {
-        final TestInfo info = setupTest("4.3.2-E", "ldpcvMaySupportPost",
+        final TestInfo info = setupTest("4.3.2-E",
                                         "LDPCv (version containers) MAY support POST.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
                                         ps);
@@ -178,7 +178,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustReturnAcceptPostHeaderIfPostIsSupported(final String uri) {
-        final TestInfo info = setupTest("4.3.2-F", "ldpcvMustReturnAcceptPostHeaderIfPostIsSupported",
+        final TestInfo info = setupTest("4.3.2-F",
                                         "If an LDPCv supports POST, the response to an OPTIONS request " +
                                         " MUST include the \"Accept-Post\" header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",
@@ -209,7 +209,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcvMustReturnAcceptPatchHeaderIfPatchIsSupported(final String uri) {
-        final TestInfo info = setupTest("4.3.2-G", "ldpcvMustReturnAcceptPatchHeaderIfPatchIsSupported",
+        final TestInfo info = setupTest("4.3.2-G",
                                         "If an LDPCv supports PATCH, the response to an OPTIONS request " +
                                         " MUST include the \"Accept-Patch\" header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-options",

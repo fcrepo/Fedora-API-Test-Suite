@@ -51,7 +51,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void linkToAclExisting(final String uri) {
-        final TestInfo info = setupTest("5.3-A", "linkToAclExisting",
+        final TestInfo info = setupTest("5.3-A",
                                         "A conforming server must advertise the individual resource ACL for every " +
                                         "controlled resource in HTTP responses with a rel=\"acl\" link in the Link " +
                                         "header, whether or not the ACL exists.",
@@ -75,7 +75,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void linkToAclNonexisting(final String uri) {
-        final TestInfo info = setupTest("5.3-B", "linkToAclNonexisting",
+        final TestInfo info = setupTest("5.3-B",
                                         "A conforming server must advertise the individual resource ACL for every " +
                                         "controlled resource in HTTP responses with a rel=\"acl\" link in the Link " +
                                         "header, whether or not the ACL exists.",
@@ -95,7 +95,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void aclOnSameServer(final String uri) {
-        final TestInfo info = setupTest("5.3-C", "aclOnSameServer",
+        final TestInfo info = setupTest("5.3-C",
                                         "The ACL resource should be located in the same server as the controlled " +
                                         "resource.",
                                         "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);

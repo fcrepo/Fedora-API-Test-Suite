@@ -55,7 +55,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void readAllowedHEAD(final String uri) {
-        final TestInfo info = setupTest("5.0-F", "readAllowedHEAD",
+        final TestInfo info = setupTest("5.0-F",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs HEAD.",
@@ -76,7 +76,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void readAllowedGET(final String uri) {
-        final TestInfo info = setupTest("5.0-G", "readAllowedGET",
+        final TestInfo info = setupTest("5.0-G",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs GET.",
@@ -96,7 +96,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void readDisallowed(final String uri) {
-        final TestInfo info = setupTest("5.0-H", "readDisallowed",
+        final TestInfo info = setupTest("5.0-H",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs GET. Its absence " +
@@ -120,7 +120,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeAllowedPUT(final String uri) {
-        final TestInfo info = setupTest("5.0-I", "writeAllowedPUT",
+        final TestInfo info = setupTest("5.0-I",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include PUT.",
@@ -146,7 +146,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeAllowedPOST(final String uri) {
-        final TestInfo info = setupTest("5.0-J", "writeAllowedPOST",
+        final TestInfo info = setupTest("5.0-J",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include POST.",
@@ -168,7 +168,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeAllowedDELETE(final String uri) {
-        final TestInfo info = setupTest("5.0-K", "writeAllowedDELETE",
+        final TestInfo info = setupTest("5.0-K",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include DELETE",
@@ -188,7 +188,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeAllowedPATCH(final String uri) {
-        final TestInfo info = setupTest("5.0-L", "writeAllowedPATCH",
+        final TestInfo info = setupTest("5.0-L",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include PATCH.",
@@ -215,7 +215,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeDisallowedPut(final String uri) {
-        final TestInfo info = setupTest("5.0-M-1", "writeDisallowedPut",
+        final TestInfo info = setupTest("5.0-M-1",
                                         "acl:Write gives access to PUT a resource. When not present, " +
                                         "writes should be disallowed.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
@@ -239,7 +239,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeDisallowedPost(final String uri) {
-        final TestInfo info = setupTest("5.0-M-2", "writeDisallowedPost",
+        final TestInfo info = setupTest("5.0-M-2",
                                         "acl:Write gives access to POST a resource. When not present, " +
                                         "writes should be disallowed.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
@@ -260,7 +260,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeDisallowedDelete(final String uri) {
-        final TestInfo info = setupTest("5.0-M-3", "writeDisallowedDelete",
+        final TestInfo info = setupTest("5.0-M-3",
                                         "acl:Write gives access to DELETE a resource. When not present, " +
                                         "writes should be disallowed.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
@@ -280,7 +280,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void writeDisallowedPatch(final String uri) {
-        final TestInfo info = setupTest("5.0-M-4", "writeDisallowedPatch",
+        final TestInfo info = setupTest("5.0-M-4",
                                         "acl:Write gives access to PATCH a resource. When not present, " +
                                         "writes should be disallowed.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
@@ -308,7 +308,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void appendAllowedPOST(final String uri) {
-        final TestInfo info = setupTest("5.0-N", "appendAllowedPOST",
+        final TestInfo info = setupTest("5.0-N",
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
                                         "This generally includes the HTTP verb POST.",
@@ -330,7 +330,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void appendAllowedPATCH(final String uri) {
-        final TestInfo info = setupTest("5.0-O", "appendAllowedPATCH",
+        final TestInfo info = setupTest("5.0-O",
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
                                         "This generally includes the INSERT-only portion of SPARQL-based PATCHes.",
@@ -355,7 +355,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void appendDisallowed(final String uri) {
-        final TestInfo info = setupTest("5.0-P", "appendDisallowed",
+        final TestInfo info = setupTest("5.0-P",
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
                                         "This generally includes the HTTP verb POST, although some implementations " +
@@ -387,7 +387,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void controlAllowedGET(final String uri) {
-        final TestInfo info = setupTest("5.0-Q", "controlAllowedGET",
+        final TestInfo info = setupTest("5.0-Q",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view the ACL of a " +
                                         "resource.",
@@ -407,7 +407,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void controlAllowedPATCH(final String uri) {
-        final TestInfo info = setupTest("5.0-R", "controlAllowedPATCH",
+        final TestInfo info = setupTest("5.0-R",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " modify the ACL of a " +
                                         "resource.",
@@ -433,7 +433,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void controlAllowedPUT(final String uri) {
-        final TestInfo info = setupTest("5.0-S", "controlAllowedPUT",
+        final TestInfo info = setupTest("5.0-S",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " modify the ACL of a " +
                                         "resource.",
@@ -464,7 +464,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void controlDisallowedGET(final String uri) {
-        final TestInfo info = setupTest("5.0-T", "controlDisallowedGET",
+        final TestInfo info = setupTest("5.0-T",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
                                         "ACL of a resource. Its absence must prevent viewing the ACL.",
@@ -485,7 +485,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void controlDisallowedPATCH(final String uri) {
-        final TestInfo info = setupTest("5.0-U", "controlDisallowedPATCH",
+        final TestInfo info = setupTest("5.0-U",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
                                         "ACL of a resource. Its absence must prevent updating the ACL.",
@@ -514,7 +514,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void controlDisallowedPUT(final String uri) {
-        final TestInfo info = setupTest("5.0-U", "controlDisallowedPUT",
+        final TestInfo info = setupTest("5.0-U",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
                                         "ACL of a resource. Its absence must prevent updating the ACL.",
