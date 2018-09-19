@@ -18,7 +18,6 @@
 package org.fcrepo.spec.testsuite.authz;
 
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -648,7 +647,7 @@ public class WebACModes extends AbstractAuthzTest {
     /**
      * 5.7.2 acl:Append for LDP-C MUST test conditions
      *
-     * @param uri
+     * @param uri of base container of Fedora server
      */
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
@@ -669,4 +668,136 @@ public class WebACModes extends AbstractAuthzTest {
         }
     }
 
+    /**
+     * 5.7.3-A acl:Append for LDP-NR MUST test conditions
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "MUST" })
+    @Parameters({ "param1" })
+    public void appendNotWriteLdpNr(final String uri) {
+        final TestInfo info = setupTest("5.7.3-A",
+                "When a client has acl:Append but not acl:Write for an LDP-NR they MUST " +
+                        "deny all DELETE, POST, and PUT requests.",
+                "https://fedora.info/2018/06/25/spec/#append-ldpnr", ps);
+
+        final Headers headers = new Headers(new Header("Content-type", "text/plain"));
+        final Response postLdpNr = doPost(uri, headers, "test image");
+        final String resourceUri = getLocation(postLdpNr);
+
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        final String description = getLdpNrDescription(resourceUri);
+
+        // POST requests to a LDP-NR with acl:Append only MUST be denied
+        final Response postRequest = doPostUnverified(resourceUri, null, null, false);
+        postRequest.then().statusCode(403);
+
+        // PUT requests to a LDP-NR with acl:Append only MUST be denied
+        final Response putRequest = doPutUnverified(resourceUri, null, null, false);
+        putRequest.then().statusCode(403);
+
+        // DELETE requests to a LDP-NR with acl:Append only MUST be denied
+        final Response deleteRequest = doDeleteUnverified(resourceUri, false);
+        deleteRequest.then().statusCode(403);
+
+        // Also perform the tests against an associated LDP-RS.
+        if (description != null) {
+            // POST requests to a LDP-NR with acl:Append only MUST be denied
+            final Response postRequest2 = doPostUnverified(description, null, null, false);
+            postRequest2.then().statusCode(403);
+
+            // PUT requests to a LDP-NR with acl:Append only MUST be denied
+            final Response putRequest2 = doPutUnverified(description, null, null, false);
+            putRequest2.then().statusCode(403);
+
+            // DELETE requests to a LDP-NR with acl:Append only MUST be denied
+            final Response deleteRequest2 = doDeleteUnverified(description, false);
+            deleteRequest2.then().statusCode(403);
+        }
+
+    }
+
+    /**
+     * 5.7.3-B acl:Append for LDP-NR MUST PATCH test conditions.
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "MUST" })
+    @Parameters({ "param1" })
+    public void appendNotWriteLdpNrPatchMust(final String uri) {
+        final TestInfo info = setupTest("5.7.3-B",
+                "When a client has acl:Append but not acl:Write for an LDP-NR they MUST " +
+                        "deny all PATCH requests that delete or modify existing content.",
+                "https://fedora.info/2018/06/25/spec/#append-ldpnr", ps);
+
+        final Headers headers = new Headers(new Header("Content-type", "text/plain"));
+        final Response postLdpNr = doPost(uri, headers, "test image");
+        final String resourceUri = getLocation(postLdpNr);
+
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        final String description = getLdpNrDescription(resourceUri);
+
+        if (description != null) {
+            // perform PATCH which also deletes.
+            final Response patchDelete = doPatchUnverified(description, new Headers(new Header("Content-type",
+                    "application/sparql-update")),
+                    "prefix dc: <http://purl.org/dc/elements/1.1/> DELETE { <> dc:title ?o1 .}" +
+                            " INSERT { <> dc:title \"I made a change\" .} WHERE { <> dc:title ?o1 .}",
+                    false);
+            // Verify failure.
+            patchDelete.then().statusCode(403);
+
+            final Response patchDeleteData = doPatchUnverified(description, new Headers(new Header("Content-type",
+                    "application/sparql-update")),
+                    "prefix dc: <http://purl.org/dc/elements/1.1/> DELETE DATA { <> dc:title \"Some title\" .}",
+                    false);
+            // Verify failure.
+            patchDeleteData.then().statusCode(403);
+        }
+
+    }
+
+    /**
+     * 5.7.3-C acl:Append for LDP-NR SHOULD PATCH test conditions.
+     *
+     * @param uri of base container of Fedora server
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void appendNotWriteLdpNrPatchShould(final String uri) {
+        final TestInfo info = setupTest("5.7.3-C",
+                "When a client has acl:Append but not acl:Write for an LDP-NR they SHOULD " +
+                        "allow all PATCH requests that only add new content.",
+                "https://fedora.info/2018/06/25/spec/#append-ldpnr", ps);
+
+        final Headers headers = new Headers(new Header("Content-type", "text/plain"));
+        final Response postLdpNr = doPost(uri, headers, "test image");
+        final String resourceUri = getLocation(postLdpNr);
+
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        final String description = getLdpNrDescription(resourceUri);
+
+        if (description != null) {
+            // perform PATCH which only adds.
+            final Response patchAdd = doPatchUnverified(description, new Headers(new Header("Content-type",
+                    "application/sparql-update")),
+                    "prefix dc: <http://purl.org/dc/elements/1.1/> DELETE { } INSERT " +
+                            "{ <> dc:title \"I made a change\" .} WHERE { }",
+                    false);
+            // Verify success.
+            patchAdd.then().statusCode(204);
+
+            // perform PATCH which only adds.
+            final Response patchAddData = doPatchUnverified(description, new Headers(new Header("Content-type",
+                    "application/sparql-update")),
+                    "prefix dc: <http://purl.org/dc/elements/1.1/> INSERT DATA { <> dc:title \"I made a change\" .}",
+                    false);
+            // Verify success.
+            patchAddData.then().statusCode(204);
+        }
+
+    }
 }

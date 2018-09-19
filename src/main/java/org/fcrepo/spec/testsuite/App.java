@@ -76,7 +76,7 @@ public class App {
 
         final CommandLineParser parser = new BasicParser();
         final HelpFormatter formatter = new HelpFormatter();
-        CommandLine cmd;
+        final CommandLine cmd;
         try {
             cmd = parser.parse(options, args);
         } catch (final ParseException e) {

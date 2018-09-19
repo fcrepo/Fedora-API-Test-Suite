@@ -127,8 +127,14 @@ public class AbstractTest {
     }
 
     /**
-     * A convenience method for setup boilerplate which attempts to automatically
-     * set the name of the test method which directly invoked this setup.
+     * A convenience method for setup boilerplate which attempts to automatically set the name of the test method
+     * which directly invoked this setup.
+     *
+     * @param id Test ID
+     * @param description Description of the test
+     * @param specLink Link to the API specification we are testing
+     * @param ps PrintStream to add the TestInfo to.
+     * @return The TestInfo
      */
     protected TestInfo setupTest(final String id, final String description, final String specLink,
             final PrintStream ps) {
@@ -144,6 +150,13 @@ public class AbstractTest {
 
     /**
      * A convenience method for setup boilerplate
+     *
+     * @param id Test ID
+     * @param title Test name
+     * @param description Description of the test
+     * @param specLink Link to the API specification we are testing
+     * @param ps PrintStream to add the TestInfo to.
+     * @return The TestInfo
      */
     protected TestInfo setupTest(final String id, final String title, final String description, final String specLink,
                                  final PrintStream ps) {
@@ -307,16 +320,27 @@ public class AbstractTest {
         return response;
     }
 
-    private Response doOptionsUnverified(final String uri) {
-        return createRequest().when().options(uri);
+    private Response doOptionsUnverified(final String uri, final boolean admin) {
+        return createRequest(admin).when().options(uri);
     }
 
-    protected Response doOptions(final String uri) {
-        final Response response = doOptionsUnverified(uri);
+    /**
+     * Do an options request.
+     *
+     * @param uri the URI of the request
+     * @param admin whether to use admin user credentials
+     * @return the response
+     */
+    protected Response doOptions(final String uri, final boolean admin) {
+        final Response response = doOptionsUnverified(uri, admin);
 
         response.then().statusCode(200);
 
         return response;
+    }
+
+    protected Response doOptions(final String uri) {
+        return doOptions(uri, true);
     }
 
     private RequestSpecification createRequest() {
@@ -555,4 +579,17 @@ public class AbstractTest {
         containers.add(URI.create("http://www.w3.org/ns/ldp#DirectContainer"));
         return containers.contains(p);
     });
+
+    /**
+     * Get the LDP-RS that describes a LDP-NR if it exists.
+     *
+     * @param ldpNrUri the uri of the LDP-NR
+     * @return the uri of the describing LDP-RS or null
+     */
+    protected String getLdpNrDescription(final String ldpNrUri) {
+        final Response response = doHead(ldpNrUri);
+        return getLinksOfRelType(response, "describedby").map(Link::getUri)
+                .map(URI::toString)
+                .findFirst().orElse(null);
+    }
 }
