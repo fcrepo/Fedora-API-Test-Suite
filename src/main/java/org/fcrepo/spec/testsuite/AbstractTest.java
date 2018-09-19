@@ -560,20 +560,6 @@ public class AbstractTest {
     }
 
     /**
-     * Does the returned Allow header have desired operation.
-     *
-     * @param resource the URI of the resource.
-     * @param op the operation desired.
-     * @return true if the operation is in the Allow header.
-     */
-    protected boolean isOperationAllowed(final String resource, final String op) {
-        final Response response = doHead(resource);
-        return getHeaders(response, "Allow")
-                .flatMap(header -> Arrays.stream(header.getValue().split(","))).anyMatch(allow -> op.toUpperCase()
-                        .equals(allow));
-    }
-
-    /**
      * Confirm the response contains one of the 3 Container types.
      *
      * @param response the request response.

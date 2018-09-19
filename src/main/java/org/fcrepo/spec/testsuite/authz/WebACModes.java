@@ -18,8 +18,6 @@
 package org.fcrepo.spec.testsuite.authz;
 
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
-import static org.junit.Assert.fail;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -740,7 +738,6 @@ public class WebACModes extends AbstractAuthzTest {
         createAclForResource(resourceUri, "user-read-append.ttl", this.username);
 
         final String description = getLdpNrDescription(resourceUri);
-        final boolean patchLDPNR = isOperationAllowed(resourceUri, "PATCH");
 
         if (description != null) {
             // perform PATCH which also deletes.
@@ -760,12 +757,6 @@ public class WebACModes extends AbstractAuthzTest {
             patchDeleteData.then().statusCode(403);
         }
 
-        if (patchLDPNR) {
-            final Response headResponse = doHead(resourceUri, false);
-            final String allowPatch = getHeaders(headResponse, "Allow-Patch").findFirst().map(Header::getValue).get();
-            // How are we testing patching an LDP-NR? Xdiff?
-            fail("This test suite has not implemented LDP-NR patch testing.");
-        }
     }
 
     /**
@@ -788,7 +779,6 @@ public class WebACModes extends AbstractAuthzTest {
         createAclForResource(resourceUri, "user-read-append.ttl", this.username);
 
         final String description = getLdpNrDescription(resourceUri);
-        final boolean patchLDPNR = isOperationAllowed(resourceUri, "PATCH");
 
         if (description != null) {
             // perform PATCH which only adds.
@@ -809,11 +799,5 @@ public class WebACModes extends AbstractAuthzTest {
             patchAddData.then().statusCode(204);
         }
 
-        if (patchLDPNR) {
-            final Response headResponse = doHead(resourceUri, false);
-            final String allowPatch = getHeaders(headResponse, "Allow-Patch").findFirst().map(Header::getValue).get();
-            // How are we testing patching an LDP-NR? Xdiff?
-            fail("This test suite has not implemented LDP-NR patch testing.");
-        }
     }
 }
