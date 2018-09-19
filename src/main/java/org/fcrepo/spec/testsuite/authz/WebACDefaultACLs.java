@@ -85,7 +85,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
         doPost(grandParentUri, headers, simpleRDFBody, false);
 
         // verify that the user can read but not write to the child
-        doPostUnverified(childUri, headers, simpleRDFBody, false).then().statusCode(clientErrorRange());
+        doPostUnverified(childUri, headers, simpleRDFBody, false).then().statusCode(403);
         doGet(childUri, false);
 
         //verify that the grandchild can read and write.
@@ -121,13 +121,16 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param0"})
     public void defaultAclOnSameServer(final String uri) {
-        setupTest("5.9-D", "The default ACL resource should be located in the same server as the " +
+        setupTest("5.9-D", "The default ACL resource should be located in the same server (host and port) as the " +
                            "controlled resource.",
                   "https://fedora.info/2018/06/25/spec/#inheritance", ps);
         //GET the default acl and verify that it is on the same server as the root uri.
         final String aclUri = getAclLocation(uri);
-        assertEquals("The default ACL resource is not located in the same server as the controlled resource.",
+        assertEquals("The default ACL resource is not located on the same host as the controlled resource.",
                      URI.create(uri).getHost(), URI.create(aclUri).getHost());
+
+        assertEquals("The default ACL resource is not located on the same port as the controlled resource.",
+                     URI.create(uri).getPort(), URI.create(aclUri).getPort());
 
     }
 

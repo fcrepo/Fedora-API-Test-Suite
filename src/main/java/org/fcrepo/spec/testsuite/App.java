@@ -49,9 +49,9 @@ public class App {
      */
     public static void main(final String[] args) {
         final Options options = new Options();
-        final Option baseurl = new Option("b", "baseurl", true, "base url");
-        baseurl.setRequired(true);
-        options.addOption(baseurl);
+        final Option rootUrl = new Option("b", "rooturl", true, "The root URL of the repository");
+        rootUrl.setRequired(true);
+        options.addOption(rootUrl);
         final Option user = new Option("u", "user", true, "Username of user with basic user role");
         user.setRequired(true);
         options.addOption(user);
@@ -86,7 +86,7 @@ public class App {
             return;
         }
 
-        final String inputUrl = cmd.getOptionValue("baseurl");
+        final String inputUrl = cmd.getOptionValue("rooturl");
         final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
         final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
         final String inputAdminUser = cmd.getOptionValue("admin-user") == null ? "" : cmd.getOptionValue("admin-user");
