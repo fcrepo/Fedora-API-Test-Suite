@@ -307,16 +307,27 @@ public class AbstractTest {
         return response;
     }
 
-    private Response doOptionsUnverified(final String uri) {
-        return createRequest().when().options(uri);
+    private Response doOptionsUnverified(final String uri, final boolean admin) {
+        return createRequest(admin).when().options(uri);
     }
 
-    protected Response doOptions(final String uri) {
-        final Response response = doOptionsUnverified(uri);
+    /**
+     * Do an options request.
+     *
+     * @param uri the URI of the request
+     * @param admin whether to use admin user credentials
+     * @return the response
+     */
+    protected Response doOptions(final String uri, final boolean admin) {
+        final Response response = doOptionsUnverified(uri, admin);
 
         response.then().statusCode(200);
 
         return response;
+    }
+
+    protected Response doOptions(final String uri) {
+        return doOptions(uri, true);
     }
 
     private RequestSpecification createRequest() {
@@ -536,6 +547,19 @@ public class AbstractTest {
     }
 
     /**
+     * Does the returned Allow header have desired operation.
+     *
+     * @param response the response.
+     * @param op the operation desired.
+     * @return true if the operation is in the Allow header.
+     */
+    protected boolean isOperationAllowed(final Response response, final String op) {
+        return getHeaders(response, "Allow")
+                .flatMap(header -> Arrays.stream(header.getValue().split(","))).anyMatch(allow -> op.toUpperCase()
+                        .equals(allow));
+    }
+
+    /**
      * Confirm the response contains one of the 3 Container types.
      *
      * @param response the request response.
@@ -555,4 +579,5 @@ public class AbstractTest {
         containers.add(URI.create("http://www.w3.org/ns/ldp#DirectContainer"));
         return containers.contains(p);
     });
+
 }
