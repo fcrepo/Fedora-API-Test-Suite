@@ -50,7 +50,7 @@ public class WebACLinking extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void linkToAclOnCreation(final String uri) {
-        final TestInfo info = setupTest("5.4-A", "linkToAclOnCreation",
+        final TestInfo info = setupTest("5.4-A",
                                         "A client HTTP POST or PUT request to create a new LDPR may include a " +
                                         "rel=\"acl\" link in the " +
                                         "Link header referencing an existing LDP-RS to use as the ACL for the new " +
@@ -78,7 +78,7 @@ public class WebACLinking extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void conflictIfNotSupportingAclLink(final String uri) {
-        final TestInfo info = setupTest("5.4-B", "conflictIfNotSupportingAclLink",
+        final TestInfo info = setupTest("5.4-B",
                                         "The server must reject the request and respond with a 4xx or 5xx range " +
                                         "status code, such as " +
                                         "409 (Conflict) if it isn't able to create the LDPR with the specified LDP-RS" +

@@ -85,7 +85,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void httpPutChangeTypeNotAllowed(final String uri) {
-        final TestInfo info = setupTest("3.6-B", "httpPutChangeTypeNotAllowed",
+        final TestInfo info = setupTest("3.6-B",
                                         "When accepting a PUT request against an existant resource, an HTTP Link: " +
                                         "rel=\"type\" header may be included. If that type is a value in the LDP " +
                                         "namespace and is not either a current type of the resource or a subtype " +
@@ -114,7 +114,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutUpdateTriples(final String uri) {
-        final TestInfo info = setupTest("3.6.1-A", "httpPutUpdateTriples",
+        final TestInfo info = setupTest("3.6.1-A",
                                         "Any LDP-RS must support PUT to update statements that are not server-managed" +
                                         " triples (as defined "
                                         + "in [LDP] 2). [LDP] 4.2.4.1 and 4.2.4.3 remain in effect.",
@@ -159,7 +159,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutUpdateDisallowedTriples(final String uri) {
-        final TestInfo info = setupTest("3.6.1-B", "httpPutUpdateDisallowedTriples",
+        final TestInfo info = setupTest("3.6.1-B",
                                         "If an otherwise valid HTTP PUT request is received that attempts to modify " +
                                         "resource "
                                         + "statements that a server"
@@ -208,7 +208,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutUpdateDisallowedTriplesResponse(final String uri) {
-        final TestInfo info = setupTest("3.6.1-C", "httpPutUpdateDisallowedTriplesResponse",
+        final TestInfo info = setupTest("3.6.1-C",
                                         "The server must provide a corresponding response body containing information "
                                         + "about which statements could"
                                         + " not be persisted. ([LDP] 4.2.4.4 should becomes must).",
@@ -254,7 +254,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutUpdateDisallowedTriplesConstrainedByHeader(final String uri) {
-        final TestInfo info = setupTest("3.6.1-D", "httpPutUpdateDisallowedTriplesConstrainedByHeader",
+        final TestInfo info = setupTest("3.6.1-D",
                                         "In that response, the restrictions causing such a request to fail must be "
                                         + "described in a resource indicated"
                                         +
@@ -302,7 +302,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpPutNR(final String uri) {
-        final TestInfo info = setupTest("3.6.2-A", "httpPutNR",
+        final TestInfo info = setupTest("3.6.2-A",
                                         "Any LDP-NR must support PUT to replace the binary content of that resource.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
         final Headers headers = new Headers(
@@ -339,7 +339,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void nonRDFSourcePutDigestResponseHeaderAuthentication(final String uri) {
-        final TestInfo info = setupTest("3.6.2-B", "nonRDFSourcePutDigestResponseHeaderAuthentication",
+        final TestInfo info = setupTest("3.6.2-B",
                                         "An HTTP PUT request that includes a Digest header (as described in " +
                                         "[RFC3230]) for which any "
                                         +
@@ -370,7 +370,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void nonRDFSourcePutDigestResponseHeaderVerification(final String uri) {
-        final TestInfo info = setupTest("3.6.2-C", "nonRDFSourcePutDigestResponseHeaderVerification",
+        final TestInfo info = setupTest("3.6.2-C",
                                         "An HTTP PUT request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), should"
                                         + " be rejected with a 400 (Bad Request) response.",
@@ -398,7 +398,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void putCreateRDFSource(final String uri) {
-        final TestInfo info = setupTest("3.6.3-A", "putCreateRDFSource",
+        final TestInfo info = setupTest("3.6.3-A",
                 "Implementations may accept HTTP PUT to create resources",
                 "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
 
@@ -417,7 +417,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void putCreateNonRDFSource(final String uri) {
-        final TestInfo info = setupTest("3.6.3-B", "putCreateNonRDFSource",
+        final TestInfo info = setupTest("3.6.3-B",
                 "Implementations may accept HTTP PUT to create non-RDF resources",
                 "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
 
@@ -439,7 +439,7 @@ public class HttpPut extends AbstractTest {
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
     public void putNonRDFSourceCreateLDPRS(final String uri) {
-        final TestInfo info = setupTest("3.6.3-C", "putNonRDFSourceCreateLDPRS",
+        final TestInfo info = setupTest("3.6.3-C",
                 "On creation of an LDP-NR with HTTP PUT, implementations MUST create " +
                         "an associated LDP-RS describing that LDP-NR in the same way that it " +
                         "would when 3.5.1 Creating LDP-NRs with HTTP POST",

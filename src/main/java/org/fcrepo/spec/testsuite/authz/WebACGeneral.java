@@ -55,7 +55,7 @@ public class WebACGeneral extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void agentSingle(final String uri) {
-        final TestInfo info = setupTest("5.0-A", "agentSingle",
+        final TestInfo info = setupTest("5.0-A",
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
                                         "the acl:agent predicate",
@@ -74,7 +74,7 @@ public class WebACGeneral extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void agentDouble(final String uri) {
-        final TestInfo info = setupTest("5.0-B", "agentDouble",
+        final TestInfo info = setupTest("5.0-B",
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
                                         "the acl:agent predicate.",
@@ -92,7 +92,7 @@ public class WebACGeneral extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void agentGroup(final String uri) {
-        final TestInfo info = setupTest("5.0-C-1", "agentGroup",
+        final TestInfo info = setupTest("5.0-C-1",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
                                         "object of an " +
                                         "agentGroup statement is a link to a Group Listing document. The group " +
@@ -128,7 +128,7 @@ public class WebACGeneral extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void agentGroupWithHashUris(final String uri) {
-        final TestInfo info = setupTest("5.0-C-2", "agentGroupWithHashUris",
+        final TestInfo info = setupTest("5.0-C-2",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
                                         "object of an agentGroup statement is a link with a hash URI to a Group " +
                                         "Listing document. The group members are listed in it, using the " +
@@ -164,7 +164,7 @@ public class WebACGeneral extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void agentAll(final String uri) {
-        final TestInfo info = setupTest("5.0-D", "agentAll",
+        final TestInfo info = setupTest("5.0-D",
                                         "To specify that you're giving a particular mode of access to everyone, you " +
                                         "can use acl:agentClass " +
                                         "foaf:Agent to denote that you're giving access to the class of all agents " +
@@ -184,7 +184,7 @@ public class WebACGeneral extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void allAuthenticatedAgents(final String uri) {
-        final TestInfo info = setupTest("5.0-E", "allAuthenticatedAgents",
+        final TestInfo info = setupTest("5.0-E",
                                         "To specify that you're giving a particular mode of access to all " +
                                         "authenticated users, you can use acl:agentClass acl:AuthenticatedAgent to " +
                                         "denote that you're giving access to the class of all authenticated agents.",
@@ -205,7 +205,7 @@ public class WebACGeneral extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void resourceSingle(final String uri) {
-        final TestInfo info = setupTest("5.0-F", "resourceSingle",
+        final TestInfo info = setupTest("5.0-F",
                                         "The acl:accessTo predicate specifies which resources you're giving access " +
                                         "to, using their URLs as " +
                                         "the subjects.",

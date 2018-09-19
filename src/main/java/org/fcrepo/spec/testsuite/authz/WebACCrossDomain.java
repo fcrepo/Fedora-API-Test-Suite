@@ -48,7 +48,7 @@ public class WebACCrossDomain extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void restrictAclToLocal(final String uri) {
-        final TestInfo info = setupTest("5.5-A", "restrictAclToLocal",
+        final TestInfo info = setupTest("5.5-A",
                 "Implementations may restrict support for ACLs to local resources.",
                 "https://fedora.info/2018/06/25/spec/#cross-domain-acls", ps);
     }
@@ -61,7 +61,7 @@ public class WebACCrossDomain extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void rejectRemoteAclStatus(final String uri) {
-        final TestInfo info = setupTest("5.5-B", "rejectRemoteAclStatus",
+        final TestInfo info = setupTest("5.5-B",
                 "If an implementation chooses to reject requests concerning remote ACLs, it must respond with a " +
                         "4xx range status code.",
                 "https://fedora.info/2018/06/25/spec/#cross-domain-acls", ps);
@@ -75,7 +75,7 @@ public class WebACCrossDomain extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void rejectRemoteAclConstraint(final String uri) {
-        final TestInfo info = setupTest("5.5-C", "rejectRemoteAclConstraint",
+        final TestInfo info = setupTest("5.5-C",
                 "If an implementation chooses to reject requests concerning remote ACLs, it must advertise the " +
                         "restriction with a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link " +
                         "response header.",
@@ -90,7 +90,7 @@ public class WebACCrossDomain extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void restrictGroupToLocal(final String uri) {
-        final TestInfo info = setupTest("5.6-A", "restrictGroupToLocal",
+        final TestInfo info = setupTest("5.6-A",
                 "Implementations may restrict support for groups of agents to local Group Listing documents.",
                 "https://fedora.info/2018/06/25/spec/#cross-domain-groups", ps);
     }
@@ -103,7 +103,7 @@ public class WebACCrossDomain extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void rejectRemoteGroupStatus(final String uri) {
-        final TestInfo info = setupTest("5.6-B", "rejectRemoteGroupStatus",
+        final TestInfo info = setupTest("5.6-B",
                 "If an implementation chooses to reject requests concerning remote Group Listings, it must respond " +
                         "with a 4xx range status code.",
                 "https://fedora.info/2018/06/25/spec/#cross-domain-groups", ps);
@@ -117,7 +117,7 @@ public class WebACCrossDomain extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void rejectRemoteGroupConstraint(final String uri) {
-        final TestInfo info = setupTest("5.6-C", "rejectRemoteGroupConstraint",
+        final TestInfo info = setupTest("5.6-C",
                 "If an implementation chooses to reject requests concerning remote Group Listings, it must advertise " +
                         "the restriction with a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link " +
                         "response header.",

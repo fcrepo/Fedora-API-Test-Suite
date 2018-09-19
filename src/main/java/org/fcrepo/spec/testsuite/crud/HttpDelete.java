@@ -53,7 +53,7 @@ public class HttpDelete extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void httpDeleteOptionsCheck(final String uri) {
-        final TestInfo info = setupTest("3.8.1-A", "httpDeleteOptionsCheck",
+        final TestInfo info = setupTest("3.8.1-A",
                                         "An implementation that cannot recurse should not advertise DELETE in " +
                                         "response to OPTIONS "
                                         + "requests for containers with contained resources.",
@@ -135,7 +135,7 @@ public class HttpDelete extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheck(final String uri) {
-        final TestInfo info = setupTest("3.8.1-C", "httpDeleteStatusCheck",
+        final TestInfo info = setupTest("3.8.1-C",
                                         "An implementation must not return a 200 (OK) or 204 (No Content) response "
                                         + "unless the entire operation successfully completed.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
@@ -212,7 +212,7 @@ public class HttpDelete extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpDeleteStatusCheckTwo(final String uri) {
-        final TestInfo info = setupTest("3.8.1-D", "httpDeleteStatusCheckTwo",
+        final TestInfo info = setupTest("3.8.1-D",
                                         "An implementation must not emit a message that implies the successful DELETE" +
                                         " of a resource until "
                                         + "the resource has been successfully removed.",

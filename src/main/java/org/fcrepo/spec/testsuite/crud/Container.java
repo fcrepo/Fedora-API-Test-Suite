@@ -57,7 +57,7 @@ public class Container extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void createLDPC(final String uri) {
-        final TestInfo info = setupTest("3.1.1-A", "createLDPC",
+        final TestInfo info = setupTest("3.1.1-A",
                                         "Implementations must support the creation and management of [LDP] Containers.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
         createBasicContainer(uri, info);
@@ -122,7 +122,7 @@ public class Container extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMembershipTriples(final String uri) {
-        final TestInfo info = setupTest("3.1.1-C", "ldpcMembershipTriples",
+        final TestInfo info = setupTest("3.1.1-C",
                                         "LDP Containers must distinguish [membership] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);
@@ -221,7 +221,7 @@ public class Container extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void ldpcMinimalContainerTriples(final String uri) {
-        final TestInfo info = setupTest("3.1.1-D", "ldpcMinimalContainerTriples",
+        final TestInfo info = setupTest("3.1.1-D",
                                         "LDP Containers must distinguish [minimal-container] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
                                         ps);

@@ -52,7 +52,7 @@ public class WebACRdfSources extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void aclIsLDPRS(final String uri) {
-        final TestInfo info = setupTest("5.1", "aclIsLDPRS",
+        final TestInfo info = setupTest("5.1",
                                         "An ACL for a controlled resource on a conforming server must itself be an " +
                                         "LDP-RS.",
                                         "https://fedora.info/2018/06/25/spec/#solid-ldp-acls", ps);

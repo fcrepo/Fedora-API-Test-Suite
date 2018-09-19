@@ -124,6 +124,22 @@ public class AbstractTest {
     }
 
     /**
+     * A convenience method for setup boilerplate which attempts to automatically
+     * set the name of the test method which directly invoked this setup.
+     */
+    protected TestInfo setupTest(final String id, final String description, final String specLink,
+            final PrintStream ps) {
+
+        // Test method should be the previous method in the stack trace.
+        final StackTraceElement[] trace = new Throwable().getStackTrace();
+        if (trace.length <= 1) {
+            throw new RuntimeException("Cannot determine test method name, " +
+                    "specify directly using title parameter in the other setupTest signature");
+        }
+        return setupTest(id, trace[1].getMethodName(), description, specLink, ps);
+    }
+
+    /**
      * A convenience method for setup boilerplate
      */
     protected TestInfo setupTest(final String id, final String title, final String description, final String specLink,

@@ -51,7 +51,7 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpcvMaySupportDelete(final String uri) {
-        final TestInfo info = setupTest("4.3.6-A", "ldpcvMaySupportDelete",
+        final TestInfo info = setupTest("4.3.6-A",
                                         "An implementation MAY support DELETION of LDPCvs.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-delete",
                                         ps);
@@ -73,7 +73,7 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos(final String uri) {
-        final TestInfo info = setupTest("4.3.6-B", "ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos",
+        final TestInfo info = setupTest("4.3.6-B",
                                         "An implementation that does support DELETE should do so by both " +
                                         "removing the LDPCv and removing the versioning interaction model from the " +
                                         "original LDPRv.",

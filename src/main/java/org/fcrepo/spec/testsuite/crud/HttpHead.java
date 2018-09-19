@@ -59,7 +59,7 @@ public class HttpHead extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpHeadResponseNoBody(final String uri) {
-        final TestInfo info = setupTest("3.3-A", "httpHeadResponseNoBody",
+        final TestInfo info = setupTest("3.3-A",
                                         "The HEAD method is identical to GET except that the server must not return a "
                                         + "message-body in the response, as "
                                         + "specified in [RFC7231] section 4.3.2.",
@@ -78,7 +78,7 @@ public class HttpHead extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void httpHeadResponseDigest(final String uri) {
-        final TestInfo info = setupTest("3.3-B", "httpHeadResponseDigest",
+        final TestInfo info = setupTest("3.3-B",
                                         "The server must send the same Digest header in the response as it"
                                         +
                                         " would have sent if the request had been a GET (or omit it if it would have " +
@@ -131,7 +131,7 @@ public class HttpHead extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void httpHeadResponseHeadersSameAsHttpGet(final String uri) {
-        final TestInfo info = setupTest("3.3-C", "httpHeadResponseHeadersSameAsHttpGet",
+        final TestInfo info = setupTest("3.3-C",
                                         "In other cases, The server should send the same headers in response to a " +
                                         "HEAD request "
                                         + "as it would have sent if the request had "

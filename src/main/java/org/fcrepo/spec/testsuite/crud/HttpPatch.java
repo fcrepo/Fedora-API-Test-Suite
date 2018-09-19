@@ -79,7 +79,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void supportPatch(final String uri) {
-        final TestInfo info = setupTest("3.7-A", "supportPatch",
+        final TestInfo info = setupTest("3.7-A",
                                         "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). " +
                                         "[sparql11-update] must be an accepted "
                                         + "content-type for PATCH.",
@@ -99,7 +99,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void ldpPatchContentTypeSupport(final String uri) {
-        final TestInfo info = setupTest("3.7-B", "ldpPatchContentTypeSupport",
+        final TestInfo info = setupTest("3.7-B",
                                         "Other content-types (e.g. [ldpatch]) may be available.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
@@ -116,7 +116,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void serverManagedPropertiesModification(final String uri) {
-        final TestInfo info = setupTest("3.7-C", "serverManagedPropertiesModification",
+        final TestInfo info = setupTest("3.7-C",
                                         "If an otherwise valid HTTP PATCH request is received that attempts to modify "
                                         + "statements to a resource that a server disallows (not ignores per [LDP] "
                                         + "4.2.4.1), the server must fail the request by responding with a 4xx range"
@@ -138,7 +138,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedResponseBody(final String uri) {
-        final TestInfo info = setupTest("3.7-D", "statementNotPersistedResponseBody",
+        final TestInfo info = setupTest("3.7-D",
                                         "The server must provide a corresponding response body containing information"
                                         + " about which statements could not be persisted."
                                         + " ([LDP] 4.2.4.4 should becomes must).",
@@ -160,7 +160,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void statementNotPersistedConstrainedBy(final String uri) {
-        final TestInfo info = setupTest("3.7-E", "statementNotPersistedConstrainedBy",
+        final TestInfo info = setupTest("3.7-E",
                                         "In that response, the restrictions causing such a request to fail must be"
                                         + " described in a resource indicated by a Link: "
                                         + "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
@@ -183,7 +183,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void successfulPatchStatusCode(final String uri) {
-        final TestInfo info = setupTest("3.7-F", "successfulPatchStatusCode",
+        final TestInfo info = setupTest("3.7-F",
                                         "A successful PATCH request must respond with a 2xx status code; the "
                                         + "specific code in the 2xx range may vary according to the response "
                                         + "body or request state.",
@@ -219,7 +219,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowPatchContainmentTriples(final String uri) {
-        final TestInfo info = setupTest("3.7.1", "disallowPatchContainmentTriples",
+        final TestInfo info = setupTest("3.7.1",
                                         "The server should not allow HTTP PATCH to update an LDPC’s containment " +
                                         "triples; if"
                                         + " the server receives such a request, it should respond with a"
@@ -244,7 +244,7 @@ public class HttpPatch extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void disallowChangeResourceType(final String uri) {
-        final TestInfo info = setupTest("3.7.2", "disallowChangeResourceType",
+        final TestInfo info = setupTest("3.7.2",
                                         "The server must disallow a PATCH request that would change the LDP"
                                         + " interaction model of a resource to a type that is not a subtype"
                                         + " of the current resource type. That request must be rejected"

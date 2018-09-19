@@ -62,7 +62,7 @@ public class HttpGet extends AbstractTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param1"})
     public void additionalValuesForPreferHeader(final String uri) {
-        final TestInfo info = setupTest("3.2.1-A", "additionalValuesForPreferHeader",
+        final TestInfo info = setupTest("3.2.1-A",
                                         "In addition to the requirements of [LDP], an implementation ... " +
                                         "should support the value " +
                                         "http://fedora.info/definitions/fcrepo#PreferInboundReferences for the " +
@@ -97,7 +97,7 @@ public class HttpGet extends AbstractTest {
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
     public void additionalValuesForPreferHeaderContainedDescriptions(final String uri) {
-        final TestInfo info = setupTest("3.2.1-B", "additionalValuesForPreferHeaderContainedDescriptions",
+        final TestInfo info = setupTest("3.2.1-B",
                 "In addition to the requirements of [LDP], an implementation ... " +
                         "may support the value " +
                         "http://www.w3.org/ns/oa#PreferContainedDescriptions for the " +
@@ -130,7 +130,7 @@ public class HttpGet extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void responsePreferenceAppliedHeader(final String uri) {
-        final TestInfo info = setupTest("3.2.2-A", "responsePreferenceAppliedHeader",
+        final TestInfo info = setupTest("3.2.2-A",
                                         "Responses to GET requests that apply a Prefer request header to any LDP-RS " +
                                         "must "
                                         + "include the Preference-Applied"
@@ -153,7 +153,7 @@ public class HttpGet extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void responseDescribesHeader(final String uri) {
-        final TestInfo info = setupTest("3.2.2-B", "responseDescribesHeader",
+        final TestInfo info = setupTest("3.2.2-B",
                                         "When a GET request is made to an LDP-RS that describes an associated LDP-NR "
                                         + "(3.5 HTTP POST and [LDP]5.2.3.12),"
                                         +
@@ -190,7 +190,7 @@ public class HttpGet extends AbstractTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void respondWantDigest(final String uri) {
-        final TestInfo info = setupTest("3.2.3-A", "respondWantDigest",
+        final TestInfo info = setupTest("3.2.3-A",
                                         "Testing for supported digest "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
@@ -217,7 +217,7 @@ public class HttpGet extends AbstractTest {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupported(final String uri) {
         final String checksum = "md5,sha";
-        final TestInfo info = setupTest("3.2.3-B", "respondWantDigestTwoSupported",
+        final TestInfo info = setupTest("3.2.3-B",
                                         "Testing for two supported digests with no weights"
                                         + " GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
@@ -253,7 +253,7 @@ public class HttpGet extends AbstractTest {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) {
         final String checksum = "md5;q=0.3,sha;q=1";
-        final TestInfo info = setupTest("3.2.3-C", "respondWantDigestTwoSupportedQvalueNonZero",
+        final TestInfo info = setupTest("3.2.3-C",
                                         "Testing for two supported digests with different weights"
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
@@ -289,7 +289,7 @@ public class HttpGet extends AbstractTest {
     @Parameters({"param1"})
     public void respondWantDigestTwoSupportedQvalueZero(final String uri) {
         final String checksum = "md5;q=0.3,sha;q=0";
-        final TestInfo info = setupTest("3.2.3-D", "respondWantDigestTwoSupportedQvalueZero",
+        final TestInfo info = setupTest("3.2.3-D",
                                         "Testing for two supported digests with different weights q=0.3,q=0"
                                         + " GET requests to any LDP-NR must correctly respond to the Want-Digest"
                                         + " header defined in [RFC3230]",
@@ -315,7 +315,7 @@ public class HttpGet extends AbstractTest {
     public void respondWantDigestNonSupported(final String uri) {
         final String checksum = "md5,abc";
 
-        final TestInfo info = setupTest("3.2.3-E", "respondWantDigestNonSupported",
+        final TestInfo info = setupTest("3.2.3-E",
                                         "Testing for one supported digest and one unsupported digest."
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
