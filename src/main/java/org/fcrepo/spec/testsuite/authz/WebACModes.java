@@ -23,6 +23,8 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
+
+import org.testng.SkipException;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -547,7 +549,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
     public void appendNotWriteLdpRsMust(final String uri) {
-        final TestInfo info = setupTest("5.7.1-A", "appendNotWriteLdpRsMust",
+        final TestInfo info = setupTest("5.7.1-A",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they MUST " +
                         "not DELETE, not PATCH that deletes triples, not PUT on the resource",
                 "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
@@ -592,7 +594,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
     public void appendNotWritePutToCreate(final String uri) {
-        final TestInfo info = setupTest("5.7.1-B", "appendNotWritePutToCreate",
+        final TestInfo info = setupTest("5.7.1-B",
                 "When a client has acl:Append but not acl:Write for an LDP-RS and the " +
                         "implementation supports PUT to create they MUST " +
                         "allow the addition of a new child resource.",
@@ -617,7 +619,7 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = { "SHOULD" })
     @Parameters({ "param1" })
     public void appendNotWriteLdpRsShould(final String uri) {
-        final TestInfo info = setupTest("5.7.1-C", "appendNotWriteLdpRsShould",
+        final TestInfo info = setupTest("5.7.1-C",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they SHOULD " +
                         "allow a PATCH request that only adds triples.",
                 "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
@@ -641,6 +643,30 @@ public class WebACModes extends AbstractAuthzTest {
                 false);
         // Verify success.
         patchAddData.then().statusCode(204);
+    }
+
+    /**
+     * 5.7.2 acl:Append for LDP-C MUST test conditions
+     *
+     * @param uri
+     */
+    @Test(groups = { "MUST" })
+    @Parameters({ "param1" })
+    public void appendNotWriteLdpCMust(final String uri) {
+        final TestInfo info = setupTest("5.7.2",
+                "When a client has acl:Append but not acl:Write for an LDPC they MUST " +
+                        "allow a POST request.",
+                "https://fedora.info/2018/06/25/spec/#append-ldpc", ps);
+
+        final String resourceUri = createResource(uri, info.getId());
+        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+
+        final Response getInfo = doGet(resourceUri, false);
+        if (confirmLDPContainer(getInfo)) {
+            doPost(resourceUri, null, null, false);
+        } else {
+            throw new SkipException("Cannot confirm resource is a LDPC.");
+        }
     }
 
 }
