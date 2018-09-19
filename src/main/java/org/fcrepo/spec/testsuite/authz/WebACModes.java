@@ -669,14 +669,14 @@ public class WebACModes extends AbstractAuthzTest {
     }
 
     /**
-     * 5.7.3-A acl:Append for LDP-NR MUST test conditions
+     * 5.7.3 acl:Append for LDP-NR MUST test conditions
      *
      * @param uri of base container of Fedora server
      */
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
     public void appendNotWriteLdpNr(final String uri) {
-        final TestInfo info = setupTest("5.7.3-A",
+        final TestInfo info = setupTest("5.7.3",
                 "When a client has acl:Append but not acl:Write for an LDP-NR they MUST " +
                         "deny all DELETE, POST, and PUT requests.",
                 "https://fedora.info/2018/06/25/spec/#append-ldpnr", ps);
