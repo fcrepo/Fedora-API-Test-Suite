@@ -127,8 +127,14 @@ public class AbstractTest {
     }
 
     /**
-     * A convenience method for setup boilerplate which attempts to automatically
-     * set the name of the test method which directly invoked this setup.
+     * A convenience method for setup boilerplate which attempts to automatically set the name of the test method
+     * which directly invoked this setup.
+     *
+     * @param id Test ID
+     * @param description Description of the test
+     * @param specLink Link to the API specification we are testing
+     * @param ps PrintStream to add the TestInfo to.
+     * @return The TestInfo
      */
     protected TestInfo setupTest(final String id, final String description, final String specLink,
             final PrintStream ps) {
@@ -144,6 +150,13 @@ public class AbstractTest {
 
     /**
      * A convenience method for setup boilerplate
+     *
+     * @param id Test ID
+     * @param title Test name
+     * @param description Description of the test
+     * @param specLink Link to the API specification we are testing
+     * @param ps PrintStream to add the TestInfo to.
+     * @return The TestInfo
      */
     protected TestInfo setupTest(final String id, final String title, final String description, final String specLink,
                                  final PrintStream ps) {
@@ -549,11 +562,12 @@ public class AbstractTest {
     /**
      * Does the returned Allow header have desired operation.
      *
-     * @param response the response.
+     * @param resource the URI of the resource.
      * @param op the operation desired.
      * @return true if the operation is in the Allow header.
      */
-    protected boolean isOperationAllowed(final Response response, final String op) {
+    protected boolean isOperationAllowed(final String resource, final String op) {
+        final Response response = doHead(resource);
         return getHeaders(response, "Allow")
                 .flatMap(header -> Arrays.stream(header.getValue().split(","))).anyMatch(allow -> op.toUpperCase()
                         .equals(allow));
@@ -580,4 +594,16 @@ public class AbstractTest {
         return containers.contains(p);
     });
 
+    /**
+     * Get the LDP-RS that describes a LDP-NR if it exists.
+     *
+     * @param ldpNrUri the uri of the LDP-NR
+     * @return the uri of the describing LDP-RS or null
+     */
+    protected String getLdpNrDescription(final String ldpNrUri) {
+        final Response response = doHead(ldpNrUri);
+        return getLinksOfRelType(response, "describedby").map(Link::getUri)
+                .map(URI::toString)
+                .findFirst().orElse(null);
+    }
 }

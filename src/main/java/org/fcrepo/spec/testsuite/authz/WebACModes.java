@@ -20,10 +20,6 @@ package org.fcrepo.spec.testsuite.authz;
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.junit.Assert.fail;
 
-import java.net.URI;
-
-import javax.ws.rs.core.Link;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -693,10 +689,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         createAclForResource(resourceUri, "user-read-append.ttl", this.username);
 
-        final Response getResponse = doHead(resourceUri, false);
-        final String description = getLinksOfRelType(getResponse, "describedby").map(Link::getUri)
-                .map(URI::toString)
-                .findFirst().orElse(null);
+        final String description = getLdpNrDescription(resourceUri);
 
         // POST requests to a LDP-NR with acl:Append only MUST be denied
         final Response postRequest = doPostUnverified(resourceUri, null, null, false);
@@ -746,11 +739,8 @@ public class WebACModes extends AbstractAuthzTest {
 
         createAclForResource(resourceUri, "user-read-append.ttl", this.username);
 
-        final Response getResponse = doHead(resourceUri, false);
-        final String description = getLinksOfRelType(getResponse, "describedby").map(Link::getUri)
-                .map(URI::toString)
-                .findFirst().orElse(null);
-        final boolean patchLDPNR = isOperationAllowed(getResponse, "PATCH");
+        final String description = getLdpNrDescription(resourceUri);
+        final boolean patchLDPNR = isOperationAllowed(resourceUri, "PATCH");
 
         if (description != null) {
             // perform PATCH which also deletes.
@@ -771,7 +761,8 @@ public class WebACModes extends AbstractAuthzTest {
         }
 
         if (patchLDPNR) {
-            final String allowPatch = getHeaders(getResponse, "Allow-Patch").findFirst().map(Header::getValue).get();
+            final Response headResponse = doHead(resourceUri, false);
+            final String allowPatch = getHeaders(headResponse, "Allow-Patch").findFirst().map(Header::getValue).get();
             // How are we testing patching an LDP-NR? Xdiff?
             fail("This test suite has not implemented LDP-NR patch testing.");
         }
@@ -796,11 +787,8 @@ public class WebACModes extends AbstractAuthzTest {
 
         createAclForResource(resourceUri, "user-read-append.ttl", this.username);
 
-        final Response getResponse = doHead(resourceUri, false);
-        final String description = getLinksOfRelType(getResponse, "describedby").map(Link::getUri)
-                .map(URI::toString)
-                .findFirst().orElse(null);
-        final boolean patchLDPNR = isOperationAllowed(getResponse, "PATCH");
+        final String description = getLdpNrDescription(resourceUri);
+        final boolean patchLDPNR = isOperationAllowed(resourceUri, "PATCH");
 
         if (description != null) {
             // perform PATCH which only adds.
@@ -822,7 +810,8 @@ public class WebACModes extends AbstractAuthzTest {
         }
 
         if (patchLDPNR) {
-            final String allowPatch = getHeaders(getResponse, "Allow-Patch").findFirst().map(Header::getValue).get();
+            final Response headResponse = doHead(resourceUri, false);
+            final String allowPatch = getHeaders(headResponse, "Allow-Patch").findFirst().map(Header::getValue).get();
             // How are we testing patching an LDP-NR? Xdiff?
             fail("This test suite has not implemented LDP-NR patch testing.");
         }
