@@ -71,11 +71,8 @@
       <class name="org.fcrepo.spec.testsuite.authz.WebACRepresentation"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACRdfSources"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACGeneral"/>
-
-      <!-- Below not yet implemented -->
-      <!--
+      <class name="org.fcrepo.spec.testsuite.authz.WebACDefaultACLs"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACCrossDomain"/>
-      -->
     </classes>
 
   </test>

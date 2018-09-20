@@ -22,8 +22,8 @@ import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
-import static org.testng.AssertJUnit.assertTrue;
 import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
+import static org.testng.AssertJUnit.assertTrue;
 
 import java.io.PrintStream;
 import java.io.StringReader;
