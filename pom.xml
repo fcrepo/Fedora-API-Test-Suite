@@ -33,6 +33,7 @@
     <license.plugin.version>2.11</license.plugin.version>
     <javax.xml.version>1.4.5</javax.xml.version>
     <wiremock.version>2.18.0</wiremock.version>
+    <yamlbeans.version>1.09</yamlbeans.version>
     <app.main.class>org.fcrepo.spec.testsuite.App</app.main.class>
   </properties>
 
@@ -256,6 +257,11 @@
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock</artifactId>
       <version>${wiremock.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.esotericsoftware.yamlbeans</groupId>
+      <artifactId>yamlbeans</artifactId>
+      <version>${yamlbeans.version}</version>
     </dependency>
 
 
