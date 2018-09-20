@@ -12,17 +12,57 @@ $ mvn install
 
 Running the test suite:
 ```
-$ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --baseurl http://localhost:8080/
+$ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:8080/
 ```
 
 ## Options
-* `baseurl` The repository base URL, e.g., `http://localhost:8080/rest/`
-* `user` (optional) The username to connect to the repository with
-* `password` (optional) The password to connect to the repository with
+* `rooturl` The repository base URL, e.g., `http://localhost:8080/rest/`
+* `admin-user` An user with admin access to the repository.
+* `admin-password` The admin user's password.
+* `user` The username to connect to the repository with
+* `password` The password to connect to the repository with
 * `testngxml` (optional) The custom testng.xml configuration ([documentation](http://testng.org/doc/documentation-main.html#testng-xml))
   * See example [testng.xml](https://github.com/fcrepo/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)
 * `requirements` (optional) The requirement-levels of test to be run: ALL|MUST|SHOULD|MAY
   * Multiple levels can be provided, separated by ','
+* `configFile` (optional) A yaml configuration file containing the configuration parameters. See distributed `config.yml.dist`
+* `configFileSitename` (optional) The above yaml file can contain multiple configurations, this chooses one. Defaults to "default"
+
+### Configuration file syntax
+The configuration file is Yaml and a simple structure. The first level groups a set of configuration parameters, these parameters are key value pairs with the keys being the above options.
+
+```
+default:
+  rooturl: http://localhost:8088/rest
+  admin-user: fedoraAdmin
+  admin-password: fedoraAdmin
+  user: testuser
+  password: testpass
+```
+
+An example with multiple configurations looks like:
+
+```
+default:
+  rooturl: http://localhost:8088/rest
+  admin-user: fedoraAdmin
+  admin-password: fedoraAdmin
+  user: testuser
+  password: testpass
+othersite:
+  rooturl: http://secondserver:8080/fcrepo/rest
+  admin-user: totalBoss
+  admin-password: totalBoss
+  user: otherperson
+  password: otherpassword
+```
+
+To use the "othersite" settings run:
+
+```
+java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar -c config.yml.dist -n othersite
+```
+
 
 ### Notes
 * Specific test methods may be invoked by using a custom testng.xml file (option: `testngxml`) with the addition of \<class>/\<methods> regular expression filters.
