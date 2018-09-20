@@ -94,7 +94,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     }
 
     /**
-     * 5.9-C - In the case that the controlled resource is uncontained and has no ACL, or that there is no ACL at any
+     * 5.9-B - In the case that the controlled resource is uncontained and has no ACL, or that there is no ACL at any
      * point in the containment hierarchy of the controlled resource, then the server must supply a default ACL.
      *
      * @param uri of base container of Fedora server
@@ -102,7 +102,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     @Test(groups = {"SHOULD"})
     @Parameters({"param0"})
     public void serverSuppliedDefaultAcl(final String uri) {
-        setupTest("5.9-C", "In the case that the controlled resource is uncontained and has no ACL, or " +
+        setupTest("5.9-B", "In the case that the controlled resource is uncontained and has no ACL, or " +
                            "that there is no ACL at any point in the containment hierarchy of the " +
                            "controlled resource, then the server must supply a default ACL.",
                   "https://fedora.info/2018/06/25/spec/#inheritance", ps);
@@ -114,14 +114,14 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     }
 
     /**
-     * 5.9-D - Default ACL should be on the same server as the controlled resource.
+     * 5.9-C - Default ACL should be on the same server as the controlled resource.
      *
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
     @Parameters({"param0"})
     public void defaultAclOnSameServer(final String uri) {
-        setupTest("5.9-D", "The default ACL resource should be located in the same server (host and port) as the " +
+        setupTest("5.9-C", "The default ACL resource should be located in the same server (host and port) as the " +
                            "controlled resource.",
                   "https://fedora.info/2018/06/25/spec/#inheritance", ps);
         //GET the default acl and verify that it is on the same server as the root uri.
