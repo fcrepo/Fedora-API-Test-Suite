@@ -94,7 +94,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     }
 
     /**
-     * 5.9-B - In the case that the controlled resource is uncontained and has no ACL, or that there is no ACL at any
+     * 5.9-C - In the case that the controlled resource is uncontained and has no ACL, or that there is no ACL at any
      * point in the containment hierarchy of the controlled resource, then the server must supply a default ACL.
      *
      * @param uri of base container of Fedora server
