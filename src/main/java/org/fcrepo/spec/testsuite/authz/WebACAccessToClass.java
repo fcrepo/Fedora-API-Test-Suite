@@ -45,13 +45,13 @@ public class WebACAccessToClass extends AbstractAuthzTest {
     }
 
     /**
-     * 5.9-A - accessType MUST
+     * 5.8-A - accessToClass MUST give access.
      *
      * @param uri of base test container
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void accessTypeMustGiveAccess(final String uri) {
+    public void accessToClassMustGiveAccess(final String uri) {
         final TestInfo info = setupTest("5.8-A",
                                         "When an ACL includes an acl:accessToClass statement, it MUST give access to " +
                                         "all " +
@@ -80,13 +80,13 @@ public class WebACAccessToClass extends AbstractAuthzTest {
     }
 
     /**
-     * 5.9-B - accessType MAY use inference.
+     * 5.8-B - accessToClass MAY use inference.
      *
      * @param uri of base test container
      */
     @Test(groups = {"MAY"})
     @Parameters({"param1"})
-    public void accessTypeMayUseInference(final String uri) {
+    public void accessToClassMayUseInference(final String uri) {
         final TestInfo info = setupTest("5.8-B",
                                         " Implementations may use inference to infer types not present in a " +
                                         "resource's triples or rel=\"type\" links in the Link header",
