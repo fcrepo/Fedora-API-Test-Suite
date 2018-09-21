@@ -21,8 +21,10 @@ import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.Matchers.equalTo;
+import static org.testng.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.restassured.http.Header;
@@ -172,11 +174,28 @@ public class HttpHead extends AbstractTest {
                 h2.add(h);
             }
         }
-        // Compares if both lists have the same size
-        if (!h2.equals(h1)) {
-            Assert.fail();
-        }
+        // Ensures that lists are the same size
+        assertEquals(h1.size(), h2.size(), "Lists should be the same size: GET header count=" + h1.size() +
+                                                      ", HEAD header count =" + h2.size());
 
+        removeNonComparableHeaders(h1);
+        removeNonComparableHeaders(h2);
+
+        // Ensures that headers that should be compared are the same.
+        assertEquals(h1, h2, "Comparable headers should be the same between GET and HEAD");
+    }
+
+    private void removeNonComparableHeaders(final List<Header> headers) {
+        final List<String> nonComparableHeaders = Arrays.asList("Date", "Set-Cookie");
+        for (int i = headers.size() - 1; i > -1; i--) {
+            final Header header = headers.get(i);
+            for (String headerName : nonComparableHeaders) {
+                if (header.getName().equalsIgnoreCase(headerName)) {
+                    headers.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
 }
