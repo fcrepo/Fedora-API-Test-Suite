@@ -25,8 +25,8 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
   * See example [testng.xml](https://github.com/fcrepo/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)
 * `requirements` (optional) The requirement-levels of test to be run: ALL|MUST|SHOULD|MAY
   * Multiple levels can be provided, separated by ','
-* `configFile` (optional) A yaml configuration file containing the configuration parameters. See distributed `config.yml.dist`
-* `configFileSitename` (optional) The above yaml file can contain multiple configurations, this chooses one. Defaults to "default"
+* `config-file` (optional) A yaml configuration file containing the configuration parameters. See distributed `config.yml.dist`
+* `site-name` (optional) The above yaml file can contain multiple configurations, this chooses one. Defaults to "default"
 
 ### Configuration file syntax
 The configuration file is Yaml and a simple structure. The first level groups a set of configuration parameters, these parameters are key value pairs with the keys being the above options.
@@ -38,6 +38,9 @@ default:
   admin-password: fedoraAdmin
   user: testuser
   password: testpass
+  broker-url: tcp://127.0.0.1:61616
+  topic-name: fedora
+  queue-name:
 ```
 
 An example with multiple configurations looks like:
@@ -49,12 +52,18 @@ default:
   admin-password: fedoraAdmin
   user: testuser
   password: testpass
+  broker-url: tcp://127.0.0.1:61616
+  topic-name: fedora
+  queue-name:
 othersite:
   rooturl: http://secondserver:8080/fcrepo/rest
   admin-user: totalBoss
   admin-password: totalBoss
   user: otherperson
   password: otherpassword
+  broker-url: tcp://overtherainbow:61616
+  topic-name:
+  queue-name: fedora
 ```
 
 To use the "othersite" settings run:
