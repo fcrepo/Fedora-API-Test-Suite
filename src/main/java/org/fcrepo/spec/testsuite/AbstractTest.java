@@ -23,7 +23,7 @@ import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
-import static org.testng.AssertJUnit.assertTrue;
+import static org.testng.AssertJUnit.fail;
 
 import java.io.PrintStream;
 import java.io.StringReader;
@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import javax.ws.rs.core.Link;
@@ -549,8 +550,13 @@ public class AbstractTest {
 
     protected void confirmPresenceOfConstrainedByLink(final Response response) {
         final String contrainedByUri = "http://www.w3.org/ns/ldp#constrainedBy";
-        assertTrue("Response does not contain link of rel type = " + contrainedByUri,
-                   getLinksOfRelType(response, contrainedByUri).count() > 0);
+        final Optional<URI> link = getLinksOfRelTypeAsUris(response, contrainedByUri).findAny();
+        if (!link.isPresent()) {
+            fail("Response does not contain a link of rel type = " + contrainedByUri);
+        } else {
+            //verify the link is readable.
+            doGet(link.get().toString());
+        }
     }
 
     protected String joinLocation(final String uri, final String... subpaths) {
