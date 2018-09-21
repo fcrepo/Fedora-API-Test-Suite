@@ -23,6 +23,7 @@ import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
@@ -130,7 +131,7 @@ public class NotificationTest extends AbstractEventTest {
     }
 
     /**
-     * 6.2 Event Serialization
+     * 6.2-A Event Serialization
      *
      * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
@@ -139,11 +140,10 @@ public class NotificationTest extends AbstractEventTest {
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
     public void testEventSerialization(final String uri) throws JMSException, InterruptedException {
-        final TestInfo info = setupTest("6.2",
+        final TestInfo info = setupTest("6.2-A",
                 "The notification serialization MUST conform to the [activitystreams-core] specification, " +
                         "and each event MUST contain the IRI of the resource and the event type.",
-
-                "https://fedora.info/2018/06/25/spec/#notification-events", ps);
+                "https://fedora.info/2018/06/25/spec/#notification-serialization", ps);
         // Start with a clean JMS connection.
         resetConnection();
         // Get a new consumer.
@@ -177,6 +177,54 @@ public class NotificationTest extends AbstractEventTest {
                     // Parent container is only Updated
                     assertArrayEquals("Does not have correct event types.", new String[] { "Update" }, eventTypes);
                 }
+            }
+        }
+        consumer.close();
+
+        session.close();
+        connection.close();
+    }
+
+    /**
+     * 6.2-B Event Serialization
+     *
+     * @param uri the repository base uri
+     * @throws JMSException problems connecting to broker
+     * @throws InterruptedException interrupt the thread.sleep
+     */
+    @Test(groups = { "SHOULD" })
+    @Parameters({ "param1" })
+    public void testEventSerializationShould(final String uri) throws JMSException, InterruptedException {
+        final TestInfo info = setupTest("6.2-B",
+                "Wherever possible, data SHOULD be expressed using the [activitystreams-vocabulary]. ",
+                "https://fedora.info/2018/06/25/spec/#notification-serialization", ps);
+        // Start with a clean JMS connection.
+        resetConnection();
+        // Get a new consumer.
+        final MessageConsumer consumer = getConsumer();
+        // Assign a message bank to capture the messages.
+        consumer.setMessageListener(new MessageBank());
+        // Start listening to the broker.
+        connection.start();
+        // Do your actions.
+        createBasicContainer(uri, info);
+        Thread.sleep(500);
+        // Get the message bank back.
+        final MessageBank listener = (MessageBank) consumer.getMessageListener();
+        assertEquals("Not the correct number of events.", 2, listener.stream().count());
+        final List<Message> message = listener.stream().collect(toList());
+        for (final Message m : message) {
+            if (m instanceof TextMessage) {
+                final String body = ((TextMessage) m).getText();
+                final String[] eventTypes = jsonArrayToArray(JsonPath.read(body, "$.type"));
+                for (final String type : eventTypes) {
+                    try {
+                        ActivityStream.Activities.valueOf(type);
+                    } catch (final IllegalArgumentException e) {
+                        fail("Event type " + type + " is not from the Activity Streams vocabulary");
+                    }
+                }
+
             }
         }
         consumer.close();
