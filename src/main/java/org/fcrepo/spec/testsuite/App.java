@@ -17,9 +17,13 @@
  */
 package org.fcrepo.spec.testsuite;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,16 +34,32 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.jena.ext.com.google.common.base.Joiner;
 import org.testng.TestNG;
 import org.testng.xml.SuiteXmlParser;
 import org.testng.xml.XmlSuite;
+
+import com.esotericsoftware.yamlbeans.YamlReader;
 
 /**
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class App {
     private App() {
+    }
+
+    /*
+     * Map of configuration options and whether they are required.
+     */
+    private static Map<String, Boolean> configArgs = new HashMap<>();
+
+    static {
+        configArgs.put("rooturl", true);
+        configArgs.put("user", true);
+        configArgs.put("password", true);
+        configArgs.put("admin-user", true);
+        configArgs.put("admin-password", true);
+        configArgs.put("testngxml", false);
+        configArgs.put("requirements", false);
     }
 
     /**
@@ -50,19 +70,14 @@ public class App {
     public static void main(final String[] args) {
         final Options options = new Options();
         final Option rootUrl = new Option("b", "rooturl", true, "The root URL of the repository");
-        rootUrl.setRequired(true);
         options.addOption(rootUrl);
         final Option user = new Option("u", "user", true, "Username of user with basic user role");
-        user.setRequired(true);
         options.addOption(user);
         final Option password = new Option("p", "password", true, "Password of user with basic user role");
-        password.setRequired(true);
         options.addOption(password);
         final Option adminUser = new Option("a", "admin-user", true, "Username of user with admin role");
-        adminUser.setRequired(true);
         options.addOption(adminUser);
         final Option adminPassword = new Option("s", "admin-password", true, "Password of user with admin role");
-        adminPassword.setRequired(true);
         options.addOption(adminPassword);
 
         final Option testngxml = new Option("x", "testngxml", true, "TestNG XML file");
@@ -71,8 +86,15 @@ public class App {
         final Option reqs = new Option("r", "requirements", true, "Requirement levels. One or more of the following, " +
                                                                   "separated by ',': [ALL|MUST|SHOULD|MAY]");
         reqs.setRequired(false);
-        reqs.setValueSeparator(',');
         options.addOption(reqs);
+
+        final Option configFile = new Option("c", "configFile", true, "Configuration file of test parameters.");
+        configFile.setRequired(false);
+        options.addOption(configFile);
+        final Option configFileSite = new Option("n", "configFileSitename", true,
+                "Site name from configuration file (defaults to \"default\")");
+        configFileSite.setRequired(false);
+        options.addOption(configFileSite);
 
         final CommandLineParser parser = new BasicParser();
         final HelpFormatter formatter = new HelpFormatter();
@@ -86,54 +108,120 @@ public class App {
             return;
         }
 
-        final String inputUrl = cmd.getOptionValue("rooturl");
-        final String inputUser = cmd.getOptionValue("user") == null ? "" : cmd.getOptionValue("user");
-        final String inputPassword = cmd.getOptionValue("password") == null ? "" : cmd.getOptionValue("password");
-        final String inputAdminUser = cmd.getOptionValue("admin-user") == null ? "" : cmd.getOptionValue("admin-user");
-        final String inputAdminPassword =
-            cmd.getOptionValue("admin-password") == null ? "" : cmd.getOptionValue("admin-password");
+        Map<String, String> params = new HashMap<>();
+        if (cmd.hasOption("configFile")) {
+            final File configurationFile = new File(cmd.getOptionValue("configFile"));
+            if (configurationFile.exists()) {
+                final String sitename = cmd.getOptionValue("configFileSitename") == null ? "default" : cmd
+                        .getOptionValue("configFileSitename");
+                params = retrieveConfig(configurationFile, sitename);
+            }
+        }
 
-        final String inputXml = cmd.getOptionValue("testngxml");
-        final String[] requirements = cmd.getOptionValues("requirements");
+        for (final String opt : configArgs.keySet()) {
+            // Allow command line overriding of config file arguments
+            if (cmd.getOptionValue(opt) != null) {
+                params.put(opt, cmd.getOptionValue(opt));
+            }
+            if (!params.containsKey(opt)) {
+                if (configArgs.get(opt)) {
+                    throw new RuntimeException("Argument \"" + opt + "\" is required");
+                }
+                // Fill in missing parts with blanks
+                params.put(opt, "");
+            }
+        }
 
         //Create the default container
-        final Map<String, String> params = new HashMap<>();
-        params.put("param0", inputUrl);
-        params.put("param1", TestSuiteGlobals.containerTestSuite(inputUrl, inputAdminUser, inputAdminPassword));
-        params.put("param2", inputAdminUser);
-        params.put("param3", inputAdminPassword);
-        params.put("param4", inputUser);
-        params.put("param5", inputPassword);
+        final Map<String, String> testParams = new HashMap<>();
+        testParams.put("param0", params.get("rooturl"));
+        testParams.put("param1", TestSuiteGlobals.containerTestSuite(params.get("rooturl"), params.get(
+                "admin-user"), params.get("admin-password")));
+        testParams.put("param2", params.get("admin-user"));
+        testParams.put("param3", params.get("admin-password"));
+        testParams.put("param4", params.get("user"));
+        testParams.put("param5", params.get("password"));
 
         InputStream inputStream = null;
-        if (inputXml == null) {
+        if (params.get("testngxml").toString().isEmpty()) {
             inputStream = ClassLoader.getSystemResourceAsStream("testng.xml");
         } else {
             try {
-                inputStream = new FileInputStream(inputXml);
+                inputStream = new FileInputStream(params.get("testngxml").toString());
             } catch (final FileNotFoundException e) {
-                System.err.println("Unable to open '" + inputXml + "'." + e.getMessage());
+                System.err.println("Unable to open '" + params.get("testngxml").toString() + "'." + e.getMessage());
                 System.exit(1);
             }
         }
 
-        final String testFilename = inputXml == null ? "Default testng.xml" : inputXml;
+        final String testFilename = params.get("testngxml").toString().isEmpty() ? "Default testng.xml" : params.get(
+                "testngxml").toString();
         final SuiteXmlParser xmlParser = new SuiteXmlParser();
         final XmlSuite xmlSuite = xmlParser.parse(testFilename, inputStream, true);
-        xmlSuite.setParameters(params);
+        xmlSuite.setParameters(testParams);
 
         final TestNG testng = new TestNG();
         testng.setCommandLineSuite(xmlSuite);
 
         // Set requirement-level groups to be run
-        if (requirements != null && requirements.length > 0) {
-            testng.setGroups(Joiner.on(',').join(requirements).toLowerCase());
+        if (!params.get("requirements").isEmpty()) {
+            testng.setGroups(params.get("requirements").toLowerCase());
         }
 
         try {
             testng.run();
         } finally {
             TestSuiteGlobals.cleanupTestResources();
+        }
+    }
+
+    /**
+     * This method parses the provided configFile into its equivalent command-line args
+     *
+     * @param configFile containing config args
+     * @param siteName the site name from the config file to use
+     * @return Array of args
+     */
+    @SuppressWarnings("unchecked")
+    protected static Map<String, String> retrieveConfig(final File configFile, final String siteName) {
+        if (!configFile.exists()) {
+            printHelp("Configuration file does not exist: " + configFile);
+        }
+        try {
+            final YamlReader reader = new YamlReader(new FileReader(configFile));
+            final Map<String, Map<String, String>> config = (Map<String, Map<String, String>>) reader.read();
+            if (config.containsKey(siteName)) {
+                return config.get(siteName);
+            } else {
+                throw new RuntimeException("Unable to find site \"" + siteName + "\" in configuration file.");
+            }
+        } catch (final IOException e) {
+            throw new RuntimeException("Unable to read configuration file due to: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Print help/usage information
+     *
+     * @param message the message or null for none
+     */
+    private static void printHelp(final String message) {
+        final HelpFormatter formatter = new HelpFormatter();
+        final PrintWriter writer = new PrintWriter(System.out);
+        if (message != null) {
+            writer.println("\n-----------------------\n" + message + "\n-----------------------\n");
+        }
+
+        writer.println("Running Fedora API Test Suite from command line arguments");
+        // formatter.printHelp(writer, 80, "java -jar testSuite-shaded.jar", "", options, 4, 4, "", true);
+
+        writer.println("\n");
+        writer.flush();
+
+        if (message != null) {
+            throw new RuntimeException(message);
+        } else {
+            throw new RuntimeException();
         }
     }
 }
