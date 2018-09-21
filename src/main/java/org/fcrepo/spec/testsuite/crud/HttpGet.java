@@ -183,15 +183,15 @@ public class HttpGet extends AbstractTest {
     }
 
     /**
-     * 3.2.3-A
+     * 3.2.3-A-1
      *
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigest(final String uri) {
-        final TestInfo info = setupTest("3.2.3-A",
-                                        "Testing for supported digest "
+    public void respondWantDigestMd5(final String uri) {
+        final TestInfo info = setupTest("3.2.3-A-1",
+                                        "Testing for supported digest: md5 . "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
@@ -205,7 +205,62 @@ public class HttpGet extends AbstractTest {
         final String locationHeader = getLocation(resource);
         doGet(locationHeader, new Header("Want-Digest", checksum))
                 .then()
+                .statusCode(200)
                 .header(DIGEST, containsString("md5"));
+    }
+
+    /**
+     * 3.2.3-A-2
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void respondWantDigestSha1(final String uri) {
+        final TestInfo info = setupTest("3.2.3-A-2",
+                                        "Testing for supported digest: sha . "
+                                        + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+                                        + "header defined in [RFC3230]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
+        final String checksum = "sha";
+
+        final Headers headers = new Headers(
+            new Header(CONTENT_DISPOSITION, "attachment; filename=\"respondwantdigest.txt\""),
+            new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
+        final String locationHeader = getLocation(resource);
+        doGet(locationHeader, new Header("Want-Digest", checksum))
+            .then()
+            .statusCode(200)
+            .header(DIGEST, containsString(checksum));
+    }
+
+    /**
+     * 3.2.3-A-3
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void respondWantDigestSha256(final String uri) {
+        final TestInfo info = setupTest("3.2.3-A-3",
+                                        "Testing for supported digest: sha-256 . "
+                                        + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+                                        + "header defined in [RFC3230]",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
+        final String checksum = "sha-256";
+
+        final Headers headers = new Headers(
+            new Header(CONTENT_DISPOSITION, "attachment; filename=\"respondwantdigest.txt\""),
+            new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
+        final String locationHeader = getLocation(resource);
+        doGet(locationHeader, new Header("Want-Digest", checksum))
+            .then()
+            .statusCode(200)
+            .header(DIGEST, containsString(checksum));
     }
 
     /**
@@ -312,7 +367,7 @@ public class HttpGet extends AbstractTest {
      */
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
-    public void respondWantDigestNonSupported(final String uri) {
+    public void respondWantDigestNonSupportedWithSupported(final String uri) {
         final String checksum = "md5,abc";
 
         final TestInfo info = setupTest("3.2.3-E",
@@ -329,6 +384,32 @@ public class HttpGet extends AbstractTest {
         doGet(locationHeader, new Header("Want-Digest", checksum))
                 .then()
                 .header(DIGEST, containsString("md5"));
+    }
+
+    /**
+     * 3.2.3-F
+     *
+     * @param uri The repository root URI
+     */
+    @Test(groups = {"MUST"})
+    @Parameters({"param1"})
+    public void respondWantDigestNonSupported(final String uri) {
+        final String checksum = "abc";
+
+        final TestInfo info = setupTest("3.2.3-F",
+                                        "Testing that unsupported digest is rejected with a 400."
+                                        + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
+                                        + "header defined in [RFC3230].",
+                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        ps);
+        final Headers headers = new Headers(
+            new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestNonSupported.txt\""),
+            new Header(SLUG, info.getId()));
+        final Response resource = doPost(uri, headers, "TestString");
+        final String locationHeader = getLocation(resource);
+        doGetUnverified(locationHeader, new Header("Want-Digest", checksum))
+            .then()
+            .statusCode(400);
     }
 
 }
