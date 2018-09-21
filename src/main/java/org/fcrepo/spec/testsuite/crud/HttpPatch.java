@@ -17,24 +17,13 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.apache.jena.rdf.model.ModelFactory.createDefaultModel;
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.testng.AssertJUnit.fail;
-
-import java.util.Iterator;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-import org.apache.jena.graph.Node;
-import org.apache.jena.graph.Triple;
-import org.apache.jena.query.Dataset;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.sparql.core.DatasetGraph;
-import org.apache.jena.sparql.core.DatasetImpl;
-import org.apache.jena.sparql.core.Quad;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -128,50 +117,20 @@ public class HttpPatch extends AbstractTest {
                                         + "4.2.4.1), the server must fail the request by responding with a 4xx range"
                                         + " status code (e.g. 409 Conflict).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
-
-        //This test assumes that creating an empty container will result in RDF that contains at least one
-        // server-managed triple.
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
-
-        //parse the resource's body
-        final Model model = createDefaultModel();
-        model.read(doGet(resourceUri, new Header("Accept", "text/turtle")).getBody().asInputStream(), "",
-                   "text/turtle");
-        final Dataset dataset = new DatasetImpl(model);
-        final DatasetGraph graph = dataset.asDatasetGraph();
-        final Iterator<Quad> it = graph.find();
-        boolean atLeastOneUpdateFailed = false;
-
-        while (it.hasNext()) {
-            //for each triple
-            final Triple oldValue = it.next().asTriple();
-            final String newObject = "newValue:" + System.currentTimeMillis();
-            //attempt to update the resource with that triple
-            if (patchReturned4xx(resourceUri, oldValue.getPredicate().getURI(),
-                                 newObject)) {
-                atLeastOneUpdateFailed = true;
-            }
-        }
-        //if no 409 is received for any modified triple,  the test should fail.
-        if (!atLeastOneUpdateFailed) {
-            fail("No 4xx's returned on PATCH.");
-        }
+        patchWithDisallowedStatement(resourceUri, "\"a literal\"").then().statusCode(clientErrorRange());
     }
 
-    private Response patchWithNewValue(final String resource, final String predicateUri, final String newObject) {
+    private Response patchWithDisallowedStatement(final String resource, final String invalidValue) {
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         final StringBuilder body = new StringBuilder();
         body.append("INSERT { ");
-        body.append("<> <" + predicateUri + "> ");
-        body.append("\"" + newObject + "\" } WHERE {}");
-
+        body.append("<> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> " + invalidValue);
+        body.append("} WHERE {}");
         return doPatchUnverified(resource, headers, body.toString());
     }
 
-    private boolean patchReturned4xx(final String resource, final String predicateUri, final String newObject) {
-        return clientErrorRange().matches(patchWithNewValue(resource, predicateUri, newObject).statusCode());
-    }
 
     /**
      * 3.7-D
@@ -186,38 +145,11 @@ public class HttpPatch extends AbstractTest {
                                         + " about which statements could not be persisted."
                                         + " ([LDP] 4.2.4.4 should becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
-
-        //This test assumes that creating an empty container will result in RDF that contains at least one
-        // server-managed triple.
-
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
-
-        final Model model = createDefaultModel();
-        model.read(doGet(resourceUri, new Header("Accept", "text/turtle")).getBody().asInputStream(), "",
-                   "text/turtle");
-        final Dataset dataset = new DatasetImpl(model);
-        final DatasetGraph graph = dataset.asDatasetGraph();
-        final Iterator<Quad> it = graph.find();
-        boolean atLeastOneUpdateFailed = false;
-
-        while (it.hasNext()) {
-            //for each triple
-            final Triple oldValue = it.next().asTriple();
-            final String newObject = "newValue:" + System.currentTimeMillis();
-            final Node predicate = oldValue.getPredicate();
-            final Response patchResponse = patchWithNewValue(resourceUri, predicate.getURI(), newObject);
-            //attempt to update the resource with that triple
-            if (clientErrorRange().matches(patchResponse.statusCode())) {
-                //check that response contains predicate info.
-                patchResponse.then().body(containsString(predicate.getURI()));
-                atLeastOneUpdateFailed = true;
-            }
-        }
-        //if no 4xx is received for any modified triple,  the test should fail.
-        if (!atLeastOneUpdateFailed) {
-            fail("No 4xx's returned on PATCH.");
-        }
+        final String invalidValue = "\"a literal\"";
+        patchWithDisallowedStatement(resourceUri, invalidValue).then().statusCode(clientErrorRange())
+                                                               .body(containsString(invalidValue));
     }
 
     /**
@@ -235,38 +167,11 @@ public class HttpPatch extends AbstractTest {
                                         + "response header per [LDP] 4.2.1.6.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
 
-        //This test assumes that creating an empty container will result in RDF that contains at least one
-        // server-managed triple.
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
-
-        //parse the resource's body
-        final Model model = createDefaultModel();
-        model.read(doGet(resourceUri, new Header("Accept", "text/turtle")).getBody().asInputStream(), "",
-                   "text/turtle");
-        final Dataset dataset = new DatasetImpl(model);
-        final DatasetGraph graph = dataset.asDatasetGraph();
-        final Iterator<Quad> it = graph.find();
-        boolean atLeastOneUpdateFailed = false;
-
-        while (it.hasNext()) {
-            //for each triple
-            final Triple oldValue = it.next().asTriple();
-            final String newObject = "newValue:" + System.currentTimeMillis();
-            final Node predicate = oldValue.getPredicate();
-            final Response patchResponse = patchWithNewValue(resourceUri, predicate.getURI(), newObject);
-            //attempt to update the resource with that triple
-            if (clientErrorRange().matches(patchResponse.statusCode())) {
-                confirmPresenceOfConstrainedByLink(patchResponse);
-                atLeastOneUpdateFailed = true;
-            }
-        }
-
-        //if no 4xx is received for any modified triple,  the test should fail.
-        if (!atLeastOneUpdateFailed) {
-            fail("No 4xx's returned on PATCH.");
-        }
-
+        final Response patchResponse = patchWithDisallowedStatement(resourceUri,  "\"a literal\"");
+        patchResponse.then().statusCode(clientErrorRange());
+        confirmPresenceOfConstrainedByLink(patchResponse);
     }
 
     /**
