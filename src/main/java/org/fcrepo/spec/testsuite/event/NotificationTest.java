@@ -17,15 +17,15 @@
  */
 package org.fcrepo.spec.testsuite.event;
 
+import static org.awaitility.Awaitility.await;
+import static org.awaitility.Duration.TEN_SECONDS;
 import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static java.util.stream.Collectors.toList;
-
 import java.util.List;
 
 import javax.jms.JMSException;
@@ -96,10 +96,11 @@ public class NotificationTest extends AbstractEventTest {
         // Do your actions.
         final Response response = createBasicContainer(uri, info);
         final String location = getLocation(response);
-        Thread.sleep(500);
         // Get the message bank back.
         final MessageBank listener = (MessageBank) consumer.getMessageListener();
-        assertEquals("Not the correct number of events for POST.", 2, listener.stream().count());
+        // POST emits 2 events
+        await().atMost(TEN_SECONDS).until(() -> listener.stream()
+                .count() == 2);
 
         // empty the message bank
         listener.clear();
@@ -109,20 +110,23 @@ public class NotificationTest extends AbstractEventTest {
 
         doPut(location, new Headers(new Header("Content-type", "text/turtle"), new Header("Prefer",
                 "handling=lenient; received=minimal")), body);
-        Thread.sleep(500);
-        assertEquals("Not the correct number of events for PUT.", 1, listener.stream().count());
+        // PUT emits 1 event
+        await().atMost(TEN_SECONDS).until(() -> listener.stream()
+                .count() == 1);
 
         listener.clear();
         doPatch(location, new Headers(new Header("Content-type", "application/sparql-update")),
                 "prefix dc: <http://purl.org/dc/elements/1.1/> INSERT { <> dc:title \"This has been updated\"} " +
                         "WHERE {}");
-        Thread.sleep(500);
-        assertEquals("Not the correct number of events for PATCH.", 1, listener.stream().count());
+        // PATCH emits one event
+        await().atMost(TEN_SECONDS).until(() -> listener.stream()
+                .count() == 1);
 
         listener.clear();
         doDelete(location);
-        Thread.sleep(500);
-        assertEquals("Not the correct number of events for DELETE.", 2, listener.stream().count());
+        // Delete emits 2 events.
+        await().atMost(TEN_SECONDS).until(() -> listener.stream()
+                .count() == 2);
 
         consumer.close();
 
@@ -155,10 +159,11 @@ public class NotificationTest extends AbstractEventTest {
         // Do your actions.
         final Response response = createBasicContainer(uri, info);
         final String location = getLocation(response);
-        Thread.sleep(500);
         // Get the message bank back.
         final MessageBank listener = (MessageBank) consumer.getMessageListener();
-        assertEquals("Not the correct number of events.", 2, listener.stream().count());
+        await().atMost(TEN_SECONDS).until(() -> listener.stream()
+                .count() == 2);
+
         final List<Message> message = listener.stream().collect(toList());
         for (final Message m : message) {
             if (m instanceof TextMessage) {
@@ -204,14 +209,15 @@ public class NotificationTest extends AbstractEventTest {
         final MessageConsumer consumer = getConsumer();
         // Assign a message bank to capture the messages.
         consumer.setMessageListener(new MessageBank());
+        // Get the message bank back.
+        final MessageBank listener = (MessageBank) consumer.getMessageListener();
         // Start listening to the broker.
         connection.start();
         // Do your actions.
         createBasicContainer(uri, info);
-        Thread.sleep(500);
-        // Get the message bank back.
-        final MessageBank listener = (MessageBank) consumer.getMessageListener();
-        assertEquals("Not the correct number of events.", 2, listener.stream().count());
+        await().atMost(TEN_SECONDS).until(() -> listener.stream()
+                .count() == 2);
+
         final List<Message> message = listener.stream().collect(toList());
         for (final Message m : message) {
             if (m instanceof TextMessage) {
