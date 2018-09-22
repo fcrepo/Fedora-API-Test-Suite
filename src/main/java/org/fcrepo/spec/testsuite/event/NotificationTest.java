@@ -39,7 +39,6 @@ import org.fcrepo.spec.testsuite.TestInfo;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
@@ -68,7 +67,9 @@ public class NotificationTest extends AbstractEventTest {
     private static final Resource ldpBasicContainer = ResourceFactory.createResource(LDP_NAMESPACE +
             "BasicContainer");
 
-    private static final Property AStype = ResourceFactory.createProperty(ACTIVITY_STREAMS_NS, "Type");
+    private static final RDFNode ASupdate = ResourceFactory.createResource(ACTIVITY_STREAMS_NS + "Update");
+
+    private static final RDFNode AScreate = ResourceFactory.createResource(ACTIVITY_STREAMS_NS + "Create");
     /**
      * Default constructor.
      *
@@ -194,12 +195,17 @@ public class NotificationTest extends AbstractEventTest {
                 model.read(is, location, "JSON-LD");
                 if (model.contains(locResource, RdfType)) {
                     // This is the resource we created.
-                    assertTrue("Event doesn't have container type", model.contains(locResource, RdfType,
-                            ldpBasicContainer));
+                    assertTrue("Event doesn't have the IRI of the resource", model.contains(locResource, null,
+                            (RDFNode) null));
+                    assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
+                            AScreate));
+                    assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
+                            ASupdate));
+                } else {
+                    // Parent node is updated
+                    assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
+                            ASupdate));
                 }
-
-                assertTrue("Event doesn't have an Activity Stream type", model.contains(null, AStype,
-                        (RDFNode) null));
             }
         }
         consumer.close();
@@ -252,14 +258,9 @@ public class NotificationTest extends AbstractEventTest {
                     // This is the resource we created.
                     assertTrue("Event doesn't have container type",
                             model.contains(locResource, RdfType, ldpBasicContainer));
-                }
-                assertTrue("Event doesn't have an Activity Stream type",
-                        model.contains(null, AStype, (RDFNode) null));
-                final NodeIterator iter = model.listObjectsOfProperty(AStype);
-                while (iter.hasNext()) {
-                    // There is an AS Type, verify its from the vocabulary.
-                    final Resource object = iter.next().asResource();
-                    ActivityStream.Activities.valueOf(object.getLocalName());
+
+                    // TODO: Need a test for the AS:actor
+                    // TODO: Need a test for the ldp:inbox if it exists
                 }
             }
         }
