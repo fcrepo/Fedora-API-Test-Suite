@@ -56,6 +56,7 @@ public class AbstractEventTest extends AbstractTest {
 
     private final String topicName;
 
+    protected static final String ACTIVITY_STREAMS_NS = "https://www.w3.org/ns/activitystreams#";
     /**
      * Constructor
      *

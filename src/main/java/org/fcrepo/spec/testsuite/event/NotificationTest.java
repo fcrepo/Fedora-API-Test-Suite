@@ -22,10 +22,12 @@ import static org.awaitility.Duration.TEN_SECONDS;
 import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static java.util.stream.Collectors.toList;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.jms.JMSException;
@@ -35,10 +37,16 @@ import javax.jms.TextMessage;
 
 import org.fcrepo.spec.testsuite.TestInfo;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import com.jayway.jsonpath.JsonPath;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -52,6 +60,15 @@ import io.restassured.response.Response;
  */
 public class NotificationTest extends AbstractEventTest {
 
+    private static final String LDP_NAMESPACE = "http://www.w3.org/ns/ldp#";
+
+    private static final Property RdfType = ResourceFactory.createProperty(
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+
+    private static final Resource ldpBasicContainer = ResourceFactory.createResource(LDP_NAMESPACE +
+            "BasicContainer");
+
+    private static final Property AStype = ResourceFactory.createProperty(ACTIVITY_STREAMS_NS, "Type");
     /**
      * Default constructor.
      *
@@ -140,10 +157,12 @@ public class NotificationTest extends AbstractEventTest {
      * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
      * @throws InterruptedException interrupt the thread.sleep
+     * @throws UnsupportedEncodingException
      */
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
-    public void testEventSerialization(final String uri) throws JMSException, InterruptedException {
+    public void testEventSerialization(final String uri) throws JMSException, InterruptedException,
+            UnsupportedEncodingException {
         final TestInfo info = setupTest("6.2-A",
                 "The notification serialization MUST conform to the [activitystreams-core] specification, " +
                         "and each event MUST contain the IRI of the resource and the event type.",
@@ -164,24 +183,23 @@ public class NotificationTest extends AbstractEventTest {
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
                 .count() == 2);
 
+        final Resource locResource = ResourceFactory.createResource(location);
         final List<Message> message = listener.stream().collect(toList());
         for (final Message m : message) {
             if (m instanceof TextMessage) {
                 final String body = ((TextMessage) m).getText();
-                final List<String> context = jsonArrayToList(JsonPath.read(body, "$.@context"));
-                assertTrue("Doesn't have activity streams context", context.contains(
-                        "https://www.w3.org/ns/activitystreams"));
-                final String[] eventTypes = jsonArrayToArray(JsonPath.read(body, "$.type"));
-                final String objectId = JsonPath.read(body, "$.object.id");
-                final List<String> objectType = jsonArrayToList(JsonPath.read(body, "$.object.type"));
-                if (objectId.equals(location)) {
-                    assertArrayEquals("Does not have correct event types.", new String[] { "Update", "Create" },
-                            eventTypes);
-                    assertTrue("It is a Container", objectType.contains("http://www.w3.org/ns/ldp#Container"));
-                } else {
-                    // Parent container is only Updated
-                    assertArrayEquals("Does not have correct event types.", new String[] { "Update" }, eventTypes);
+                final InputStream is = new ByteArrayInputStream(body.getBytes("UTF-8"));
+                final Model model = ModelFactory.createDefaultModel();
+
+                model.read(is, location, "JSON-LD");
+                if (model.contains(locResource, RdfType)) {
+                    // This is the resource we created.
+                    assertTrue("Event doesn't have container type", model.contains(locResource, RdfType,
+                            ldpBasicContainer));
                 }
+
+                assertTrue("Event doesn't have an Activity Stream type", model.contains(null, AStype,
+                        (RDFNode) null));
             }
         }
         consumer.close();
@@ -196,10 +214,12 @@ public class NotificationTest extends AbstractEventTest {
      * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
      * @throws InterruptedException interrupt the thread.sleep
+     * @throws UnsupportedEncodingException getBytes encoding fails
      */
     @Test(groups = { "SHOULD" })
     @Parameters({ "param1" })
-    public void testEventSerializationShould(final String uri) throws JMSException, InterruptedException {
+    public void testEventSerializationShould(final String uri) throws JMSException, InterruptedException,
+            UnsupportedEncodingException {
         final TestInfo info = setupTest("6.2-B",
                 "Wherever possible, data SHOULD be expressed using the [activitystreams-vocabulary]. ",
                 "https://fedora.info/2018/06/25/spec/#notification-serialization", ps);
@@ -214,23 +234,33 @@ public class NotificationTest extends AbstractEventTest {
         // Start listening to the broker.
         connection.start();
         // Do your actions.
-        createBasicContainer(uri, info);
+        final Response resp = createBasicContainer(uri, info);
+        final String location = getLocation(resp);
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
                 .count() == 2);
 
+        final Resource locResource = ResourceFactory.createResource(location);
         final List<Message> message = listener.stream().collect(toList());
         for (final Message m : message) {
             if (m instanceof TextMessage) {
                 final String body = ((TextMessage) m).getText();
-                final String[] eventTypes = jsonArrayToArray(JsonPath.read(body, "$.type"));
-                for (final String type : eventTypes) {
-                    try {
-                        ActivityStream.Activities.valueOf(type);
-                    } catch (final IllegalArgumentException e) {
-                        fail("Event type " + type + " is not from the Activity Streams vocabulary");
-                    }
-                }
+                final InputStream is = new ByteArrayInputStream(body.getBytes("UTF-8"));
+                final Model model = ModelFactory.createDefaultModel();
 
+                model.read(is, location, "JSON-LD");
+                if (model.contains(locResource, RdfType)) {
+                    // This is the resource we created.
+                    assertTrue("Event doesn't have container type",
+                            model.contains(locResource, RdfType, ldpBasicContainer));
+                }
+                assertTrue("Event doesn't have an Activity Stream type",
+                        model.contains(null, AStype, (RDFNode) null));
+                final NodeIterator iter = model.listObjectsOfProperty(AStype);
+                while (iter.hasNext()) {
+                    // There is an AS Type, verify its from the vocabulary.
+                    final Resource object = iter.next().asResource();
+                    ActivityStream.Activities.valueOf(object.getLocalName());
+                }
             }
         }
         consumer.close();
