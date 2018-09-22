@@ -21,9 +21,6 @@ import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -33,8 +30,6 @@ import javax.jms.Session;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Parameters;
-
-import net.minidev.json.JSONArray;
 
 /**
  * Abstract Event testing class.
@@ -56,7 +51,6 @@ public class AbstractEventTest extends AbstractTest {
 
     private final String topicName;
 
-    protected static final String ACTIVITY_STREAMS_NS = "https://www.w3.org/ns/activitystreams#";
     /**
      * Constructor
      *
@@ -106,33 +100,6 @@ public class AbstractEventTest extends AbstractTest {
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
     }
 
-    /**
-     * Convert a JSONArray to a String array
-     *
-     * @param array the JSONArray
-     * @return the string array
-     */
-    protected static String[] jsonArrayToArray(final JSONArray array) {
-        final String[] list = new String[array.size()];
-        for (int count = 0; count < array.size(); count += 1) {
-            list[count] = array.get(count).toString();
-        }
-        return list;
-    }
-
-    /**
-     * Convert a JSONArray to a list
-     *
-     * @param array the JSONArray
-     * @return a list of strings
-     */
-    protected static List<String> jsonArrayToList(final JSONArray array) {
-        final List<String> list = new ArrayList<>();
-        for (final Object o : array) {
-            list.add(o.toString());
-        }
-        return list;
-    }
     /**
      * Close JMS connections.
      *

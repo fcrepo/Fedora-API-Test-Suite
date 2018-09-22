@@ -33,7 +33,6 @@
     <fcrepo-build-tools.version>4.4.2</fcrepo-build-tools.version>
     <project.copyrightYear>2017</project.copyrightYear>
     <license.plugin.version>2.11</license.plugin.version>
-    <jsonpath.version>2.4.0</jsonpath.version>
     <javax.xml.version>1.4.5</javax.xml.version>
     <javax.jms.version>2.0.1</javax.jms.version>
     <wiremock.version>2.18.0</wiremock.version>
@@ -276,11 +275,6 @@
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-all</artifactId>
       <version>${activemq.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.jayway.jsonpath</groupId>
-      <artifactId>json-path</artifactId>
-      <version>${jsonpath.version}</version>
     </dependency>
     <dependency>
       <groupId>org.awaitility</groupId>

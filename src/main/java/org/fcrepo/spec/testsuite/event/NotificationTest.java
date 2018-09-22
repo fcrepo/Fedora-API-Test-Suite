@@ -59,6 +59,8 @@ import io.restassured.response.Response;
  */
 public class NotificationTest extends AbstractEventTest {
 
+    private static final String ACTIVITY_STREAMS_NS = "https://www.w3.org/ns/activitystreams#";
+
     private static final String LDP_NAMESPACE = "http://www.w3.org/ns/ldp#";
 
     private static final Property RdfType = ResourceFactory.createProperty(
