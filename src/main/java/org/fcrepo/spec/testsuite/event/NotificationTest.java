@@ -23,15 +23,11 @@ import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
 import static org.junit.Assert.assertTrue;
-import static java.util.stream.Collectors.toList;
-
+import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-
 import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
 
@@ -159,13 +155,10 @@ public class NotificationTest extends AbstractEventTest {
      *
      * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
-     * @throws InterruptedException interrupt the thread.sleep
-     * @throws UnsupportedEncodingException
      */
     @Test(groups = { "MUST" })
     @Parameters({ "param1" })
-    public void testEventSerialization(final String uri) throws JMSException, InterruptedException,
-            UnsupportedEncodingException {
+    public void testEventSerialization(final String uri) throws JMSException {
         final TestInfo info = setupTest("6.2-A",
                 "The notification serialization MUST conform to the [activitystreams-core] specification, " +
                         "and each event MUST contain the IRI of the resource and the event type.",
@@ -187,29 +180,34 @@ public class NotificationTest extends AbstractEventTest {
                 .count() == 2);
 
         final Resource locResource = ResourceFactory.createResource(location);
-        final List<Message> message = listener.stream().collect(toList());
-        for (final Message m : message) {
+        listener.stream().forEach(m -> {
             if (m instanceof TextMessage) {
-                final String body = ((TextMessage) m).getText();
-                final InputStream is = new ByteArrayInputStream(body.getBytes("UTF-8"));
-                final Model model = ModelFactory.createDefaultModel();
+                try {
+                    final String body = ((TextMessage) m).getText();
+                    final InputStream is = new ByteArrayInputStream(body.getBytes("UTF-8"));
+                    final Model model = ModelFactory.createDefaultModel();
 
-                model.read(is, location, "JSON-LD");
-                if (model.contains(locResource, RdfType)) {
-                    // This is the resource we created.
-                    assertTrue("Event doesn't have the IRI of the resource", model.contains(locResource, null,
-                            (RDFNode) null));
-                    assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
-                            AScreate));
-                    assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
-                            ASupdate));
-                } else {
-                    // Parent node is updated
-                    assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
-                            ASupdate));
+                    model.read(is, location, "JSON-LD");
+                    if (model.contains(locResource, RdfType)) {
+                        // This is the resource we created.
+                        assertTrue("Event doesn't have the IRI of the resource", model.contains(locResource, null,
+                                (RDFNode) null));
+                        assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
+                                AScreate));
+                        assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
+                                ASupdate));
+                    } else {
+                        // Parent node is updated
+                        assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
+                                ASupdate));
+                    }
+                } catch (final JMSException e) {
+                    fail("Could not cast Message to TextMessage");
+                } catch (final UnsupportedEncodingException e) {
+                    fail("Could not get Message body with UTF-8 encoding");
                 }
             }
-        }
+        });
         consumer.close();
 
         session.close();
@@ -221,13 +219,10 @@ public class NotificationTest extends AbstractEventTest {
      *
      * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
-     * @throws InterruptedException interrupt the thread.sleep
-     * @throws UnsupportedEncodingException getBytes encoding fails
      */
     @Test(groups = { "SHOULD" })
     @Parameters({ "param1" })
-    public void testEventSerializationShould(final String uri) throws JMSException, InterruptedException,
-            UnsupportedEncodingException {
+    public void testEventSerializationShould(final String uri) throws JMSException {
         final TestInfo info = setupTest("6.2-B",
                 "Wherever possible, data SHOULD be expressed using the [activitystreams-vocabulary]. ",
                 "https://fedora.info/2018/06/25/spec/#notification-serialization", ps);
@@ -248,24 +243,29 @@ public class NotificationTest extends AbstractEventTest {
                 .count() == 2);
 
         final Resource locResource = ResourceFactory.createResource(location);
-        final List<Message> message = listener.stream().collect(toList());
-        for (final Message m : message) {
+        listener.stream().forEach(m -> {
             if (m instanceof TextMessage) {
-                final String body = ((TextMessage) m).getText();
-                final InputStream is = new ByteArrayInputStream(body.getBytes("UTF-8"));
-                final Model model = ModelFactory.createDefaultModel();
+                try {
+                    final String body = ((TextMessage) m).getText();
+                    final InputStream is = new ByteArrayInputStream(body.getBytes("UTF-8"));
+                    final Model model = ModelFactory.createDefaultModel();
 
-                model.read(is, location, "JSON-LD");
-                if (model.contains(locResource, RdfType)) {
-                    // This is the resource we created.
-                    assertTrue("Event doesn't have container type",
-                            model.contains(locResource, RdfType, ldpBasicContainer));
+                    model.read(is, location, "JSON-LD");
+                    if (model.contains(locResource, RdfType)) {
+                        // This is the resource we created.
+                        assertTrue("Event doesn't have container type",
+                                model.contains(locResource, RdfType, ldpBasicContainer));
 
-                    // TODO: Need a test for the AS:actor
-                    // TODO: Need a test for the ldp:inbox if it exists
+                        // TODO: Need a test for the AS:actor
+                        // TODO: Need a test for the ldp:inbox if it exists
+                    }
+                } catch (final JMSException e) {
+                    fail("Could not cast Message to TextMessage");
+                } catch (final UnsupportedEncodingException e) {
+                    fail("Could not get Message body with UTF-8 encoding");
                 }
             }
-        }
+        });
         consumer.close();
 
         session.close();
