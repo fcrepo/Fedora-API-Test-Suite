@@ -78,9 +78,6 @@ public class NotificationTest extends AbstractEventTest {
     private static final List<Resource> containerTypes = Arrays.asList(ldpBasicContainer, ldpDirectContainer,
             ldpIndirectContainer);
 
-    private static final RDFNode ASupdate = ResourceFactory.createResource(ACTIVITY_STREAMS_NS + "Update");
-
-
     /**
      * Default constructor.
      *
