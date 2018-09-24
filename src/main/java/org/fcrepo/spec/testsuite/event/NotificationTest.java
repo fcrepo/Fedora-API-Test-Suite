@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
@@ -192,6 +193,7 @@ public class NotificationTest extends AbstractEventTest {
                 .count() == 2);
 
         final Resource locResource = ResourceFactory.createResource(location);
+        final AtomicBoolean foundExpectedLocation = new AtomicBoolean(false);
         listener.stream().forEach(m -> {
             if (m instanceof TextMessage) {
                 try {
@@ -200,21 +202,21 @@ public class NotificationTest extends AbstractEventTest {
                     final Model model = ModelFactory.createDefaultModel();
 
                     model.read(is, location, "JSON-LD");
-                    if (model.contains(locResource, RdfType)) {
-                        // This is the resource we created.
-                        final StmtIterator iter = model.listStatements(null, RdfType, (RDFNode) null);
-                        assertTrue("Event has no rdf:types defined", iter.hasNext());
-
-                        final boolean has_AS_type = iter
-                                .filterKeep(s -> s.getObject().asResource().getNameSpace().equalsIgnoreCase(
-                                        ACTIVITY_STREAMS_NS))
-                                .hasNext();
-                        assertTrue("Event has at least one Activity Stream type", has_AS_type);
-                    } else {
-                        // Parent node is updated
-                        assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
-                                ASupdate));
+                    final StmtIterator iter = model.listStatements(null, RdfType, (RDFNode) null);
+                    if (model.contains(locResource, null)) {
+                        if (!foundExpectedLocation.get()) {
+                            foundExpectedLocation.set(true);
+                        }
+                        assertTrue("Event MUST have the IRI of the resource changed.", model.contains(locResource,
+                                null));
                     }
+                    assertTrue("Event has no rdf:types defined", iter.hasNext());
+
+                    final boolean has_AS_type = iter
+                            .filterKeep(s -> s.getObject().asResource().getNameSpace().equalsIgnoreCase(
+                                    ACTIVITY_STREAMS_NS))
+                            .hasNext();
+                    assertTrue("Event has at least one Activity Stream type", has_AS_type);
                 } catch (final JMSException e) {
                     fail("Could not cast Message to TextMessage");
                 } catch (final UnsupportedEncodingException e) {
@@ -223,6 +225,9 @@ public class NotificationTest extends AbstractEventTest {
             }
         });
         consumer.close();
+        if (!foundExpectedLocation.get()) {
+            fail("No events contained the expected location -- " + location);
+        }
 
         session.close();
         connection.close();
@@ -263,7 +268,7 @@ public class NotificationTest extends AbstractEventTest {
 
     /**
      * Creates a container with rdf:type "type" and checks the event for it.
-     * 
+     *
      * @param baseUri repository baseUri
      * @param type the ldp container type
      * @param listener the message listener
