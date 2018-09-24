@@ -27,6 +27,9 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.TextMessage;
@@ -39,7 +42,7 @@ import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-
+import org.apache.jena.rdf.model.StmtIterator;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -65,9 +68,18 @@ public class NotificationTest extends AbstractEventTest {
     private static final Resource ldpBasicContainer = ResourceFactory.createResource(LDP_NAMESPACE +
             "BasicContainer");
 
+    private static final Resource ldpDirectContainer = ResourceFactory.createResource(LDP_NAMESPACE +
+            "DirectContainer");
+
+    private static final Resource ldpIndirectContainer = ResourceFactory.createResource(LDP_NAMESPACE +
+            "IndirectContainer");
+
+    private static final List<Resource> containerTypes = Arrays.asList(ldpBasicContainer, ldpDirectContainer,
+            ldpIndirectContainer);
+
     private static final RDFNode ASupdate = ResourceFactory.createResource(ACTIVITY_STREAMS_NS + "Update");
 
-    private static final RDFNode AScreate = ResourceFactory.createResource(ACTIVITY_STREAMS_NS + "Create");
+
     /**
      * Default constructor.
      *
@@ -190,12 +202,14 @@ public class NotificationTest extends AbstractEventTest {
                     model.read(is, location, "JSON-LD");
                     if (model.contains(locResource, RdfType)) {
                         // This is the resource we created.
-                        assertTrue("Event doesn't have the IRI of the resource", model.contains(locResource, null,
-                                (RDFNode) null));
-                        assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
-                                AScreate));
-                        assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
-                                ASupdate));
+                        final StmtIterator iter = model.listStatements(null, RdfType, (RDFNode) null);
+                        assertTrue("Event has no rdf:types defined", iter.hasNext());
+
+                        final boolean has_AS_type = iter
+                                .filterKeep(s -> s.getObject().asResource().getNameSpace().equalsIgnoreCase(
+                                        ACTIVITY_STREAMS_NS))
+                                .hasNext();
+                        assertTrue("Event has at least one Activity Stream type", has_AS_type);
                     } else {
                         // Parent node is updated
                         assertTrue("Event doesn't have an Activity Stream type", model.contains(null, RdfType,
@@ -236,8 +250,27 @@ public class NotificationTest extends AbstractEventTest {
         final MessageBank listener = (MessageBank) consumer.getMessageListener();
         // Start listening to the broker.
         connection.start();
-        // Do your actions.
-        final Response resp = createBasicContainer(uri, info);
+
+        containerTypes.stream().forEach(type -> {
+            doContainerTypeTest(uri, type, listener);
+        });
+
+        consumer.close();
+
+        session.close();
+        connection.close();
+    }
+
+    /**
+     * Creates a container with rdf:type "type" and checks the event for it.
+     * 
+     * @param baseUri repository baseUri
+     * @param type the ldp container type
+     * @param listener the message listener
+     */
+    private void doContainerTypeTest(final String baseUri, final Resource type, final MessageBank listener) {
+        listener.clear();
+        final Response resp = doPost(baseUri, new Headers(new Header("Link", "<" + type.getURI() + ">; rel=type")));
         final String location = getLocation(resp);
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
                 .count() == 2);
@@ -253,8 +286,8 @@ public class NotificationTest extends AbstractEventTest {
                     model.read(is, location, "JSON-LD");
                     if (model.contains(locResource, RdfType)) {
                         // This is the resource we created.
-                        assertTrue("Event doesn't have container type",
-                                model.contains(locResource, RdfType, ldpBasicContainer));
+                        assertTrue("Event doesn't have expected container type",
+                                model.contains(locResource, RdfType, type));
 
                         // TODO: Need a test for the AS:actor
                         // TODO: Need a test for the ldp:inbox if it exists
@@ -266,9 +299,5 @@ public class NotificationTest extends AbstractEventTest {
                 }
             }
         });
-        consumer.close();
-
-        session.close();
-        connection.close();
     }
 }
