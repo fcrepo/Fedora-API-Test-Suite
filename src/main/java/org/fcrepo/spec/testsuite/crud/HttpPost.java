@@ -62,26 +62,6 @@ public class HttpPost extends AbstractTest {
     }
 
     /**
-     * 3.5-B
-     *
-     * @param uri The repository root URI
-     */
-    @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void constrainedByResponseHeader(final String uri) {
-        final TestInfo info = setupTest("3.5-B",
-                                        "The default interaction model that will be assigned when there is no " +
-                                        "explicit Link "
-                                        + "header in the request must be recorded in the constraints"
-                                        +
-                                        " document referenced in the Link: rel=\"http://www" +
-                                        ".w3.org/ns/ldp#constrainedBy\" "
-                                        + "header ([LDP] 4.2.1.6 clarification).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
-        createBasicContainer(uri, info).then().header("Link", containsString("constrainedBy"));
-    }
-
-    /**
      * 3.5.1-A
      *
      * @param uri The repository root URI
