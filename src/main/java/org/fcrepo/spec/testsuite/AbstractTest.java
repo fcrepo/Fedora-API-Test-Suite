@@ -549,10 +549,10 @@ public class AbstractTest {
     }
 
     protected void confirmPresenceOfConstrainedByLink(final Response response) {
-        final String contrainedByUri = "http://www.w3.org/ns/ldp#constrainedBy";
-        final Optional<URI> link = getLinksOfRelTypeAsUris(response, contrainedByUri).findAny();
+        final String constrainedByUri = "http://www.w3.org/ns/ldp#constrainedBy";
+        final Optional<URI> link = getLinksOfRelTypeAsUris(response, constrainedByUri).findAny();
         if (!link.isPresent()) {
-            fail("Response does not contain a link of rel type = " + contrainedByUri);
+            fail("Response does not contain a link of rel type = " + constrainedByUri);
         } else {
             //verify the link is readable.
             doGet(link.get().toString());
