@@ -58,6 +58,9 @@ public class AbstractEventTest extends AbstractTest {
      * @param adminPassword admin password
      * @param username username
      * @param password password
+     * @param jmsBroker URL of the JMS broker
+     * @param queueName queue name (if applicable)
+     * @param topicName topic name (if applicable)
      * @throws JMSException unable to create connection.
      */
     @Parameters({ "param2", "param3", "param4", "param5", BROKER_URL_PARAM, QUEUE_NAME_PARAM, TOPIC_NAME_PARAM })

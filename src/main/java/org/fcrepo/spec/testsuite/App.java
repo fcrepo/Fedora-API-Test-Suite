@@ -87,7 +87,7 @@ public class App {
         configArgs.put(ADMIN_PASS_PARAM, true);
         configArgs.put(TESTNGXML_PARAM, false);
         configArgs.put(REQUIREMENTS_PARAM, false);
-        configArgs.put(BROKER_URL_PARAM, false);
+        configArgs.put(BROKER_URL_PARAM, true);
         configArgs.put(QUEUE_NAME_PARAM, false);
         configArgs.put(TOPIC_NAME_PARAM, false);
     }
@@ -95,7 +95,7 @@ public class App {
     /**
      * Main configuration and execution of crud cases
      *
-     * @param args
+     * @param args the command line arguments.
      */
     public static void main(final String[] args) {
         final Options options = new Options();
@@ -127,6 +127,10 @@ public class App {
         configFileSite.setRequired(false);
         options.addOption(configFileSite);
 
+        options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
+        options.addOption(new Option("q", QUEUE_NAME_PARAM, true, "Queue name for events (if applicable)"));
+        options.addOption(new Option("t", TOPIC_NAME_PARAM, true, "Topic name for events (if applicable)"));
+
         final CommandLineParser parser = new BasicParser();
         final HelpFormatter formatter = new HelpFormatter();
         final CommandLine cmd;
@@ -154,13 +158,19 @@ public class App {
             if (cmd.getOptionValue(opt) != null) {
                 params.put(opt, cmd.getOptionValue(opt));
             }
-            if (!params.containsKey(opt)) {
+            if (!params.containsKey(opt) || params.get(opt).isEmpty()) {
                 if (configArgs.get(opt)) {
                     throw new RuntimeException("Argument \"" + opt + "\" is required");
                 }
                 // Fill in missing parts with blanks
                 params.put(opt, "");
             }
+        }
+
+        if ((!params.containsKey(QUEUE_NAME_PARAM) || params.get(QUEUE_NAME_PARAM).isEmpty()) &&
+                (!params.containsKey(TOPIC_NAME_PARAM) || params.get(TOPIC_NAME_PARAM).isEmpty())) {
+            throw new RuntimeException(String.format("One of %s, %s must be provided", QUEUE_NAME_PARAM,
+                    TOPIC_NAME_PARAM));
         }
 
         //Create the default container
