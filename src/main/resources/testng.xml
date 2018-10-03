@@ -74,6 +74,7 @@
       <class name="org.fcrepo.spec.testsuite.authz.WebACDefaultACLs"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACAccessToClass"/>
       <class name="org.fcrepo.spec.testsuite.authz.WebACCrossDomain"/>
+      <class name="org.fcrepo.spec.testsuite.event.NotificationTest"/>
     </classes>
 
   </test>
