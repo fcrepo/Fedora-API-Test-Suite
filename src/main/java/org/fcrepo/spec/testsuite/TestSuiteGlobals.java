@@ -62,7 +62,7 @@ public abstract class TestSuiteGlobals {
 
         final String name = outputName + "container" + today();
         final String base = baseurl.endsWith("/") ? baseurl : baseurl + '/';
-        String containerUrl = base + name + "/";
+        String containerUrl = base + name;
         containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
         final Response res = RestAssured.given()
                                         .auth().basic(user, pass)
