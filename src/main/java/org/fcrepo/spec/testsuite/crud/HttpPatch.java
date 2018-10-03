@@ -17,9 +17,12 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
+import static org.fcrepo.spec.testsuite.App.CONSTRAINT_ERROR_GENERATOR_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
+import java.io.File;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -35,35 +38,40 @@ import org.testng.annotations.Test;
 public class HttpPatch extends AbstractTest {
 
     private final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
-                         + " INSERT {"
-                         + " <> dcterms:description \"Patch Updated Description\" ."
-                         + "}"
-                         + " WHERE { }";
+                                + " INSERT {"
+                                + " <> dcterms:description \"Patch Updated Description\" ."
+                                + "}"
+                                + " WHERE { }";
     private final String ldpatch = "@prefix dcterms: <http://purl.org/dc/terms/>"
-                            + "Add {"
-                            + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
-                            + "} .";
+                                   + "Add {"
+                                   + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
+                                   + "} .";
     private final String resourceType = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-                                 + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
-                                 + " INSERT {"
-                                 + " <> rdf:type ldp:NonRDFSource ."
-                                 + "}"
-                                 + " WHERE { }";
+                                        + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
+                                        + " INSERT {"
+                                        + " <> rdf:type ldp:NonRDFSource ."
+                                        + "}"
+                                        + " WHERE { }";
     private final String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#>\n"
-                                             + " INSERT {   \n"
-                                             + "  <> ldp:contains \"some-url\" .\n"
-                                             + "}\n"
-                                             + " WHERE { }";
+                                                    + " INSERT {   \n"
+                                                    + "  <> ldp:contains \"some-url\" .\n"
+                                                    + "}\n"
+                                                    + " WHERE { }";
+
+    private String constraintErrorGeneratingSparqlQuery = null;
 
     /**
      * Authentication
      *
-     * @param username The repository username
-     * @param password The repository password
+     * @param username                             The repository username
+     * @param password                             The repository password
+     * @param constraintErrorGeneratingSparqlQuery A file path containing a sparql query that will generate a constraint
+     *                                             error.
      */
-    @Parameters({"param2", "param3"})
-    public HttpPatch(final String username, final String password) {
+    @Parameters({"param2", "param3", CONSTRAINT_ERROR_GENERATOR_PARAM})
+    public HttpPatch(final String username, final String password, final String constraintErrorGeneratingSparqlQuery) {
         super(username, password);
+        this.constraintErrorGeneratingSparqlQuery = constraintErrorGeneratingSparqlQuery;
     }
 
     /**
@@ -119,18 +127,20 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
-        patchWithDisallowedStatement(resourceUri, "\"a literal\"").then().statusCode(clientErrorRange());
+        patchWithDisallowedStatement(resourceUri).then().statusCode(clientErrorRange());
     }
 
-    private Response patchWithDisallowedStatement(final String resource, final String invalidValue) {
+    private Response patchWithDisallowedStatement(final String resource) {
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
-        final StringBuilder body = new StringBuilder();
-        body.append("INSERT { ");
-        body.append("<> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> " + invalidValue);
-        body.append("} WHERE {}");
-        return doPatchUnverified(resource, headers, body.toString());
+        String sparqlQuery = fileToString("/constraint-error-generator.sparql");
+        if (constraintErrorGeneratingSparqlQuery != null) {
+            final File constraintGeneratorFile = new File(constraintErrorGeneratingSparqlQuery);
+            if (constraintGeneratorFile.exists()) {
+                sparqlQuery = fileToString(constraintGeneratorFile);
+            }
+        }
+        return doPatchUnverified(resource, headers, sparqlQuery);
     }
-
 
     /**
      * 3.7-D
@@ -147,9 +157,12 @@ public class HttpPatch extends AbstractTest {
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
-        final String invalidValue = "\"a literal\"";
-        patchWithDisallowedStatement(resourceUri, invalidValue).then().statusCode(clientErrorRange())
-                                                               .body(containsString(invalidValue));
+        //the check for not null body is not ideal,
+        //but given the dynamic nature of the test,
+        //it's not clear to me how to test this requirement (dbernstein)
+        patchWithDisallowedStatement(resourceUri).then().statusCode(clientErrorRange())
+                                                 .body(notNullValue());
+
     }
 
     /**
@@ -169,7 +182,7 @@ public class HttpPatch extends AbstractTest {
 
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
-        final Response patchResponse = patchWithDisallowedStatement(resourceUri,  "\"a literal\"");
+        final Response patchResponse = patchWithDisallowedStatement(resourceUri);
         patchResponse.then().statusCode(clientErrorRange());
         confirmPresenceOfConstrainedByLink(patchResponse);
     }
@@ -231,8 +244,8 @@ public class HttpPatch extends AbstractTest {
 
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         doPatchUnverified(locationHeader, headers, updateContainmentTriples)
-                .then()
-                .statusCode(409);
+            .then()
+            .statusCode(409);
     }
 
     /**
@@ -254,7 +267,7 @@ public class HttpPatch extends AbstractTest {
 
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         doPatchUnverified(locationHeader, headers, resourceType)
-                .then()
-                .statusCode(409);
+            .then()
+            .statusCode(409);
     }
 }

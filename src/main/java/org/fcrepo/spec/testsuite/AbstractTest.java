@@ -25,6 +25,9 @@ import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
 import static org.testng.AssertJUnit.fail;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
 import java.net.URI;
@@ -44,6 +47,7 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.apache.commons.io.IOUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
@@ -597,5 +601,21 @@ public class AbstractTest {
         return getLinksOfRelType(response, "describedby").map(Link::getUri)
                 .map(URI::toString)
                 .findFirst().orElse(null);
+    }
+
+    protected String fileToString(final String resourcePath) {
+        try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
+            return IOUtils.toString(is, "UTF-8");
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    protected String fileToString(final File file) {
+        try (InputStream is = new FileInputStream(file)) {
+            return IOUtils.toString(is, "UTF-8");
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

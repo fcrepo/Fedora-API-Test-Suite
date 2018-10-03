@@ -27,6 +27,7 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
   * Multiple levels can be provided, separated by ','
 * `config-file` (optional) A yaml configuration file containing the configuration parameters. See distributed `config.yml.dist`
 * `site-name` (optional) The above yaml file can contain multiple configurations, this chooses one. Defaults to "default"
+* `constraint-error-generator` (optional)  A file containing a SPARQL query that will trigger a constraint error. If no file is specified, the test suite will use a default constraint error generating test.
 
 ### Configuration file syntax
 The configuration file is Yaml and a simple structure. The first level groups a set of configuration parameters, these parameters are key value pairs with the keys being the above options.

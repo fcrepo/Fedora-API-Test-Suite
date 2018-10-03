@@ -17,7 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,6 @@ import javax.ws.rs.core.Link;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
-import org.apache.commons.io.IOUtils;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.testng.annotations.Parameters;
 
@@ -50,15 +48,11 @@ public class AbstractAuthzTest extends AbstractTest {
     }
 
     protected String filterFileAndConvertToString(final String fileName, final Map<String, String> params) {
-        try (InputStream is = getClass().getResourceAsStream("/acls/" + fileName)) {
-            String str = IOUtils.toString(is, "UTF-8");
-            for (String key : params.keySet()) {
-                str = str.replace("${" + key + "}", params.get(key));
-            }
-            return str;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        String str = fileToString("/acls/" + fileName);
+        for (String key : params.keySet()) {
+            str = str.replace("${" + key + "}", params.get(key));
         }
+        return str;
     }
 
     protected String getAclAsString(final String fileName, final String resourceUri, final String username) {
