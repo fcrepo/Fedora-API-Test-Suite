@@ -38,25 +38,25 @@ import org.testng.annotations.Test;
 public class HttpPatch extends AbstractTest {
 
     private final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
-                                + " INSERT {"
-                                + " <> dcterms:description \"Patch Updated Description\" ."
-                                + "}"
-                                + " WHERE { }";
+                            + " INSERT {"
+                            + " <> dcterms:description \"Patch Updated Description\" ."
+                            + "}"
+                            + " WHERE { }";
     private final String ldpatch = "@prefix dcterms: <http://purl.org/dc/terms/>"
-                                   + "Add {"
-                                   + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
-                                   + "} .";
+                               + "Add {"
+                               + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
+                               + "} .";
     private final String resourceType = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-                                        + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
-                                        + " INSERT {"
-                                        + " <> rdf:type ldp:NonRDFSource ."
-                                        + "}"
-                                        + " WHERE { }";
+                                    + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
+                                    + " INSERT {"
+                                    + " <> rdf:type ldp:NonRDFSource ."
+                                    + "}"
+                                    + " WHERE { }";
     private final String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#>\n"
-                                                    + " INSERT {   \n"
-                                                    + "  <> ldp:contains \"some-url\" .\n"
-                                                    + "}\n"
-                                                    + " WHERE { }";
+                                                + " INSERT {   \n"
+                                                + "  <> ldp:contains \"some-url\" .\n"
+                                                + "}\n"
+                                                + " WHERE { }";
 
     private String constraintErrorGeneratingSparqlQuery = null;
 
@@ -244,8 +244,8 @@ public class HttpPatch extends AbstractTest {
 
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         doPatchUnverified(locationHeader, headers, updateContainmentTriples)
-            .then()
-            .statusCode(409);
+                .then()
+                .statusCode(409);
     }
 
     /**
@@ -267,7 +267,7 @@ public class HttpPatch extends AbstractTest {
 
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
         doPatchUnverified(locationHeader, headers, resourceType)
-            .then()
-            .statusCode(409);
+                .then()
+                .statusCode(409);
     }
 }
