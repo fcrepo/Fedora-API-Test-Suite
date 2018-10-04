@@ -133,7 +133,7 @@ public class App {
         options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
         options.addOption(new Option("q", QUEUE_NAME_PARAM, true, "Queue name for events (if applicable)"));
         options.addOption(new Option("t", TOPIC_NAME_PARAM, true, "Topic name for events (if applicable)"));
-        options.addOption(new Option("c", CONSTRAINT_ERROR_GENERATOR_PARAM, true,
+        options.addOption(new Option("g", CONSTRAINT_ERROR_GENERATOR_PARAM, true,
                                      "A file containing a SPARQL query that will trigger a constraint error."));
 
         final CommandLineParser parser = new BasicParser();
