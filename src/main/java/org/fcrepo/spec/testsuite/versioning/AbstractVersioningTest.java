@@ -107,7 +107,7 @@ public class AbstractVersioningTest extends AbstractTest {
                                                                  final Response response) {
         Assert
             .assertFalse(hasHeaderValueInMultiValueHeader(headerName, headerValue, response),
-                         headerName + " with a value of " + headerValue + " must be not present but it is!");
+                        headerName + " with a value of " + headerValue + " must be not present but it is!");
     }
 
     protected boolean hasHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
@@ -127,10 +127,12 @@ public class AbstractVersioningTest extends AbstractTest {
         assertEquals(mementoDateTime, dateTime, "Memento-Datetime header does not match expected");
     }
 
+
     protected void confirmPresenceOfVersionLocationHeader(final Response response) {
         final String location = response.getHeader("Location");
         Assert.assertTrue(location.contains("fcr:versions"));
     }
+
 
     protected void confirmAbsenceOfLinkValue(final String linkValue, final Response response) {
         final Link link = Link.valueOf(linkValue);
@@ -160,11 +162,10 @@ public class AbstractVersioningTest extends AbstractTest {
     /**
      * Given the URI of the original resource, create a memento based on the
      * specified body.
-     *
      * @param originalResourceUri The resource to be memento-ized.
-     * @param mementoDateTime     the memento datetime
-     * @param contentType         the content Type of the memento
-     * @param body                the body of the memento
+     * @param mementoDateTime the memento datetime
+     * @param contentType the content Type of the memento
+     * @param body the body of the memento
      * @return The uri of the newly created memento
      */
     protected String createMemento(final String originalResourceUri, final String mementoDateTime,
@@ -174,7 +175,7 @@ public class AbstractVersioningTest extends AbstractTest {
         final Headers headers = new Headers(new Header("Content-Type", contentType),
                                             new Header(MEMENTO_DATETIME_HEADER, mementoDateTime));
 
-        final Response timeMapResponse = doPost(timeMapURI.toString(), headers, body);
+        final Response timeMapResponse = doPost(timeMapURI.toString(),headers, body);
         return getLocation(timeMapResponse);
     }
 
@@ -191,8 +192,8 @@ public class AbstractVersioningTest extends AbstractTest {
         } else {
             // otherwise create a memento by altering the original resource and retrieving the most recent memento
             //if ldp-rs
-
-            if (getLinksOfRelType(response, "type").anyMatch(link -> link.equals(RDF_SOURCE_LINK_HEADER))) {
+            if (getLinksOfRelType(response, "type")
+                .anyMatch(link -> link.equals(Link.valueOf(RDF_SOURCE_LINK_HEADER)))) {
                 final String body = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                                     "PREFIX pcdm: <http://pcdm.org/models#>\n" +
                                     "INSERT  {\n" +
@@ -202,7 +203,7 @@ public class AbstractVersioningTest extends AbstractTest {
                         body);
             } else {
                 //otherwise ldp-nr
-                doPut(originalResourceUri, new Headers(new Header("Content-Type", "text")),
+                doPut(originalResourceUri, new Headers(new Header("Content-Type", "text/plain")),
                       "body-" + System.currentTimeMillis());
             }
 
