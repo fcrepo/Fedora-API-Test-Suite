@@ -38,33 +38,33 @@ import org.testng.annotations.Test;
 public class HttpPatch extends AbstractTest {
 
     private final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
-                            + " INSERT {"
-                            + " <> dcterms:description \"Patch Updated Description\" ."
-                            + "}"
-                            + " WHERE { }";
+                         + " INSERT {"
+                         + " <> dcterms:description \"Patch Updated Description\" ."
+                         + "}"
+                         + " WHERE { }";
     private final String ldpatch = "@prefix dcterms: <http://purl.org/dc/terms/>"
-                               + "Add {"
-                               + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
-                               + "} .";
+                            + "Add {"
+                            + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
+                            + "} .";
     private final String resourceType = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
-                                    + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
-                                    + " INSERT {"
-                                    + " <> rdf:type ldp:NonRDFSource ."
-                                    + "}"
-                                    + " WHERE { }";
+                                 + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
+                                 + " INSERT {"
+                                 + " <> rdf:type ldp:NonRDFSource ."
+                                 + "}"
+                                 + " WHERE { }";
     private final String updateContainmentTriples = "PREFIX ldp: <http://www.w3.org/ns/ldp#>\n"
-                                                + " INSERT {   \n"
-                                                + "  <> ldp:contains \"some-url\" .\n"
-                                                + "}\n"
-                                                + " WHERE { }";
+                                             + " INSERT {   \n"
+                                             + "  <> ldp:contains \"some-url\" .\n"
+                                             + "}\n"
+                                             + " WHERE { }";
 
     private String constraintErrorGeneratingSparqlQuery = null;
 
     /**
      * Authentication
      *
-     * @param username                             The repository username
-     * @param password                             The repository password
+     * @param username The repository username
+     * @param password The repository password
      * @param constraintErrorGeneratingSparqlQuery A file path containing a sparql query that will generate a constraint
      *                                             error.
      */
