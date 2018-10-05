@@ -75,13 +75,13 @@ public class ResourceVersioning extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    @Test(groups = { "MUST" })
+    @Test(groups = { "MAY" })
     @Parameters({ "param1" })
     public void convertToLDPRViaPutWithType(final String uri) {
         final TestInfo info = setupTest("4.0-B",
-                "Implementations may allow a subsequent PUT request with a rel=\"type\" link in the Link header " +
+                "Implementations MAY allow a subsequent PUT request with a rel=\"type\" link in the Link header " +
                 "specifying type http://mementoweb.org/ns#OriginalResource to convert an existing LDPR into an LDPRv." +
-                " If such a conversion from an LDPR to an LDPRv is supported, it must be accompanied by the creation " +
+                " If such a conversion from an LDPR to an LDPRv is supported, it MUST be accompanied by the creation " +
                 "of a version container (LDPCv), as noted above.",
                 "https://fcrepo.github.io/fcrepo-specification/#resource-versioning",
                                         ps);
