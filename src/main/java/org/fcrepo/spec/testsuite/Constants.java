@@ -29,8 +29,7 @@ public class Constants {
     public static final String BASIC_CONTAINER_LINK_HEADER = "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\"";
     public static final String BASIC_CONTAINER_BODY = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
                                                       + "@prefix dcterms: <http://purl.org/dc/terms/> ."
-                                                      + "<> a ldp:Container, ldp:BasicContainer;"
-                                                      + "dcterms:title 'Container class Container' ;"
+                                                      + "<> dcterms:title 'Container class Container' ;"
                                                       +
                                                       "dcterms:description 'This is a crud container for the Fedora " +
                                                       "API Test Suite.' . ";
