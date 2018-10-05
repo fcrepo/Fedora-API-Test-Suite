@@ -92,7 +92,7 @@ public class AbstractTest {
      * @param adminPassword admin password
      */
     public AbstractTest(final String adminUsername, final String adminPassword) {
-        this(adminPassword, adminPassword, null, null);
+        this(adminUsername, adminPassword, null, null);
     }
 
     /**
