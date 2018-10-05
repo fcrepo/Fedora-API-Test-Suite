@@ -17,9 +17,12 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
+import static org.fcrepo.spec.testsuite.App.CONSTRAINT_ERROR_GENERATOR_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
-import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
+import java.io.File;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -43,11 +46,6 @@ public class HttpPatch extends AbstractTest {
                             + "Add {"
                             + " <#> dcterms:description \"Patch LDP Updated Description\" ;"
                             + "} .";
-    private final String serverProps = "PREFIX fedora: <http://fedora.info/definitions/v4/repository#>"
-                                + " INSERT {"
-                                + " <> fedora:lastModifiedBy \"User\" ."
-                                + "}"
-                                + " WHERE { }";
     private final String resourceType = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>"
                                  + " PREFIX ldp: <http://www.w3.org/ns/ldp#>"
                                  + " INSERT {"
@@ -60,15 +58,20 @@ public class HttpPatch extends AbstractTest {
                                              + "}\n"
                                              + " WHERE { }";
 
+    private String constraintErrorGeneratingSparqlQuery = null;
+
     /**
      * Authentication
      *
      * @param username The repository username
      * @param password The repository password
+     * @param constraintErrorGeneratingSparqlQuery A file path containing a sparql query that will generate a constraint
+     *                                             error.
      */
-    @Parameters({"param2", "param3"})
-    public HttpPatch(final String username, final String password) {
+    @Parameters({"param2", "param3", CONSTRAINT_ERROR_GENERATOR_PARAM})
+    public HttpPatch(final String username, final String password, final String constraintErrorGeneratingSparqlQuery) {
         super(username, password);
+        this.constraintErrorGeneratingSparqlQuery = constraintErrorGeneratingSparqlQuery;
     }
 
     /**
@@ -123,11 +126,20 @@ public class HttpPatch extends AbstractTest {
                                         + " status code (e.g. 409 Conflict).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = getLocation(resource);
+        final String resourceUri = getLocation(resource);
+        patchWithDisallowedStatement(resourceUri).then().statusCode(clientErrorRange());
+    }
+
+    private Response patchWithDisallowedStatement(final String resource) {
         final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
-        doPatchUnverified(locationHeader, headers, serverProps)
-                .then()
-                .statusCode(clientErrorRange());
+        String sparqlQuery = fileToString("/constraint-error-generator.sparql");
+        if (constraintErrorGeneratingSparqlQuery != null) {
+            final File constraintGeneratorFile = new File(constraintErrorGeneratingSparqlQuery);
+            if (constraintGeneratorFile.exists()) {
+                sparqlQuery = fileToString(constraintGeneratorFile);
+            }
+        }
+        return doPatchUnverified(resource, headers, sparqlQuery);
     }
 
     /**
@@ -144,12 +156,13 @@ public class HttpPatch extends AbstractTest {
                                         + " ([LDP] 4.2.4.4 should becomes must).",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = getLocation(resource);
-        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
-        doPatchUnverified(locationHeader, headers, serverProps)
-                .then()
-                .statusCode(clientErrorRange())
-                .body(containsString("lastModified"));
+        final String resourceUri = getLocation(resource);
+        //the check for not null body is not ideal,
+        //but given the dynamic nature of the test,
+        //it's not clear to me how to test this requirement (dbernstein)
+        patchWithDisallowedStatement(resourceUri).then().statusCode(clientErrorRange())
+                                                 .body(notNullValue());
+
     }
 
     /**
@@ -166,13 +179,12 @@ public class HttpPatch extends AbstractTest {
                                         + "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
                                         + "response header per [LDP] 4.2.1.6.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
+
         final Response resource = createBasicContainer(uri, info);
-        final String locationHeader = getLocation(resource);
-        final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
-        doPatchUnverified(locationHeader, headers, serverProps)
-                .then()
-                .statusCode(clientErrorRange())
-                .header("Link", containsString("constrainedBy"));
+        final String resourceUri = getLocation(resource);
+        final Response patchResponse = patchWithDisallowedStatement(resourceUri);
+        patchResponse.then().statusCode(clientErrorRange());
+        confirmPresenceOfConstrainedByLink(patchResponse);
     }
 
     /**

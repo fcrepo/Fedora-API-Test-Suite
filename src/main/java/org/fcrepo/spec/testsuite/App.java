@@ -73,6 +73,7 @@ public class App {
     private final static String CONFIG_FILE_PARAM = "config-file";
 
     private final static String SITE_NAME_PARAM = "site-name";
+    public  final static String CONSTRAINT_ERROR_GENERATOR_PARAM = "constraint-error-generator";
 
     /*
      * Map of configuration options and whether they are required.
@@ -90,6 +91,8 @@ public class App {
         configArgs.put(BROKER_URL_PARAM, true);
         configArgs.put(QUEUE_NAME_PARAM, false);
         configArgs.put(TOPIC_NAME_PARAM, false);
+        configArgs.put(CONSTRAINT_ERROR_GENERATOR_PARAM, false);
+
     }
 
     /**
@@ -130,6 +133,8 @@ public class App {
         options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
         options.addOption(new Option("q", QUEUE_NAME_PARAM, true, "Queue name for events (if applicable)"));
         options.addOption(new Option("t", TOPIC_NAME_PARAM, true, "Topic name for events (if applicable)"));
+        options.addOption(new Option("g", CONSTRAINT_ERROR_GENERATOR_PARAM, true,
+                                     "A file containing a SPARQL query that will trigger a constraint error."));
 
         final CommandLineParser parser = new BasicParser();
         final HelpFormatter formatter = new HelpFormatter();
@@ -185,6 +190,7 @@ public class App {
         testParams.put(BROKER_URL_PARAM, params.get(BROKER_URL_PARAM));
         testParams.put(QUEUE_NAME_PARAM, params.get(QUEUE_NAME_PARAM));
         testParams.put(TOPIC_NAME_PARAM, params.get(TOPIC_NAME_PARAM));
+        testParams.put(CONSTRAINT_ERROR_GENERATOR_PARAM, params.get(CONSTRAINT_ERROR_GENERATOR_PARAM));
 
         InputStream inputStream = null;
         if (params.get(TESTNGXML_PARAM).toString().isEmpty()) {

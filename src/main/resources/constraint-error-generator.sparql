@@ -1,0 +1,12 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX ldp: <http://www.w3.org/ns/ldp#>
+PREFIX pcdm: <http://pcdm.org/models#>
+INSERT  {
+ <>  rdf:type "a literal" .
+ <>  ldp:insertedContentRelation pcdm:memberOf .
+ <>  ldp:contains </test> . 
+ <>  ldp:isMemberOfRelation pcdm:memberOf .
+ <>  ldp:hasMemberRelation pcdm:hasMember .
+ <>  ldp:membershipResource <http://outofdomainresource/test> .
+
+} WHERE {}
