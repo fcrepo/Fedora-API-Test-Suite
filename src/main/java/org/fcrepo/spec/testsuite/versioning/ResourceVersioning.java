@@ -75,27 +75,29 @@ public class ResourceVersioning extends AbstractVersioningTest {
      *
      * @param uri The repository root URI
      */
-    @Test(groups = { "MUST" })
+    @Test(groups = { "MAY" })
     @Parameters({ "param1" })
-    public void putLdprWithType(final String uri) {
+    public void convertToLDPRViaPutWithType(final String uri) {
         final TestInfo info = setupTest("4.0-B",
-                "When an LDPR is created with a rel=\"type\" link in the Link " +
-                        "header specifying type http://mementoweb.org/ns#OriginalResource " +
-                        "to indicate versioning, it MUST be created as an LDPRv and a version " +
-                        "container (LDPCv) MUST be created to contain Memento resources",
+                "Implementations MAY allow a subsequent PUT request with a rel=\"type\" link in the Link header " +
+                "specifying type http://mementoweb.org/ns#OriginalResource to convert an existing LDPR into an LDPRv." +
+                " If such a conversion from an LDPR to an LDPRv is supported, it MUST be accompanied by the creation " +
+                "of a version container (LDPCv), as noted above.",
                 "https://fcrepo.github.io/fcrepo-specification/#resource-versioning",
                                         ps);
 
+        //create a container
+        final String resourceUri = getLocation(createBasicContainer(uri, info));
         //create an LDPRv using a put
-        final Response response = putVersionedResourceUnverified(uri, info);
+        final Response response = putVersionedResourceUnverified(resourceUri);
         // PUT creation operation not supported
-        if (response.getStatusCode() >= 400 && response.getStatusCode() < 500) {
+        if (clientErrorRange().matches(response.getStatusCode())) {
             return;
         }
+
         // is a LDPRv: URI-R and Timegate
         confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, response);
         confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, response);
-
         // Verify timemap created
         final URI timemapUri = getTimeMapUri(response);
         doGet(timemapUri.toString());
