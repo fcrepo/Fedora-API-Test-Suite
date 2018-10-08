@@ -115,8 +115,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         //get timegate uri
         final URI timeGateUri = getTimeGateUri(response);
 
-        final Response newMementoResponse = doPost(timeMapURI.toString());
-        final String newMementoUri = getLocation(newMementoResponse);
+        final String newMementoUri = createMemento(resourceUri);
 
         //query timegate using Accept-Datetime
         final String isoDateString = "1970-01-01T00:00:00Z";
@@ -285,11 +284,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
                             1,
                             "Link with rel type '" + relType + "' must be present but is not!");
     }
-
-    private URI getTimeGateUri(final Response response) {
-        return getLinksOfRelTypeAsUris(response, "timegate").findFirst().get();
-    }
-
 
     private URI getOriginalUri(final Response response) {
         return getLinksOfRelTypeAsUris(response, "original").findFirst().get();

@@ -18,13 +18,17 @@
 
 package org.fcrepo.spec.testsuite.versioning;
 
+import static java.time.Instant.now;
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static java.util.Arrays.sort;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.RDF_SOURCE_LINK_HEADER;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.net.URI;
+import java.time.ZoneId;
 import java.util.Arrays;
 import javax.ws.rs.core.Link;
 
@@ -175,10 +179,40 @@ public class AbstractVersioningTest extends AbstractTest {
         return getLocation(timeMapResponse);
     }
 
+    protected URI getTimeGateUri(final Response response) {
+        return getLinksOfRelTypeAsUris(response, "timegate").findFirst().get();
+    }
+
     protected String createMemento(final String originalResourceUri) {
         final Response response = doGet(originalResourceUri);
         final URI timeMapURI = getTimeMapUri(response);
-        final Response timeMapResponse = doPost(timeMapURI.toString());
-        return getLocation(timeMapResponse);
+        if (hasHeaderValueInMultiValueHeader("Allow", "Post", doGet(timeMapURI.toString()))) {
+            //if POST allowed (client-managed versioning)
+            return getLocation(doPost(timeMapURI.toString()));
+        } else {
+            // otherwise create a memento by altering the original resource and retrieving the most recent memento
+            //if ldp-rs
+            if (getLinksOfRelType(response, "type")
+                .anyMatch(link -> link.equals(Link.valueOf(RDF_SOURCE_LINK_HEADER)))) {
+                final String body = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+                                    "PREFIX pcdm: <http://pcdm.org/models#>\n" +
+                                    "INSERT  {\n" +
+                                    " <>  rdf:type pcdm:Collection .\n" +
+                                    "} WHERE {}";
+                doPatch(originalResourceUri, new Headers(new Header("Content-Type", "application/sparql-update")),
+                        body);
+            } else {
+                //otherwise ldp-nr
+                doPut(originalResourceUri, new Headers(new Header("Content-Type", "text/plain")),
+                      "body-" + System.currentTimeMillis());
+            }
+
+            final String now = RFC_1123_DATE_TIME.withZone(ZoneId.of("UTC")).format(now());
+            final String timeGate = getTimeGateUri(response).toString();
+            //get the most recent memento
+            final Response timeGateResponse = doGetUnverified(timeGate, new Header("Accept-Datetime", now));
+            timeGateResponse.then().statusCode(302);
+            return getLocation(timeGateResponse);
+        }
     }
 }
