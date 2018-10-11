@@ -27,6 +27,8 @@ import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.DIRECT_CONTAINER_BODY;
 import static org.testng.Assert.assertTrue;
 
@@ -39,11 +41,10 @@ public class Container extends AbstractTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public Container(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public Container(final String username) {
+        super(username);
     }
 
     /**
@@ -52,7 +53,7 @@ public class Container extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void createLDPC(final String uri) {
         final TestInfo info = setupTest("3.1.1-A",
                                         "Implementations must support the creation and management of [LDP] Containers.",
@@ -66,7 +67,7 @@ public class Container extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcContainmentTriples(final String uri) {
         final TestInfo info = setupTest("3.1.1-B",
                                         "ldpcContainmentTriples",
@@ -117,7 +118,7 @@ public class Container extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcMembershipTriples(final String uri) {
         final TestInfo info = setupTest("3.1.1-C",
                                         "LDP Containers must distinguish [membership] triples.",
@@ -206,7 +207,7 @@ public class Container extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcMinimalContainerTriples(final String uri) {
         final TestInfo info = setupTest("3.1.1-D",
                                         "LDP Containers must distinguish [minimal-container] triples.",

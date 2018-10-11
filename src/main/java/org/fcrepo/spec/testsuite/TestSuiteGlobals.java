@@ -23,6 +23,7 @@ import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -30,6 +31,9 @@ import java.util.TreeMap;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.authn.AuthenticationToken;
+import org.fcrepo.spec.testsuite.authn.Authenticator;
+import org.fcrepo.spec.testsuite.authn.AuthenticatorResolver;
 import org.testng.IResultMap;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
@@ -64,8 +68,9 @@ public abstract class TestSuiteGlobals {
         final String base = baseurl.endsWith("/") ? baseurl : baseurl + '/';
         String containerUrl = base + name;
         containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
-        final Response res = RestAssured.given()
-                                        .auth().basic(user, pass)
+        final Authenticator authenticator = AuthenticatorResolver.getAuthenticator();
+        final AuthenticationToken token = authenticator.createAuthToken(URI.create(user));
+        final Response res = token.addAuthInfo(RestAssured.given())
                                         .contentType("text/turtle")
                                         .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                         .header(SLUG, name)

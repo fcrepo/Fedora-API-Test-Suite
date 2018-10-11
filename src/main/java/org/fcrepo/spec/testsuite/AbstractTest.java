@@ -52,6 +52,8 @@ import org.apache.http.message.BasicHeaderValueParser;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
+import org.fcrepo.spec.testsuite.authn.AuthenticationToken;
+import org.fcrepo.spec.testsuite.authn.AuthenticatorResolver;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
@@ -70,35 +72,28 @@ public class AbstractTest {
 
     protected PrintStream ps;
 
-    private final String adminUsername;
-    private final String adminPassword;
-    protected final String username;
-    protected final String password;
+    private String rootControllerUserWebId = null;
+    protected String permissionlessUserWebId = null;
+
 
     /**
      * Constructor
      *
-     * @param adminUsername admin password
-     * @param adminPassword admin username
-     * @param username username
-     * @param password password
+     * @param rootControllerUserWebId root container controller WebID
+     * @param permissionlessUserWebId permissionlessUserWebId
      */
-    public AbstractTest(final String adminUsername, final String adminPassword, final String username,
-                        final String password) {
-        this.adminUsername = adminUsername;
-        this.adminPassword = adminPassword;
-        this.username = username;
-        this.password = password;
+    public AbstractTest(final String rootControllerUserWebId, final String permissionlessUserWebId) {
+        this.rootControllerUserWebId = rootControllerUserWebId;
+        this.permissionlessUserWebId = permissionlessUserWebId;
     }
 
     /**
      * Constructor
      *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
+     * @param rootControllerUserWebId root container controller WebID
      */
-    public AbstractTest(final String adminUsername, final String adminPassword) {
-        this(adminUsername, adminPassword, null, null);
+    public AbstractTest(final String rootControllerUserWebId) {
+       this.rootControllerUserWebId = rootControllerUserWebId;
     }
 
     /**
@@ -367,15 +362,16 @@ public class AbstractTest {
 
     private RequestSpecification createRequestAuthOnly(final boolean admin) {
         if (admin) {
-            return createRequestAuthOnly(this.adminUsername, this.adminPassword);
+            return createRequestAuthOnly(this.rootControllerUserWebId);
         } else {
-            return createRequestAuthOnly(this.username, this.password);
+            return createRequestAuthOnly(this.permissionlessUserWebId);
         }
     }
 
-    private RequestSpecification createRequestAuthOnly(final String username, final String password) {
-        return RestAssured.given()
-                          .auth().basic(username, password).urlEncodingEnabled(false);
+    private RequestSpecification createRequestAuthOnly(final String username) {
+        final AuthenticationToken token =
+            AuthenticatorResolver.getAuthenticator().createAuthToken(URI.create(username));
+        return token.addAuthInfo(RestAssured.given()).urlEncodingEnabled(false);
     }
 
     protected Response doGet(final String uri, final Header header) {

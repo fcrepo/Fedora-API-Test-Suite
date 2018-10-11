@@ -18,7 +18,9 @@
 package org.fcrepo.spec.testsuite.event;
 
 import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
+import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
 import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
 import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
 
 import javax.jms.Connection;
@@ -54,20 +56,19 @@ public class AbstractEventTest extends AbstractTest {
     /**
      * Constructor
      *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
+     * @param rootControllerUserWebId root container controller WebID
      * @param username username
-     * @param password password
      * @param jmsBroker URL of the JMS broker
      * @param queueName queue name (if applicable)
      * @param topicName topic name (if applicable)
      * @throws JMSException unable to create connection.
      */
-    @Parameters({ "param2", "param3", "param4", "param5", BROKER_URL_PARAM, QUEUE_NAME_PARAM, TOPIC_NAME_PARAM })
-    public AbstractEventTest(final String adminUsername, final String adminPassword, final String username,
-            final String password, final String jmsBroker, final String queueName, final String topicName)
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM, BROKER_URL_PARAM, QUEUE_NAME_PARAM,
+                 TOPIC_NAME_PARAM})
+    public AbstractEventTest(final String rootControllerUserWebId, final String username,
+            final String jmsBroker, final String queueName, final String topicName)
             throws JMSException {
-        super(adminUsername, adminPassword, username, password);
+        super(rootControllerUserWebId, username);
         connFactory = new org.apache.activemq.ActiveMQConnectionFactory(jmsBroker);
         resetConnection();
         this.queueName = queueName.isEmpty() ? null : queueName;

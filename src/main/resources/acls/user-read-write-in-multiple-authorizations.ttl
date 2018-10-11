@@ -2,13 +2,13 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 <#auth1> a acl:Authorization ;
-              acl:agent "${user}" ;
+              acl:agent <${user}> ;
               acl:mode acl:Read;
               acl:default <${resource}> ;
               acl:accessTo <${resource}> .
 
 <#auth2> a acl:Authorization ;
-              acl:agent "${user}" ;
+              acl:agent <${user}> ;
               acl:mode acl:Write;
               acl:default <${resource}> ;
               acl:accessTo <${resource}> .

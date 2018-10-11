@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.net.URI;
@@ -35,12 +37,11 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
     /**
      * Constructor
      *
-     * @param adminUser admin user
-     * @param adminPassword admin password
+     * @param rootControllerUserWebId admin user
      */
-    @Parameters({"param2", "param3"})
-    public WebACLinkHeaders(final String adminUser, final String adminPassword) {
-        super(adminUser, adminPassword, null, null);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public WebACLinkHeaders(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     /**
@@ -49,7 +50,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void linkToAclExisting(final String uri) {
         final TestInfo info = setupTest("5.3-A",
                                         "A conforming server must advertise the individual resource ACL for every " +
@@ -62,7 +63,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
         //verify that the link does not exist already
         doGetUnverified(getAclLocation(resourceUri)).then().statusCode(404);
         //create the acl for the resource
-        createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
+        createAclForResource(resourceUri, "user-read-only.ttl", "http://example.com/anyuser");
         //verify that it now exists.
         doGet(getAclLocation(resourceUri));
     }
@@ -73,7 +74,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void linkToAclNonexisting(final String uri) {
         final TestInfo info = setupTest("5.3-B",
                                         "A conforming server must advertise the individual resource ACL for every " +
@@ -93,7 +94,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void aclOnSameServer(final String uri) {
         final TestInfo info = setupTest("5.3-C",
                                         "The ACL resource should be located in the same server as the controlled " +

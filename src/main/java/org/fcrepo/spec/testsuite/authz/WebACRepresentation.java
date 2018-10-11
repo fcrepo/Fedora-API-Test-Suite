@@ -17,6 +17,10 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,15 +40,12 @@ public class WebACRepresentation extends AbstractAuthzTest {
     /**
      * Constructor
      *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
+     * @param rootControllerUserWebId root container controller WebID
+     * @param permissionlessUserWebId      permissionlessUserWebId
      */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public WebACRepresentation(final String adminUsername, final String adminPassword, final String username,
-                      final String password) {
-        super(adminUsername, adminPassword, username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM})
+    public WebACRepresentation(final String rootControllerUserWebId, final String permissionlessUserWebId) {
+        super(rootControllerUserWebId, permissionlessUserWebId);
     }
     /**
      * 5.2-A - Authz type and URI as subject of triples
@@ -52,7 +53,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void aclRepresentation(final String uri) {
         final TestInfo info = setupTest("5.2-A",
                                         "Implementations must inspect the ACL RDF for authorizations. Authorizations " +
@@ -63,7 +64,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform GET as non-admin
         doGet(resourceUri, false);
     }
@@ -74,7 +75,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void onlyAuthorizationStatementsUsed(final String uri) {
         final TestInfo info = setupTest("5.2-B",
                                         "Implementations must use only statements associated with an authorization in" +
@@ -84,7 +85,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "acl-without-authorization-type-triple.ttl", this.username);
+        createAclForResource(resourceUri, "acl-without-authorization-type-triple.ttl", this.permissionlessUserWebId);
         //GET as non-admin should succeed
         doGet(resourceUri);
         //POST as non-admin return 403
@@ -98,7 +99,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void dereferencingGroups(final String uri) {
         final TestInfo info = setupTest("5.2-C",
                 "Implementations must use only statements associated with an authorization in the ACL RDF to " +
@@ -112,7 +113,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
         //create agent-group list
         final String groupListUri = testContainerUri + "/agent-group";
         final Map<String,String> params = new HashMap<>();
-        params.put("user", "testuser");
+        params.put("user", this.permissionlessUserWebId);
         final Response response  = doPutUnverified(groupListUri,
             new Headers(new Header("Content-Type", "text/turtle")),
             filterFileAndConvertToString("agent-group.ttl", params));
@@ -133,7 +134,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void aclExamined(final String uri) {
         final TestInfo info = setupTest("5.2-D",
                                         "The authorizations must be examined to see whether they grant the requested " +
@@ -141,7 +142,8 @@ public class WebACRepresentation extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-write-in-multiple-authorizations.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write-in-multiple-authorizations.ttl",
+                             this.permissionlessUserWebId);
         //perform GET as non-admin
         doGet(resourceUri, false);
         doPost(resourceUri, new Headers(new Header("Content-Type", "text/plain")), "test body", false).then()
@@ -154,7 +156,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void accessDenied(final String uri) {
         final TestInfo info = setupTest("5.2-E",
                 "If none of the authorizations grant the requested access then the request must be denied.",
@@ -162,7 +164,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "empty-acl.ttl", this.username);
+        createAclForResource(resourceUri, "empty-acl.ttl", this.permissionlessUserWebId);
         //perform GET as non-admin
         final Response getResponse = doGetUnverified(resourceUri, false);
         //verify unauthorized

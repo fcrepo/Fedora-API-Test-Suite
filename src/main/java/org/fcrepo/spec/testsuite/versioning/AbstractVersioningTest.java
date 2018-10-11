@@ -21,6 +21,7 @@ package org.fcrepo.spec.testsuite.versioning;
 import static java.time.Instant.now;
 import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
 import static java.util.Arrays.sort;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
@@ -49,12 +50,11 @@ public class AbstractVersioningTest extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username The repository username
-     * @param password The repository password
+     * @param rootControllerUserWebId The repository rootControllerUserWebId
      */
-    @Parameters({"param2", "param3"})
-    public AbstractVersioningTest(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public AbstractVersioningTest(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     protected URI getTimeMapUri(final Response response) {

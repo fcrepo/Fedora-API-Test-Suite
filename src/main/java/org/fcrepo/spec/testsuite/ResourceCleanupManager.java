@@ -18,6 +18,7 @@
 package org.fcrepo.spec.testsuite;
 
 import java.io.PrintStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,8 @@ import javax.ws.rs.core.Link;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import org.fcrepo.spec.testsuite.authn.AuthenticatorResolver;
 
 /**
  * Service which cleans up Fedora resources created during test runs.
@@ -87,8 +90,7 @@ public class ResourceCleanupManager {
 
     private boolean cleanupTestContainer() {
         // Determine if recursive delete allowed
-        final Response resp = RestAssured.given()
-                .auth().basic(user, password)
+        final Response resp = auth(RestAssured.given())
                 .when()
                 .options(testContainerUrl);
 
@@ -99,6 +101,11 @@ public class ResourceCleanupManager {
         return deleteResource(testContainerUrl);
     }
 
+    private RequestSpecification auth(final RequestSpecification given) {
+        return AuthenticatorResolver.getAuthenticator().createAuthToken(URI.create(user)).addAuthInfo(given);
+
+    }
+
     private void cleanupResources() {
         for (final String resourceUrl : createdResources) {
             deleteResource(resourceUrl);
@@ -106,8 +113,7 @@ public class ResourceCleanupManager {
     }
 
     private boolean deleteResource(final String url) {
-        final Response resp = RestAssured.given()
-                .auth().basic(user, password)
+        final Response resp = auth(RestAssured.given())
                 .when()
                 .delete(url);
 
@@ -116,8 +122,7 @@ public class ResourceCleanupManager {
             log.append("Failed to cleanup test resource:\n").append(url).append('\n');
             return false;
         } else {
-            final Response headResp = RestAssured.given()
-                    .auth().basic(user, password)
+            final Response headResp = auth(RestAssured.given())
                     .when()
                     .head(url);
 
@@ -131,8 +136,7 @@ public class ResourceCleanupManager {
                 String path = tombstoneOption.get().getUri().toString();
                 // Remove duplicate slashes (aside from ://) due to RestAssured issue #867
                 path = path.replaceAll("(?<!:)//", "/");
-                final Response dResp = RestAssured.given()
-                        .auth().basic(user, password)
+                final Response dResp = auth(RestAssured.given())
                         .when()
                         .delete(path);
             }

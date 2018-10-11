@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.NON_RDF_SOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
@@ -39,11 +41,10 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public LdprvHttpPut(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public LdprvHttpPut(final String username) {
+        super(username);
     }
 
     /**
@@ -52,7 +53,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprvMustSupportPUT(final String uri) {
         final TestInfo info = setupTest("4.1.2-A",
                                         "Must support PUT for creating new LDPRv",
@@ -74,7 +75,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprvMustSupportPUTForExistingResources(final String uri) {
         final TestInfo info = setupTest("4.1.2-B",
                                         "Must support PUT for updating existing LDPRvs",
@@ -114,7 +115,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpnrvMustSupportPUT(final String uri) {
         final TestInfo info = setupTest("4.1.2-C",
                                         "Must support PUT for creating new LDPNRv",
@@ -139,7 +140,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpnrvMustSupportPUTForExistingResources(final String uri) {
         final TestInfo info = setupTest("4.1.2-D",
                                         "Must support PUT for updating existing  LDPNRvs",

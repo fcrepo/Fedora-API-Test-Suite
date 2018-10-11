@@ -20,7 +20,10 @@ package org.fcrepo.spec.testsuite.event;
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.TEN_SECONDS;
 import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
+import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
 import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -81,20 +84,19 @@ public class NotificationTest extends AbstractEventTest {
     /**
      * Default constructor.
      *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
+     * @param rootControllerUserWebId root container controller WebID
      * @param username regular username
-     * @param password regular user password
      * @param jmsBroker broker url
      * @param queueName queue name
      * @param topicName topic name
      * @throws JMSException on error connecting to broker
      */
-    @Parameters({ "param2", "param3", "param4", "param5", BROKER_URL_PARAM, QUEUE_NAME_PARAM, TOPIC_NAME_PARAM })
-    public NotificationTest(final String adminUsername, final String adminPassword, final String username,
-            final String password, final String jmsBroker, final String queueName, final String topicName)
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM, BROKER_URL_PARAM, QUEUE_NAME_PARAM,
+                 TOPIC_NAME_PARAM})
+    public NotificationTest(final String rootControllerUserWebId, final String username,
+            final String jmsBroker, final String queueName, final String topicName)
             throws JMSException {
-        super(adminUsername, adminPassword, username, password, jmsBroker, queueName, topicName);
+        super(rootControllerUserWebId, username, jmsBroker, queueName, topicName);
     }
 
     /**
@@ -105,7 +107,7 @@ public class NotificationTest extends AbstractEventTest {
      * @throws InterruptedException interrupt the thread.sleep
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
+    @Parameters({ TEST_CONTAINER_URL_PARAM })
     public void testCatchMessage(final String uri) throws JMSException, InterruptedException {
         final TestInfo info = setupTest("6.1",
                 "For every resource whose state is changed as a result of an HTTP operation, there MUST be a " +
@@ -167,7 +169,7 @@ public class NotificationTest extends AbstractEventTest {
      * @throws JMSException problems connecting to broker
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
+    @Parameters({ TEST_CONTAINER_URL_PARAM })
     public void testEventSerialization(final String uri) throws JMSException {
         final TestInfo info = setupTest("6.2-A",
                 "The notification serialization MUST conform to the [activitystreams-core] specification, " +
@@ -237,7 +239,7 @@ public class NotificationTest extends AbstractEventTest {
      * @throws JMSException problems connecting to broker
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
+    @Parameters({ TEST_CONTAINER_URL_PARAM })
     public void testEventSerializationShould(final String uri) throws JMSException {
         final TestInfo info = setupTest("6.2-B",
                 "Wherever possible, data SHOULD be expressed using the [activitystreams-vocabulary]. ",

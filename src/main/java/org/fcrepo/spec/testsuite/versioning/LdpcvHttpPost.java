@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
 import static org.testng.AssertJUnit.fail;
@@ -41,12 +43,11 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     /**
      * Authentication
      *
-     * @param username The repository username
-     * @param password The repository password
+     * @param rootControllerUserWebId The repository rootControllerUserWebId
      */
-    @Parameters({"param2", "param3"})
-    public LdpcvHttpPost(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public LdpcvHttpPost(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     /**
@@ -55,7 +56,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = { "MAY" })
-    @Parameters({ "param1" })
+    @Parameters({ TEST_CONTAINER_URL_PARAM })
     public void ldpcvMayDisallowPost(final String uri) {
         final TestInfo info = setupTest("4.3",
                 "Although an LDPCv is both a TimeMap and an LDPC, implementations MAY disallow POST requests.",
@@ -76,7 +77,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvOfLdprsShouldSupportPostWithoutMementoDatetimeHeader(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-A",
                                         "If an LDPCv of an LDP-RS supports POST, a POST request that does not contain" +
@@ -117,7 +118,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvOfLdpnrsShouldSupportPostWithoutMementoDatetimeHeader(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-B",
                                         "If an LDPCv of an LDP-NR supports POST, a POST request that does not contain" +
@@ -156,7 +157,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void postToldpcvOfLdprsWithoutMementoDatetimeMustIgnoreBody(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-C",
                                         "If an LDPCv of an LDP-RS supports POST, a POST request that does not contain" +
@@ -195,7 +196,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void postToldpcvOfLdpnrWithoutMementoDatetimeMustIgnoreBody(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-D",
                                         "If an LDPCv of an LDP-NR supports POST, a POST request that does not contain" +
@@ -232,7 +233,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void postToldpcvOfLdprWithMementoDatetimeShouldCreateNewResource(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-E",
                                         "If an LDPCv supports POST, a POST with a Memento-Datetime header " +
@@ -268,7 +269,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void mementoDatetimeHeaderShouldMatchThatUsedWhenMementoCreated(final String uri) {
         final TestInfo info = setupTest("4.3.3.1-F",
                                         " If an LDPCv supports POST, a POST with a Memento-Datetime header " +
@@ -301,7 +302,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvDoesNotSupportPost(final String uri) {
         final TestInfo info = setupTest("4.3.3.2",
                                         "If an implementation does not support one or both of POST cases " +
@@ -341,7 +342,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMayDisallowPut(final String uri) {
         final TestInfo info = setupTest("4.3.4",
                                         "Implementations MAY disallow PUT.",
@@ -365,7 +366,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMayDisallowPatch(final String uri) {
         final TestInfo info = setupTest("4.3.5",
                                         "Implementations MAY disallow PATCH",

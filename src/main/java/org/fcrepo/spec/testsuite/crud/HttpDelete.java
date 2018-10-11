@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
@@ -38,11 +40,10 @@ public class HttpDelete extends AbstractTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public HttpDelete(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public HttpDelete(final String username) {
+        super(username);
     }
 
     /**
@@ -51,7 +52,7 @@ public class HttpDelete extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void httpDeleteOptionsCheck(final String uri) {
         final TestInfo info = setupTest("3.8.1-A",
                                         "An implementation that cannot recurse should not advertise DELETE in " +
@@ -133,7 +134,7 @@ public class HttpDelete extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void httpDeleteStatusCheck(final String uri) {
         final TestInfo info = setupTest("3.8.1-C",
                                         "An implementation must not return a 200 (OK) or 204 (No Content) response "
@@ -210,7 +211,7 @@ public class HttpDelete extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void httpDeleteStatusCheckTwo(final String uri) {
         final TestInfo info = setupTest("3.8.1-D",
                                         "An implementation must not emit a message that implies the successful DELETE" +

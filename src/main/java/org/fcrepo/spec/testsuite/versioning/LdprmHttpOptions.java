@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.testng.Assert.assertEquals;
 
 import io.restassured.response.Response;
@@ -34,12 +36,11 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     /**
      * Authentication
      *
-     * @param username The repository username
-     * @param password The repository password
+     * @param rootControllerUserWebId The repository rootControllerUserWebId
      */
-    @Parameters({"param2", "param3"})
-    public LdprmHttpOptions(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public LdprmHttpOptions(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     /**
@@ -48,7 +49,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprmMustSupportOptions(final String uri) {
         final TestInfo info = setupTest("4.2.2-A",
                                         "LDPRm resources must support OPTIONS",
@@ -74,7 +75,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprmOptionsMustSupportGetHeadAndOptions(final String uri) {
         final TestInfo info = setupTest("4.2.2-B",
                                         "A response to an OPTIONS request must include Allow: GET, HEAD, OPTIONS",
@@ -96,7 +97,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprmOptionsMaySupportDelete(final String uri) {
         final TestInfo info = setupTest("4.2.2-C",
                                         "A response to an OPTIONS request may include Allow: DELETE",
@@ -117,7 +118,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprmMustNotSupportPost(final String uri) {
         final TestInfo info = setupTest("4.2.3",
                                         "An LDPRm must not support POST",
@@ -139,7 +140,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprmMustNotSupportPut(final String uri) {
         final TestInfo info = setupTest("4.2.4",
                                         "An LDPRm must not support PUT",
@@ -163,7 +164,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprmMustNotSupportPatch(final String uri) {
         final TestInfo info = setupTest("4.2.5",
                                         "An LDPRm must not support PATCH",

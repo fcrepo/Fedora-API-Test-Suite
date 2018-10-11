@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.testng.AssertJUnit.assertEquals;
 
@@ -36,11 +38,10 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public LdpcvHttpDelete(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public LdpcvHttpDelete(final String username) {
+        super(username);
     }
 
     /**
@@ -49,7 +50,7 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMaySupportDelete(final String uri) {
         final TestInfo info = setupTest("4.3.6-A",
                                         "An implementation MAY support DELETION of LDPCvs.",
@@ -71,7 +72,7 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos(final String uri) {
         final TestInfo info = setupTest("4.3.6-B",
                                         "An implementation that does support DELETE should do so by both " +

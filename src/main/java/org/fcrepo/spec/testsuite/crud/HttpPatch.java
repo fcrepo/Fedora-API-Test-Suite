@@ -18,6 +18,8 @@
 package org.fcrepo.spec.testsuite.crud;
 
 import static org.fcrepo.spec.testsuite.App.CONSTRAINT_ERROR_GENERATOR_PARAM;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -63,14 +65,13 @@ public class HttpPatch extends AbstractTest {
     /**
      * Authentication
      *
-     * @param username The repository username
-     * @param password The repository password
+     * @param rootControllerUserWebId The repository rootControllerUserWebId
      * @param constraintErrorGeneratingSparqlQuery A file path containing a sparql query that will generate a constraint
      *                                             error.
      */
-    @Parameters({"param2", "param3", CONSTRAINT_ERROR_GENERATOR_PARAM})
-    public HttpPatch(final String username, final String password, final String constraintErrorGeneratingSparqlQuery) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, CONSTRAINT_ERROR_GENERATOR_PARAM})
+    public HttpPatch(final String rootControllerUserWebId, final String constraintErrorGeneratingSparqlQuery) {
+        super(rootControllerUserWebId);
         this.constraintErrorGeneratingSparqlQuery = constraintErrorGeneratingSparqlQuery;
     }
 
@@ -80,7 +81,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void supportPatch(final String uri) {
         final TestInfo info = setupTest("3.7-A",
                                         "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). " +
@@ -100,7 +101,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpPatchContentTypeSupport(final String uri) {
         final TestInfo info = setupTest("3.7-B",
                                         "Other content-types (e.g. [ldpatch]) may be available.",
@@ -117,7 +118,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void serverManagedPropertiesModification(final String uri) {
         final TestInfo info = setupTest("3.7-C",
                                         "If an otherwise valid HTTP PATCH request is received that attempts to modify "
@@ -148,7 +149,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void statementNotPersistedResponseBody(final String uri) {
         final TestInfo info = setupTest("3.7-D",
                                         "The server must provide a corresponding response body containing information"
@@ -171,7 +172,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void statementNotPersistedConstrainedBy(final String uri) {
         final TestInfo info = setupTest("3.7-E",
                                         "In that response, the restrictions causing such a request to fail must be"
@@ -193,7 +194,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void successfulPatchStatusCode(final String uri) {
         final TestInfo info = setupTest("3.7-F",
                                         "A successful PATCH request must respond with a 2xx status code; the "
@@ -229,7 +230,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void disallowPatchContainmentTriples(final String uri) {
         final TestInfo info = setupTest("3.7.1",
                                         "The server should not allow HTTP PATCH to update an LDPC’s containment " +
@@ -254,7 +255,7 @@ public class HttpPatch extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void disallowChangeResourceType(final String uri) {
         final TestInfo info = setupTest("3.7.2",
                                         "The server must disallow a PATCH request that would change the LDP"

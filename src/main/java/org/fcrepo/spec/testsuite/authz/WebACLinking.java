@@ -17,6 +17,9 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
+
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -35,11 +38,10 @@ public class WebACLinking extends AbstractTest {
      * Constructor
      *
      * @param username username
-     * @param password password
      */
-    @Parameters({"param2", "param3"})
-    public WebACLinking(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public WebACLinking(final String username) {
+        super(username);
     }
 
     /**
@@ -48,7 +50,7 @@ public class WebACLinking extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void linkToAclOnCreation(final String uri) {
         final TestInfo info = setupTest("5.4-A",
                                         "A client HTTP POST or PUT request to create a new LDPR may include a " +
@@ -76,7 +78,7 @@ public class WebACLinking extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void conflictIfNotSupportingAclLink(final String uri) {
         final TestInfo info = setupTest("5.4-B",
                                         "The server must reject the request and respond with a 4xx or 5xx range " +

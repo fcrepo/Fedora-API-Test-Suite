@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
@@ -39,11 +41,10 @@ public class Ldpnr extends AbstractTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public Ldpnr(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public Ldpnr(final String username) {
+        super(username);
     }
 
     /**
@@ -52,7 +53,7 @@ public class Ldpnr extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpnrCreationLinkType(final String uri) {
         final TestInfo info = setupTest("3.1.2-A",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
@@ -113,7 +114,7 @@ public class Ldpnr extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpnrCreationWrongLinkType(final String uri) {
         final TestInfo info = setupTest("3.1.2-B",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +

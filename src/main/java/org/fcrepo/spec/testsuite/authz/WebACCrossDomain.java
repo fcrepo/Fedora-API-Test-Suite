@@ -17,6 +17,9 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
+
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -32,12 +35,11 @@ public class WebACCrossDomain extends AbstractTest {
     /**
      * Constructor
      *
-     * @param username username
-     * @param password password
+     * @param rootControllerUserWebId rootControllerUserWebId
      */
-    @Parameters({"param2", "param3"})
-    public WebACCrossDomain(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public WebACCrossDomain(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     /**
@@ -46,7 +48,7 @@ public class WebACCrossDomain extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void restrictAclToLocal(final String uri) {
         final TestInfo info = setupTest("5.5-A",
                 "Implementations may restrict support for ACLs to local resources.",
@@ -59,7 +61,7 @@ public class WebACCrossDomain extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void rejectRemoteAclStatus(final String uri) {
         final TestInfo info = setupTest("5.5-B",
                 "If an implementation chooses to reject requests concerning remote ACLs, it must respond with a " +
@@ -73,7 +75,7 @@ public class WebACCrossDomain extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void rejectRemoteAclConstraint(final String uri) {
         final TestInfo info = setupTest("5.5-C",
                 "If an implementation chooses to reject requests concerning remote ACLs, it must advertise the " +
@@ -88,7 +90,7 @@ public class WebACCrossDomain extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void restrictGroupToLocal(final String uri) {
         final TestInfo info = setupTest("5.6-A",
                 "Implementations may restrict support for groups of agents to local Group Listing documents.",
@@ -101,7 +103,7 @@ public class WebACCrossDomain extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void rejectRemoteGroupStatus(final String uri) {
         final TestInfo info = setupTest("5.6-B",
                 "If an implementation chooses to reject requests concerning remote Group Listings, it must respond " +
@@ -115,7 +117,7 @@ public class WebACCrossDomain extends AbstractTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void rejectRemoteGroupConstraint(final String uri) {
         final TestInfo info = setupTest("5.6-C",
                 "If an implementation chooses to reject requests concerning remote Group Listings, it must advertise " +

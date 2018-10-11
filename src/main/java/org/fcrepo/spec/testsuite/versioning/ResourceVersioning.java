@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
 import java.net.URI;
@@ -36,12 +38,11 @@ public class ResourceVersioning extends AbstractVersioningTest {
     /**
      * Authentication
      *
-     * @param username The repository username
-     * @param password The repository password
+     * @param rootControllerUserWebId The repository rootControllerUserWebId
      */
-    @Parameters({"param2", "param3"})
-    public ResourceVersioning(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public ResourceVersioning(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     /**
@@ -50,7 +51,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void postLdprWithType(final String uri) {
         final TestInfo info = setupTest("4.0-A",
                                         "When an LDPR is created with a rel=\"type\" link in the Link " +
@@ -77,7 +78,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = { "MAY" })
-    @Parameters({ "param1" })
+    @Parameters({ TEST_CONTAINER_URL_PARAM })
     public void convertToLDPRViaPutWithType(final String uri) {
         final TestInfo info = setupTest("4.0-B",
                 "Implementations MAY allow a subsequent PUT request with a rel=\"type\" link in the Link header " +

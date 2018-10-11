@@ -19,6 +19,8 @@ package org.fcrepo.spec.testsuite.versioning;
 
 import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
 
@@ -44,11 +46,10 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public LdprvHttpGet(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public LdprvHttpGet(final String username) {
+        super(username);
     }
 
     /**
@@ -57,7 +58,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void shouldReturn406WhenNoLdprm(final String uri) {
         final TestInfo info = setupTest("4.1.1-A-1",
                                         "If no LDPRm is appropriate to the Accept-Datetime value, " +
@@ -93,7 +94,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void shouldReturn302WhenLdprmFromTimeGate(final String uri) {
         final TestInfo info = setupTest("4.1.1-A-2",
                                         "The Accept-Datetime header is used to request a past state, " +
@@ -138,7 +139,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpvGetMustReturnHeaderOriginalTypeLink(final String uri) {
         final TestInfo info = setupTest("4.1.1-B",
                                         "The response to a GET request on an LDPRv must return " +
@@ -159,7 +160,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpvGetMustReturnHeaderTimeGateTypeLink(final String uri) {
         final TestInfo info = setupTest("4.1.1-C",
                                         "The response to a GET request on an LDPRv must return " +
@@ -180,7 +181,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpvGetMustReturnOriginalResourceLink(final String uri) {
         final TestInfo info = setupTest("4.1.1-D",
                                         "The response to a GET request on an LDPRv must return a " +
@@ -201,7 +202,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpvGetMustReturnTimeGateTypeLink(final String uri) {
         final TestInfo info = setupTest("4.1.1-E",
                                         "The response to a GET request on an LDPRv must return a " +
@@ -222,7 +223,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpvGetMustReturnTimeMapLink(final String uri) {
         final TestInfo info = setupTest("4.1.1-F",
                                         "The response to a GET request on an LDPRv must return At least one " +
@@ -243,7 +244,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpvGetMustReturnVaryHeader(final String uri) {
         final TestInfo info = setupTest("4.1.1-G",
                                         "The response to a GET request on an LDPRv must return " +

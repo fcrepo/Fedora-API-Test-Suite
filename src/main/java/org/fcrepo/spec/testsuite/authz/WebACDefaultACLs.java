@@ -17,6 +17,9 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.ROOT_URL_PARAM;
 import static org.testng.AssertJUnit.assertEquals;
 
 import java.net.URI;
@@ -37,15 +40,12 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     /**
      * Constructor
      *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
+     * @param rootControllerUserWebId root container controller WebID
+     * @param permissionlessUserWebId      permissionlessUserWebId
      */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public WebACDefaultACLs(final String adminUsername, final String adminPassword, final String username,
-                            final String password) {
-        super(adminUsername, adminPassword, username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM})
+    public WebACDefaultACLs(final String rootControllerUserWebId, final String permissionlessUserWebId) {
+        super(rootControllerUserWebId, permissionlessUserWebId);
     }
 
     /**
@@ -56,7 +56,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
      * @param uri of base fedora uri
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param0"})
+    @Parameters({ROOT_URL_PARAM})
     public void aclInheritanceMustUseLdpContainmentRelationships(final String uri) {
         final TestInfo info =
             setupTest("5.9-A", "Inheritance of ACLs in Fedora implementations is defined by the [SOLIDWEBAC]" +
@@ -70,11 +70,11 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
         //create a resource
         final String grandParentUri = createResource(uri, info.getId());
         //create an acl with acl:default with write privileges
-        createAclForResource(grandParentUri, "user-read-write.ttl", this.username);
+        createAclForResource(grandParentUri, "user-read-write.ttl", this.permissionlessUserWebId);
         //create a child  and child acl with read privileges and no acl:default
         final Response childPost = doPost(grandParentUri, headers, simpleRDFBody);
         final String childUri = getLocation(childPost);
-        createAclForResource(childUri, "user-read-only-no-default.ttl", this.username);
+        createAclForResource(childUri, "user-read-only-no-default.ttl", this.permissionlessUserWebId);
 
         //create a grandchild  with no acl.
         final Response grandChildPost = doPost(childUri, headers, simpleRDFBody);
@@ -100,7 +100,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param0"})
+    @Parameters({ROOT_URL_PARAM})
     public void serverSuppliedDefaultAcl(final String uri) {
         setupTest("5.9-B", "In the case that the controlled resource is uncontained and has no ACL, or " +
                            "that there is no ACL at any point in the containment hierarchy of the " +
@@ -119,7 +119,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
      * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param0"})
+    @Parameters({ROOT_URL_PARAM})
     public void defaultAclOnSameServer(final String uri) {
         setupTest("5.9-C", "The default ACL resource should be located in the same server (host and port) as the " +
                            "controlled resource.",

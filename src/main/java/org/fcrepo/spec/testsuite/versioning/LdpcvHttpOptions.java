@@ -17,6 +17,9 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
+
 import java.net.URI;
 
 import io.restassured.response.Response;
@@ -34,11 +37,10 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public LdpcvHttpOptions(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public LdpcvHttpOptions(final String username) {
+        super(username);
     }
 
     /**
@@ -47,7 +49,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMustSupportOptions(final String uri) {
         final TestInfo info = setupTest("4.3.2-A",
                                         "LDPCv (version containers) MUST support OPTIONS.",
@@ -72,7 +74,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvOptionsMustAllowHeadGetOptions(final String uri) {
         final TestInfo info = setupTest("4.3.2-B",
                                         "LDPCv's response to an OPTIONS request MUST include \"Allow: GET, " +
@@ -101,7 +103,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMaySupportDeleteOption(final String uri) {
         final TestInfo info = setupTest("4.3.2-C",
                                         "LDPCv (version containers) MAY support DELETE.",
@@ -126,7 +128,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMaySupportPatch(final String uri) {
         final TestInfo info = setupTest("4.3.2-D",
                                         "LDPCv (version containers) MAY support PATCH.",
@@ -151,7 +153,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMaySupportPost(final String uri) {
         final TestInfo info = setupTest("4.3.2-E",
                                         "LDPCv (version containers) MAY support POST.",
@@ -176,7 +178,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMustReturnAcceptPostHeaderIfPostIsSupported(final String uri) {
         final TestInfo info = setupTest("4.3.2-F",
                                         "If an LDPCv supports POST, the response to an OPTIONS request " +
@@ -207,7 +209,7 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldpcvMustReturnAcceptPatchHeaderIfPatchIsSupported(final String uri) {
         final TestInfo info = setupTest("4.3.2-G",
                                         "If an LDPCv supports PATCH, the response to an OPTIONS request " +

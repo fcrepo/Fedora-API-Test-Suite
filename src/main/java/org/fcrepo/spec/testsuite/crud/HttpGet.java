@@ -17,6 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.RDF_BODY;
@@ -47,11 +49,10 @@ public class HttpGet extends AbstractTest {
      * Authentication
      *
      * @param username The repository username
-     * @param password The repository password
      */
-    @Parameters({"param2", "param3"})
-    public HttpGet(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public HttpGet(final String username) {
+        super(username);
     }
 
     /**
@@ -60,7 +61,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void additionalValuesForPreferHeader(final String uri) {
         final TestInfo info = setupTest("3.2.1-A",
                                         "In addition to the requirements of [LDP], an implementation ... " +
@@ -95,7 +96,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void additionalValuesForPreferHeaderContainedDescriptions(final String uri) {
         final TestInfo info = setupTest("3.2.1-B",
                 "In addition to the requirements of [LDP], an implementation ... " +
@@ -128,7 +129,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void responsePreferenceAppliedHeader(final String uri) {
         final TestInfo info = setupTest("3.2.2-A",
                                         "Responses to GET requests that apply a Prefer request header to any LDP-RS " +
@@ -151,7 +152,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void responseDescribesHeader(final String uri) {
         final TestInfo info = setupTest("3.2.2-B",
                                         "When a GET request is made to an LDP-RS that describes an associated LDP-NR "
@@ -188,7 +189,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestMd5(final String uri) {
         final TestInfo info = setupTest("3.2.3-A-1",
                                         "Testing for supported digest: md5 . "
@@ -215,7 +216,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestSha1(final String uri) {
         final TestInfo info = setupTest("3.2.3-A-2",
                                         "Testing for supported digest: sha . "
@@ -242,7 +243,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestSha256(final String uri) {
         final TestInfo info = setupTest("3.2.3-A-3",
                                         "Testing for supported digest: sha-256 . "
@@ -269,7 +270,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestTwoSupported(final String uri) {
         final String checksum = "md5,sha";
         final TestInfo info = setupTest("3.2.3-B",
@@ -305,7 +306,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) {
         final String checksum = "md5;q=0.3,sha;q=1";
         final TestInfo info = setupTest("3.2.3-C",
@@ -341,7 +342,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestTwoSupportedQvalueZero(final String uri) {
         final String checksum = "md5;q=0.3,sha;q=0";
         final TestInfo info = setupTest("3.2.3-D",
@@ -366,7 +367,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestNonSupportedWithSupported(final String uri) {
         final String checksum = "md5,abc";
 
@@ -392,7 +393,7 @@ public class HttpGet extends AbstractTest {
      * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void respondWantDigestNonSupported(final String uri) {
         final String checksum = "abc";
 

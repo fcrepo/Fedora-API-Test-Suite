@@ -17,6 +17,9 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,15 +39,22 @@ public class AbstractAuthzTest extends AbstractTest {
     /**
      * Constructor
      *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
+     * @param rootControllerUserWebId root container controller WebID
+     * @param permissionlessUserWebId      permissionlessUserWebId
      */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public AbstractAuthzTest(final String adminUsername, final String adminPassword, final String username,
-                             final String password) {
-        super(adminUsername, adminPassword, username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM})
+    public AbstractAuthzTest(final String rootControllerUserWebId, final String permissionlessUserWebId) {
+        super(rootControllerUserWebId, permissionlessUserWebId);
+    }
+
+    /**
+     * Constructor
+     *
+     * @param rootControllerUserWebId root container controller WebID
+     */
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public AbstractAuthzTest(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     protected String filterFileAndConvertToString(final String fileName, final Map<String, String> params) {
@@ -55,10 +65,10 @@ public class AbstractAuthzTest extends AbstractTest {
         return str;
     }
 
-    protected String getAclAsString(final String fileName, final String resourceUri, final String username) {
+    protected String getAclAsString(final String fileName, final String resourceUri, final String user) {
         final Map<String, String> params = new HashMap<>();
         params.put("resource", resourceUri);
-        params.put("user", username);
+        params.put("user", user);
         return filterFileAndConvertToString(fileName, params);
     }
 

@@ -29,6 +29,8 @@ import org.testng.annotations.Test;
 import io.restassured.response.Response;
 import static org.apache.jena.rdf.model.ResourceFactory.createResource;
 import static org.apache.jena.rdf.model.ResourceFactory.createProperty;
+import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 
 /**
  * Tests for DELETE requests on LDP Memento Resources
@@ -40,12 +42,11 @@ public class LdprmHttpDelete extends AbstractVersioningTest {
     /**
      * Authentication
      *
-     * @param username The repository username
-     * @param password The repository password
+     * @param rootControllerUserWebId The repository rootControllerUserWebId
      */
-    @Parameters({"param2", "param3"})
-    public LdprmHttpDelete(final String username, final String password) {
-        super(username, password);
+    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
+    public LdprmHttpDelete(final String rootControllerUserWebId) {
+        super(rootControllerUserWebId);
     }
 
     /**
@@ -54,7 +55,7 @@ public class LdprmHttpDelete extends AbstractVersioningTest {
      * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
+    @Parameters({TEST_CONTAINER_URL_PARAM})
     public void ldprmMustSupportDeleteIfAdvertised(final String uri) {
         final TestInfo info = setupTest("4.2.6",
                                         "LDPRm resources must support DELETE if DELETE is advertised in OPTIONS",

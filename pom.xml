@@ -37,6 +37,8 @@
     <javax.jms.version>2.0.1</javax.jms.version>
     <wiremock.version>2.18.0</wiremock.version>
     <yamlbeans.version>1.09</yamlbeans.version>
+      <reflections.version>0.9.11</reflections.version>
+
     <app.main.class>org.fcrepo.spec.testsuite.App</app.main.class>
   </properties>
 
@@ -282,6 +284,11 @@
       <version>${awaitility.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>${reflections.version}</version>
+    </dependency>
 
     <!-- https://mvnrepository.com/artifact/javax.xml.parsers/jaxp-api -->
     <!-- <dependency>
