@@ -124,7 +124,7 @@ public class AbstractVersioningTest extends AbstractTest {
 
     protected void confirmPresenceOfMementoDatetimeHeader(final String mementoDateTime, final Response response) {
         final String dateTime = response.getHeader(MEMENTO_DATETIME_HEADER);
-        assertEquals(mementoDateTime, dateTime, "Memento-Datetime header does not match expected");
+        assertEquals("Memento-Datetime header does not match expected", mementoDateTime, dateTime);
     }
 
 
