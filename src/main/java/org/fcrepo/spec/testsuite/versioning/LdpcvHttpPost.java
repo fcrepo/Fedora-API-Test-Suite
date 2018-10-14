@@ -245,17 +245,19 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         //if post is supported on the ldpcv
         // get the new resource, which should have all the proper memento headers
         final String originalResource = getLocation(createResponse);
-        final Response originalResponse = doGet(originalResource);
+        final Header acceptNTriples = new Header("Accept", "application/n-triples");
+        final Response originalResponse = doGet(originalResource, acceptNTriples);
         //get the original resource and add a triple
         final String body =
-            originalResponse.getBody().asString() + "\n<" + originalResource + "> dc:description \"test\" .";
+            originalResponse.getBody().asString() +
+                    "<" + originalResource + "> <http://purl.org/dc/elements/1.1/description> \"test\"";
         final URI timeMapURI = getTimeMapUri(originalResponse);
         if (hasHeaderValueInMultiValueHeader("Allow", "POST", doGet(timeMapURI.toString()))) {
             //create a memento using the Memento-Datetime and a body
             final String mementoUri =
                 createMemento(originalResource, "Sat, 1 Jan 2000 00:00:00 GMT", "text/turtle", body);
             // is the memento exactly the same as provided?
-            confirmResponseBodyNTriplesAreEqual(body, doGet(mementoUri).getBody().asString());
+            confirmResponseBodyNTriplesAreEqual(body, doGet(mementoUri, acceptNTriples).getBody().asString());
 
         }
     }
