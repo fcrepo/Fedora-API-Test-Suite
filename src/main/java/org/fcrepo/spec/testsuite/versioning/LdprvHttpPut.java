@@ -99,7 +99,8 @@ public class LdprvHttpPut extends AbstractVersioningTest {
             new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER));
 
         //add a triple to the body
-        final String newBody = body +  "\n\n<" + resourceUri + "> dc:title \"title test\" .";
+        final String newBody = body +  "@prefix dc: <http://purl.org/dc/elements/1.1/>\n\n" +
+                "<" + resourceUri + "> dc:title \"title test\" .";
         final Response response2 = doPutUnverified(resourceUri, headers, newBody);
         assertEquals(response2.getStatusCode(), 204);
         final Response getResponse2 = doGet(resourceUri, acceptTurtleHeader);
