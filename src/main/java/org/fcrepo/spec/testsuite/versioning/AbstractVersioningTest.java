@@ -150,6 +150,8 @@ public class AbstractVersioningTest extends AbstractTest {
     protected void confirmResponseBodyNTriplesAreEqual(final String responseBodyA, final String responseBodyB) {
         final String[] aTriples = responseBodyA.split(".(\\r\\n|\\r|\\n)");
         final String[] bTriples = responseBodyB.split(".(\\r\\n|\\r|\\n)");
+        Arrays.stream(aTriples).map(String::trim).toArray(unused -> aTriples);
+        Arrays.stream(bTriples).map(String::trim).toArray(unused -> bTriples);
         sort(aTriples);
         sort(bTriples);
         Assert.assertTrue(Arrays.equals(aTriples, bTriples));
