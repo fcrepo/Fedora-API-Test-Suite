@@ -461,7 +461,8 @@ public class AbstractTest {
     protected Response doPatchUnverified(final String uri, final Headers headers, final String body,
                                          final boolean admin) {
         final RequestSpecification req = createRequest(admin).config(RestAssured.config().encoderConfig(
-                new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)));
+                new EncoderConfig().encodeContentTypeAs(APPLICATION_SPARQL_UPDATE, ContentType.TEXT)
+        .appendDefaultContentCharsetToContentTypeIfUndefined(false)));
         if (headers != null) {
             req.headers(headers);
         }
