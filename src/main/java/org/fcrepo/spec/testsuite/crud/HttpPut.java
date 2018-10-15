@@ -28,6 +28,7 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.SkipException;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -452,7 +453,7 @@ public class HttpPut extends AbstractTest {
 
         final Response resp = doPutUnverified(location, headers, "content");
         if (resp.statusCode() != 201) {
-            return;
+            throw new SkipException("PUT not supported");
         }
         final Link describedby = getLinksOfRelType(resp, "describedby").findFirst().get();
         doGet(describedby.getUri().toString());

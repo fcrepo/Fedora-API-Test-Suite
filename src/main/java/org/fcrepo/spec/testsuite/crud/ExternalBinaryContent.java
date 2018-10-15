@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
@@ -491,7 +492,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         if (externalContentSupported(uri)) {
-            return;
+            throw new SkipException("External Binaries are supported");
         }
 
         final Headers headers = new Headers(
@@ -517,7 +518,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
         if (externalContentSupported(uri)) {
-            return;
+            throw new SkipException("External Binaries are supported");
         }
 
         final Headers headers = new Headers(

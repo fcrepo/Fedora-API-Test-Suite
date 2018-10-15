@@ -22,6 +22,7 @@ import java.net.URI;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.SkipException;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -68,7 +69,7 @@ public class LdprmHttpDelete extends AbstractVersioningTest {
         //check if LDPRm supports DELETE and if so perform DELETE
         final String accept = doOptions(mementoUri).header("Allow");
         if (!accept.contains("DELETE")) {
-            return;
+            throw new SkipException("DELETE not supported");
         }
         doDelete(mementoUri);
 

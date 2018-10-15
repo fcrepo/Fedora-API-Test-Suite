@@ -22,6 +22,7 @@ import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
 import java.net.URI;
 
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.SkipException;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -92,7 +93,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
         final Response response = putVersionedResourceUnverified(resourceUri);
         // PUT creation operation not supported
         if (clientErrorRange().matches(response.getStatusCode())) {
-            return;
+            throw new SkipException("External Binaries are supported");
         }
 
         // is a LDPRv: URI-R and Timegate
