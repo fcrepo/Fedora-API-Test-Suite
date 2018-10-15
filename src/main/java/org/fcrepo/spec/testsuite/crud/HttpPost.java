@@ -20,10 +20,11 @@ package org.fcrepo.spec.testsuite.crud;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
-import static org.hamcrest.Matchers.containsString;
+import static org.testng.Assert.assertTrue;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
+import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.annotations.Parameters;
@@ -95,9 +96,8 @@ public class HttpPost extends AbstractTest {
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\""),
                 new Header(SLUG, info.getId()));
-        doPost(uri, headers, "TestString.")
-                .then()
-                .header("Link", containsString("describedby"));
+        final Response response = doPost(uri, headers, "TestString.");
+        assertTrue(getLinksOfRelType(response, "describedby").count() >= 1, "No describedby Link header found!");
     }
 
     /**

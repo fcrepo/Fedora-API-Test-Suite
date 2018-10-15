@@ -48,6 +48,7 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.message.BasicHeaderValueParser;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
@@ -536,7 +537,8 @@ public class AbstractTest {
     protected Stream<Link> getLinksOfRelType(final Response response, final String relType) {
         return getHeaders(response, "Link")
             // Link header may include multiple, comma-separated link values
-            .flatMap(header -> Arrays.stream(header.getValue().split(",")).map(linkStr -> Link.valueOf(linkStr)))
+            .flatMap(header -> Arrays.stream(BasicHeaderValueParser.parseElements(header.getValue(), null))
+                    .map(linkElement -> Link.valueOf(linkElement.toString())))
             // Each link value may contain multiple "rel" values
             .filter(link -> link.getRels().stream().anyMatch(rel -> rel.equalsIgnoreCase(relType)));
     }
