@@ -18,6 +18,7 @@ maven-eclipse.xml
 atlassian-ide-plugin.xml
 test-output
 testng-local.xml
+config-local.yml
 /bin
 /report
 *.swp
