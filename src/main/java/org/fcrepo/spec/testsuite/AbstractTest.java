@@ -340,7 +340,7 @@ public class AbstractTest {
     protected Response doOptions(final String uri, final boolean admin) {
         final Response response = doOptionsUnverified(uri, admin);
 
-        response.then().statusCode(200);
+        response.then().statusCode(successRange());
 
         return response;
     }
