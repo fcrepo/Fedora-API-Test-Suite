@@ -84,7 +84,7 @@ public class AbstractAuthzTest extends AbstractTest {
         //create read acl for user role
         final Response response = doPutUnverified(aclUri, new Headers(new Header("Content-Type", "text/turtle")),
                                                   getAclAsString(aclFileName, resourceUri, username));
-        response.then().statusCode(201);
+        response.then().statusCode(successRange());
         return aclUri;
     }
 
@@ -95,7 +95,7 @@ public class AbstractAuthzTest extends AbstractTest {
         //create read acl for user role
         final Response response = doPutUnverified(aclUri, new Headers(new Header("Content-Type", "text/turtle")),
                                                   filterFileAndConvertToString(aclFileName, aclParams));
-        response.then().statusCode(201);
+        response.then().statusCode(successRange());
         return aclUri;
     }
 
