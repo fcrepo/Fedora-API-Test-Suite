@@ -441,20 +441,28 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-control.ttl", this.username);
-        //perform PUT  to child resource as non-admin
-        final Response putResponse =
-            doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
-                            "test", false);
-        //verify successful
-        putResponse.then().statusCode(201);
 
-        //get acl location of child
-        final String childResourceUri = getLocation(putResponse);
-        final String childAclUri = getAclLocation(childResourceUri);
+        // ACL allows control but not read/write
+        final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.username);
 
-        doPut(childAclUri, new Headers(new Header("Content-Type", "text/turtle")),
-              getAclAsString("user-read-only.ttl", childResourceUri, this.username));
+        // Verify that non-admin user can not read the resource
+        doGetUnverified(resourceUri, false).then().statusCode(403);
+
+        final String body = "PREFIX acl: <http://www.w3.org/ns/auth/acl#>\n"
+                + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"
+                + " INSERT {\n"
+                + " <#openaccess> a acl:Authorization ;"
+                + " acl:mode acl:Read ;\n"
+                + " acl:agentClass foaf:Agent ; \n"
+                + " acl:accessTo <" + resourceUri + "> .\n"
+                + "}"
+                + " WHERE { }";
+
+        // Verify that non-admin user can update ACL
+        doPatch(aclUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
+
+        // Verify that non-admin user can now read the resource
+        doGet(resourceUri, false);
     }
 
     /**
