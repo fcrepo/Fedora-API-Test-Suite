@@ -20,7 +20,6 @@ package org.fcrepo.spec.testsuite.crud;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
-import static org.hamcrest.Matchers.containsString;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -96,8 +95,7 @@ public class HttpPost extends AbstractTest {
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\""),
                 new Header(SLUG, info.getId()));
         doPost(uri, headers, "TestString.")
-                .then()
-                .header("Link", containsString("describedby"));
+                .getHeaders().toString().contains("rels=\"describedby\"");
     }
 
     /**
