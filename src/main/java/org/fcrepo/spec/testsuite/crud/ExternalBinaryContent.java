@@ -27,8 +27,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.apache.http.message.BasicHeaderValueParser;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.SkipException;
@@ -900,7 +902,8 @@ public class ExternalBinaryContent extends AbstractTest {
         if (header == null) {
             return emptyList();
         }
-        return Arrays.asList(header.split("\\s*,\\s*"));
+        return Arrays.stream(BasicHeaderValueParser.parseElements(header, null))
+                .map(Objects::toString).collect(Collectors.toList());
     }
 
     private String mockHttpResource(final String filename, final String type, final String content) {

@@ -35,6 +35,7 @@ import javax.ws.rs.core.Link;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.apache.http.message.BasicHeaderValueParser;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
@@ -112,14 +113,10 @@ public class AbstractVersioningTest extends AbstractTest {
 
     protected boolean hasHeaderValueInMultiValueHeader(final String headerName, final String headerValue,
                                                        final Response response) {
-        return getHeaders(response, headerName).flatMap(header -> {
-            return Arrays.stream(header.getValue().split(","));
-        })
-                                               .map(val -> val.trim())
-                                               .filter(val -> {
-                                                   return val.equalsIgnoreCase(headerValue);
-                                               }).count() > 0;
-
+        return getHeaders(response, headerName).flatMap(header ->
+            Arrays.stream(BasicHeaderValueParser.parseElements(header.getValue(), null)))
+                .map(headerElement -> headerElement.toString().trim())
+                .anyMatch(val -> val.equalsIgnoreCase(headerValue));
     }
 
     protected void confirmPresenceOfMementoDatetimeHeader(final String mementoDateTime, final Response response) {

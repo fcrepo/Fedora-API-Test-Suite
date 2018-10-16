@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import java.util.List;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -29,9 +27,8 @@ import org.testng.Assert;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.core.Link;
-
 import static org.fcrepo.spec.testsuite.Constants.DIRECT_CONTAINER_BODY;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Jorge Abrego, Fernando Cardoza
@@ -199,18 +196,8 @@ public class Container extends AbstractTest {
     }
 
     private void verifyConstraintHeader(final Response response) {
-        final List<Header> linkHeaders = response.getHeaders().getList("Link");
-        // Loop individual Link headers
-        for (final Header header : linkHeaders) {
-            // Loop multi-valued Link headers
-            for (final String linkValue : header.getValue().split(",")) {
-                final Link link = Link.valueOf(linkValue);
-                if (link.getRel().equals("http://www.w3.org/ns/ldp#constrainedBy")) {
-                    return;
-                }
-            }
-        }
-        Assert.fail("No constrainedBy header found in: " + response);
+        assertTrue(getLinksOfRelType(response, "http://www.w3.org/ns/ldp#constrainedBy").count() >= 1,
+                "No constrainedBy Link header found in " + response);
     }
 
     /**
