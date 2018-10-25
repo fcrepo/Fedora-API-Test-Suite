@@ -523,14 +523,14 @@ public class WebACModes extends AbstractAuthzTest {
     @Test(groups = {"MUST"})
     @Parameters({"param1"})
     public void controlDisallowedPUT(final String uri) {
-        final TestInfo info = setupTest("5.0-U",
+        final TestInfo info = setupTest("5.0-V",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
                                         "ACL of a resource. Its absence must prevent updating the ACL.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
         //perform PUT  to child resource as non-admin
         final Response putResponse =
             doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
@@ -543,7 +543,8 @@ public class WebACModes extends AbstractAuthzTest {
         final String childAclUri = getAclLocation(childResourceUri);
         final Response childAclResponse =
             doPutUnverified(childAclUri, new Headers(new Header("Content-Type", "text/turtle")),
-                            getAclAsString("user-read-write.ttl", childResourceUri, this.username));
+                            getAclAsString("user-read-write.ttl", childResourceUri, this.username),
+                            false);
 
         childAclResponse.then().statusCode(403);
     }
