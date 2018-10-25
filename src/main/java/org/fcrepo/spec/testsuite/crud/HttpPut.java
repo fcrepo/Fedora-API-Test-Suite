@@ -220,7 +220,7 @@ public class HttpPut extends AbstractTest {
         createBasicContainer(locationHeader, "containedFolderSlug", BASIC_CONTAINER_BODY);
 
         final Response getResponse = doGet(locationHeader);
-        final String body2 = getResponse.asString();
+        final String body2 = getResponse.getBody().asString();
         final String etag = getETag(getResponse);
 
         final String newBody = body2.replace("containedFolderSlug", "conflicting-contained-resource");
@@ -243,8 +243,7 @@ public class HttpPut extends AbstractTest {
         doPutUnverified(locationHeader, headers, newBody)
                 .then()
                 .statusCode(409)
-                .body(containsString("contains"))
-                .body(containsString("conflicting-contained-resource"));
+                .body(containsString("contains"));
     }
 
     /**
