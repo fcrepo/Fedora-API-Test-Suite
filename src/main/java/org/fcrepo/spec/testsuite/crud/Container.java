@@ -24,11 +24,8 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.DIRECT_CONTAINER_BODY;
 import static org.testng.Assert.assertTrue;
 
@@ -38,23 +35,10 @@ import static org.testng.Assert.assertTrue;
 public class Container extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public Container(final String username) {
-        super(username);
-    }
-
-    /**
      * 3.1.1-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void createLDPC(final String uri) {
+    public void createLDPC() {
         final TestInfo info = setupTest("3.1.1-A",
                                         "Implementations must support the creation and management of [LDP] Containers.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
@@ -63,12 +47,9 @@ public class Container extends AbstractTest {
 
     /**
      * 3.1.1-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldpcContainmentTriples(final String uri) {
+    public void ldpcContainmentTriples() {
         final TestInfo info = setupTest("3.1.1-B",
                                         "ldpcContainmentTriples",
                                         "LDP Containers must distinguish [containment triples]",
@@ -114,12 +95,9 @@ public class Container extends AbstractTest {
 
     /**
      * 3.1.1-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldpcMembershipTriples(final String uri) {
+    public void ldpcMembershipTriples() {
         final TestInfo info = setupTest("3.1.1-C",
                                         "LDP Containers must distinguish [membership] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",
@@ -203,12 +181,9 @@ public class Container extends AbstractTest {
 
     /**
      * 3.1.1-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldpcMinimalContainerTriples(final String uri) {
+    public void ldpcMinimalContainerTriples() {
         final TestInfo info = setupTest("3.1.1-D",
                                         "LDP Containers must distinguish [minimal-container] triples.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc",

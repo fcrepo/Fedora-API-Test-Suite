@@ -31,14 +31,4 @@ public interface Authenticator {
      * @return an authentication token
      */
     AuthenticationToken createAuthToken(final URI webid);
-
-    /**
-     * Get the parameter value optionally passed via the commandline for the given webId.
-     *
-     * @param webId
-     * @return the password value or null
-     */
-    public static String getPasswordFor(URI webId) {
-        return System.getProperty(webId.toString(), null);
-    }
 }

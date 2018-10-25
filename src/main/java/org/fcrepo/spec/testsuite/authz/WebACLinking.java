@@ -17,15 +17,11 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -35,23 +31,10 @@ import org.testng.annotations.Test;
 public class WebACLinking extends AbstractTest {
 
     /**
-     * Constructor
-     *
-     * @param username username
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public WebACLinking(final String username) {
-        super(username);
-    }
-
-    /**
      * 5.4-A - Client-provided Link to preferred ACL on resource creation
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void linkToAclOnCreation(final String uri) {
+    public void linkToAclOnCreation() {
         final TestInfo info = setupTest("5.4-A",
                                         "A client HTTP POST or PUT request to create a new LDPR may include a " +
                                         "rel=\"acl\" link in the " +
@@ -74,12 +57,9 @@ public class WebACLinking extends AbstractTest {
 
     /**
      * 5.4-B - Reject request if Linking to client-provided ACL is not supported
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void conflictIfNotSupportingAclLink(final String uri) {
+    public void conflictIfNotSupportingAclLink() {
         final TestInfo info = setupTest("5.4-B",
                                         "The server must reject the request and respond with a 4xx or 5xx range " +
                                         "status code, such as " +

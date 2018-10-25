@@ -17,6 +17,21 @@
  */
 package org.fcrepo.spec.testsuite;
 
+import static org.fcrepo.spec.testsuite.TestParameters.AUTHENTICATOR_CLASS_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.BROKER_URL_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.CONFIG_FILE_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.CONSTRAINT_ERROR_GENERATOR_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_AUTH_HEADER;
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_PASSWORD_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.QUEUE_NAME_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_AUTH_HEADER;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_PASSWORD_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_URL_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.TOPIC_NAME_PARAM;
+import static org.testng.util.Strings.isNullOrEmpty;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -46,41 +61,15 @@ import org.testng.xml.XmlSuite;
  */
 public class App {
 
+    private final static String TESTNGXML_PARAM = "testngxml";
+    private final static String REQUIREMENTS_PARAM = "requirements";
+    private final static String SITE_NAME_PARAM = "site-name";
+
 
     private App() {
     }
 
-    /**
-     * Configuration parameter names for consistency.
-     */
-    public static final String TEST_CONTAINER_URL_PARAM = "testContainerURL";
 
-    public final static String ROOT_URL_PARAM = "rooturl";
-
-    public final static String PERMISSIONLESS_USER_WEBID_PARAM = "permissionless-user-webid";
-
-    public final static String PERMISSIONLESS_USER_PASSWORD_PARAM = "permissionless-user-password";
-
-    public final static String ROOT_CONTROLLER_USER_WEBID_PARAM = "root-controller-user-webid";
-
-    public final static String ROOT_CONTROLLER_USER_PASSWORD_PARAM = "root-controller-user-password";
-
-    private final static String TESTNGXML_PARAM = "testngxml";
-
-    private final static String REQUIREMENTS_PARAM = "requirements";
-
-    public final static String BROKER_URL_PARAM = "broker-url";
-
-    public final static String QUEUE_NAME_PARAM = "queue-name";
-
-    public final static String TOPIC_NAME_PARAM = "topic-name";
-
-    private final static String CONFIG_FILE_PARAM = "config-file";
-
-    private final static String SITE_NAME_PARAM = "site-name";
-    public final static String CONSTRAINT_ERROR_GENERATOR_PARAM = "constraint-error-generator";
-
-    public final static String AUTHENTICATOR_CLASS_PARAM = "auth-class";
     /*
      * Map of configuration options and whether they are required.
      */
@@ -89,14 +78,17 @@ public class App {
     static {
         configArgs.put(ROOT_URL_PARAM, true);
         configArgs.put(PERMISSIONLESS_USER_WEBID_PARAM, true);
+        configArgs.put(PERMISSIONLESS_USER_PASSWORD_PARAM, false);
+        configArgs.put(PERMISSIONLESS_USER_AUTH_HEADER, false);
         configArgs.put(ROOT_CONTROLLER_USER_WEBID_PARAM, true);
+        configArgs.put(ROOT_CONTROLLER_USER_PASSWORD_PARAM, false);
+        configArgs.put(ROOT_CONTROLLER_USER_AUTH_HEADER, false);
         configArgs.put(TESTNGXML_PARAM, false);
         configArgs.put(REQUIREMENTS_PARAM, false);
         configArgs.put(BROKER_URL_PARAM, true);
         configArgs.put(QUEUE_NAME_PARAM, false);
         configArgs.put(TOPIC_NAME_PARAM, false);
         configArgs.put(CONSTRAINT_ERROR_GENERATOR_PARAM, false);
-
     }
 
     /**
@@ -107,40 +99,35 @@ public class App {
     public static void main(final String[] args) {
         try {
             final Options options = new Options();
-            final Option rootUrl = new Option("b", ROOT_URL_PARAM, true, "The root URL of the repository");
-            options.addOption(rootUrl);
-            final Option user = new Option("u", PERMISSIONLESS_USER_WEBID_PARAM, true,
-                                           "A URI representing the WebID of a user with no permissions.");
-            options.addOption(user);
-            final Option password =
-                new Option("p", PERMISSIONLESS_USER_PASSWORD_PARAM, true, "Password of user with basic user role");
-            options.addOption(password);
-            final Option rootControllerUserWebId = new Option("a", ROOT_CONTROLLER_USER_WEBID_PARAM, true,
-                                                "A URI representing the WebID of a user with read, write, and control" +
-                                                " permissions on root container.");
-            options.addOption(rootControllerUserWebId);
-            final Option adminPassword =
-                new Option("s", ROOT_CONTROLLER_USER_PASSWORD_PARAM, true, "Password of user with admin role");
-            options.addOption(adminPassword);
+            options.addOption(new Option("b", ROOT_URL_PARAM, true, "The root URL of the repository"));
+            options.addOption(new Option("u", PERMISSIONLESS_USER_WEBID_PARAM, true,
+                                         "A URI representing the WebID of a user with no permissions."));
+            options.addOption(
+                new Option("p", PERMISSIONLESS_USER_PASSWORD_PARAM, true, "Password of user with basic user role"));
+            options.addOption(new Option("a", ROOT_CONTROLLER_USER_WEBID_PARAM, true,
+                                         "A URI representing the WebID of a user with read, write, and control" +
+                                         " permissions on root container."));
+            options.addOption(
+                new Option("s", ROOT_CONTROLLER_USER_PASSWORD_PARAM, true, "Password of user with admin role"));
 
-            final Option testngxml = new Option("x", TESTNGXML_PARAM, true, "TestNG XML file");
-            testngxml.setRequired(false);
-            options.addOption(testngxml);
-            final Option reqs = new Option("r", REQUIREMENTS_PARAM, true,
-                                           "Requirement levels. One or more of the following, " +
-                                           "separated by ',': [ALL|MUST|SHOULD|MAY]");
-            reqs.setRequired(false);
-            options.addOption(reqs);
+            options.addOption(new Option("R", ROOT_CONTROLLER_USER_AUTH_HEADER, true,
+                                         "\"Authorization\" header value for a user with read, write, and control. " +
+                                         "When present, this value will be added to the request effectively " +
+                                         "overriding Authenticator implementations, custom or default, found in the " +
+                                         "classpath.."));
 
-            final Option configFile =
-                new Option("c", CONFIG_FILE_PARAM, true, "Configuration file of test parameters.");
-            configFile.setRequired(false);
-            options.addOption(configFile);
-            final Option configFileSite = new Option("n", SITE_NAME_PARAM, true,
-                                                     "Site name from configuration file (defaults to \"default\")");
-            configFileSite.setRequired(false);
-            options.addOption(configFileSite);
-
+            options.addOption(new Option("P", PERMISSIONLESS_USER_AUTH_HEADER, true,
+                                         "\"Authorization\" header value for a user with no permissions. " +
+                                         "When present, this value will be added to the request effectively " +
+                                         "overriding Authenticator implementations, custom or default, found in the " +
+                                         "classpath.."));
+            options.addOption( new Option("x", TESTNGXML_PARAM, true, "TestNG XML file"));
+            options.addOption(new Option("r", REQUIREMENTS_PARAM, true,
+                                         "Requirement levels. One or more of the following, " +
+                                         "separated by ',': [ALL|MUST|SHOULD|MAY]"));
+            options.addOption(new Option("c", CONFIG_FILE_PARAM, true, "Configuration file of test parameters."));
+            options.addOption(new Option("n", SITE_NAME_PARAM, true,
+                                         "Site name from configuration file (defaults to \"default\")"));
             options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
             options.addOption(new Option("q", QUEUE_NAME_PARAM, true, "Queue name for events (if applicable)"));
             options.addOption(new Option("t", TOPIC_NAME_PARAM, true, "Topic name for events (if applicable)"));
@@ -191,51 +178,36 @@ public class App {
                 }
             }
 
-            if ((!params.containsKey(QUEUE_NAME_PARAM) || params.get(QUEUE_NAME_PARAM).isEmpty()) &&
-                (!params.containsKey(TOPIC_NAME_PARAM) || params.get(TOPIC_NAME_PARAM).isEmpty())) {
+            TestParameters.initialize(params);
+            final TestParameters tp = TestParameters.get();
+            if (isNullOrEmpty(tp.getQueueName()) &&
+                isNullOrEmpty(tp.getTopicName())) {
                 throw new RuntimeException(String.format("One of %s, %s must be provided", QUEUE_NAME_PARAM,
                                                          TOPIC_NAME_PARAM));
             }
 
             //validate that the webids are URIs
-            final String rootControllerWebId = params.get(ROOT_CONTROLLER_USER_WEBID_PARAM);
-            final String permissionlessUserWebId = params.get(PERMISSIONLESS_USER_WEBID_PARAM);
             try {
-                URI.create(rootControllerWebId);
-                URI.create(permissionlessUserWebId);
+                URI.create(tp.getRootControllerUserWebId());
+                URI.create(tp.getPermissionlessUserWebId());
             } catch (Exception ex) {
                 printHelpAndExit("WebID parameters must be well-formed URIs: " + ex.getMessage(),
                                  options);
             }
 
-            //set the passwords in the system property to be used by default authenticator
-            //if necessary
-            final String rootControllerPassword = params.get(ROOT_CONTROLLER_USER_PASSWORD_PARAM);
-            final String permissionlessUserPassword = params.get(PERMISSIONLESS_USER_PASSWORD_PARAM);
-            System.setProperty(rootControllerWebId, rootControllerPassword);
-            System.setProperty(permissionlessUserWebId, permissionlessUserPassword);
-
-            try {
-                //initialize the resolver
-                AuthenticatorResolver.initialize(cmd.getOptionValue(AUTHENTICATOR_CLASS_PARAM, null));
-            } catch (final Exception e) {
-                System.err.println(e.getMessage());
-                System.exit(1);
-                return;
+            if (isNullOrEmpty(tp.getPermissionlessUserAuthHeader()) ||
+                isNullOrEmpty(tp.getRootControllerUserAuthHeader())) {
+                try {
+                    //initialize the resolver
+                    AuthenticatorResolver.initialize(cmd.getOptionValue(AUTHENTICATOR_CLASS_PARAM, null));
+                } catch (final Exception e) {
+                    System.err.println(e.getMessage());
+                    System.exit(1);
+                    return;
+                }
             }
 
-            //Create the default container
-            final Map<String, String> testParams = new HashMap<>();
-            testParams.put(ROOT_URL_PARAM, params.get(ROOT_URL_PARAM));
-            testParams.put(TEST_CONTAINER_URL_PARAM,
-                           TestSuiteGlobals.containerTestSuite(params.get(ROOT_URL_PARAM), params.get(
-                               ROOT_CONTROLLER_USER_WEBID_PARAM), params.get(ROOT_CONTROLLER_USER_PASSWORD_PARAM)));
-            testParams.put(ROOT_CONTROLLER_USER_WEBID_PARAM, rootControllerWebId);
-            testParams.put(PERMISSIONLESS_USER_WEBID_PARAM, permissionlessUserWebId);
-            testParams.put(BROKER_URL_PARAM, params.get(BROKER_URL_PARAM));
-            testParams.put(QUEUE_NAME_PARAM, params.get(QUEUE_NAME_PARAM));
-            testParams.put(TOPIC_NAME_PARAM, params.get(TOPIC_NAME_PARAM));
-            testParams.put(CONSTRAINT_ERROR_GENERATOR_PARAM, params.get(CONSTRAINT_ERROR_GENERATOR_PARAM));
+            tp.setTestContainerUrl(TestSuiteGlobals.containerTestSuite());
 
             InputStream inputStream = null;
             if (params.get(TESTNGXML_PARAM).toString().isEmpty()) {
@@ -253,7 +225,6 @@ public class App {
                 TESTNGXML_PARAM);
             final SuiteXmlParser xmlParser = new SuiteXmlParser();
             final XmlSuite xmlSuite = xmlParser.parse(testFilename, inputStream, true);
-            xmlSuite.setParameters(testParams);
 
             final TestNG testng = new TestNG();
             testng.setCommandLineSuite(xmlSuite);

@@ -17,27 +17,31 @@
  */
 package org.fcrepo.spec.testsuite.authn;
 
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_PASSWORD_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_PASSWORD_PARAM;
+
 import java.net.URI;
 
-import org.fcrepo.spec.testsuite.App;
+import org.fcrepo.spec.testsuite.TestParameters;
 
 /**
  * @author dbernstein
  */
 public class DefaultAuthenticator implements Authenticator {
-    private final String USERS_FILE_SYSTEM_PROPERTY = "org.fcrepo.spec.testsuite.authn.community.usersFile";
-
     @Override
     public AuthenticationToken createAuthToken(final URI webid) {
         //get username by taking string after the last forward slash.
         final String webidStr = webid.toString();
         final String username = webidStr.substring(webidStr.lastIndexOf('/') + 1);
-        final String password = Authenticator.getPasswordFor(webid);
+        final TestParameters params = TestParameters.get();
+        final String password =
+            webid.toString().equals(params.getRootControllerUserWebId()) ? params.getRootControllerUserPassword() :
+            params.getPermissionlessUserPassword();
         if (password == null) {
             throw new RuntimeException(
                 "When using the DefaultAuthenticator you must specify the optional password parameters in the command" +
                 " line, ie --" +
-                App.ROOT_CONTROLLER_USER_PASSWORD_PARAM + " and --" + App.PERMISSIONLESS_USER_PASSWORD_PARAM);
+                ROOT_CONTROLLER_USER_PASSWORD_PARAM + " and --" + PERMISSIONLESS_USER_PASSWORD_PARAM);
         }
         return new DefaultAuthToken(username, password);
     }

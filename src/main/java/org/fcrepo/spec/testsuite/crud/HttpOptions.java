@@ -17,13 +17,10 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.hamcrest.Matchers.containsString;
 
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -32,23 +29,10 @@ import org.testng.annotations.Test;
 public class HttpOptions extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public HttpOptions(final String username) {
-        super(username);
-    }
-
-    /**
      * 3.4-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpOptionsSupport(final String uri) {
+    public void httpOptionsSupport() {
         final TestInfo info = setupTest("3.4-A",
                                         "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
                                         + "4.2.8.1 LDP servers must support the HTTP OPTIONS method.",
@@ -59,12 +43,9 @@ public class HttpOptions extends AbstractTest {
 
     /**
      * 3.4-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpOptionsSupportAllow(final String uri) {
+    public void httpOptionsSupportAllow() {
         final TestInfo info = setupTest("3.4-B",
                                         "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
                                         + "LDP servers must indicate their support for HTTP Methods by responding to a"

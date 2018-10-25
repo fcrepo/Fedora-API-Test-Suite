@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
@@ -31,7 +29,6 @@ import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.SkipException;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.EntityTag;
@@ -43,23 +40,11 @@ import javax.ws.rs.core.Link;
 public class HttpPut extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param rootControllerUserWebId The repository rootControllerUserWebId
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public HttpPut(final String rootControllerUserWebId) {
-        super(rootControllerUserWebId);
-    }
-
-    /**
      * 3.6-A
      *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPutChangeTypeAllowed(final String uri) {
+    public void httpPutChangeTypeAllowed() {
         final TestInfo info = setupTest("3.6-A", "httpPutChangeTypeAllowed",
                 "Implementations MAY allow the interaction model of an existing " +
                         "resource to be changed by specification of a new LDP type in a " +
@@ -81,12 +66,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPutChangeTypeNotAllowed(final String uri) {
+    public void httpPutChangeTypeNotAllowed() {
         final TestInfo info = setupTest("3.6-B",
                                         "When accepting a PUT request against an existant resource, an HTTP Link: " +
                                         "rel=\"type\" header may be included. If that type is a value in the LDP " +
@@ -110,12 +92,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.1-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPutUpdateTriples(final String uri) {
+    public void httpPutUpdateTriples() {
         final TestInfo info = setupTest("3.6.1-A",
                                         "Any LDP-RS must support PUT to update statements that are not server-managed" +
                                         " triples (as defined "
@@ -155,12 +134,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.1-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPutUpdateDisallowedTriples(final String uri) {
+    public void httpPutUpdateDisallowedTriples() {
         final TestInfo info = setupTest("3.6.1-B",
                                         "If an otherwise valid HTTP PUT request is received that attempts to modify " +
                                         "resource "
@@ -204,12 +180,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.1-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPutUpdateDisallowedTriplesResponse(final String uri) {
+    public void httpPutUpdateDisallowedTriplesResponse() {
         final TestInfo info = setupTest("3.6.1-C",
                                         "The server must provide a corresponding response body containing information "
                                         + "about which statements could"
@@ -249,12 +222,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.1-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPutUpdateDisallowedTriplesConstrainedByHeader(final String uri) {
+    public void httpPutUpdateDisallowedTriplesConstrainedByHeader() {
         final TestInfo info = setupTest("3.6.1-D",
                                         "In that response, the restrictions causing such a request to fail must be "
                                         + "described in a resource indicated"
@@ -297,12 +267,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.2-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPutNR(final String uri) {
+    public void httpPutNR() {
         final TestInfo info = setupTest("3.6.2-A",
                                         "Any LDP-NR must support PUT to replace the binary content of that resource.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
@@ -334,12 +301,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.2-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void nonRDFSourcePutDigestResponseHeaderAuthentication(final String uri) {
+    public void nonRDFSourcePutDigestResponseHeaderAuthentication() {
         final TestInfo info = setupTest("3.6.2-B",
                                         "An HTTP PUT request that includes a Digest header (as described in " +
                                         "[RFC3230]) for which any "
@@ -365,12 +329,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.2-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void nonRDFSourcePutDigestResponseHeaderVerification(final String uri) {
+    public void nonRDFSourcePutDigestResponseHeaderVerification() {
         final TestInfo info = setupTest("3.6.2-C",
                                         "An HTTP PUT request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), should"
@@ -393,12 +354,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.3-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void putCreateRDFSource(final String uri) {
+    public void putCreateRDFSource() {
         final TestInfo info = setupTest("3.6.3-A",
                 "Implementations may accept HTTP PUT to create resources",
                 "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
@@ -412,12 +370,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.3-B create non-rdf source
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void putCreateNonRDFSource(final String uri) {
+    public void putCreateNonRDFSource() {
         final TestInfo info = setupTest("3.6.3-B",
                 "Implementations may accept HTTP PUT to create non-RDF resources",
                 "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
@@ -434,12 +389,9 @@ public class HttpPut extends AbstractTest {
 
     /**
      * 3.6.3-C put create ldprs for non-rdf source
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({ TEST_CONTAINER_URL_PARAM })
-    public void putNonRDFSourceCreateLDPRS(final String uri) {
+    public void putNonRDFSourceCreateLDPRS() {
         final TestInfo info = setupTest("3.6.3-C",
                 "On creation of an LDP-NR with HTTP PUT, implementations MUST create " +
                         "an associated LDP-RS describing that LDP-NR in the same way that it " +

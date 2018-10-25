@@ -17,15 +17,10 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -35,24 +30,10 @@ import org.testng.annotations.Test;
 public class WebACAccessToClass extends AbstractAuthzTest {
 
     /**
-     * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     * @param permissionlessUserWebId      permissionlessUserWebId
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM,})
-    public WebACAccessToClass(final String rootControllerUserWebId, final String permissionlessUserWebId) {
-        super(rootControllerUserWebId, permissionlessUserWebId);
-    }
-
-    /**
      * 5.8-A - accessToClass MUST give access.
-     *
-     * @param uri of base test container
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void accessToClassMustGiveAccess(final String uri) {
+    public void accessToClassMustGiveAccess() {
         final TestInfo info = setupTest("5.8-A",
                                         "When an ACL includes an acl:accessToClass statement, it MUST give access to " +
                                         "all " +
@@ -82,12 +63,9 @@ public class WebACAccessToClass extends AbstractAuthzTest {
 
     /**
      * 5.8-B - accessToClass MAY use inference.
-     *
-     * @param uri of base test container
      */
     @Test(groups = {"MAY"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void accessToClassMayUseInference(final String uri) {
+    public void accessToClassMayUseInference() {
         final TestInfo info = setupTest("5.8-B",
                                         " Implementations may use inference to infer types not present in a " +
                                         "resource's triples or rel=\"type\" links in the Link header",

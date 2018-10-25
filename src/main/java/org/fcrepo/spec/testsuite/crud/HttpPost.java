@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
@@ -29,7 +27,6 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -38,23 +35,10 @@ import org.testng.annotations.Test;
 public class HttpPost extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param rootControllerUserWebId The repository rootControllerUserWebId
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public HttpPost(final String rootControllerUserWebId) {
-        super(rootControllerUserWebId);
-    }
-
-    /**
      * 3.5-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpPost(final String uri) {
+    public void httpPost() {
         final TestInfo info = setupTest("3.5-A",
                                         "Any LDPC (except Version Containers (LDPCv)) must support POST ([LDP] 4.2.3 " +
                                         "/ 5.2.3). ",
@@ -65,12 +49,9 @@ public class HttpPost extends AbstractTest {
 
     /**
      * 3.5.1-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void postNonRDFSource(final String uri) {
+    public void postNonRDFSource() {
         final TestInfo info = setupTest("3.5.1-A",
                                         "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
                                         " must).",
@@ -83,12 +64,9 @@ public class HttpPost extends AbstractTest {
 
     /**
      * 3.5.1-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void postResourceAndCheckAssociatedResource(final String uri) {
+    public void postResourceAndCheckAssociatedResource() {
         final TestInfo info = setupTest("3.5.1-B",
                                         "On creation of an LDP-NR, an implementation must create an associated LDP-RS" +
                                         " describing"
@@ -103,12 +81,9 @@ public class HttpPost extends AbstractTest {
 
     /**
      * 3.5.1-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void postDigestResponseHeaderAuthentication(final String uri) {
+    public void postDigestResponseHeaderAuthentication() {
         final TestInfo info = setupTest("3.5.1-C",
                                         "An HTTP POST request that would create an LDP-NR and includes a Digest " +
                                         "header (as described"
@@ -129,12 +104,9 @@ public class HttpPost extends AbstractTest {
 
     /**
      * 3.5.1-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void postDigestResponseHeaderVerification(final String uri) {
+    public void postDigestResponseHeaderVerification() {
         final TestInfo info = setupTest("3.5.1-D",
                                         "An HTTP POST request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), "

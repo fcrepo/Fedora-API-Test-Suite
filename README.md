@@ -19,8 +19,10 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
 * `rooturl` The repository base URL, e.g., `http://localhost:8080/rest/`
 * `root-controller-user-webid` An user with admin access to the repository.
 * `root-controller-user-password` The admin user's password.
+* `root-controller-user-auth-header-value` "Authorization" header value for a user with read, write, and control.  When present, this value will be added to the request effectively overriding Authenticator implementations, custom or default, found in the classpath.
 * `permissionless-user-webid` The username to connect to the repository with
 * `permissionless-user-password` The password to connect to the repository with
+* `permissionless-user-auth-header-value` "Authorization" header value for a user with no preset permissions.  When present, this value will be added to the request, effectively overriding Authenticator implementations, custom or default, found in the classpath.
 * `testngxml` (optional) The custom testng.xml configuration ([documentation](http://testng.org/doc/documentation-main.html#testng-xml))
   * See example [testng.xml](https://github.com/fcrepo/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)
 * `requirements` (optional) The requirement-levels of test to be run: ALL|MUST|SHOULD|MAY

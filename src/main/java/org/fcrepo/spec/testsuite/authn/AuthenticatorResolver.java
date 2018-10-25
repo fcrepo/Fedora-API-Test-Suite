@@ -18,6 +18,8 @@
 
 package org.fcrepo.spec.testsuite.authn;
 
+import static org.fcrepo.spec.testsuite.TestParameters.AUTHENTICATOR_CLASS_PARAM;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.MalformedURLException;
@@ -30,7 +32,6 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.fcrepo.spec.testsuite.App;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
@@ -144,7 +145,7 @@ public class AuthenticatorResolver {
                         message.append("We found more than one Authenticator implementations in your classpath.\n");
                         message.append(
                             "Please specify one of the following class names in the \"" +
-                            App.AUTHENTICATOR_CLASS_PARAM + "\" parameter:\n");
+                            AUTHENTICATOR_CLASS_PARAM + "\" parameter:\n");
                         authClasses.stream().forEach(x -> message.append(" * " + x.getName() + "\n"));
                         throw new RuntimeException(message.toString());
                     }

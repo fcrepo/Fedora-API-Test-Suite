@@ -17,9 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,32 +27,11 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
-import org.testng.annotations.Parameters;
 
 /**
  * @author Daniel Bernstein
  */
 public class AbstractAuthzTest extends AbstractTest {
-    /**
-     * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     * @param permissionlessUserWebId      permissionlessUserWebId
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM})
-    public AbstractAuthzTest(final String rootControllerUserWebId, final String permissionlessUserWebId) {
-        super(rootControllerUserWebId, permissionlessUserWebId);
-    }
-
-    /**
-     * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public AbstractAuthzTest(final String rootControllerUserWebId) {
-        super(rootControllerUserWebId);
-    }
 
     protected String filterFileAndConvertToString(final String fileName, final Map<String, String> params) {
         String str = fileToString("/acls/" + fileName);

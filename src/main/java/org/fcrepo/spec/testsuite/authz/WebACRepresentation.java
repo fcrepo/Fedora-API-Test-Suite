@@ -17,10 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +24,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -38,23 +33,10 @@ import org.testng.annotations.Test;
 public class WebACRepresentation extends AbstractAuthzTest {
 
     /**
-     * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     * @param permissionlessUserWebId      permissionlessUserWebId
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM})
-    public WebACRepresentation(final String rootControllerUserWebId, final String permissionlessUserWebId) {
-        super(rootControllerUserWebId, permissionlessUserWebId);
-    }
-    /**
      * 5.2-A - Authz type and URI as subject of triples
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void aclRepresentation(final String uri) {
+    public void aclRepresentation() {
         final TestInfo info = setupTest("5.2-A",
                                         "Implementations must inspect the ACL RDF for authorizations. Authorizations " +
                                         "are identified by type definition triples of the form authorization_N " +
@@ -71,12 +53,9 @@ public class WebACRepresentation extends AbstractAuthzTest {
 
     /**
      * 5.2-B - Only authz statements used to determine access
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void onlyAuthorizationStatementsUsed(final String uri) {
+    public void onlyAuthorizationStatementsUsed() {
         final TestInfo info = setupTest("5.2-B",
                                         "Implementations must use only statements associated with an authorization in" +
                                         " the ACL RDF to determine access, except in the case of acl:agentGroup " +
@@ -95,12 +74,9 @@ public class WebACRepresentation extends AbstractAuthzTest {
 
     /**
      * 5.2-C - Group membership determined by dereferencing resource containing members
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void dereferencingGroups(final String uri) {
+    public void dereferencingGroups() {
         final TestInfo info = setupTest("5.2-C",
                 "Implementations must use only statements associated with an authorization in the ACL RDF to " +
                         "determine access, except in the case of acl:agentGroup statements where the group listing " +
@@ -130,12 +106,9 @@ public class WebACRepresentation extends AbstractAuthzTest {
 
     /**
      * 5.2-D - Access granted by examining all authorizations
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void aclExamined(final String uri) {
+    public void aclExamined() {
         final TestInfo info = setupTest("5.2-D",
                                         "The authorizations must be examined to see whether they grant the requested " +
                                         "access to the controlled resource.",
@@ -152,12 +125,9 @@ public class WebACRepresentation extends AbstractAuthzTest {
 
     /**
      * 5.2-E - Deny access if no authorizations grant access
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void accessDenied(final String uri) {
+    public void accessDenied() {
         final TestInfo info = setupTest("5.2-E",
                 "If none of the authorizations grant the requested access then the request must be denied.",
                 "https://fedora.info/2018/06/25/spec/#acl-representation", ps);

@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 
@@ -28,7 +26,6 @@ import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -37,23 +34,10 @@ import org.testng.annotations.Test;
 public class HttpDelete extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public HttpDelete(final String username) {
-        super(username);
-    }
-
-    /**
      * 3.8.1-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpDeleteOptionsCheck(final String uri) {
+    public void httpDeleteOptionsCheck() {
         final TestInfo info = setupTest("3.8.1-A",
                                         "An implementation that cannot recurse should not advertise DELETE in " +
                                         "response to OPTIONS "
@@ -130,12 +114,9 @@ public class HttpDelete extends AbstractTest {
 
     /**
      * 3.8.1-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpDeleteStatusCheck(final String uri) {
+    public void httpDeleteStatusCheck() {
         final TestInfo info = setupTest("3.8.1-C",
                                         "An implementation must not return a 200 (OK) or 204 (No Content) response "
                                         + "unless the entire operation successfully completed.",
@@ -207,12 +188,9 @@ public class HttpDelete extends AbstractTest {
 
     /**
      * 3.8.1-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpDeleteStatusCheckTwo(final String uri) {
+    public void httpDeleteStatusCheckTwo() {
         final TestInfo info = setupTest("3.8.1-D",
                                         "An implementation must not emit a message that implies the successful DELETE" +
                                         " of a resource until "

@@ -17,12 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.event;
 
-import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
-import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
-
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
@@ -30,8 +24,8 @@ import javax.jms.MessageConsumer;
 import javax.jms.Session;
 
 import org.fcrepo.spec.testsuite.AbstractTest;
+import org.fcrepo.spec.testsuite.TestParameters;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.Parameters;
 
 /**
  * Abstract Event testing class.
@@ -55,24 +49,19 @@ public class AbstractEventTest extends AbstractTest {
 
     /**
      * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     * @param username username
-     * @param jmsBroker URL of the JMS broker
-     * @param queueName queue name (if applicable)
-     * @param topicName topic name (if applicable)
      * @throws JMSException unable to create connection.
      */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM, PERMISSIONLESS_USER_WEBID_PARAM, BROKER_URL_PARAM, QUEUE_NAME_PARAM,
-                 TOPIC_NAME_PARAM})
-    public AbstractEventTest(final String rootControllerUserWebId, final String username,
-            final String jmsBroker, final String queueName, final String topicName)
+    public AbstractEventTest()
             throws JMSException {
-        super(rootControllerUserWebId, username);
-        connFactory = new org.apache.activemq.ActiveMQConnectionFactory(jmsBroker);
+        super();
+        final TestParameters params = TestParameters.get();
+        final String queue = params.getQueueName();
+        final String topic  = params.getTopicName();
+
+        connFactory = new org.apache.activemq.ActiveMQConnectionFactory(params.getBrokerUrl());
         resetConnection();
-        this.queueName = queueName.isEmpty() ? null : queueName;
-        this.topicName = topicName.isEmpty() ? null : topicName;
+        this.queueName = queue.isEmpty() ? null : queue;
+        this.topicName = topic.isEmpty() ? null : topic;
     }
 
     /**

@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
@@ -36,7 +34,6 @@ import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -45,23 +42,10 @@ import org.testng.annotations.Test;
 public class HttpHead extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param rootControllerUserWebId The repository rootControllerUserWebId
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public HttpHead(final String rootControllerUserWebId) {
-        super(rootControllerUserWebId);
-    }
-
-    /**
      * 3.3-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpHeadResponseNoBody(final String uri) {
+    public void httpHeadResponseNoBody() {
         final TestInfo info = setupTest("3.3-A",
                                         "The HEAD method is identical to GET except that the server must not return a "
                                         + "message-body in the response, as "
@@ -75,12 +59,9 @@ public class HttpHead extends AbstractTest {
 
     /**
      * 3.3-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpHeadResponseDigest(final String uri) {
+    public void httpHeadResponseDigest() {
         final TestInfo info = setupTest("3.3-B",
                                         "The server must send the same Digest header in the response as it"
                                         +
@@ -128,12 +109,9 @@ public class HttpHead extends AbstractTest {
 
     /**
      * 3.3-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void httpHeadResponseHeadersSameAsHttpGet(final String uri) {
+    public void httpHeadResponseHeadersSameAsHttpGet() {
         final TestInfo info = setupTest("3.3-C",
                                         "In other cases, The server should send the same headers in response to a " +
                                         "HEAD request "

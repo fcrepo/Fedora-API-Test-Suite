@@ -23,6 +23,7 @@ import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
+import static org.fcrepo.spec.testsuite.authn.AuthUtil.auth;
 import static org.testng.AssertJUnit.fail;
 
 import java.io.File;
@@ -52,8 +53,6 @@ import org.apache.http.message.BasicHeaderValueParser;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Statement;
-import org.fcrepo.spec.testsuite.authn.AuthenticationToken;
-import org.fcrepo.spec.testsuite.authn.AuthenticatorResolver;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Description;
@@ -72,28 +71,18 @@ public class AbstractTest {
 
     protected PrintStream ps;
 
-    private String rootControllerUserWebId = null;
-    protected String permissionlessUserWebId = null;
-
-
+    protected String rootControllerUserWebId;
+    protected String permissionlessUserWebId;
+    protected String uri;
+    protected String rootUri;
     /**
      * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     * @param permissionlessUserWebId permissionlessUserWebId
      */
-    public AbstractTest(final String rootControllerUserWebId, final String permissionlessUserWebId) {
-        this.rootControllerUserWebId = rootControllerUserWebId;
-        this.permissionlessUserWebId = permissionlessUserWebId;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     */
-    public AbstractTest(final String rootControllerUserWebId) {
-       this.rootControllerUserWebId = rootControllerUserWebId;
+    public AbstractTest() {
+        this.rootControllerUserWebId = TestParameters.get().getRootControllerUserWebId();
+        this.permissionlessUserWebId =  TestParameters.get().getPermissionlessUserWebId();
+        this.uri = TestParameters.get().getTestContainerUrl();
+        this.rootUri = TestParameters.get().getRootUrl();
     }
 
     /**
@@ -219,7 +208,7 @@ public class AbstractTest {
     /**
      * Do a POST request.
      *
-     * @param uri the URI of the request.
+
      * @param headers the request headers.
      * @param body the request body.
      * @param admin use the admin user credentials.
@@ -257,7 +246,7 @@ public class AbstractTest {
     /**
      * Do a POST and confirm a 201 status code.
      *
-     * @param uri the URI for the request.
+
      * @param headers the request headers.
      * @param body the request body.
      * @param admin use the admin user credentials.
@@ -328,7 +317,7 @@ public class AbstractTest {
     /**
      * Do an options request.
      *
-     * @param uri the URI of the request
+
      * @param admin whether to use admin user credentials
      * @return the response
      */
@@ -368,10 +357,8 @@ public class AbstractTest {
         }
     }
 
-    private RequestSpecification createRequestAuthOnly(final String username) {
-        final AuthenticationToken token =
-            AuthenticatorResolver.getAuthenticator().createAuthToken(URI.create(username));
-        return token.addAuthInfo(RestAssured.given()).urlEncodingEnabled(false);
+    private RequestSpecification createRequestAuthOnly(final String webId) {
+        return auth(RestAssured.given(), webId).urlEncodingEnabled(false);
     }
 
     protected Response doGet(final String uri, final Header header) {

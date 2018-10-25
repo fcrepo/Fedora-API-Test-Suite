@@ -19,11 +19,11 @@ package org.fcrepo.spec.testsuite;
 
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
+import static org.fcrepo.spec.testsuite.authn.AuthUtil.auth;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -31,9 +31,6 @@ import java.util.TreeMap;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import org.fcrepo.spec.testsuite.authn.AuthenticationToken;
-import org.fcrepo.spec.testsuite.authn.Authenticator;
-import org.fcrepo.spec.testsuite.authn.AuthenticatorResolver;
 import org.testng.IResultMap;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
@@ -58,19 +55,18 @@ public abstract class TestSuiteGlobals {
     /**
      * Get or create the default container for all tests resources to be created
      *
-     * @param baseurl
-     * @return containerUrl
      */
-    public static String containerTestSuite(final String baseurl, final String user, final String pass) {
-        cleanupManager = new ResourceCleanupManager(user, pass);
+    public static String containerTestSuite() {
+        cleanupManager = new ResourceCleanupManager();
 
+        final TestParameters params = TestParameters.get();
+        final String rootUrl = params.getRootUrl();
         final String name = outputName + "container" + today();
-        final String base = baseurl.endsWith("/") ? baseurl : baseurl + '/';
+        final String base = rootUrl.endsWith("/") ? rootUrl : rootUrl + '/';
         String containerUrl = base + name;
         containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
-        final Authenticator authenticator = AuthenticatorResolver.getAuthenticator();
-        final AuthenticationToken token = authenticator.createAuthToken(URI.create(user));
-        final Response res = token.addAuthInfo(RestAssured.given())
+
+        final Response res = auth(RestAssured.given(), params.getRootControllerUserWebId())
                                         .contentType("text/turtle")
                                         .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                         .header(SLUG, name)

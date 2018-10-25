@@ -17,8 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.NON_RDF_SOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
@@ -29,7 +27,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -38,23 +35,10 @@ import org.testng.annotations.Test;
 public class LdprvHttpPut extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public LdprvHttpPut(final String username) {
-        super(username);
-    }
-
-    /**
      * 4.1.2-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldprvMustSupportPUT(final String uri) {
+    public void ldprvMustSupportPUT() {
         final TestInfo info = setupTest("4.1.2-A",
                                         "Must support PUT for creating new LDPRv",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
@@ -71,12 +55,9 @@ public class LdprvHttpPut extends AbstractVersioningTest {
 
     /**
      * 4.1.2-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldprvMustSupportPUTForExistingResources(final String uri) {
+    public void ldprvMustSupportPUTForExistingResources() {
         final TestInfo info = setupTest("4.1.2-B",
                                         "Must support PUT for updating existing LDPRvs",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
@@ -111,12 +92,9 @@ public class LdprvHttpPut extends AbstractVersioningTest {
 
     /**
      * 4.1.2-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldpnrvMustSupportPUT(final String uri) {
+    public void ldpnrvMustSupportPUT() {
         final TestInfo info = setupTest("4.1.2-C",
                                         "Must support PUT for creating new LDPNRv",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
@@ -136,12 +114,9 @@ public class LdprvHttpPut extends AbstractVersioningTest {
 
     /**
      * 4.1.2-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldpnrvMustSupportPUTForExistingResources(final String uri) {
+    public void ldpnrvMustSupportPUTForExistingResources() {
         final TestInfo info = setupTest("4.1.2-D",
                                         "Must support PUT for updating existing  LDPNRvs",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",

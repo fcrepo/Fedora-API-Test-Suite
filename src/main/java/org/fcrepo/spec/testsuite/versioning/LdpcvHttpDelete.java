@@ -17,14 +17,11 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.testng.AssertJUnit.assertEquals;
 
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -35,23 +32,10 @@ import org.testng.annotations.Test;
 public class LdpcvHttpDelete extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public LdpcvHttpDelete(final String username) {
-        super(username);
-    }
-
-    /**
      * Tests section 4.3.6-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldpcvMaySupportDelete(final String uri) {
+    public void ldpcvMaySupportDelete() {
         final TestInfo info = setupTest("4.3.6-A",
                                         "An implementation MAY support DELETION of LDPCvs.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-delete",
@@ -68,12 +52,9 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
 
     /**
      * Tests section 4.3.6-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos(final String uri) {
+    public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos() {
         final TestInfo info = setupTest("4.3.6-B",
                                         "An implementation that does support DELETE should do so by both " +
                                         "removing the LDPCv and removing the versioning interaction model from the " +

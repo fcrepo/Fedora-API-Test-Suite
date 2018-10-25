@@ -18,7 +18,6 @@
 package org.fcrepo.spec.testsuite;
 
 import java.io.PrintStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +28,7 @@ import javax.ws.rs.core.Link;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.fcrepo.spec.testsuite.authn.AuthenticatorResolver;
+import org.fcrepo.spec.testsuite.authn.AuthUtil;
 
 /**
  * Service which cleans up Fedora resources created during test runs.
@@ -40,21 +39,13 @@ public class ResourceCleanupManager {
 
     private String testContainerUrl;
 
-    private final String user;
-
-    private final String password;
-
     private List<String> createdResources = new ArrayList<>();
 
     /**
      * Construct manager
      *
-     * @param user user
-     * @param pass password
      */
-    public ResourceCleanupManager(final String user, final String pass) {
-        this.user = user;
-        this.password = pass;
+    public ResourceCleanupManager() {
     }
 
     /**
@@ -102,8 +93,7 @@ public class ResourceCleanupManager {
     }
 
     private RequestSpecification auth(final RequestSpecification given) {
-        return AuthenticatorResolver.getAuthenticator().createAuthToken(URI.create(user)).addAuthInfo(given);
-
+        return AuthUtil.auth(given, TestParameters.get().getRootControllerUserWebId());
     }
 
     private void cleanupResources() {

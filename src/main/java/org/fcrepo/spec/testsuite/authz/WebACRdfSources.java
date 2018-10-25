@@ -17,15 +17,12 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.RDF_SOURCE_LINK_HEADER;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -36,23 +33,10 @@ import org.testng.annotations.Test;
 public class WebACRdfSources extends AbstractAuthzTest {
 
     /**
-     * Constructor
-     *
-     * @param rootControllerUserWebId     root container controller WebID
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM})
-    public WebACRdfSources(final String rootControllerUserWebId) {
-        super(rootControllerUserWebId);
-    }
-
-    /**
      * 5.1 - ACL is LDPRS
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void aclIsLDPRS(final String uri) {
+    public void aclIsLDPRS() {
         final TestInfo info = setupTest("5.1",
                                         "An ACL for a controlled resource on a conforming server must itself be an " +
                                         "LDP-RS.",

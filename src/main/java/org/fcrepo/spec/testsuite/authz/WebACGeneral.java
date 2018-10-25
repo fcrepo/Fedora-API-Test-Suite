@@ -17,9 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
-import static org.fcrepo.spec.testsuite.App.PERMISSIONLESS_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.ROOT_CONTROLLER_USER_WEBID_PARAM;
-import static org.fcrepo.spec.testsuite.App.TEST_CONTAINER_URL_PARAM;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +25,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -37,25 +33,12 @@ import org.testng.annotations.Test;
  */
 public class WebACGeneral extends AbstractAuthzTest {
 
-    /**
-     * Constructor
-     *
-     * @param rootControllerUserWebId root container controller WebID
-     * @param permissionlessUserWebId      permissionless User WebId
-     */
-    @Parameters({ROOT_CONTROLLER_USER_WEBID_PARAM,PERMISSIONLESS_USER_WEBID_PARAM})
-    public WebACGeneral(final String rootControllerUserWebId, final String permissionlessUserWebId) {
-        super(rootControllerUserWebId, permissionlessUserWebId);
-    }
 
     /**
      * 5.0-A - Access to a single agent
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void agentSingle(final String uri) {
+    public void agentSingle() {
         final TestInfo info = setupTest("5.0-A",
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
@@ -69,12 +52,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-B - Different access to different agents
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void agentDouble(final String uri) {
+    public void agentDouble() {
         final TestInfo info = setupTest("5.0-B",
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
@@ -87,12 +67,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-C-1 - Access to an agent group
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void agentGroup(final String uri) {
+    public void agentGroup() {
         final TestInfo info = setupTest("5.0-C-1",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
                                         "object of an " +
@@ -123,12 +100,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-C-2 - Access to an agent group with hash uris
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void agentGroupWithHashUris(final String uri) {
+    public void agentGroupWithHashUris() {
         final TestInfo info = setupTest("5.0-C-2",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
                                         "object of an agentGroup statement is a link with a hash URI to a Group " +
@@ -159,12 +133,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-D - Public access
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void agentAll(final String uri) {
+    public void agentAll() {
         final TestInfo info = setupTest("5.0-D",
                                         "To specify that you're giving a particular mode of access to everyone, you " +
                                         "can use acl:agentClass " +
@@ -179,12 +150,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-E - Authenticated access
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void allAuthenticatedAgents(final String uri) {
+    public void allAuthenticatedAgents() {
         final TestInfo info = setupTest("5.0-E",
                                         "To specify that you're giving a particular mode of access to all " +
                                         "authenticated users, you can use acl:agentClass acl:AuthenticatedAgent to " +
@@ -200,12 +168,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-F - Access to a specific resource
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({TEST_CONTAINER_URL_PARAM})
-    public void resourceSingle(final String uri) {
+    public void resourceSingle() {
         final TestInfo info = setupTest("5.0-F",
                                         "The acl:accessTo predicate specifies which resources you're giving access " +
                                         "to, using their URLs as " +
