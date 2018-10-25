@@ -469,6 +469,7 @@ public class WebACModes extends AbstractAuthzTest {
         final Response childAclResponse =
             doPutUnverified(childAclUri, new Headers(new Header("Content-Type", "text/turtle")),
                             getAclAsString("user-read-write.ttl", childResourceUri, this.permissionlessUserWebId),
+                            false);
         childAclResponse.then().statusCode(403);
     }
 
