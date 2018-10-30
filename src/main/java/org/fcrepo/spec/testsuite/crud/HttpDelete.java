@@ -26,6 +26,7 @@ import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 /**
@@ -78,7 +79,10 @@ public class HttpDelete extends AbstractTest {
         // Options to resourceOp
         final Response responseOptions = doOptions(locationHeader);
 
-        final String allowHeader = responseOptions.getHeader("Allow");
+        // Is DELETE supported?
+        if (getHeaders(responseOptions, "Allow").noneMatch(h -> h.getValue().contains("DELETE"))) {
+            throw new SkipException("DELETE not supported");
+        }
 
         // Delete to resourceOp
         final Response response = doDelete(locationHeader);
@@ -92,24 +96,11 @@ public class HttpDelete extends AbstractTest {
         }
 
         //GET deleted resources
-        final Response resResource = doGetUnverified(locationHeader);
-        final Response resResourceSon = doGetUnverified(locationHeader2);
-        final Response resRdf01 = doGetUnverified(rlocationHeader1);
-        final Response resRdf02 = doGetUnverified(rlocationHeader2);
-        final Response resRdf03 = doGetUnverified(rlocationHeader3);
-
-        if (allowHeader.contains("OPTIONS")) {
-            if (resResource.getStatusCode() != 410 && resResourceSon.getStatusCode() != 410 &&
-                resRdf01.getStatusCode() != 410 && resRdf02.getStatusCode() != 410 &&
-                resRdf03.getStatusCode() != 410) {
-                Assert.fail();
-            }
-        } else if (resResource.getStatusCode() == 410 || resResourceSon.getStatusCode() == 410 ||
-                resRdf01.getStatusCode() == 410 || resRdf02.getStatusCode() == 410 ||
-                resRdf03.getStatusCode() == 410) {
-                Assert.fail();
-        }
-
+        doGetUnverified(locationHeader).then().statusCode(410);
+        doGetUnverified(locationHeader2).then().statusCode(410);
+        doGetUnverified(rlocationHeader1).then().statusCode(410);
+        doGetUnverified(rlocationHeader2).then().statusCode(410);
+        doGetUnverified(rlocationHeader3).then().statusCode(410);
     }
 
     /**
@@ -151,6 +142,14 @@ public class HttpDelete extends AbstractTest {
         ps.append("Request URI:\t").append(uri).append("\n");
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
+
+        // Options to rootres
+        final Response responseOptions = doOptions(locationHeader);
+
+        // Is DELETE supported?
+        if (getHeaders(responseOptions, "Allow").noneMatch(h -> h.getValue().contains("DELETE"))) {
+            throw new SkipException("DELETE not supported");
+        }
 
         // Delete root folder
         final Response response = doDelete(locationHeader);
@@ -226,6 +225,14 @@ public class HttpDelete extends AbstractTest {
         ps.append("Request URI:\t").append(uri).append("\n");
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
+
+        // Options to rootres
+        final Response responseOptions = doOptions(locationHeader);
+
+        // Is DELETE supported?
+        if (getHeaders(responseOptions, "Allow").noneMatch(h -> h.getValue().contains("DELETE"))) {
+            throw new SkipException("DELETE not supported");
+        }
 
         // Delete root folder
         final Response response = doDelete(locationHeader);
