@@ -25,6 +25,9 @@ import java.net.URI;
 import org.fcrepo.spec.testsuite.TestParameters;
 
 /**
+ * This implementation of the Authenticator interface implements Basic Auth by
+ * resolving the password associated with the specified WebId based on the passwords
+ * supplied via the commandline or YAML parameters file.
  * @author dbernstein
  */
 public class DefaultAuthenticator implements Authenticator {

@@ -20,6 +20,9 @@ package org.fcrepo.spec.testsuite.authn;
 import io.restassured.specification.RequestSpecification;
 
 /**
+ * An interface defining a token that can add any implementation specific authentication
+ * information to the request.
+ * See {@link org.fcrepo.spec.testsuite.authn.DefaultAuthToken} for an example implementation.
  * @author dbernstein
  */
 public interface AuthenticationToken {
@@ -30,10 +33,4 @@ public interface AuthenticationToken {
      * @return the modified request specification
      */
     RequestSpecification addAuthInfo(RequestSpecification requestSpecification);
-
-    /**
-     * Indicates whether the token is expired (for tokens that can/must be reused).
-     * @return flag
-     */
-    boolean isExpired();
 }

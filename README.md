@@ -38,9 +38,8 @@ The configuration file is Yaml and a simple structure. The first level groups a 
 ### Authenticators 
 The Fedora Specification does not have anything to say about how requests are authenticated by implementations.  Therefore it is necessary for each implementation to perform
 container authentications where required and add any required auth information to the request originating from the testsuite.  See org.fcrepo.spec.testsuite.authn.Authenticator and the 
-org.fcrepo.spec.testsuite.authn.DefaultAuthenticator for a sample implementation.  Once you've implemented your Authenticator and packaged it in a jar,  you must drop the jar in a directory
-named `authenticators`.  This `authenticators` directory must be in one of three places: 1) in the same directory as your testsuite jar. 2) in the execution directory (ie the directory in which you invoke java -jar ...)
-or 3) in the user's home directory.
+org.fcrepo.spec.testsuite.authn.DefaultAuthenticator for a sample implementation.  Once you've implemented your Authenticator and packaged it in a jar,  you must drop the jar in a directory named
+`authenticators` located in the same directory as your testsuite jar.
 
 ```
 default:

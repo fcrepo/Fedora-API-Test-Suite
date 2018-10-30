@@ -138,12 +138,9 @@ public class App {
                                       "The class name of the Authenticator implementation. This class must be " +
                                       "packaged in" +
                                       " a jar file that is placed in an 'authenticators' directory adjacent to the " +
-                                      "testsuite jar, '" +
-                                      System.getProperty("user.dir") + "', or '" + System.getProperty("user.home") +
-                                      "'. If there is only one implementation any of the specified locations, it will" +
-                                      " be " +
-                                      "discovered and used automatically; ie you don't need to use this optionpal " +
-                                      "parameter."));
+                                      "testsuite jar.  If there is only one implementation in any of the specified " +
+                                      "locations, it will be discovered and used automatically; ie you don't need to " +
+                                      "use this optional parameter."));
 
             final CommandLineParser parser = new BasicParser();
             final CommandLine cmd;

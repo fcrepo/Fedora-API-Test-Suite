@@ -30,8 +30,6 @@ public class TestParameters {
     /**
      * Configuration parameter names for consistency.
      */
-    public static final String TEST_CONTAINER_URL_PARAM = "testContainerURL";
-
     public final static String ROOT_URL_PARAM = "rooturl";
 
     public final static String PERMISSIONLESS_USER_WEBID_PARAM = "permissionless-user-webid";

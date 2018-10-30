@@ -20,6 +20,7 @@ package org.fcrepo.spec.testsuite.authn;
 import io.restassured.specification.RequestSpecification;
 
 /**
+ * A token that adds basic authorization to a request.
  * @author dbernstein
  */
 public class DefaultAuthToken implements AuthenticationToken {
@@ -41,8 +42,4 @@ public class DefaultAuthToken implements AuthenticationToken {
         return requestSpecification.auth().basic(this.username, this.password);
     }
 
-    @Override
-    public boolean isExpired() {
-        return false;
-    }
 }

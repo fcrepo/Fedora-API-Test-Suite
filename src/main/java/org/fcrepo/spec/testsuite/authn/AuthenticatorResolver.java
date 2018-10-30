@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
@@ -44,10 +45,10 @@ public class AuthenticatorResolver {
 
     private static String authenticatorClass = null;
 
+    private static Authenticator instance = null;
+
     private AuthenticatorResolver() {
     }
-
-    private static Authenticator instance = null;
 
     /**
      * Initialize the resolver
@@ -71,17 +72,9 @@ public class AuthenticatorResolver {
             //look for jars an authenticators directory sitting in the same
             //directory as the executing jar.
             File dir = new File(jar.getParentFile(), authDirName);
-            //if there is no authenticators dir in the executing jar's dir
-            //look for an authenticators dir in the dir where java was run
+            //look for an authenticators dir where the executing jar lives.
             if (!dir.exists()) {
-                dir = new File(System.getProperty("user.dir"), authDirName);
-                if (!dir.exists()) {
-                    //otherwise look in the user's home directory
-                    dir = new File(System.getProperty("user.home"), authDirName);
-                    if (!dir.exists()) {
-                        dir = null;
-                    }
-                }
+                dir = null;
             }
 
             //if a valid directory was found, try to find an implementation of the Authenticator
@@ -94,6 +87,8 @@ public class AuthenticatorResolver {
                         final URLClassLoader cl = URLClassLoader.newInstance(new URL[] {x.toURI().toURL()});
                         classLoadersList.add(cl);
                     } catch (MalformedURLException ex) {
+                        //Should never happen
+                        throw new RuntimeException(ex);
                     }
                 });
 
@@ -124,12 +119,10 @@ public class AuthenticatorResolver {
                             authClasses.stream().forEach(x -> message.append(" * " + x.getName() + "\n"));
                         }
                         message.append(
-                            "Please verify that your classname is correct and that you've placed the jar in an " +
-                            "'authenticators` directory in " +
-                            jar.getParentFile().getPath() + ", " + System.getProperty("user.dir") + ", or " +
-                            System.getProperty("user.home") +
-                            " . Otherwise you may opt not to specify an Authenticator class. In that case if there is" +
-                            " a single Authenticator found we will use that one, otherwise we will use the default " +
+                            "Please verify that your classname is correct and that you've packaged it in a jar that " +
+                            "you have placed in '" + jar.getParentFile().getPath()  + File.separator + authDirName +
+                            "'. Otherwise you may opt not to specify an Authenticator class. In that case if there is " +
+                            "a single Authenticator found we will use that one, otherwise we will use the default " +
                             "authenticator.");
                         throw new RuntimeException(message.toString());
                     }
@@ -153,13 +146,13 @@ public class AuthenticatorResolver {
 
                 //if an auth class was resolved create a new instance
                 if (authClass != null) {
-                    System.out.println("Using " + authClass.getName());
+                    TestSuiteGlobals.logFile().println("Using " + authClass.getName());
                     return (Authenticator) authClass.newInstance();
                 }
             }
 
             //no auth class was found
-            System.out.println(
+            TestSuiteGlobals.logFile().println(
                 "No " + Authenticator.class + " implementation found in classpath. Using default: " +
                 DefaultAuthenticator.class.getName());
             return new DefaultAuthenticator();
@@ -173,7 +166,7 @@ public class AuthenticatorResolver {
      *
      * @return the configured authenticator instance
      */
-    public static final Authenticator getAuthenticator() {
+    public static Authenticator getAuthenticator() {
         if (instance == null) {
             throw new RuntimeException("You must all initialize() on this class before accessing the Authenticator.");
         }
