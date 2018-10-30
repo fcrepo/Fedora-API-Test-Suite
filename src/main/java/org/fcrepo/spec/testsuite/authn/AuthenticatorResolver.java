@@ -121,8 +121,8 @@ public class AuthenticatorResolver {
                         message.append(
                             "Please verify that your classname is correct and that you've packaged it in a jar that " +
                             "you have placed in '" + jar.getParentFile().getPath()  + File.separator + authDirName +
-                            "'. Otherwise you may opt not to specify an Authenticator class. In that case if there is " +
-                            "a single Authenticator found we will use that one, otherwise we will use the default " +
+                            "'. Otherwise you may opt not to specify an Authenticator class. In that case if there " +
+                            "is a single Authenticator found we will use that one, otherwise we will use the default " +
                             "authenticator.");
                         throw new RuntimeException(message.toString());
                     }
