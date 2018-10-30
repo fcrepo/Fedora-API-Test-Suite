@@ -204,6 +204,13 @@ public class AbstractTest {
         return doPostUnverified(uri, headers, body);
     }
 
+    protected Response createIndirectContainerUnverifed(final String uri, final String body) {
+        final Headers headers = new Headers(
+            new Header("Link", "<http://www.w3.org/ns/ldp#IndirectContainer>; rel=\"type\""),
+            new Header("Content-Type", "text/turtle"));
+        return doPostUnverified(uri, headers, body);
+    }
+
     /**
      * Do a POST request.
      *
