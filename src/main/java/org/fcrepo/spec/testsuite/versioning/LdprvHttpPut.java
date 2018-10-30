@@ -35,6 +35,38 @@ import org.testng.annotations.Test;
 public class LdprvHttpPut extends AbstractVersioningTest {
 
     /**
+     * 4-A
+     */
+    @Test(groups = {"MAY"})
+    public void changeLDPRToAnLDPRv() {
+        final TestInfo info = setupTest("4-A",
+                                        "Implementations may allow a subsequent PUT request with a rel=\"type\"" +
+                                        " link in the Link header specifying type http://mementoweb" +
+                                        ".org/ns#OriginalResource to convert an existing LDPR into an LDPRv. If such " +
+                                        "a conversion from an LDPR to an LDPRv is supported, it must be accompanied " +
+                                        "by the creation of a version container (LDPCv), as noted above.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#resource-versioning",
+                                        ps);
+
+        //create a resource
+        final Response response = createBasicContainer(this.uri, info.getId());
+        final String resourceUri = getLocation(response);
+        //if it has an original resource header skip
+        final Response getResponse = doGet(resourceUri);
+        skipIfVersionedByDefault(getResponse);
+        //otherwise PUT with the OriginalResource header.
+        final String body = getResponse.getBody().asString();
+        doPut(resourceUri, new Headers(new Header("Link", ORIGINAL_RESOURCE_LINK_HEADER)), body);
+        final Response getResponse2 = doGet(resourceUri);
+        //verify that OriginalResource header is returned.
+        confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, getResponse2);
+        //confirm there is a timemap link
+        confirmPresenceOfTimeMapLink(getResponse2);
+        //confirm that the timemap link is not broken.
+        doGet(getTimeMapUri(getResponse2).toString());
+    }
+
+    /**
      * 4.1.2-A
      */
     @Test(groups = {"MUST"})
@@ -139,4 +171,6 @@ public class LdprvHttpPut extends AbstractVersioningTest {
         confirmPresenceOfLinkValue(ORIGINAL_RESOURCE_LINK_HEADER, getResponse2);
         confirmPresenceOfLinkValue(TIME_GATE_LINK_HEADER, getResponse2);
     }
+
+
 }
