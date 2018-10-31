@@ -52,6 +52,10 @@ public abstract class TestSuiteGlobals {
 
     private static ResourceCleanupManager cleanupManager;
 
+    static {
+        initialize();
+    }
+
     /**
      * Get or create the default container for all tests resources to be created
      *
@@ -77,6 +81,21 @@ public abstract class TestSuiteGlobals {
 
         cleanupManager.setTestContainerUrl(containerUrl);
         return containerUrl;
+    }
+
+    private static void initialize() {
+        //create output directory if does not exist
+        final File dir = new File(TestSuiteGlobals.outputDirectory);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        //remove existing log if exists
+        final File f = new File(
+            TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
+        if (f.exists()) {
+            f.delete();
+        }
     }
 
     /**
@@ -133,19 +152,6 @@ public abstract class TestSuiteGlobals {
      */
     private static String today() {
         return new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
-    }
-
-    /**
-     * Remove existing log file
-     */
-    public static void resetFile() {
-        final File dir = new File("report");
-        dir.mkdirs();
-        final File f = new File(
-            TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
-        if (f.exists()) {
-            f.delete();
-        }
     }
 
     /**

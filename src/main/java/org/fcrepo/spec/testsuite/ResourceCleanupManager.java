@@ -42,13 +42,6 @@ public class ResourceCleanupManager {
     private List<String> createdResources = new ArrayList<>();
 
     /**
-     * Construct manager
-     *
-     */
-    public ResourceCleanupManager() {
-    }
-
-    /**
      * Add a url to the list of created fedora resources
      *
      * @param url url to add

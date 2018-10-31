@@ -71,7 +71,7 @@ public class AbstractTest {
 
     protected PrintStream ps;
 
-    protected String rootControllerUserWebId;
+    private String rootControllerUserWebId;
     protected String permissionlessUserWebId;
     protected String uri;
     protected String rootUri;
@@ -208,7 +208,7 @@ public class AbstractTest {
     /**
      * Do a POST request.
      *
-
+     * @param uri the URI of the request
      * @param headers the request headers.
      * @param body the request body.
      * @param admin use the admin user credentials.
@@ -246,7 +246,7 @@ public class AbstractTest {
     /**
      * Do a POST and confirm a 201 status code.
      *
-
+     * @param uri the URI of the request
      * @param headers the request headers.
      * @param body the request body.
      * @param admin use the admin user credentials.
@@ -317,7 +317,7 @@ public class AbstractTest {
     /**
      * Do an options request.
      *
-
+     * @param uri the URI of the request
      * @param admin whether to use admin user credentials
      * @return the response
      */

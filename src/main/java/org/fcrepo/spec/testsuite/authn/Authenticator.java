@@ -22,7 +22,7 @@ import java.net.URI;
 /**
  * An interface that provides a means to resolve any authentication-related information based on a user-identifying
  * URI (ie a WebID) that will be required by subsequent requests in order to fulfill a request.  For example in the
- * case of an implementation that uses Basic Auth,  the createAuthToken() would return and AuthToken with access to
+ * case of an implementation that uses Basic Auth,  the createAuthToken() would return an AuthToken with access to
  * valid credentials that the AuthToken would subsequently add to the request. NB:  A zero-argument constructor is
  * required for any implementation of this interface.
  * See {@link org.fcrepo.spec.testsuite.authn.DefaultAuthenticator} and

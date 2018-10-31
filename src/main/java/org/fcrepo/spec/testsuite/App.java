@@ -97,148 +97,143 @@ public class App {
      * @param args the command line arguments.
      */
     public static void main(final String[] args) {
+        final Options options = new Options();
+        options.addOption(new Option("b", ROOT_URL_PARAM, true, "The root URL of the repository"));
+        options.addOption(new Option("u", PERMISSIONLESS_USER_WEBID_PARAM, true,
+                                     "A URI representing the WebID of a user with no permissions."));
+        options.addOption(
+            new Option("p", PERMISSIONLESS_USER_PASSWORD_PARAM, true, "Password of user with basic user role"));
+        options.addOption(new Option("a", ROOT_CONTROLLER_USER_WEBID_PARAM, true,
+                                     "A URI representing the WebID of a user with read, write, and control" +
+                                     " permissions on root container."));
+        options.addOption(
+            new Option("s", ROOT_CONTROLLER_USER_PASSWORD_PARAM, true, "Password of user with admin role"));
+
+        options.addOption(new Option("R", ROOT_CONTROLLER_USER_AUTH_HEADER, true,
+                                     "\"Authorization\" header value for a user with read, write, and control. " +
+                                     "When present, this value will be added to the request effectively " +
+                                     "overriding Authenticator implementations, custom or default, found in the " +
+                                     "classpath."));
+
+        options.addOption(new Option("P", PERMISSIONLESS_USER_AUTH_HEADER, true,
+                                     "\"Authorization\" header value for a user with no permissions. " +
+                                     "When present, this value will be added to the request effectively " +
+                                     "overriding Authenticator implementations, custom or default, found in the " +
+                                     "classpath."));
+        options.addOption( new Option("x", TESTNGXML_PARAM, true, "TestNG XML file"));
+        options.addOption(new Option("r", REQUIREMENTS_PARAM, true,
+                                     "Requirement levels. One or more of the following, " +
+                                     "separated by ',': [ALL|MUST|SHOULD|MAY]"));
+        options.addOption(new Option("c", CONFIG_FILE_PARAM, true, "Configuration file of test parameters."));
+        options.addOption(new Option("n", SITE_NAME_PARAM, true,
+                                     "Site name from configuration file (defaults to \"default\")"));
+        options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
+        options.addOption(new Option("q", QUEUE_NAME_PARAM, true, "Queue name for events (if applicable)"));
+        options.addOption(new Option("t", TOPIC_NAME_PARAM, true, "Topic name for events (if applicable)"));
+        options.addOption(new Option("g", CONSTRAINT_ERROR_GENERATOR_PARAM, true,
+                                     "A file containing a SPARQL query that will trigger a constraint error."));
+        options
+            .addOption(new Option("A", AUTHENTICATOR_CLASS_PARAM, true,
+                                  "The class name of the Authenticator implementation. This class must be " +
+                                  "packaged in a jar file that is placed in an 'authenticators' directory adjacent " +
+                                  "to the testsuite jar.  If there is only one implementation found in the jar(s) in " +
+                                  "the 'authenticators' directory, it will be discovered and used automatically.  " +
+                                  "In other words, if you have only one implementation you don't need to use this " +
+                                  "optional parameter."));
+
+        final CommandLineParser parser = new BasicParser();
+        final CommandLine cmd;
         try {
-            final Options options = new Options();
-            options.addOption(new Option("b", ROOT_URL_PARAM, true, "The root URL of the repository"));
-            options.addOption(new Option("u", PERMISSIONLESS_USER_WEBID_PARAM, true,
-                                         "A URI representing the WebID of a user with no permissions."));
-            options.addOption(
-                new Option("p", PERMISSIONLESS_USER_PASSWORD_PARAM, true, "Password of user with basic user role"));
-            options.addOption(new Option("a", ROOT_CONTROLLER_USER_WEBID_PARAM, true,
-                                         "A URI representing the WebID of a user with read, write, and control" +
-                                         " permissions on root container."));
-            options.addOption(
-                new Option("s", ROOT_CONTROLLER_USER_PASSWORD_PARAM, true, "Password of user with admin role"));
+            cmd = parser.parse(options, args);
+        } catch (final ParseException e) {
+            printHelpAndExit(e.getMessage(), options);
+            return;
+        }
 
-            options.addOption(new Option("R", ROOT_CONTROLLER_USER_AUTH_HEADER, true,
-                                         "\"Authorization\" header value for a user with read, write, and control. " +
-                                         "When present, this value will be added to the request effectively " +
-                                         "overriding Authenticator implementations, custom or default, found in the " +
-                                         "classpath.."));
+        Map<String, String> params = new HashMap<>();
+        if (cmd.hasOption(CONFIG_FILE_PARAM)) {
+            final File configurationFile = new File(cmd.getOptionValue(CONFIG_FILE_PARAM));
+            if (configurationFile.exists()) {
+                final String sitename = cmd.getOptionValue(SITE_NAME_PARAM) == null ? "default" : cmd
+                    .getOptionValue(SITE_NAME_PARAM);
+                params = retrieveConfig(configurationFile, sitename);
+            }
+        }
 
-            options.addOption(new Option("P", PERMISSIONLESS_USER_AUTH_HEADER, true,
-                                         "\"Authorization\" header value for a user with no permissions. " +
-                                         "When present, this value will be added to the request effectively " +
-                                         "overriding Authenticator implementations, custom or default, found in the " +
-                                         "classpath.."));
-            options.addOption( new Option("x", TESTNGXML_PARAM, true, "TestNG XML file"));
-            options.addOption(new Option("r", REQUIREMENTS_PARAM, true,
-                                         "Requirement levels. One or more of the following, " +
-                                         "separated by ',': [ALL|MUST|SHOULD|MAY]"));
-            options.addOption(new Option("c", CONFIG_FILE_PARAM, true, "Configuration file of test parameters."));
-            options.addOption(new Option("n", SITE_NAME_PARAM, true,
-                                         "Site name from configuration file (defaults to \"default\")"));
-            options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
-            options.addOption(new Option("q", QUEUE_NAME_PARAM, true, "Queue name for events (if applicable)"));
-            options.addOption(new Option("t", TOPIC_NAME_PARAM, true, "Topic name for events (if applicable)"));
-            options.addOption(new Option("g", CONSTRAINT_ERROR_GENERATOR_PARAM, true,
-                                         "A file containing a SPARQL query that will trigger a constraint error."));
-            options
-                .addOption(new Option("A", AUTHENTICATOR_CLASS_PARAM, true,
-                                      "The class name of the Authenticator implementation. This class must be " +
-                                      "packaged in" +
-                                      " a jar file that is placed in an 'authenticators' directory adjacent to the " +
-                                      "testsuite jar.  If there is only one implementation in any of the specified " +
-                                      "locations, it will be discovered and used automatically; ie you don't need to " +
-                                      "use this optional parameter."));
+        for (final String opt : configArgs.keySet()) {
+            // Allow command line overriding of config file arguments
+            if (cmd.getOptionValue(opt) != null) {
+                params.put(opt, cmd.getOptionValue(opt));
+            }
+            if (!params.containsKey(opt) || params.get(opt).isEmpty()) {
+                if (configArgs.get(opt)) {
+                    throw new RuntimeException("Argument \"" + opt + "\" is required");
+                }
+                // Fill in missing parts with blanks
+                params.put(opt, "");
+            }
+        }
 
-            final CommandLineParser parser = new BasicParser();
-            final CommandLine cmd;
+        TestParameters.initialize(params);
+        final TestParameters tp = TestParameters.get();
+        if (isNullOrEmpty(tp.getQueueName()) &&
+            isNullOrEmpty(tp.getTopicName())) {
+            throw new RuntimeException(String.format("One of %s, %s must be provided", QUEUE_NAME_PARAM,
+                                                     TOPIC_NAME_PARAM));
+        }
+
+        //validate that the webids are URIs
+        try {
+            URI.create(tp.getRootControllerUserWebId());
+            URI.create(tp.getPermissionlessUserWebId());
+        } catch (Exception ex) {
+            printHelpAndExit("WebID parameters must be well-formed URIs: " + ex.getMessage(),
+                             options);
+        }
+
+        if (isNullOrEmpty(tp.getPermissionlessUserAuthHeader()) ||
+            isNullOrEmpty(tp.getRootControllerUserAuthHeader())) {
             try {
-                cmd = parser.parse(options, args);
-            } catch (final ParseException e) {
-                printHelpAndExit(e.getMessage(), options);
+                //initialize the resolver
+                AuthenticatorResolver.initialize(cmd.getOptionValue(AUTHENTICATOR_CLASS_PARAM, null));
+            } catch (final Exception e) {
+                System.err.println(e.getMessage());
+                System.exit(1);
                 return;
             }
+        }
 
-            Map<String, String> params = new HashMap<>();
-            if (cmd.hasOption(CONFIG_FILE_PARAM)) {
-                final File configurationFile = new File(cmd.getOptionValue(CONFIG_FILE_PARAM));
-                if (configurationFile.exists()) {
-                    final String sitename = cmd.getOptionValue(SITE_NAME_PARAM) == null ? "default" : cmd
-                        .getOptionValue(SITE_NAME_PARAM);
-                    params = retrieveConfig(configurationFile, sitename);
-                }
-            }
+        tp.setTestContainerUrl(TestSuiteGlobals.containerTestSuite());
 
-            for (final String opt : configArgs.keySet()) {
-                // Allow command line overriding of config file arguments
-                if (cmd.getOptionValue(opt) != null) {
-                    params.put(opt, cmd.getOptionValue(opt));
-                }
-                if (!params.containsKey(opt) || params.get(opt).isEmpty()) {
-                    if (configArgs.get(opt)) {
-                        throw new RuntimeException("Argument \"" + opt + "\" is required");
-                    }
-                    // Fill in missing parts with blanks
-                    params.put(opt, "");
-                }
-            }
-
-            TestParameters.initialize(params);
-            final TestParameters tp = TestParameters.get();
-            if (isNullOrEmpty(tp.getQueueName()) &&
-                isNullOrEmpty(tp.getTopicName())) {
-                throw new RuntimeException(String.format("One of %s, %s must be provided", QUEUE_NAME_PARAM,
-                                                         TOPIC_NAME_PARAM));
-            }
-
-            //validate that the webids are URIs
+        InputStream inputStream = null;
+        if (params.get(TESTNGXML_PARAM).toString().isEmpty()) {
+            inputStream = ClassLoader.getSystemResourceAsStream("testng.xml");
+        } else {
             try {
-                URI.create(tp.getRootControllerUserWebId());
-                URI.create(tp.getPermissionlessUserWebId());
-            } catch (Exception ex) {
-                printHelpAndExit("WebID parameters must be well-formed URIs: " + ex.getMessage(),
-                                 options);
+                inputStream = new FileInputStream(params.get(TESTNGXML_PARAM));
+            } catch (final FileNotFoundException e) {
+                System.err.println("Unable to open '" + params.get(TESTNGXML_PARAM) + "'." + e.getMessage());
+                System.exit(1);
             }
+        }
 
-            if (isNullOrEmpty(tp.getPermissionlessUserAuthHeader()) ||
-                isNullOrEmpty(tp.getRootControllerUserAuthHeader())) {
-                try {
-                    //initialize the resolver
-                    AuthenticatorResolver.initialize(cmd.getOptionValue(AUTHENTICATOR_CLASS_PARAM, null));
-                } catch (final Exception e) {
-                    System.err.println(e.getMessage());
-                    System.exit(1);
-                    return;
-                }
-            }
+        final String testFilename = params.get(TESTNGXML_PARAM).isEmpty() ? "Default testng.xml" : params.get(
+            TESTNGXML_PARAM);
+        final SuiteXmlParser xmlParser = new SuiteXmlParser();
+        final XmlSuite xmlSuite = xmlParser.parse(testFilename, inputStream, true);
 
-            tp.setTestContainerUrl(TestSuiteGlobals.containerTestSuite());
+        final TestNG testng = new TestNG();
+        testng.setCommandLineSuite(xmlSuite);
 
-            InputStream inputStream = null;
-            if (params.get(TESTNGXML_PARAM).toString().isEmpty()) {
-                inputStream = ClassLoader.getSystemResourceAsStream("testng.xml");
-            } else {
-                try {
-                    inputStream = new FileInputStream(params.get(TESTNGXML_PARAM));
-                } catch (final FileNotFoundException e) {
-                    System.err.println("Unable to open '" + params.get(TESTNGXML_PARAM) + "'." + e.getMessage());
-                    System.exit(1);
-                }
-            }
+        // Set requirement-level groups to be run
+        if (!params.get(REQUIREMENTS_PARAM).isEmpty()) {
+            testng.setGroups(params.get(REQUIREMENTS_PARAM).toLowerCase());
+        }
 
-            final String testFilename = params.get(TESTNGXML_PARAM).isEmpty() ? "Default testng.xml" : params.get(
-                TESTNGXML_PARAM);
-            final SuiteXmlParser xmlParser = new SuiteXmlParser();
-            final XmlSuite xmlSuite = xmlParser.parse(testFilename, inputStream, true);
-
-            final TestNG testng = new TestNG();
-            testng.setCommandLineSuite(xmlSuite);
-
-            // Set requirement-level groups to be run
-            if (!params.get(REQUIREMENTS_PARAM).isEmpty()) {
-                testng.setGroups(params.get(REQUIREMENTS_PARAM).toLowerCase());
-            }
-
-            try {
-                testng.run();
-            } finally {
-                TestSuiteGlobals.cleanupTestResources();
-            }
-
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
+        try {
+            testng.run();
+        } finally {
+            TestSuiteGlobals.cleanupTestResources();
         }
     }
 

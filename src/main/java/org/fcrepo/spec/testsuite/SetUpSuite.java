@@ -24,12 +24,10 @@ import org.testng.annotations.BeforeSuite;
  */
 public class SetUpSuite {
 
-
     /**
-     * Reset Globals
+     * Placeholder for any suite setup routines
      */
     @BeforeSuite
     public void setUp() {
-        TestSuiteGlobals.resetFile();
     }
 }

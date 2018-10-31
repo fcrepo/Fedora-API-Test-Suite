@@ -21,7 +21,7 @@ package org.fcrepo.spec.testsuite;
 import java.util.Map;
 
 /**
- * A singleton class providing access to shared test paramters.
+ * A singleton class providing access to shared test parameters.
  *
  * @author dbernstein
  */
@@ -58,6 +58,10 @@ public class TestParameters {
 
     private static TestParameters instance;
 
+    private Map<String, String> params = null;
+
+    private String testContainerUrl = null;
+
     /**
      * Initialize the test parameters
      * @param params
@@ -78,16 +82,13 @@ public class TestParameters {
         return instance;
     }
 
-    private Map<String, String> params = null;
-    private String testContainerUrl = null;
-
     private TestParameters(final Map<String, String> params) {
         this.params = params;
     }
 
     /**
      * The repository root url
-     * @return
+     * @return the root url
      */
     public String getRootUrl() {
         return params.get(ROOT_URL_PARAM);
@@ -95,7 +96,7 @@ public class TestParameters {
 
     /**
      * The root controller user WebID
-     * @return
+     * @return the WebID
      */
     public String getRootControllerUserWebId() {
         return params.get(ROOT_CONTROLLER_USER_WEBID_PARAM);
@@ -103,7 +104,7 @@ public class TestParameters {
 
     /**
      * The root controller user password
-     * @return
+     * @return the password
      */
     public String getRootControllerUserPassword() {
         return params.get(ROOT_CONTROLLER_USER_PASSWORD_PARAM);
@@ -111,7 +112,7 @@ public class TestParameters {
 
     /**
      * The root controller user auth header value
-     * @return
+     * @return The value to be placed in the Authorization header (if present)
      */
     public String getRootControllerUserAuthHeader() {
         return params.get(ROOT_CONTROLLER_USER_AUTH_HEADER);
@@ -119,7 +120,7 @@ public class TestParameters {
 
     /**
      * The permissionless user WebID
-     * @return
+     * @return the WebID
      */
 
     public String getPermissionlessUserWebId() {
@@ -128,7 +129,7 @@ public class TestParameters {
 
     /**
      * The permissionless user password
-     * @return
+     * @return the password
      */
     public String getPermissionlessUserPassword() {
         return params.get(PERMISSIONLESS_USER_PASSWORD_PARAM);
@@ -136,7 +137,7 @@ public class TestParameters {
 
     /**
      * The permissionless user auth header value
-     * @return
+     * @return The value to be placed in the Authorization header (if present)
      */
     public String getPermissionlessUserAuthHeader() {
         return params.get(PERMISSIONLESS_USER_AUTH_HEADER);
@@ -144,7 +145,7 @@ public class TestParameters {
 
     /**
      * Set the test container url
-     * @param testContainerUrl
+     * @param testContainerUrl the test container url
      */
     public void setTestContainerUrl(final String testContainerUrl) {
         this.testContainerUrl = testContainerUrl;
@@ -152,39 +153,39 @@ public class TestParameters {
 
     /**
      * Get the test container url
-     * @return
+     * @return the test container url
      */
     public String getTestContainerUrl() {
         return this.testContainerUrl;
     }
 
     /**
-     * queue name
-     * @return
+     * Get queue name
+     * @return the queue name
      */
     public String getQueueName() {
         return params.get(QUEUE_NAME_PARAM);
     }
 
     /**
-     * topic name
-     * @return
+     * Get topic name
+     * @return the topic name
      */
     public String getTopicName() {
         return params.get(TOPIC_NAME_PARAM);
     }
 
     /**
-     * broker url
-     * @return
+     * Get broker url
+     * @return the broker url
      */
     public String getBrokerUrl() {
         return params.get(BROKER_URL_PARAM);
     }
 
     /**
-     * constraint error generator file path
-     * @return
+     * Get constraint error generator file path
+     * @return the constraint error generator file path
      */
     public String getConstraintErrorGenerator() {
         return params.get(CONSTRAINT_ERROR_GENERATOR_PARAM);

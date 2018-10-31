@@ -22,6 +22,7 @@ import static org.fcrepo.spec.testsuite.TestParameters.AUTHENTICATOR_CLASS_PARAM
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -61,7 +62,9 @@ public class AuthenticatorResolver {
     }
 
     private static Authenticator findAuthenticator() {
+        final PrintStream log = TestSuiteGlobals.logFile();
         try {
+
             final List<ClassLoader> classLoadersList = new LinkedList<>();
             final String path =
                 AuthenticatorResolver.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -146,18 +149,23 @@ public class AuthenticatorResolver {
 
                 //if an auth class was resolved create a new instance
                 if (authClass != null) {
-                    TestSuiteGlobals.logFile().println("Using " + authClass.getName());
+                    log.println(
+                        "Using user specified " + Authenticator.class + " implementation: " + authClass.getName() +
+                        "\n\n");
                     return (Authenticator) authClass.newInstance();
                 }
             }
 
             //no auth class was found
-            TestSuiteGlobals.logFile().println(
+            log.println(
                 "No " + Authenticator.class + " implementation found in classpath. Using default: " +
-                DefaultAuthenticator.class.getName());
+                DefaultAuthenticator.class.getName() + "\n\n");
+
             return new DefaultAuthenticator();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
+        } finally {
+            log.close();
         }
     }
 
