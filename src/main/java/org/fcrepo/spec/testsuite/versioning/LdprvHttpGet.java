@@ -239,16 +239,6 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         confirmPresenceOfRelType(response, "timegate");
     }
 
-    private void confirmPresenceOfTimeMapLink(final Response response) {
-        confirmPresenceOfRelType(response, "timemap");
-    }
-
-    private void confirmPresenceOfRelType(final Response response, final String relType) {
-        Assert.assertEquals(getLinksOfRelType(response, relType).count(),
-                            1,
-                            "Link with rel type '" + relType + "' must be present but is not!");
-    }
-
     private URI getOriginalUri(final Response response) {
         return getLinksOfRelTypeAsUris(response, "original").findFirst().get();
     }

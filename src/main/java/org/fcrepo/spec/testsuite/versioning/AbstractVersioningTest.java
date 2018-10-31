@@ -39,6 +39,7 @@ import org.apache.http.message.BasicHeaderValueParser;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
+import org.testng.SkipException;
 
 /**
  * @author Daniel Bernstein
@@ -202,4 +203,22 @@ public class AbstractVersioningTest extends AbstractTest {
             return getLocation(timeGateResponse);
         }
     }
+
+    protected void confirmPresenceOfRelType(final Response response, final String relType) {
+        Assert.assertEquals(getLinksOfRelType(response, relType).count(),
+                            1,
+                            "Link with rel type '" + relType + "' must be present but is not!");
+    }
+
+    protected void confirmPresenceOfTimeMapLink(final Response response) {
+        confirmPresenceOfRelType(response, "timemap");
+    }
+
+    protected void skipIfVersionedByDefault(final Response response) {
+        if (getLinksOfRelType(response, "type").filter(x -> x.getUri().equals(
+            Link.valueOf(ORIGINAL_RESOURCE_LINK_HEADER).getUri())).count() == 1) {
+            throw new SkipException("This container versions resources by default");
+        }
+    }
+
 }
