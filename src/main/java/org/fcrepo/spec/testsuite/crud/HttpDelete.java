@@ -76,13 +76,8 @@ public class HttpDelete extends AbstractTest {
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
-        // Options to resourceOp
-        final Response responseOptions = doOptions(locationHeader);
-
         // Is DELETE supported?
-        if (getHeaders(responseOptions, "Allow").noneMatch(h -> h.getValue().contains("DELETE"))) {
-            throw new SkipException("DELETE not supported");
-        }
+        skipTestIfDeleteNotSupported(locationHeader);
 
         // Delete to resourceOp
         final Response response = doDelete(locationHeader);
@@ -143,13 +138,8 @@ public class HttpDelete extends AbstractTest {
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
-        // Options to rootres
-        final Response responseOptions = doOptions(locationHeader);
-
         // Is DELETE supported?
-        if (getHeaders(responseOptions, "Allow").noneMatch(h -> h.getValue().contains("DELETE"))) {
-            throw new SkipException("DELETE not supported");
-        }
+        skipTestIfDeleteNotSupported(locationHeader);
 
         // Delete root folder
         final Response response = doDelete(locationHeader);
@@ -226,13 +216,8 @@ public class HttpDelete extends AbstractTest {
         ps.append("Headers:\tAccept=*/*\n");
         ps.append("Body:\n");
 
-        // Options to rootres
-        final Response responseOptions = doOptions(locationHeader);
-
-        // Is DELETE supported?
-        if (getHeaders(responseOptions, "Allow").noneMatch(h -> h.getValue().contains("DELETE"))) {
-            throw new SkipException("DELETE not supported");
-        }
+         // Is DELETE supported?
+        skipTestIfDeleteNotSupported(locationHeader);
 
         // Delete root folder
         final Response response = doDelete(locationHeader);
@@ -266,6 +251,14 @@ public class HttpDelete extends AbstractTest {
                 resRdf03.getStatusCode() == 410) {
                 Assert.fail();
             }
+        }
+    }
+
+    private void skipTestIfDeleteNotSupported(final String location) {
+        final Response response = doOptions(location);
+
+        if (getHeaders(response, "Allow").noneMatch(h -> h.getValue().contains("DELETE"))) {
+            throw new SkipException("DELETE not supported");
         }
     }
 
