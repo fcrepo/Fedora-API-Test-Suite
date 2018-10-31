@@ -27,12 +27,14 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
+import org.fcrepo.spec.testsuite.Constants;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Link;
+import java.util.Random;
 
 /**
  * @author Jorge Abrego, Fernando Cardoza
@@ -361,11 +363,24 @@ public class HttpPut extends AbstractTest {
                 "Implementations may accept HTTP PUT to create resources",
                 "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
 
-        final String location = joinLocation(uri, info.getId());
+        // Create (POST) parent container
+        final String containerLocation = getLocation(createBasicContainer(uri, info));
 
-        doPutUnverified(location)
-                .then()
-                .statusCode(201);
+        // Is PUT to-create supported?
+        final String slug = Integer.toString(new Random().nextInt());
+        final String childURL = joinLocation(containerLocation, slug);
+
+        final Response putResponse = doPutUnverified(childURL);
+        final int statusCode = putResponse.statusCode();
+
+        if (clientErrorRange().matches(statusCode)) {
+            throw new SkipException("PUT to create not supported");
+
+        } else {
+            // Verify successful creation
+            putResponse.then().statusCode(successRange());
+            doHead(getLocation(putResponse));
+        }
     }
 
     /**
@@ -377,14 +392,25 @@ public class HttpPut extends AbstractTest {
                 "Implementations may accept HTTP PUT to create non-RDF resources",
                 "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
 
-        final String location = joinLocation(uri, info.getId());
+        // Create (POST) parent container
+        final String containerLocation = getLocation(createBasicContainer(uri, info));
 
-        final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"putCreate.txt\""));
+        // Is PUT for to-create LDP-NR supported?
+        final String slug = Integer.toString(new Random().nextInt());
+        final String childURL = joinLocation(containerLocation, slug);
 
-        doPutUnverified(location, headers)
-                .then()
-                .statusCode(201);
+        final Headers headers = new Headers(new Header("Link", Constants.NON_RDF_SOURCE_LINK_HEADER));
+        final Response putResponse = doPutUnverified(childURL, headers);
+        final int statusCode = putResponse.statusCode();
+
+        if (clientErrorRange().matches(statusCode)) {
+            throw new SkipException("PUT to create not supported");
+
+        } else {
+            // Verify successful creation
+            putResponse.then().statusCode(successRange());
+            doHead(getLocation(putResponse));
+        }
     }
 
     /**
