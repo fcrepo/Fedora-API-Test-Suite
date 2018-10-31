@@ -64,7 +64,7 @@ public class TestParameters {
 
     /**
      * Initialize the test parameters
-     * @param params
+     * @param params a map containing parameters received from the commandline
      */
     public static void initialize(final Map<String, String> params) {
         if (instance != null) {
@@ -76,7 +76,7 @@ public class TestParameters {
 
     /**
      * Return the singleton
-     * @return
+     * @return the instance
      */
     public static TestParameters get() {
         return instance;

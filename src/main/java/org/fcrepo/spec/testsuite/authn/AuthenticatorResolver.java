@@ -62,8 +62,7 @@ public class AuthenticatorResolver {
     }
 
     private static Authenticator findAuthenticator() {
-        final PrintStream log = TestSuiteGlobals.logFile();
-        try {
+        try (PrintStream log = TestSuiteGlobals.logFile()) {
 
             final List<ClassLoader> classLoadersList = new LinkedList<>();
             final String path =
@@ -164,8 +163,6 @@ public class AuthenticatorResolver {
             return new DefaultAuthenticator();
         } catch (Exception ex) {
             throw new RuntimeException(ex);
-        } finally {
-            log.close();
         }
     }
 
