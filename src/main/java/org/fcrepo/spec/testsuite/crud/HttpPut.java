@@ -357,7 +357,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.3-A
      */
-    @Test(groups = {"MUST"})
+    @Test(groups = {"MAY"})
     public void putCreateRDFSource() {
         final TestInfo info = setupTest("3.6.3-A",
                 "Implementations may accept HTTP PUT to create resources",
@@ -373,7 +373,7 @@ public class HttpPut extends AbstractTest {
         final Response putResponse = doPutUnverified(childURL);
         final int statusCode = putResponse.statusCode();
 
-        if (statusCode >= 400 && statusCode < 500) {
+        if (clientErrorRange().matches(statusCode)) {
             throw new SkipException("PUT to create not supported");
 
         } else {
@@ -386,7 +386,7 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6.3-B create non-rdf source
      */
-    @Test(groups = {"MUST"})
+    @Test(groups = {"MAY"})
     public void putCreateNonRDFSource() {
         final TestInfo info = setupTest("3.6.3-B",
                 "Implementations may accept HTTP PUT to create non-RDF resources",
@@ -403,7 +403,7 @@ public class HttpPut extends AbstractTest {
         final Response putResponse = doPutUnverified(childURL, headers);
         final int statusCode = putResponse.statusCode();
 
-        if (statusCode >= 400 && statusCode < 500) {
+        if (clientErrorRange().matches(statusCode)) {
             throw new SkipException("PUT to create not supported");
 
         } else {
