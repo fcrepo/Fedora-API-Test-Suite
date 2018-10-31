@@ -85,5 +85,22 @@ public class AbstractAuthzTest extends AbstractTest {
         return aclUri;
     }
 
+    protected boolean isClientAclLinkingSupported() {
+        //create a resource to be used for the acl link
+        final Response aclResponse = createBasicContainer(uri, "test");
+        final String aclUri = getLocation(aclResponse);
+
+        //PUT the new Resource
+        final String aclLinkValue = "<" + aclUri + ">; rel=\"acl\"";
+        final Response resource = doPutUnverified(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
+
+        final int statusCode = resource.getStatusCode();
+        if (statusCode >= 400) {
+            return false;
+        } else {
+            return successRange().matches(statusCode);
+        }
+    }
+
 }
 
