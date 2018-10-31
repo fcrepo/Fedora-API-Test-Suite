@@ -34,7 +34,6 @@ import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -43,24 +42,10 @@ import org.testng.annotations.Test;
 public class HttpHead extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public HttpHead(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 3.3-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void httpHeadResponseNoBody(final String uri) {
+    public void httpHeadResponseNoBody() {
         final TestInfo info = setupTest("3.3-A",
                                         "The HEAD method is identical to GET except that the server must not return a "
                                         + "message-body in the response, as "
@@ -74,12 +59,9 @@ public class HttpHead extends AbstractTest {
 
     /**
      * 3.3-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void httpHeadResponseDigest(final String uri) {
+    public void httpHeadResponseDigest() {
         final TestInfo info = setupTest("3.3-B",
                                         "The server must send the same Digest header in the response as it"
                                         +
@@ -127,12 +109,9 @@ public class HttpHead extends AbstractTest {
 
     /**
      * 3.3-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void httpHeadResponseHeadersSameAsHttpGet(final String uri) {
+    public void httpHeadResponseHeadersSameAsHttpGet() {
         final TestInfo info = setupTest("3.3-C",
                                         "In other cases, The server should send the same headers in response to a " +
                                         "HEAD request "

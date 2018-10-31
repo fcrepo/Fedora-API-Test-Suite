@@ -23,7 +23,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -34,24 +33,10 @@ import org.testng.annotations.Test;
 public class WebACRdfSources extends AbstractAuthzTest {
 
     /**
-     * Constructor
-     *
-     * @param adminUser     admin username
-     * @param adminPassword admin password
-     */
-    @Parameters({"param2", "param3"})
-    public WebACRdfSources(final String adminUser, final String adminPassword) {
-        super(adminUser, adminPassword, null, null);
-    }
-
-    /**
      * 5.1 - ACL is LDPRS
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void aclIsLDPRS(final String uri) {
+    public void aclIsLDPRS() {
         final TestInfo info = setupTest("5.1",
                                         "An ACL for a controlled resource on a conforming server must itself be an " +
                                         "LDP-RS.",
@@ -68,7 +53,7 @@ public class WebACRdfSources extends AbstractAuthzTest {
         response.then().statusCode(clientErrorRange());
 
         //successfully create an rdf acl
-        final String aclUri2 = createAclForResource(resourceUri, "user-read-only.ttl", "anyuser");
+        final String aclUri2 = createAclForResource(resourceUri, "user-read-only.ttl", "http://example.com/anyuser");
         confirmPresenceOfLinkValue(RDF_SOURCE_LINK_HEADER, doHead(aclUri2));
     }
 

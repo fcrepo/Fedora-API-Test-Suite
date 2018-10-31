@@ -21,7 +21,6 @@ import java.net.URI;
 import java.util.NoSuchElementException;
 
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
@@ -39,24 +38,10 @@ import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
 public class LdprmHttpGet extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public LdprmHttpGet(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 4.2.1-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
-    public void ldprmMustSupportGet(final String uri) {
+    public void ldprmMustSupportGet() {
         final TestInfo info = setupTest("4.2.1-A",
                                         "LDPR mementos must support GET",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
@@ -73,12 +58,9 @@ public class LdprmHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.2.1-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
-    public void ldpnrmMustSupportGet(final String uri) {
+    public void ldpnrmMustSupportGet() {
         final TestInfo info = setupTest("4.2.1-B",
                                         "LDP-NR mementos must support GET",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
@@ -96,12 +78,9 @@ public class LdprmHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.2.1-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
-    public void ldprmMustHaveCorrectTimeGate(final String uri) {
+    public void ldprmMustHaveCorrectTimeGate() {
         final TestInfo info = setupTest("4.2.1-C",
                 "TimeGate for an  LDP-RS memento is the original versioned LDP-RS",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
@@ -124,12 +103,9 @@ public class LdprmHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.2.1-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
-    public void ldpnrmMustHaveCorrectTimeGate(final String uri) {
+    public void ldpnrmMustHaveCorrectTimeGate() {
         final TestInfo info = setupTest("4.2.1-D",
                                         "TimeGate  for an  LDP-NR memento  is the original versioned LDP-NR",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
@@ -152,12 +128,9 @@ public class LdprmHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.2.1-E
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
-    public void ldprmMustHaveMementoLinkHeader(final String uri) {
+    public void ldprmMustHaveMementoLinkHeader() {
         final TestInfo info = setupTest("4.2.1-E",
                                         "Any response to a GET request on an LDP-RS Memento must include a " +
                                         "<http://mementoweb.org/ns#Memento>; rel=\"type\" link in the Link header",
@@ -176,12 +149,9 @@ public class LdprmHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.2.1-F
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
-    public void ldpnrmMustHaveMementoLinkHeader(final String uri) {
+    public void ldpnrmMustHaveMementoLinkHeader() {
         final TestInfo info = setupTest("4.2.1-F",
                                         "Any response to a GET request on an LDP-NR Memento must include a " +
                                         "<http://mementoweb.org/ns#Memento>; rel=\"type\" link in the Link header",

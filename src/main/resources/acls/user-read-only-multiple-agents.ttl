@@ -2,8 +2,8 @@
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 
 <#restricted> a acl:Authorization ;
-              acl:agent "anotheruser" ;
-              acl:agent "${user}" ;
+              acl:agent <http://example.com/anotheruser> ;
+              acl:agent <${user}> ;
               acl:mode acl:Read;
               acl:default <${resource}> ;
               acl:accessTo <${resource}> .

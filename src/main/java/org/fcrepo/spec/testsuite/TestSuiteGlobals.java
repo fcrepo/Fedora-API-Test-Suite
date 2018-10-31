@@ -19,6 +19,7 @@ package org.fcrepo.spec.testsuite;
 
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
+import static org.fcrepo.spec.testsuite.authn.AuthUtil.auth;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,21 +52,25 @@ public abstract class TestSuiteGlobals {
 
     private static ResourceCleanupManager cleanupManager;
 
+    static {
+        initialize();
+    }
+
     /**
      * Get or create the default container for all tests resources to be created
      *
-     * @param baseurl
-     * @return containerUrl
      */
-    public static String containerTestSuite(final String baseurl, final String user, final String pass) {
-        cleanupManager = new ResourceCleanupManager(user, pass);
+    public static String containerTestSuite() {
+        cleanupManager = new ResourceCleanupManager();
 
+        final TestParameters params = TestParameters.get();
+        final String rootUrl = params.getRootUrl();
         final String name = outputName + "container" + today();
-        final String base = baseurl.endsWith("/") ? baseurl : baseurl + '/';
+        final String base = rootUrl.endsWith("/") ? rootUrl : rootUrl + '/';
         String containerUrl = base + name;
         containerUrl = containerUrl.replaceAll("(?<!http:)//", "/");
-        final Response res = RestAssured.given()
-                                        .auth().basic(user, pass)
+
+        final Response res = auth(RestAssured.given(), params.getRootControllerUserWebId())
                                         .contentType("text/turtle")
                                         .header("Link", BASIC_CONTAINER_LINK_HEADER)
                                         .header(SLUG, name)
@@ -76,6 +81,21 @@ public abstract class TestSuiteGlobals {
 
         cleanupManager.setTestContainerUrl(containerUrl);
         return containerUrl;
+    }
+
+    private static void initialize() {
+        //create output directory if does not exist
+        final File dir = new File(TestSuiteGlobals.outputDirectory);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        //remove existing log if exists
+        final File f = new File(
+            TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
+        if (f.exists()) {
+            f.delete();
+        }
     }
 
     /**
@@ -132,19 +152,6 @@ public abstract class TestSuiteGlobals {
      */
     private static String today() {
         return new SimpleDateFormat("MMddyyyyHHmmss").format(new Date());
-    }
-
-    /**
-     * Remove existing log file
-     */
-    public static void resetFile() {
-        final File dir = new File("report");
-        dir.mkdirs();
-        final File f = new File(
-            TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
-        if (f.exists()) {
-            f.delete();
-        }
     }
 
     /**

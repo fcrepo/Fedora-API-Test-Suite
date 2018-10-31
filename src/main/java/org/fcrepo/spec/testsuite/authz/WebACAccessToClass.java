@@ -21,7 +21,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -31,27 +30,10 @@ import org.testng.annotations.Test;
 public class WebACAccessToClass extends AbstractAuthzTest {
 
     /**
-     * Constructor
-     *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
-     */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public WebACAccessToClass(final String adminUsername, final String adminPassword, final String username,
-                              final String password) {
-        super(adminUsername, adminPassword, username, password);
-    }
-
-    /**
      * 5.8-A - accessToClass MUST give access.
-     *
-     * @param uri of base test container
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void accessToClassMustGiveAccess(final String uri) {
+    public void accessToClassMustGiveAccess() {
         final TestInfo info = setupTest("5.8-A",
                                         "When an ACL includes an acl:accessToClass statement, it MUST give access to " +
                                         "all " +
@@ -62,7 +44,7 @@ public class WebACAccessToClass extends AbstractAuthzTest {
         //create an resource
         final String testContainerUri = createResource(uri, info.getId());
         //create a read acl with acl:accessToClass specified
-        createAclForResource(testContainerUri, "user-read-only-access-to-class.ttl", this.username);
+        createAclForResource(testContainerUri, "user-read-only-access-to-class.ttl", this.permissionlessUserWebId);
         //create a child resource
         final Response response =
             doPost(testContainerUri, new Headers(new Header("Content-Type", "text/plain")), "test body");
@@ -81,12 +63,9 @@ public class WebACAccessToClass extends AbstractAuthzTest {
 
     /**
      * 5.8-B - accessToClass MAY use inference.
-     *
-     * @param uri of base test container
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void accessToClassMayUseInference(final String uri) {
+    public void accessToClassMayUseInference() {
         final TestInfo info = setupTest("5.8-B",
                                         " Implementations may use inference to infer types not present in a " +
                                         "resource's triples or rel=\"type\" links in the Link header",
@@ -95,7 +74,7 @@ public class WebACAccessToClass extends AbstractAuthzTest {
         //create an resource
         final String testContainerUri = createResource(uri, info.getId());
         //create a read acl with acl:accessToClass specified
-        createAclForResource(testContainerUri, "user-read-only-access-to-class.ttl", this.username);
+        createAclForResource(testContainerUri, "user-read-only-access-to-class.ttl", this.permissionlessUserWebId);
         //create a child resource
         final Response response =
             doPost(testContainerUri, new Headers(new Header("Content-Type", "text/plain")), "image-bytes");

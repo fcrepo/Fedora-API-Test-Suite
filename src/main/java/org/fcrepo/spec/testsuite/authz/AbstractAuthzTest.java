@@ -27,25 +27,11 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
-import org.testng.annotations.Parameters;
 
 /**
  * @author Daniel Bernstein
  */
 public class AbstractAuthzTest extends AbstractTest {
-    /**
-     * Constructor
-     *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
-     */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public AbstractAuthzTest(final String adminUsername, final String adminPassword, final String username,
-                             final String password) {
-        super(adminUsername, adminPassword, username, password);
-    }
 
     protected String filterFileAndConvertToString(final String fileName, final Map<String, String> params) {
         String str = fileToString("/acls/" + fileName);
@@ -55,10 +41,10 @@ public class AbstractAuthzTest extends AbstractTest {
         return str;
     }
 
-    protected String getAclAsString(final String fileName, final String resourceUri, final String username) {
+    protected String getAclAsString(final String fileName, final String resourceUri, final String user) {
         final Map<String, String> params = new HashMap<>();
         params.put("resource", resourceUri);
-        params.put("user", username);
+        params.put("user", user);
         return filterFileAndConvertToString(fileName, params);
     }
 

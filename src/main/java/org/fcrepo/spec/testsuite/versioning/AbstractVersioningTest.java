@@ -39,23 +39,11 @@ import org.apache.http.message.BasicHeaderValueParser;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 
 /**
  * @author Daniel Bernstein
  */
 public class AbstractVersioningTest extends AbstractTest {
-
-    /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public AbstractVersioningTest(final String username, final String password) {
-        super(username, password);
-    }
 
     protected URI getTimeMapUri(final Response response) {
         return getLinksOfRelTypeAsUris(response, "timemap").findFirst().get();

@@ -33,7 +33,6 @@ import org.apache.jena.rdf.model.Statement;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Link;
@@ -44,24 +43,10 @@ import javax.ws.rs.core.Link;
 public class HttpGet extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public HttpGet(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 3.2.1-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void additionalValuesForPreferHeader(final String uri) {
+    public void additionalValuesForPreferHeader() {
         final TestInfo info = setupTest("3.2.1-A",
                                         "In addition to the requirements of [LDP], an implementation ... " +
                                         "should support the value " +
@@ -91,12 +76,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.1-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void additionalValuesForPreferHeaderContainedDescriptions(final String uri) {
+    public void additionalValuesForPreferHeaderContainedDescriptions() {
         final TestInfo info = setupTest("3.2.1-B",
                 "In addition to the requirements of [LDP], an implementation ... " +
                         "may support the value " +
@@ -124,12 +106,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.2-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void responsePreferenceAppliedHeader(final String uri) {
+    public void responsePreferenceAppliedHeader() {
         final TestInfo info = setupTest("3.2.2-A",
                                         "Responses to GET requests that apply a Prefer request header to any LDP-RS " +
                                         "must "
@@ -147,12 +126,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.2-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void responseDescribesHeader(final String uri) {
+    public void responseDescribesHeader() {
         final TestInfo info = setupTest("3.2.2-B",
                                         "When a GET request is made to an LDP-RS that describes an associated LDP-NR "
                                         + "(3.5 HTTP POST and [LDP]5.2.3.12),"
@@ -184,12 +160,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-A-1
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestMd5(final String uri) {
+    public void respondWantDigestMd5() {
         final TestInfo info = setupTest("3.2.3-A-1",
                                         "Testing for supported digest: md5 . "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
@@ -211,12 +184,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-A-2
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestSha1(final String uri) {
+    public void respondWantDigestSha1() {
         final TestInfo info = setupTest("3.2.3-A-2",
                                         "Testing for supported digest: sha . "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
@@ -238,12 +208,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-A-3
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestSha256(final String uri) {
+    public void respondWantDigestSha256() {
         final TestInfo info = setupTest("3.2.3-A-3",
                                         "Testing for supported digest: sha-256 . "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
@@ -265,12 +232,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestTwoSupported(final String uri) {
+    public void respondWantDigestTwoSupported() {
         final String checksum = "md5,sha";
         final TestInfo info = setupTest("3.2.3-B",
                                         "Testing for two supported digests with no weights"
@@ -301,12 +265,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueNonZero(final String uri) {
+    public void respondWantDigestTwoSupportedQvalueNonZero() {
         final String checksum = "md5;q=0.3,sha;q=1";
         final TestInfo info = setupTest("3.2.3-C",
                                         "Testing for two supported digests with different weights"
@@ -337,12 +298,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestTwoSupportedQvalueZero(final String uri) {
+    public void respondWantDigestTwoSupportedQvalueZero() {
         final String checksum = "md5;q=0.3,sha;q=0";
         final TestInfo info = setupTest("3.2.3-D",
                                         "Testing for two supported digests with different weights q=0.3,q=0"
@@ -362,12 +320,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-E
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestNonSupportedWithSupported(final String uri) {
+    public void respondWantDigestNonSupportedWithSupported() {
         final String checksum = "md5,abc";
 
         final TestInfo info = setupTest("3.2.3-E",
@@ -388,12 +343,9 @@ public class HttpGet extends AbstractTest {
 
     /**
      * 3.2.3-F
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void respondWantDigestNonSupported(final String uri) {
+    public void respondWantDigestNonSupported() {
         final String checksum = "abc";
 
         final TestInfo info = setupTest("3.2.3-F",

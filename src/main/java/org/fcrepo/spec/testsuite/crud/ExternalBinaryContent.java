@@ -35,7 +35,6 @@ import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -78,16 +77,11 @@ public class ExternalBinaryContent extends AbstractTest {
     private Boolean extContentSupported;
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
+     * Constructor
      * @throws IOException thrown if unable to create temp file
      */
-    @Parameters({"param2", "param3"})
-    public ExternalBinaryContent(final String username, final String password) throws IOException {
-        super(username, password);
-
+    public ExternalBinaryContent() throws IOException {
+        super();
         wireMockServer = new WireMockServer(options().dynamicPort());
         wireMockServer.start();
         externalUri = mockHttpResource("file.txt", "text/plain", "binary content");
@@ -108,12 +102,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-A-1 PostCreate Copy
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void postCreateExternalBinaryContentCopy(final String uri) {
+    public void postCreateExternalBinaryContentCopy() {
         final TestInfo info = setupTest("3.9-A-1",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -129,12 +120,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-A-1b PostCreate Copy File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void postCreateExternalFileUriBinaryCopy(final String uri) {
+    public void postCreateExternalFileUriBinaryCopy() {
         final TestInfo info = setupTest("3.9-A-1b",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -150,12 +138,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-A-2 PostCreate Redirect
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void postCreateExternalBinaryContentRedirect(final String uri) {
+    public void postCreateExternalBinaryContentRedirect() {
         final TestInfo info = setupTest("3.9-A-2",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -170,12 +155,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-A-2b PostCreate Redirect File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void postCreateExternalFileUriBinaryRedirect(final String uri) {
+    public void postCreateExternalFileUriBinaryRedirect() {
         final TestInfo info = setupTest("3.9-A-2b",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -190,12 +172,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-A-3 PostCreate Proxy
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void postCreateExternalBinaryContentProxy(final String uri) {
+    public void postCreateExternalBinaryContentProxy() {
         final TestInfo info = setupTest("3.9-A-3",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -210,12 +189,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-A-3b PostCreate Proxy File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void postCreateExternalFileUriBinaryProxy(final String uri) {
+    public void postCreateExternalFileUriBinaryProxy() {
         final TestInfo info = setupTest("3.9-A-3b",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -230,12 +206,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-B-1 PutCreate Copy
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void putCreateExternalBinaryContentCopy(final String uri) {
+    public void putCreateExternalBinaryContentCopy() {
         final TestInfo info = setupTest("3.9-B-1",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -251,12 +224,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-B-1b PutCreate Copy File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void putCreateExternalFileUriBinaryCopy(final String uri) {
+    public void putCreateExternalFileUriBinaryCopy() {
         final TestInfo info = setupTest("3.9-B-1b",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -272,12 +242,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-B-2 PutCreate Redirect
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void putCreateExternalBinaryContentRedirect(final String uri) {
+    public void putCreateExternalBinaryContentRedirect() {
         final TestInfo info = setupTest("3.9-B-2",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -293,12 +260,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-B-2b PutCreate Redirect File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void putCreateExternalFileUriBinaryRedirect(final String uri) {
+    public void putCreateExternalFileUriBinaryRedirect() {
         final TestInfo info = setupTest("3.9-B-2b",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -314,12 +278,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-B-3 PutCreate Proxy
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void putCreateExternalBinaryContentProxy(final String uri) {
+    public void putCreateExternalBinaryContentProxy() {
         final TestInfo info = setupTest("3.9-B-3",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -335,12 +296,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-B-3b PutCreate Proxy File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void putCreateExternalFileUriBinaryProxy(final String uri) {
+    public void putCreateExternalFileUriBinaryProxy() {
         final TestInfo info = setupTest("3.9-B-3b",
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -356,12 +314,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-C-1 PutUpdate Copy
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void putUpdateExternalBinaryContentCopy(final String uri) {
+    public void putUpdateExternalBinaryContentCopy() {
         final TestInfo info = setupTest("3.9-C-1",
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -377,12 +332,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-C-1b PutUpdate Copy File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void putUpdateExternalFileUriBinaryCopy(final String uri) {
+    public void putUpdateExternalFileUriBinaryCopy() {
         final TestInfo info = setupTest("3.9-C-1b",
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -398,12 +350,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-C-2 PutUpdate Redirect
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void putUpdateExternalBinaryContentRedirect(final String uri) {
+    public void putUpdateExternalBinaryContentRedirect() {
         final TestInfo info = setupTest("3.9-C-2",
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -419,12 +368,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-C-2b PutUpdate Redirect File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void putUpdateExternalFileUriBinaryRedirect(final String uri) {
+    public void putUpdateExternalFileUriBinaryRedirect() {
         final TestInfo info = setupTest("3.9-C-2b",
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -440,12 +386,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-C-3 PutUpdate Proxy
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void putUpdateExternalBinaryContentProxy(final String uri) {
+    public void putUpdateExternalBinaryContentProxy() {
         final TestInfo info = setupTest("3.9-C-3",
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -461,12 +404,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-C-3b PutUpdate Proxy File URI
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void putUpdateExternalFileUriBinaryProxy(final String uri) {
+    public void putUpdateExternalFileUriBinaryProxy() {
         final TestInfo info = setupTest("3.9-C-3b",
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
@@ -482,12 +422,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-D-1 Unsupported status code
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void unsupportedExternalBinaryContentStatus(final String uri) {
+    public void unsupportedExternalBinaryContentStatus() {
         final TestInfo info = setupTest("3.9-D-1",
                 "Fedora servers that do not support the creation of LDP-NRs with content external must reject " +
                         "with a 4xx range status code",
@@ -507,12 +444,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-D-2 Unsupported constraint
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void unsupportedExternalBinaryContentConstraint(final String uri) {
+    public void unsupportedExternalBinaryContentConstraint() {
         final TestInfo info = setupTest("3.9-D-2",
                 "Fedora servers that do not support the creation of LDP-NRs with content external must describe " +
                         "this restriction in a resource indicated by a " +
@@ -532,12 +466,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-E-1 handling attribute
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void externalBinaryContentHandlingAttribute(final String uri) {
+    public void externalBinaryContentHandlingAttribute() {
         final TestInfo info = setupTest("3.9-E-1",
                 "Fedora servers must use the handling attribute in the external content link to determine how to " +
                         "process the request. At least one of the following handling attributes must be supported: " +
@@ -565,12 +496,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-E-2 handling status
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void externalBinaryContentHandlingStatus(final String uri) {
+    public void externalBinaryContentHandlingStatus() {
         final TestInfo info = setupTest("3.9-E-2",
                 "Fedora servers must reject with a 4xx range status code requests for which the handling attribute " +
                         "is not present or cannot be respected.",
@@ -587,12 +515,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-E-3 unsupported handling
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void unsupportedBinaryContentHandlingAttribute(final String uri) {
+    public void unsupportedBinaryContentHandlingAttribute() {
         final TestInfo info = setupTest("3.9-E-3",
                 "In the case that the specified handling cannot be respected, the restrictions causing the request " +
                         "to fail must be described in a resource indicated by a " +
@@ -610,12 +535,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-F-1 media type
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentMediaType(final String uri) {
+    public void binaryContentMediaType() {
         final TestInfo info = setupTest("3.9-F-1",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided.",
@@ -633,12 +555,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-F-2 no type attribute - external type
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void binaryContentNoTypeExternalType(final String uri) {
+    public void binaryContentNoTypeExternalType() {
         final TestInfo info = setupTest("3.9-F-2",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. If there is no type attribute: " +
@@ -657,12 +576,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-F-3 no type attribute - default
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void binaryContentNoTypeDefault(final String uri) {
+    public void binaryContentNoTypeDefault() {
         final TestInfo info = setupTest("3.9-F-3",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. If there is no type attribute: " +
@@ -681,12 +597,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-F-4 no type attribute - unsupported
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void binaryContentNoTypeUnsupported(final String uri) {
+    public void binaryContentNoTypeUnsupported() {
         final TestInfo info = setupTest("3.9-F-4",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. If there is no type attribute: " +
@@ -702,12 +615,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-F-5 Content-Type and type
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void binaryContentContentTypeAndType(final String uri) {
+    public void binaryContentContentTypeAndType() {
         final TestInfo info = setupTest("3.9-F-5",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. Any Content-Type header in the request should be " +
@@ -728,12 +638,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-F-6 Content-Type and no type
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void binaryContentContentTypeAndNoType(final String uri) {
+    public void binaryContentContentTypeAndNoType() {
         final TestInfo info = setupTest("3.9-F-6",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. Any Content-Type header in the request should be " +
@@ -753,12 +660,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9-G-1 Guaranteed headers
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentGuaranteeHeaders(final String uri) {
+    public void binaryContentGuaranteeHeaders() {
         final TestInfo info = setupTest("3.9-G-1",
                 "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
@@ -781,12 +685,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9.1 OPTIONS values
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentOptions(final String uri) {
+    public void binaryContentOptions() {
         final TestInfo info = setupTest("3.9.1",
                 "Fedora servers supporting external content MUST include \"Accept-External-Content-Handling\" " +
                         "header in response to \"OPTIONS\" request.",
@@ -798,12 +699,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9.3-A-1 redirect want-digest header
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentRedirectWantDigest(final String uri) {
+    public void binaryContentRedirectWantDigest() {
         final TestInfo info = setupTest("3.9.3-A-1",
                 "Fedora servers supporting \"redirect\" external content types MUST correctly respond to the " +
                         "\"Want-Digest\" header.",
@@ -822,12 +720,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9.3-A-2 proxy want-digest header
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentProxyWantDigest(final String uri) {
+    public void binaryContentProxyWantDigest() {
         final TestInfo info = setupTest("3.9.3-A-2",
                 "Fedora servers supporting \"redirect\" external content types MUST correctly respond to the " +
                         "\"Want-Digest\" header.",
@@ -846,12 +741,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9.3-B-1 redirect content status code on GET
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentRedirectStatusGet(final String uri) {
+    public void binaryContentRedirectStatusGet() {
         final TestInfo info = setupTest("3.9.3-B-1",
                 "A successful response to a GET request for external content with handling of redirect " +
                         "must have status code of either 302 (Found) or 307 (Temporary Redirect)",
@@ -868,12 +760,9 @@ public class ExternalBinaryContent extends AbstractTest {
 
     /**
      * 3.9.3-B-2 redirect content status code on HEAD
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void binaryContentRedirectStatusHead(final String uri) {
+    public void binaryContentRedirectStatusHead() {
         final TestInfo info = setupTest("3.9.3-B-2",
                 "A successful response to a HEAD request for external content with handling of redirect " +
                         "must have status code of either 302 (Found) or 307 (Temporary Redirect)",

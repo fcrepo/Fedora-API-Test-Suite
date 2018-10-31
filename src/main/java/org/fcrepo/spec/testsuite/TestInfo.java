@@ -62,7 +62,7 @@ public class TestInfo {
 
     /**
      * @param methodName
-     * @return
+     * @return a TestInfo object
      */
     public static TestInfo getByMethodName(final String methodName) {
         return TEST_INFO.get(methodName);

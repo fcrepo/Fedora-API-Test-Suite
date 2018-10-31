@@ -17,10 +17,12 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
 
 ## Options
 * `rooturl` The repository base URL, e.g., `http://localhost:8080/rest/`
-* `admin-user` An user with admin access to the repository.
-* `admin-password` The admin user's password.
-* `user` The username to connect to the repository with
-* `password` The password to connect to the repository with
+* `root-controller-user-webid` An user with admin access to the repository.
+* `root-controller-user-password` The admin user's password.
+* `root-controller-user-auth-header-value` "Authorization" header value for a user with read, write, and control.  When present, this value will be added to the request effectively overriding Authenticator implementations, custom or default, found in the classpath.
+* `permissionless-user-webid` The username to connect to the repository with
+* `permissionless-user-password` The password to connect to the repository with
+* `permissionless-user-auth-header-value` "Authorization" header value for a user with no preset permissions.  When present, this value will be added to the request, effectively overriding Authenticator implementations, custom or default, found in the classpath.
 * `testngxml` (optional) The custom testng.xml configuration ([documentation](http://testng.org/doc/documentation-main.html#testng-xml))
   * See example [testng.xml](https://github.com/fcrepo/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)
 * `requirements` (optional) The requirement-levels of test to be run: ALL|MUST|SHOULD|MAY
@@ -28,6 +30,13 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
 * `config-file` (optional) A yaml configuration file containing the configuration parameters. See distributed `config.yml.dist`
 * `site-name` (optional) The above yaml file can contain multiple configurations, this chooses one. Defaults to "default"
 * `constraint-error-generator` (optional)  A file containing a SPARQL query that will trigger a constraint error. If no file is specified, the test suite will use a default constraint error generating test.
+* `auth-class` (optional) The class name of an implementation of the org.fcrepo.spec.testsuite.authn.Authenticator interface.
+
+### Authenticators
+The Fedora Specification does not have anything to say about how requests are authenticated by implementations.  Therefore it is necessary for each implementation to perform
+container authentications where required and add any required auth information to the request originating from the testsuite.  See org.fcrepo.spec.testsuite.authn.Authenticator and the
+org.fcrepo.spec.testsuite.authn.DefaultAuthenticator for a sample implementation.  Once you've implemented your Authenticator and packaged it in a jar,  you must drop the jar in a directory named
+`authenticators` located in the same directory as your testsuite jar.
 
 ### Configuration file syntax
 The configuration file is Yaml and a simple structure. The first level groups a set of configuration parameters, these parameters are key value pairs with the keys being the above options.
@@ -35,10 +44,10 @@ The configuration file is Yaml and a simple structure. The first level groups a 
 ```
 default:
   rooturl: http://localhost:8088/rest
-  admin-user: fedoraAdmin
-  admin-password: fedoraAdmin
-  user: testuser
-  password: testpass
+  root-controller-user-webid: http://example.com/fedoraAdmin
+  root-controller-user-password: fedoraAdmin
+  permissionless-user-webid: http://example.com/testuser
+  permissionless-user-password: testpass
   broker-url: tcp://127.0.0.1:61616
   topic-name: fedora
   queue-name:
@@ -49,19 +58,19 @@ An example with multiple configurations looks like:
 ```
 default:
   rooturl: http://localhost:8088/rest
-  admin-user: fedoraAdmin
-  admin-password: fedoraAdmin
-  user: testuser
-  password: testpass
+  root-controller-user-webid: http://example.com/fedoraAdmin
+  root-controller-user-password: fedoraAdmin
+  permissionless-user-webid: http://example.com/testuser
+  permissionless-user-password: testpass
   broker-url: tcp://127.0.0.1:61616
   topic-name: fedora
   queue-name:
 othersite:
   rooturl: http://secondserver:8080/fcrepo/rest
-  admin-user: totalBoss
-  admin-password: totalBoss
-  user: otherperson
-  password: otherpassword
+  root-controller-user-webid: http://example.com/totalBoss
+  root-controller-user-password: totalBoss 
+  permissionless-user-webid: http://example.com/otherperson
+  permissionless-user-password: otherpassword 
   broker-url: tcp://overtherainbow:61616
   topic-name:
   queue-name: fedora

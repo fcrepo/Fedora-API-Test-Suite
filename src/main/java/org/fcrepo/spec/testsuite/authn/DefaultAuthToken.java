@@ -15,21 +15,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.fcrepo.spec.testsuite;
+package org.fcrepo.spec.testsuite.authn;
 
-import org.testng.annotations.BeforeSuite;
+import io.restassured.specification.RequestSpecification;
 
 /**
- * @author Jorge Abrego, Fernando Cardoza
+ * A token that adds basic authorization to a request.
+ * @author dbernstein
  */
-public class SetUpSuite {
-
+public class DefaultAuthToken implements AuthenticationToken {
+    private String username;
+    private String password;
 
     /**
-     * Reset Globals
+     * Constructor
+     * @param username basic auth username
+     * @param password basic auth password
      */
-    @BeforeSuite
-    public void setUp() {
-        TestSuiteGlobals.resetFile();
+    public DefaultAuthToken(final String username, final String password) {
+        this.username = username;
+        this.password = password;
     }
+
+    @Override
+    public RequestSpecification addAuthInfo(final RequestSpecification requestSpecification) {
+        return requestSpecification.auth().basic(this.username, this.password);
+    }
+
 }

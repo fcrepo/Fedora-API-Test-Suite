@@ -17,7 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.fcrepo.spec.testsuite.App.CONSTRAINT_ERROR_GENERATOR_PARAM;
 import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -29,7 +28,7 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
+import org.fcrepo.spec.testsuite.TestParameters;
 import org.testng.annotations.Test;
 
 /**
@@ -61,27 +60,18 @@ public class HttpPatch extends AbstractTest {
     private String constraintErrorGeneratingSparqlQuery = null;
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     * @param constraintErrorGeneratingSparqlQuery A file path containing a sparql query that will generate a constraint
-     *                                             error.
+     * Constructor
      */
-    @Parameters({"param2", "param3", CONSTRAINT_ERROR_GENERATOR_PARAM})
-    public HttpPatch(final String username, final String password, final String constraintErrorGeneratingSparqlQuery) {
-        super(username, password);
-        this.constraintErrorGeneratingSparqlQuery = constraintErrorGeneratingSparqlQuery;
+    public HttpPatch() {
+        super();
+        this.constraintErrorGeneratingSparqlQuery = TestParameters.get().getConstraintErrorGenerator();
     }
 
     /**
      * 3.7-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void supportPatch(final String uri) {
+    public void supportPatch() {
         final TestInfo info = setupTest("3.7-A",
                                         "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). " +
                                         "[sparql11-update] must be an accepted "
@@ -96,12 +86,9 @@ public class HttpPatch extends AbstractTest {
 
     /**
      * 3.7-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void ldpPatchContentTypeSupport(final String uri) {
+    public void ldpPatchContentTypeSupport() {
         final TestInfo info = setupTest("3.7-B",
                                         "Other content-types (e.g. [ldpatch]) may be available.",
                                         "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
@@ -113,12 +100,9 @@ public class HttpPatch extends AbstractTest {
 
     /**
      * 3.7-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void serverManagedPropertiesModification(final String uri) {
+    public void serverManagedPropertiesModification() {
         final TestInfo info = setupTest("3.7-C",
                                         "If an otherwise valid HTTP PATCH request is received that attempts to modify "
                                         + "statements to a resource that a server disallows (not ignores per [LDP] "
@@ -144,12 +128,9 @@ public class HttpPatch extends AbstractTest {
 
     /**
      * 3.7-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void statementNotPersistedResponseBody(final String uri) {
+    public void statementNotPersistedResponseBody() {
         final TestInfo info = setupTest("3.7-D",
                                         "The server must provide a corresponding response body containing information"
                                         + " about which statements could not be persisted."
@@ -167,12 +148,9 @@ public class HttpPatch extends AbstractTest {
 
     /**
      * 3.7-E
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void statementNotPersistedConstrainedBy(final String uri) {
+    public void statementNotPersistedConstrainedBy() {
         final TestInfo info = setupTest("3.7-E",
                                         "In that response, the restrictions causing such a request to fail must be"
                                         + " described in a resource indicated by a Link: "
@@ -189,12 +167,9 @@ public class HttpPatch extends AbstractTest {
 
     /**
      * 3.7-F
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void successfulPatchStatusCode(final String uri) {
+    public void successfulPatchStatusCode() {
         final TestInfo info = setupTest("3.7-F",
                                         "A successful PATCH request must respond with a 2xx status code; the "
                                         + "specific code in the 2xx range may vary according to the response "
@@ -225,12 +200,9 @@ public class HttpPatch extends AbstractTest {
 
     /**
      * 3.7.1
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void disallowPatchContainmentTriples(final String uri) {
+    public void disallowPatchContainmentTriples() {
         final TestInfo info = setupTest("3.7.1",
                                         "The server should not allow HTTP PATCH to update an LDPC’s containment " +
                                         "triples; if"
@@ -250,12 +222,9 @@ public class HttpPatch extends AbstractTest {
 
     /**
      * 3.7.2
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void disallowChangeResourceType(final String uri) {
+    public void disallowChangeResourceType() {
         final TestInfo info = setupTest("3.7.2",
                                         "The server must disallow a PATCH request that would change the LDP"
                                         + " interaction model of a resource to a type that is not a subtype"

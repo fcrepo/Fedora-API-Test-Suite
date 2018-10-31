@@ -32,7 +32,6 @@ import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -41,24 +40,10 @@ import org.testng.annotations.Test;
 public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public LdprvHttpGet(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 4.1.1-A-1
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void shouldReturn406WhenNoLdprm(final String uri) {
+    public void shouldReturn406WhenNoLdprm() {
         final TestInfo info = setupTest("4.1.1-A-1",
                                         "If no LDPRm is appropriate to the Accept-Datetime value, " +
                                         "implementations should return a 406 (Unacceptable).",
@@ -89,12 +74,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.1.1-A-2
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void shouldReturn302WhenLdprmFromTimeGate(final String uri) {
+    public void shouldReturn302WhenLdprmFromTimeGate() {
         final TestInfo info = setupTest("4.1.1-A-2",
                                         "The Accept-Datetime header is used to request a past state, " +
                                         "exactly as per [RFC7089] section 2.1.1. A successful response must be a 302 " +
@@ -134,12 +116,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.1.1-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpvGetMustReturnHeaderOriginalTypeLink(final String uri) {
+    public void ldpvGetMustReturnHeaderOriginalTypeLink() {
         final TestInfo info = setupTest("4.1.1-B",
                                         "The response to a GET request on an LDPRv must return " +
                                         " a rel=\"timegate\" Link header referencing itself ",
@@ -155,12 +134,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.1.1-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpvGetMustReturnHeaderTimeGateTypeLink(final String uri) {
+    public void ldpvGetMustReturnHeaderTimeGateTypeLink() {
         final TestInfo info = setupTest("4.1.1-C",
                                         "The response to a GET request on an LDPRv must return " +
                                         " a rel=\"timegate\" Link header referencing itself",
@@ -176,12 +152,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.1.1-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpvGetMustReturnOriginalResourceLink(final String uri) {
+    public void ldpvGetMustReturnOriginalResourceLink() {
         final TestInfo info = setupTest("4.1.1-D",
                                         "The response to a GET request on an LDPRv must return a " +
                                         "<http://mementoweb.org/ns#OriginalResource>; rel=\"type\" link in the " +
@@ -197,12 +170,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.1.1-E
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpvGetMustReturnTimeGateTypeLink(final String uri) {
+    public void ldpvGetMustReturnTimeGateTypeLink() {
         final TestInfo info = setupTest("4.1.1-E",
                                         "The response to a GET request on an LDPRv must return a " +
                                         "<http://mementoweb.org/ns#OriginalResource>; rel=\"type\" link in the " +
@@ -218,12 +188,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.1.1-F
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpvGetMustReturnTimeMapLink(final String uri) {
+    public void ldpvGetMustReturnTimeMapLink() {
         final TestInfo info = setupTest("4.1.1-F",
                                         "The response to a GET request on an LDPRv must return At least one " +
                                         "rel=\"timemap\" link in the Link header referencing an associated LDPCv",
@@ -239,12 +206,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.1.1-G
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpvGetMustReturnVaryHeader(final String uri) {
+    public void ldpvGetMustReturnVaryHeader() {
         final TestInfo info = setupTest("4.1.1-G",
                                         "The response to a GET request on an LDPRv must return " +
                                         "a Vary: Accept-Datetime header, exactly as per [RFC7089] section 2.1.2.",

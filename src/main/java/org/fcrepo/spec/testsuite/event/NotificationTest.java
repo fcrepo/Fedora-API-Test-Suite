@@ -19,9 +19,6 @@ package org.fcrepo.spec.testsuite.event;
 
 import static org.awaitility.Awaitility.await;
 import static org.awaitility.Duration.TEN_SECONDS;
-import static org.fcrepo.spec.testsuite.App.BROKER_URL_PARAM;
-import static org.fcrepo.spec.testsuite.App.QUEUE_NAME_PARAM;
-import static org.fcrepo.spec.testsuite.App.TOPIC_NAME_PARAM;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
@@ -44,7 +41,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.StmtIterator;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import io.restassured.http.Header;
@@ -79,34 +75,19 @@ public class NotificationTest extends AbstractEventTest {
             ldpIndirectContainer);
 
     /**
-     * Default constructor.
-     *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username regular username
-     * @param password regular user password
-     * @param jmsBroker broker url
-     * @param queueName queue name
-     * @param topicName topic name
-     * @throws JMSException on error connecting to broker
+     * Constructor
+     * @throws JMSException
      */
-    @Parameters({ "param2", "param3", "param4", "param5", BROKER_URL_PARAM, QUEUE_NAME_PARAM, TOPIC_NAME_PARAM })
-    public NotificationTest(final String adminUsername, final String adminPassword, final String username,
-            final String password, final String jmsBroker, final String queueName, final String topicName)
-            throws JMSException {
-        super(adminUsername, adminPassword, username, password, jmsBroker, queueName, topicName);
+    public NotificationTest() throws JMSException {
+        super();
     }
-
     /**
      * 6.1 Notification Events
-     *
-     * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
      * @throws InterruptedException interrupt the thread.sleep
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
-    public void testCatchMessage(final String uri) throws JMSException, InterruptedException {
+    public void testCatchMessage() throws JMSException, InterruptedException {
         final TestInfo info = setupTest("6.1",
                 "For every resource whose state is changed as a result of an HTTP operation, there MUST be a " +
                         "corresponding notification made available describing that change.",
@@ -163,12 +144,10 @@ public class NotificationTest extends AbstractEventTest {
     /**
      * 6.2-A Event Serialization
      *
-     * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
-    public void testEventSerialization(final String uri) throws JMSException {
+    public void testEventSerialization() throws JMSException {
         final TestInfo info = setupTest("6.2-A",
                 "The notification serialization MUST conform to the [activitystreams-core] specification, " +
                         "and each event MUST contain the IRI of the resource and the event type.",
@@ -233,12 +212,10 @@ public class NotificationTest extends AbstractEventTest {
     /**
      * 6.2-B Event Serialization
      *
-     * @param uri the repository base uri
      * @throws JMSException problems connecting to broker
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void testEventSerializationShould(final String uri) throws JMSException {
+    public void testEventSerializationShould() throws JMSException {
         final TestInfo info = setupTest("6.2-B",
                 "Wherever possible, data SHOULD be expressed using the [activitystreams-vocabulary]. ",
                 "https://fedora.info/2018/06/25/spec/#notification-serialization", ps);

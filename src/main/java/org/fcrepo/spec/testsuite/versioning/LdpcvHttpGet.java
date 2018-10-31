@@ -20,7 +20,6 @@ package org.fcrepo.spec.testsuite.versioning;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import static org.fcrepo.spec.testsuite.Constants.CONTAINER_LINK_HEADER;
@@ -35,24 +34,10 @@ import static org.testng.AssertJUnit.assertNotNull;
 public class LdpcvHttpGet extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public LdpcvHttpGet(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 4.3.1-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpcvMustSupportGet(final String uri) {
+    public void ldpcvMustSupportGet() {
         final TestInfo info = setupTest("4.3.1-A",
                                         "LDPCv must support GET, as is the case for any LDPR",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
@@ -65,12 +50,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.3.1-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpcvMustHaveTimeMapLinkHeader(final String uri) {
+    public void ldpcvMustHaveTimeMapLinkHeader() {
         final TestInfo info = setupTest("4.3.1-B",
                                         "LDPCv contain TimeMap type link header.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
@@ -89,12 +71,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.3.1-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpcvMustRespondToGetWithApplicationLinkAcceptHeader(final String uri) {
+    public void ldpcvMustRespondToGetWithApplicationLinkAcceptHeader() {
         final TestInfo info = setupTest("4.3.1-C",
                                         "An LDPCv must respond to GET Accept: application/link-format as " +
                                         "indicated in [ RFC7089 ] section 5 and specified in [ RFC6690 ] section 7.3.",
@@ -108,12 +87,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.3.1-D
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void lpcvMustIncludeAllowHeader(final String uri) {
+    public void lpcvMustIncludeAllowHeader() {
         final TestInfo info = setupTest("4.3.1-D",
                                         "LDPCv resources must include the Allow header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
@@ -129,12 +105,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.3.1-E
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpcvMustIncludeAcceptPostIfPostAllowed(final String uri) {
+    public void ldpcvMustIncludeAcceptPostIfPostAllowed() {
         final TestInfo info = setupTest("4.3.1-E",
                                         "If an LDPCv supports POST, then it must include the Accept-Post header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
@@ -150,12 +123,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.3.1-F
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpcvMustIncludeAcceptPatchIfPatchAllowed(final String uri) {
+    public void ldpcvMustIncludeAcceptPatchIfPatchAllowed() {
         final TestInfo info = setupTest("4.3.1-F",
                                         "If an LDPCv supports PATCH, then it must include the Accept-Patch header",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
@@ -173,12 +143,9 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
 
     /**
      * 4.3.1-G
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldpcvMustHaveContainerLinkHeader(final String uri) {
+    public void ldpcvMustHaveContainerLinkHeader() {
         final TestInfo info = setupTest("4.3.1-G",
                                         "An LDPCv, being a container must have a \"Link: <http://www" +
                                         ".w3.org/ns/ldp#Container>;rel=\"type\"\"",

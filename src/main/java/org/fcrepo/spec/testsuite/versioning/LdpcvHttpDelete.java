@@ -22,7 +22,6 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -33,24 +32,10 @@ import org.testng.annotations.Test;
 public class LdpcvHttpDelete extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public LdpcvHttpDelete(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * Tests section 4.3.6-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void ldpcvMaySupportDelete(final String uri) {
+    public void ldpcvMaySupportDelete() {
         final TestInfo info = setupTest("4.3.6-A",
                                         "An implementation MAY support DELETION of LDPCvs.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpcv-delete",
@@ -67,12 +52,9 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
 
     /**
      * Tests section 4.3.6-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos(final String uri) {
+    public void ldpcvThatAdvertisesDeleteShouldRemoveContainerAndMementos() {
         final TestInfo info = setupTest("4.3.6-B",
                                         "An implementation that does support DELETE should do so by both " +
                                         "removing the LDPCv and removing the versioning interaction model from the " +

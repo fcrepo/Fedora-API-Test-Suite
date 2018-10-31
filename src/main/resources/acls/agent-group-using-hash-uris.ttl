@@ -2,5 +2,5 @@
 @prefix  vcard:  <http://www.w3.org/2006/vcard/ns#>.
 <> a  acl:GroupListing .
 <#group1> a vcard:Group ;
-          vcard:hasMember  "${user}" .
+          vcard:hasMember  <${user}> .
 

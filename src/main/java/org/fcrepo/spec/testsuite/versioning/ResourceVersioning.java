@@ -23,7 +23,6 @@ import java.net.URI;
 
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.SkipException;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
@@ -33,25 +32,12 @@ import io.restassured.response.Response;
  */
 public class ResourceVersioning extends AbstractVersioningTest {
 
-    /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public ResourceVersioning(final String username, final String password) {
-        super(username, password);
-    }
 
     /**
      * 4.0-A ldprv with type via post
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void postLdprWithType(final String uri) {
+    public void postLdprWithType() {
         final TestInfo info = setupTest("4.0-A",
                                         "When an LDPR is created with a rel=\"type\" link in the Link " +
                                         "header specifying type http://mementoweb.org/ns#OriginalResource " +
@@ -73,12 +59,9 @@ public class ResourceVersioning extends AbstractVersioningTest {
 
     /**
      * 4.0-B ldprv with type via put
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MAY" })
-    @Parameters({ "param1" })
-    public void convertToLDPRViaPutWithType(final String uri) {
+    public void convertToLDPRViaPutWithType() {
         final TestInfo info = setupTest("4.0-B",
                 "Implementations MAY allow a subsequent PUT request with a rel=\"type\" link in the Link header " +
                 "specifying type http://mementoweb.org/ns#OriginalResource to convert an existing LDPR into an LDPRv." +

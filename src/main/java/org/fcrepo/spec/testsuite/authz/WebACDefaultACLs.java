@@ -25,7 +25,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -35,29 +34,12 @@ import org.testng.annotations.Test;
 public class WebACDefaultACLs extends AbstractAuthzTest {
 
     /**
-     * Constructor
-     *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
-     */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public WebACDefaultACLs(final String adminUsername, final String adminPassword, final String username,
-                            final String password) {
-        super(adminUsername, adminPassword, username, password);
-    }
-
-    /**
      * 5.9-A - Inheritance of ACLs in Fedora implementations is defined by the [SOLIDWEBAC]
      * ACL Inheritance Algorithm and must be reckoned along the [LDP] containment
      * relationships linking controlled resources
-     *
-     * @param uri of base fedora uri
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param0"})
-    public void aclInheritanceMustUseLdpContainmentRelationships(final String uri) {
+    public void aclInheritanceMustUseLdpContainmentRelationships() {
         final TestInfo info =
             setupTest("5.9-A", "Inheritance of ACLs in Fedora implementations is defined by the [SOLIDWEBAC]" +
                                "ACL Inheritance Algorithm and must be reckoned along the [LDP] containment " +
@@ -68,13 +50,13 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
         final Headers headers = new Headers(new Header("Content-Type", "text/turtle"));
 
         //create a resource
-        final String grandParentUri = createResource(uri, info.getId());
+        final String grandParentUri = createResource(rootUri, info.getId());
         //create an acl with acl:default with write privileges
-        createAclForResource(grandParentUri, "user-read-write.ttl", this.username);
+        createAclForResource(grandParentUri, "user-read-write.ttl", this.permissionlessUserWebId);
         //create a child  and child acl with read privileges and no acl:default
         final Response childPost = doPost(grandParentUri, headers, simpleRDFBody);
         final String childUri = getLocation(childPost);
-        createAclForResource(childUri, "user-read-only-no-default.ttl", this.username);
+        createAclForResource(childUri, "user-read-only-no-default.ttl", this.permissionlessUserWebId);
 
         //create a grandchild  with no acl.
         final Response grandChildPost = doPost(childUri, headers, simpleRDFBody);
@@ -96,41 +78,35 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     /**
      * 5.9-B - In the case that the controlled resource is uncontained and has no ACL, or that there is no ACL at any
      * point in the containment hierarchy of the controlled resource, then the server must supply a default ACL.
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param0"})
-    public void serverSuppliedDefaultAcl(final String uri) {
+    public void serverSuppliedDefaultAcl() {
         setupTest("5.9-B", "In the case that the controlled resource is uncontained and has no ACL, or " +
                            "that there is no ACL at any point in the containment hierarchy of the " +
                            "controlled resource, then the server must supply a default ACL.",
                   "https://fedora.info/2018/06/25/spec/#inheritance", ps);
 
         //retrieve the default acl resource link from the root resource
-        final String aclUri = getAclLocation(uri);
+        final String aclUri = getAclLocation(rootUri);
         //GET the default acl and verify success
         doGet(aclUri);
     }
 
     /**
      * 5.9-C - Default ACL should be on the same server as the controlled resource.
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param0"})
-    public void defaultAclOnSameServer(final String uri) {
+    public void defaultAclOnSameServer() {
         setupTest("5.9-C", "The default ACL resource should be located in the same server (host and port) as the " +
                            "controlled resource.",
                   "https://fedora.info/2018/06/25/spec/#inheritance", ps);
         //GET the default acl and verify that it is on the same server as the root uri.
-        final String aclUri = getAclLocation(uri);
+        final String aclUri = getAclLocation(rootUri);
         assertEquals("The default ACL resource is not located on the same host as the controlled resource.",
-                     URI.create(uri).getHost(), URI.create(aclUri).getHost());
+                     URI.create(rootUri).getHost(), URI.create(aclUri).getHost());
 
         assertEquals("The default ACL resource is not located on the same port as the controlled resource.",
-                     URI.create(uri).getPort(), URI.create(aclUri).getPort());
+                     URI.create(rootUri).getPort(), URI.create(aclUri).getPort());
 
     }
 

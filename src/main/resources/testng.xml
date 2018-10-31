@@ -36,7 +36,6 @@
     </groups>
 
     <classes>
-      <class name="org.fcrepo.spec.testsuite.SetUpSuite"/>
       <class name="org.fcrepo.spec.testsuite.crud.Container">
         <!--Specify methods to 'include' or 'exclude'-->
         <!--

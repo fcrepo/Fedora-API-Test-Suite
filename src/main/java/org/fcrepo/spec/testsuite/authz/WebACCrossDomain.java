@@ -19,7 +19,6 @@ package org.fcrepo.spec.testsuite.authz;
 
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -28,26 +27,11 @@ import org.testng.annotations.Test;
  */
 public class WebACCrossDomain extends AbstractTest {
 
-
-    /**
-     * Constructor
-     *
-     * @param username username
-     * @param password password
-     */
-    @Parameters({"param2", "param3"})
-    public WebACCrossDomain(final String username, final String password) {
-        super(username, password);
-    }
-
     /**
      * 5.5-A - Restrict ACLs to local resources
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void restrictAclToLocal(final String uri) {
+    public void restrictAclToLocal() {
         final TestInfo info = setupTest("5.5-A",
                 "Implementations may restrict support for ACLs to local resources.",
                 "https://fedora.info/2018/06/25/spec/#cross-domain-acls", ps);
@@ -55,12 +39,9 @@ public class WebACCrossDomain extends AbstractTest {
 
     /**
      * 5.5-B - Rejected requests to have 4xx range status code
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void rejectRemoteAclStatus(final String uri) {
+    public void rejectRemoteAclStatus() {
         final TestInfo info = setupTest("5.5-B",
                 "If an implementation chooses to reject requests concerning remote ACLs, it must respond with a " +
                         "4xx range status code.",
@@ -69,12 +50,9 @@ public class WebACCrossDomain extends AbstractTest {
 
     /**
      * 5.5-C - Rejected requests to have constrainedBy Link header
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void rejectRemoteAclConstraint(final String uri) {
+    public void rejectRemoteAclConstraint() {
         final TestInfo info = setupTest("5.5-C",
                 "If an implementation chooses to reject requests concerning remote ACLs, it must advertise the " +
                         "restriction with a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link " +
@@ -84,12 +62,9 @@ public class WebACCrossDomain extends AbstractTest {
 
     /**
      * 5.6-A - Restrict ACL group to local resources
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void restrictGroupToLocal(final String uri) {
+    public void restrictGroupToLocal() {
         final TestInfo info = setupTest("5.6-A",
                 "Implementations may restrict support for groups of agents to local Group Listing documents.",
                 "https://fedora.info/2018/06/25/spec/#cross-domain-groups", ps);
@@ -97,12 +72,9 @@ public class WebACCrossDomain extends AbstractTest {
 
     /**
      * 5.6-B - Rejected requests to have 4xx range status code
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void rejectRemoteGroupStatus(final String uri) {
+    public void rejectRemoteGroupStatus() {
         final TestInfo info = setupTest("5.6-B",
                 "If an implementation chooses to reject requests concerning remote Group Listings, it must respond " +
                         "with a 4xx range status code.",
@@ -111,12 +83,9 @@ public class WebACCrossDomain extends AbstractTest {
 
     /**
      * 5.6-C - Rejected requests to have constrainedBy Link header
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void rejectRemoteGroupConstraint(final String uri) {
+    public void rejectRemoteGroupConstraint() {
         final TestInfo info = setupTest("5.6-C",
                 "If an implementation chooses to reject requests concerning remote Group Listings, it must advertise " +
                         "the restriction with a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link " +

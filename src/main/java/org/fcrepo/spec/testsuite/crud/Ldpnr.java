@@ -27,7 +27,6 @@ import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.Constants;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -36,24 +35,10 @@ import org.testng.annotations.Test;
 public class Ldpnr extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public Ldpnr(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 3.1.2.-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void ldpnrCreationLinkType(final String uri) {
+    public void ldpnrCreationLinkType() {
         final TestInfo info = setupTest("3.1.2-A",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
@@ -109,12 +94,9 @@ public class Ldpnr extends AbstractTest {
 
     /**
      * 3.1.2.-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"SHOULD"})
-    @Parameters({"param1"})
-    public void ldpnrCreationWrongLinkType(final String uri) {
+    public void ldpnrCreationWrongLinkType() {
         final TestInfo info = setupTest("3.1.2-B",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"

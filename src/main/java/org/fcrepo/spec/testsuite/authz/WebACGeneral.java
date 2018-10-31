@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.authz;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,6 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -33,28 +33,12 @@ import org.testng.annotations.Test;
  */
 public class WebACGeneral extends AbstractAuthzTest {
 
-    /**
-     * Constructor
-     *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
-     */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public WebACGeneral(final String adminUsername, final String adminPassword, final String username,
-                        final String password) {
-        super(adminUsername, adminPassword, username, password);
-    }
 
     /**
      * 5.0-A - Access to a single agent
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void agentSingle(final String uri) {
+    public void agentSingle() {
         final TestInfo info = setupTest("5.0-A",
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
@@ -62,36 +46,30 @@ public class WebACGeneral extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         doGet(resourceUri, false);
     }
 
     /**
      * 5.0-B - Different access to different agents
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void agentDouble(final String uri) {
+    public void agentDouble() {
         final TestInfo info = setupTest("5.0-B",
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
                                         "the acl:agent predicate.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only-multiple-agents.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only-multiple-agents.ttl", this.permissionlessUserWebId);
         doGet(resourceUri, false);
     }
 
     /**
      * 5.0-C-1 - Access to an agent group
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void agentGroup(final String uri) {
+    public void agentGroup() {
         final TestInfo info = setupTest("5.0-C-1",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
                                         "object of an " +
@@ -105,7 +83,7 @@ public class WebACGeneral extends AbstractAuthzTest {
         //create agent-group list
         final String groupListUri = joinLocation(testContainerUri, "agent-group");
         final Map<String, String> params = new HashMap<>();
-        params.put("user", "testuser");
+        params.put("user", this.permissionlessUserWebId);
         final Response response = doPutUnverified(groupListUri,
                                                   new Headers(new Header("Content-Type", "text/turtle")),
                                                   filterFileAndConvertToString("agent-group.ttl", params));
@@ -122,12 +100,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-C-2 - Access to an agent group with hash uris
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void agentGroupWithHashUris(final String uri) {
+    public void agentGroupWithHashUris() {
         final TestInfo info = setupTest("5.0-C-2",
                                         "To give access to a group of agents, use the acl:agentGroup predicate. The " +
                                         "object of an agentGroup statement is a link with a hash URI to a Group " +
@@ -140,7 +115,7 @@ public class WebACGeneral extends AbstractAuthzTest {
         //create agent-group list
         final String groupListUri = joinLocation(testContainerUri, "agent-group");
         final Map<String, String> params = new HashMap<>();
-        params.put("user", "testuser");
+        params.put("user", this.permissionlessUserWebId);
         final Response response = doPutUnverified(groupListUri,
                                                   new Headers(new Header("Content-Type", "text/turtle")),
                                                   filterFileAndConvertToString("agent-group-using-hash-uris.ttl",
@@ -158,12 +133,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-D - Public access
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void agentAll(final String uri) {
+    public void agentAll() {
         final TestInfo info = setupTest("5.0-D",
                                         "To specify that you're giving a particular mode of access to everyone, you " +
                                         "can use acl:agentClass " +
@@ -178,12 +150,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-E - Authenticated access
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void allAuthenticatedAgents(final String uri) {
+    public void allAuthenticatedAgents() {
         final TestInfo info = setupTest("5.0-E",
                                         "To specify that you're giving a particular mode of access to all " +
                                         "authenticated users, you can use acl:agentClass acl:AuthenticatedAgent to " +
@@ -199,12 +168,9 @@ public class WebACGeneral extends AbstractAuthzTest {
 
     /**
      * 5.0-F - Access to a specific resource
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void resourceSingle(final String uri) {
+    public void resourceSingle() {
         final TestInfo info = setupTest("5.0-F",
                                         "The acl:accessTo predicate specifies which resources you're giving access " +
                                         "to, using their URLs as " +
@@ -217,7 +183,7 @@ public class WebACGeneral extends AbstractAuthzTest {
 
         final Map<String, String> params = new HashMap<>();
         params.put("accessTo", child1resource);
-        params.put("user", this.username);
+        params.put("user", this.permissionlessUserWebId);
         params.put("defaultResource", parentResource);
 
         createAclForResource(parentResource, "user-read-only-access-to-child.ttl", params);

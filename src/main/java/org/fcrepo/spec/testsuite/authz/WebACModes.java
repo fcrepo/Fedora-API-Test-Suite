@@ -24,7 +24,6 @@ import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 
 import org.testng.SkipException;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -35,27 +34,10 @@ import org.testng.annotations.Test;
 public class WebACModes extends AbstractAuthzTest {
 
     /**
-     * Constructor
-     *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     * @param username      username
-     * @param password      password
-     */
-    @Parameters({"param2", "param3", "param4", "param5"})
-    public WebACModes(final String adminUsername, final String adminPassword, final String username,
-                      final String password) {
-        super(adminUsername, adminPassword, username, password);
-    }
-
-    /**
      * 5.0-F -Read access on HEAD
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void readAllowedHEAD(final String uri) {
+    public void readAllowedHEAD() {
         final TestInfo info = setupTest("5.0-F",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
@@ -64,19 +46,16 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform verified head as non-admin
         doHead(resourceUri, false);
     }
 
     /**
      * 5.0-G -Read access on GET
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void readAllowedGET(final String uri) {
+    public void readAllowedGET() {
         final TestInfo info = setupTest("5.0-G",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
@@ -84,19 +63,16 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform GET as non-admin
         doGet(resourceUri, false);
     }
 
     /**
      * 5.0-H -Read access disallowed
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void readDisallowed(final String uri) {
+    public void readDisallowed() {
         final TestInfo info = setupTest("5.0-H",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
@@ -106,7 +82,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", "not-" + this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", "not-" + this.permissionlessUserWebId);
         //perform GET as non-admin
         final Response getResponse = doGetUnverified(resourceUri, false);
         //verify unauthorized
@@ -115,12 +91,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-I - Write access PUT
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeAllowedPUT(final String uri) {
+    public void writeAllowedPUT() {
         final TestInfo info = setupTest("5.0-I",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
@@ -129,7 +102,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.permissionlessUserWebId);
         //perform PUT  to child resource as non-admin
         final Response putResponse =
             doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
@@ -141,12 +114,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-J - Write access POST
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeAllowedPOST(final String uri) {
+    public void writeAllowedPOST() {
         final TestInfo info = setupTest("5.0-J",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
@@ -155,7 +125,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.permissionlessUserWebId);
         //perform POST  to child resource as non-admin
         doPost(resourceUri, new Headers(new Header("Content-Type", "text/plain")),
                "test", false);
@@ -163,12 +133,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-K - Write access DELETE
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeAllowedDELETE(final String uri) {
+    public void writeAllowedDELETE() {
         final TestInfo info = setupTest("5.0-K",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
@@ -176,19 +143,16 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.permissionlessUserWebId);
         //perform DELETE  to child resource as non-admin
         doDelete(resourceUri, false);
     }
 
     /**
      * 5.0-L - Write access PATCH
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeAllowedPATCH(final String uri) {
+    public void writeAllowedPATCH() {
         final TestInfo info = setupTest("5.0-L",
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
@@ -202,7 +166,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.permissionlessUserWebId);
         //perform PATCH  to child resource as non-admin
         doPatch(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
 
@@ -210,12 +174,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-M-1 - Write access disallowed on PUT
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeDisallowedPut(final String uri) {
+    public void writeDisallowedPut() {
         final TestInfo info = setupTest("5.0-M-1",
                                         "acl:Write gives access to PUT a resource. When not present, " +
                                         "writes should be disallowed.",
@@ -223,7 +184,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform PUT  to child resource as non-admin with read only prives
         final Response putResponse =
             doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
@@ -234,19 +195,16 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-M - Write access disallowed POST
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeDisallowedPost(final String uri) {
+    public void writeDisallowedPost() {
         final TestInfo info = setupTest("5.0-M-2",
                                         "acl:Write gives access to POST a resource. When not present, " +
                                         "writes should be disallowed.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform POST  to child resource as non-admin
         final Response postResponse = doPostUnverified(resourceUri, new Headers(),
                                                        "test", false);
@@ -255,19 +213,16 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-M - Write access disallowed on DELETE
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeDisallowedDelete(final String uri) {
+    public void writeDisallowedDelete() {
         final TestInfo info = setupTest("5.0-M-3",
                                         "acl:Write gives access to DELETE a resource. When not present, " +
                                         "writes should be disallowed.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform DELETE  to child resource as non-admin
         final Response deleteResponse = doDeleteUnverified(resourceUri, false);
         deleteResponse.then().statusCode(403);
@@ -275,12 +230,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-M-4 - Write access disallowed on PATCH
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void writeDisallowedPatch(final String uri) {
+    public void writeDisallowedPatch() {
         final TestInfo info = setupTest("5.0-M-4",
                                         "acl:Write gives access to PATCH a resource. When not present, " +
                                         "writes should be disallowed.",
@@ -293,7 +245,7 @@ public class WebACModes extends AbstractAuthzTest {
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform PATCH  to child resource as non-admin
         final Response patchResponse =
             doPatchUnverified(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body,
@@ -303,12 +255,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-N - Append access on POST
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void appendAllowedPOST(final String uri) {
+    public void appendAllowedPOST() {
         final TestInfo info = setupTest("5.0-N",
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
@@ -316,7 +265,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
         //perform POST  to child resource as non-admin
         doPost(resourceUri, new Headers(),
                "test", false);
@@ -325,12 +274,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-O - Append access on PATCH
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void appendAllowedPATCH(final String uri) {
+    public void appendAllowedPATCH() {
         final TestInfo info = setupTest("5.0-O",
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
@@ -343,19 +289,16 @@ public class WebACModes extends AbstractAuthzTest {
                             + " WHERE { }";
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
         //perform PATCH  to child resource as non-admin
         doPatch(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
     }
 
     /**
      * 5.0-P - Append access disallowed
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void appendDisallowed(final String uri) {
+    public void appendDisallowed() {
         final TestInfo info = setupTest("5.0-P",
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
@@ -371,7 +314,7 @@ public class WebACModes extends AbstractAuthzTest {
                             + " WHERE { }";
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
         //perform PATCH  to child resource as non-admin
         final Response patchResponse =
             doPatchUnverified(resourceUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body,
@@ -382,19 +325,16 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-Q - Control access on GET
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void controlAllowedGET(final String uri) {
+    public void controlAllowedGET() {
         final TestInfo info = setupTest("5.0-Q",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view the ACL of a " +
                                         "resource.",
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.username);
+        final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.permissionlessUserWebId);
         //perform verified get as non-admin
         doGet(aclUri, false);
 
@@ -402,12 +342,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-R - Control access on PATCH
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void controlAllowedPATCH(final String uri) {
+    public void controlAllowedPATCH() {
         final TestInfo info = setupTest("5.0-R",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " modify the ACL of a " +
@@ -421,19 +358,16 @@ public class WebACModes extends AbstractAuthzTest {
                             + " WHERE { }";
 
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.username);
+        final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.permissionlessUserWebId);
         //perform PATCH  to resource's acl as non-admin
         doPatch(aclUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
     }
 
     /**
      * 5.0-S - Control access on PUT
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void controlAllowedPUT(final String uri) {
+    public void controlAllowedPUT() {
         final TestInfo info = setupTest("5.0-S",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " modify the ACL of a " +
@@ -443,7 +377,7 @@ public class WebACModes extends AbstractAuthzTest {
         final String resourceUri = createResource(uri, info.getId());
 
         // ACL allows control but not read/write
-        final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.username);
+        final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.permissionlessUserWebId);
 
         // Verify that non-admin user can not read the resource
         doGetUnverified(resourceUri, false).then().statusCode(403);
@@ -467,12 +401,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-T - Control access disallowed on GET
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void controlDisallowedGET(final String uri) {
+    public void controlDisallowedGET() {
         final TestInfo info = setupTest("5.0-T",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
@@ -480,7 +411,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform a GET on the acl using the non-admin user
         final Response getResponse = doGetUnverified(aclUri, false);
         getResponse.then().statusCode(403);
@@ -488,12 +419,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-U - Control access disallowed on PATCH
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void controlDisallowedPATCH(final String uri) {
+    public void controlDisallowedPATCH() {
         final TestInfo info = setupTest("5.0-U",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
@@ -507,7 +435,7 @@ public class WebACModes extends AbstractAuthzTest {
                             + " WHERE { }";
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
-        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.username);
+        final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
         //perform PATCH  to resource's acl as non-admin
         final Response patchResponse =
             doPatchUnverified(aclUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
@@ -517,12 +445,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.0-V - Control access disallowed on PUT
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void controlDisallowedPUT(final String uri) {
+    public void controlDisallowedPUT() {
         final TestInfo info = setupTest("5.0-V",
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
@@ -530,7 +455,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-write.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-write.ttl", this.permissionlessUserWebId);
         //perform PUT  to child resource as non-admin
         final Response putResponse =
             doPutUnverified(resourceUri + "/child1", new Headers(new Header("Content-Type", "text/plain")),
@@ -543,27 +468,23 @@ public class WebACModes extends AbstractAuthzTest {
         final String childAclUri = getAclLocation(childResourceUri);
         final Response childAclResponse =
             doPutUnverified(childAclUri, new Headers(new Header("Content-Type", "text/turtle")),
-                            getAclAsString("user-read-write.ttl", childResourceUri, this.username),
+                            getAclAsString("user-read-write.ttl", childResourceUri, this.permissionlessUserWebId),
                             false);
-
         childAclResponse.then().statusCode(403);
     }
 
     /**
      * 5.7.1-A acl:Append for LDP-RS MUST test conditions
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
-    public void appendNotWriteLdpRsMust(final String uri) {
+    public void appendNotWriteLdpRsMust() {
         final TestInfo info = setupTest("5.7.1-A",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they MUST " +
                         "not DELETE, not PATCH that deletes triples, not PUT on the resource",
                 "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
 
         // perform DELETE to resource as non-admin
         final Response deleteResponse = doDeleteUnverified(resourceUri, false);
@@ -596,12 +517,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.7.1-B acl:Append for LDP-RS MUST if PUT to create test conditions
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
-    public void appendNotWritePutToCreate(final String uri) {
+    public void appendNotWritePutToCreate() {
         final TestInfo info = setupTest("5.7.1-B",
                 "When a client has acl:Append but not acl:Write for an LDP-RS and the " +
                         "implementation supports PUT to create they MUST " +
@@ -609,7 +527,7 @@ public class WebACModes extends AbstractAuthzTest {
                 "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
 
         // perform PUT to child resource as non-admin succeeds.
         final Response putChildResponse =
@@ -621,19 +539,16 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.7.1-C acl:Append for LDP-RS SHOULD test conditions
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "SHOULD" })
-    @Parameters({ "param1" })
-    public void appendNotWriteLdpRsShould(final String uri) {
+    public void appendNotWriteLdpRsShould() {
         final TestInfo info = setupTest("5.7.1-C",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they SHOULD " +
                         "allow a PATCH request that only adds triples.",
                 "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
 
         // perform PATCH which only adds.
         final Response patchAdd = doPatchUnverified(resourceUri, new Headers(new Header("Content-type",
@@ -655,19 +570,16 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.7.2 acl:Append for LDP-C MUST test conditions
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
-    public void appendNotWriteLdpCMust(final String uri) {
+    public void appendNotWriteLdpCMust() {
         final TestInfo info = setupTest("5.7.2",
                 "When a client has acl:Append but not acl:Write for an LDPC they MUST " +
                         "allow a POST request.",
                 "https://fedora.info/2018/06/25/spec/#append-ldpc", ps);
 
         final String resourceUri = createResource(uri, info.getId());
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
 
         final Response getInfo = doGet(resourceUri, false);
         if (confirmLDPContainer(getInfo)) {
@@ -679,12 +591,9 @@ public class WebACModes extends AbstractAuthzTest {
 
     /**
      * 5.7.3 acl:Append for LDP-NR MUST test conditions
-     *
-     * @param uri of base container of Fedora server
      */
     @Test(groups = { "MUST" })
-    @Parameters({ "param1" })
-    public void appendNotWriteLdpNr(final String uri) {
+    public void appendNotWriteLdpNr() {
         final TestInfo info = setupTest("5.7.3",
                 "When a client has acl:Append but not acl:Write for an LDP-NR they MUST " +
                         "deny all DELETE, POST, and PUT requests.",
@@ -694,7 +603,7 @@ public class WebACModes extends AbstractAuthzTest {
         final Response postLdpNr = doPost(uri, headers, "test image");
         final String resourceUri = getLocation(postLdpNr);
 
-        createAclForResource(resourceUri, "user-read-append.ttl", this.username);
+        createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
 
         final String description = getLdpNrDescription(resourceUri);
 

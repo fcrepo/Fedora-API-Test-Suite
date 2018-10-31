@@ -21,7 +21,6 @@ import static org.testng.Assert.assertEquals;
 
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -32,24 +31,10 @@ import org.testng.annotations.Test;
 public class LdprmHttpOptions extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public LdprmHttpOptions(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 4.2.2-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldprmMustSupportOptions(final String uri) {
+    public void ldprmMustSupportOptions() {
         final TestInfo info = setupTest("4.2.2-A",
                                         "LDPRm resources must support OPTIONS",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-options",
@@ -70,12 +55,9 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
 
     /**
      * 4.2.2-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldprmOptionsMustSupportGetHeadAndOptions(final String uri) {
+    public void ldprmOptionsMustSupportGetHeadAndOptions() {
         final TestInfo info = setupTest("4.2.2-B",
                                         "A response to an OPTIONS request must include Allow: GET, HEAD, OPTIONS",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-options",
@@ -92,12 +74,9 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
 
     /**
      * 4.2.2-C
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MAY"})
-    @Parameters({"param1"})
-    public void ldprmOptionsMaySupportDelete(final String uri) {
+    public void ldprmOptionsMaySupportDelete() {
         final TestInfo info = setupTest("4.2.2-C",
                                         "A response to an OPTIONS request may include Allow: DELETE",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-options",
@@ -113,12 +92,9 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
 
     /**
      * 4.2.3
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldprmMustNotSupportPost(final String uri) {
+    public void ldprmMustNotSupportPost() {
         final TestInfo info = setupTest("4.2.3",
                                         "An LDPRm must not support POST",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-post",
@@ -135,12 +111,9 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
 
     /**
      * 4.2.4
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldprmMustNotSupportPut(final String uri) {
+    public void ldprmMustNotSupportPut() {
         final TestInfo info = setupTest("4.2.4",
                                         "An LDPRm must not support PUT",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-put",
@@ -159,12 +132,9 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
 
     /**
      * 4.2.5
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void ldprmMustNotSupportPatch(final String uri) {
+    public void ldprmMustNotSupportPatch() {
         final TestInfo info = setupTest("4.2.5",
                                         "An LDPRm must not support PATCH",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-patch",

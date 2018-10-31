@@ -1,9 +1,9 @@
 default:
   rooturl: http://localhost:8080/rest
-  admin-user: fedoraAdmin
-  admin-password: fedoraAdmin
-  user: testuser
-  password: testpass
+  root-controller-user-webid: http://example.com/fedoraAdmin
+  root-controller-user-password: fedoraAdmin
+  permissionless-user-webid: http://example.com/testuser
+  permissionless-user-password: testpass
   broker-url: tcp://127.0.0.1:61616
   topic-name: fedora
-  queue-name: 
+  queue-name:

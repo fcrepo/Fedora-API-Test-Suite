@@ -21,7 +21,6 @@ import static org.hamcrest.Matchers.containsString;
 
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -30,24 +29,10 @@ import org.testng.annotations.Test;
 public class HttpOptions extends AbstractTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public HttpOptions(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 3.4-A
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void httpOptionsSupport(final String uri) {
+    public void httpOptionsSupport() {
         final TestInfo info = setupTest("3.4-A",
                                         "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
                                         + "4.2.8.1 LDP servers must support the HTTP OPTIONS method.",
@@ -58,12 +43,9 @@ public class HttpOptions extends AbstractTest {
 
     /**
      * 3.4-B
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = {"MUST"})
-    @Parameters({"param1"})
-    public void httpOptionsSupportAllow(final String uri) {
+    public void httpOptionsSupportAllow() {
         final TestInfo info = setupTest("3.4-B",
                                         "Any LDPR must support OPTIONS per [LDP] 4.2.8. "
                                         + "LDP servers must indicate their support for HTTP Methods by responding to a"

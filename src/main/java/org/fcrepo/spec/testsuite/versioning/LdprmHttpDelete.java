@@ -23,7 +23,6 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.SkipException;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import io.restassured.response.Response;
@@ -38,24 +37,10 @@ import static org.apache.jena.rdf.model.ResourceFactory.createProperty;
 public class LdprmHttpDelete extends AbstractVersioningTest {
 
     /**
-     * Authentication
-     *
-     * @param username The repository username
-     * @param password The repository password
-     */
-    @Parameters({"param2", "param3"})
-    public LdprmHttpDelete(final String username, final String password) {
-        super(username, password);
-    }
-
-    /**
      * 4.2.6
-     *
-     * @param uri The repository root URI
      */
     @Test(groups = { "MUST" })
-    @Parameters({"param1"})
-    public void ldprmMustSupportDeleteIfAdvertised(final String uri) {
+    public void ldprmMustSupportDeleteIfAdvertised() {
         final TestInfo info = setupTest("4.2.6",
                                         "LDPRm resources must support DELETE if DELETE is advertised in OPTIONS",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldprm-delete",

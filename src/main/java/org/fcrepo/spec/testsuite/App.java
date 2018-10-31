@@ -17,6 +17,21 @@
  */
 package org.fcrepo.spec.testsuite;
 
+import static org.fcrepo.spec.testsuite.TestParameters.AUTHENTICATOR_CLASS_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.BROKER_URL_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.CONFIG_FILE_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.CONSTRAINT_ERROR_GENERATOR_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_AUTH_HEADER;
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_PASSWORD_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.QUEUE_NAME_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_AUTH_HEADER;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_PASSWORD_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_WEBID_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_URL_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.TOPIC_NAME_PARAM;
+import static org.testng.util.Strings.isNullOrEmpty;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,9 +39,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.esotericsoftware.yamlbeans.YamlReader;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -34,46 +51,24 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.fcrepo.spec.testsuite.authn.AuthenticatorResolver;
 import org.testng.TestNG;
 import org.testng.xml.SuiteXmlParser;
 import org.testng.xml.XmlSuite;
-
-import com.esotericsoftware.yamlbeans.YamlReader;
 
 /**
  * @author Jorge Abrego, Fernando Cardoza
  */
 public class App {
+
+    private final static String TESTNGXML_PARAM = "testngxml";
+    private final static String REQUIREMENTS_PARAM = "requirements";
+    private final static String SITE_NAME_PARAM = "site-name";
+
+
     private App() {
     }
 
-    /**
-     * Configuration parameter names for consistency.
-     */
-    private final static String ROOT_URL_PARAM = "rooturl";
-
-    private final static String USER_NAME_PARAM = "user";
-
-    private final static String USER_PASS_PARAM = "password";
-
-    private final static String ADMIN_NAME_PARAM = "admin-user";
-
-    private final static String ADMIN_PASS_PARAM = "admin-password";
-
-    private final static String TESTNGXML_PARAM = "testngxml";
-
-    private final static String REQUIREMENTS_PARAM = "requirements";
-
-    public final static String BROKER_URL_PARAM = "broker-url";
-
-    public final static String QUEUE_NAME_PARAM = "queue-name";
-
-    public final static String TOPIC_NAME_PARAM = "topic-name";
-
-    private final static String CONFIG_FILE_PARAM = "config-file";
-
-    private final static String SITE_NAME_PARAM = "site-name";
-    public  final static String CONSTRAINT_ERROR_GENERATOR_PARAM = "constraint-error-generator";
 
     /*
      * Map of configuration options and whether they are required.
@@ -82,17 +77,18 @@ public class App {
 
     static {
         configArgs.put(ROOT_URL_PARAM, true);
-        configArgs.put(USER_NAME_PARAM, true);
-        configArgs.put(USER_PASS_PARAM, true);
-        configArgs.put(ADMIN_NAME_PARAM, true);
-        configArgs.put(ADMIN_PASS_PARAM, true);
+        configArgs.put(PERMISSIONLESS_USER_WEBID_PARAM, true);
+        configArgs.put(PERMISSIONLESS_USER_PASSWORD_PARAM, false);
+        configArgs.put(PERMISSIONLESS_USER_AUTH_HEADER, false);
+        configArgs.put(ROOT_CONTROLLER_USER_WEBID_PARAM, true);
+        configArgs.put(ROOT_CONTROLLER_USER_PASSWORD_PARAM, false);
+        configArgs.put(ROOT_CONTROLLER_USER_AUTH_HEADER, false);
         configArgs.put(TESTNGXML_PARAM, false);
         configArgs.put(REQUIREMENTS_PARAM, false);
         configArgs.put(BROKER_URL_PARAM, true);
         configArgs.put(QUEUE_NAME_PARAM, false);
         configArgs.put(TOPIC_NAME_PARAM, false);
         configArgs.put(CONSTRAINT_ERROR_GENERATOR_PARAM, false);
-
     }
 
     /**
@@ -102,49 +98,55 @@ public class App {
      */
     public static void main(final String[] args) {
         final Options options = new Options();
-        final Option rootUrl = new Option("b", ROOT_URL_PARAM, true, "The root URL of the repository");
-        options.addOption(rootUrl);
-        final Option user = new Option("u", USER_NAME_PARAM, true, "Username of user with basic user role");
-        options.addOption(user);
-        final Option password = new Option("p", USER_PASS_PARAM, true, "Password of user with basic user role");
-        options.addOption(password);
-        final Option adminUser = new Option("a", ADMIN_NAME_PARAM, true, "Username of user with admin role");
-        options.addOption(adminUser);
-        final Option adminPassword = new Option("s", ADMIN_PASS_PARAM, true, "Password of user with admin role");
-        options.addOption(adminPassword);
+        options.addOption(new Option("b", ROOT_URL_PARAM, true, "The root URL of the repository"));
+        options.addOption(new Option("u", PERMISSIONLESS_USER_WEBID_PARAM, true,
+                                     "A URI representing the WebID of a user with no permissions."));
+        options.addOption(
+            new Option("p", PERMISSIONLESS_USER_PASSWORD_PARAM, true, "Password of user with basic user role"));
+        options.addOption(new Option("a", ROOT_CONTROLLER_USER_WEBID_PARAM, true,
+                                     "A URI representing the WebID of a user with read, write, and control" +
+                                     " permissions on root container."));
+        options.addOption(
+            new Option("s", ROOT_CONTROLLER_USER_PASSWORD_PARAM, true, "Password of user with admin role"));
 
-        final Option testngxml = new Option("x", TESTNGXML_PARAM, true, "TestNG XML file");
-        testngxml.setRequired(false);
-        options.addOption(testngxml);
-        final Option reqs = new Option("r", REQUIREMENTS_PARAM, true,
-                "Requirement levels. One or more of the following, " +
-                                                                  "separated by ',': [ALL|MUST|SHOULD|MAY]");
-        reqs.setRequired(false);
-        options.addOption(reqs);
+        options.addOption(new Option("R", ROOT_CONTROLLER_USER_AUTH_HEADER, true,
+                                     "\"Authorization\" header value for a user with read, write, and control. " +
+                                     "When present, this value will be added to the request effectively " +
+                                     "overriding Authenticator implementations, custom or default, found in the " +
+                                     "classpath."));
 
-        final Option configFile = new Option("c", CONFIG_FILE_PARAM, true, "Configuration file of test parameters.");
-        configFile.setRequired(false);
-        options.addOption(configFile);
-        final Option configFileSite = new Option("n", SITE_NAME_PARAM, true,
-                "Site name from configuration file (defaults to \"default\")");
-        configFileSite.setRequired(false);
-        options.addOption(configFileSite);
-
+        options.addOption(new Option("P", PERMISSIONLESS_USER_AUTH_HEADER, true,
+                                     "\"Authorization\" header value for a user with no permissions. " +
+                                     "When present, this value will be added to the request effectively " +
+                                     "overriding Authenticator implementations, custom or default, found in the " +
+                                     "classpath."));
+        options.addOption( new Option("x", TESTNGXML_PARAM, true, "TestNG XML file"));
+        options.addOption(new Option("r", REQUIREMENTS_PARAM, true,
+                                     "Requirement levels. One or more of the following, " +
+                                     "separated by ',': [ALL|MUST|SHOULD|MAY]"));
+        options.addOption(new Option("c", CONFIG_FILE_PARAM, true, "Configuration file of test parameters."));
+        options.addOption(new Option("n", SITE_NAME_PARAM, true,
+                                     "Site name from configuration file (defaults to \"default\")"));
         options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
         options.addOption(new Option("q", QUEUE_NAME_PARAM, true, "Queue name for events (if applicable)"));
         options.addOption(new Option("t", TOPIC_NAME_PARAM, true, "Topic name for events (if applicable)"));
         options.addOption(new Option("g", CONSTRAINT_ERROR_GENERATOR_PARAM, true,
                                      "A file containing a SPARQL query that will trigger a constraint error."));
+        options
+            .addOption(new Option("A", AUTHENTICATOR_CLASS_PARAM, true,
+                                  "The class name of the Authenticator implementation. This class must be " +
+                                  "packaged in a jar file that is placed in an 'authenticators' directory adjacent " +
+                                  "to the testsuite jar.  If there is only one implementation found in the jar(s) in " +
+                                  "the 'authenticators' directory, it will be discovered and used automatically.  " +
+                                  "In other words, if you have only one implementation you don't need to use this " +
+                                  "optional parameter."));
 
         final CommandLineParser parser = new BasicParser();
-        final HelpFormatter formatter = new HelpFormatter();
         final CommandLine cmd;
         try {
             cmd = parser.parse(options, args);
         } catch (final ParseException e) {
-            System.out.println(e.getMessage());
-            formatter.printHelp("Fedora Test Suite", options);
-            System.exit(1);
+            printHelpAndExit(e.getMessage(), options);
             return;
         }
 
@@ -153,7 +155,7 @@ public class App {
             final File configurationFile = new File(cmd.getOptionValue(CONFIG_FILE_PARAM));
             if (configurationFile.exists()) {
                 final String sitename = cmd.getOptionValue(SITE_NAME_PARAM) == null ? "default" : cmd
-                        .getOptionValue(SITE_NAME_PARAM);
+                    .getOptionValue(SITE_NAME_PARAM);
                 params = retrieveConfig(configurationFile, sitename);
             }
         }
@@ -172,25 +174,36 @@ public class App {
             }
         }
 
-        if ((!params.containsKey(QUEUE_NAME_PARAM) || params.get(QUEUE_NAME_PARAM).isEmpty()) &&
-                (!params.containsKey(TOPIC_NAME_PARAM) || params.get(TOPIC_NAME_PARAM).isEmpty())) {
+        TestParameters.initialize(params);
+        final TestParameters tp = TestParameters.get();
+        if (isNullOrEmpty(tp.getQueueName()) &&
+            isNullOrEmpty(tp.getTopicName())) {
             throw new RuntimeException(String.format("One of %s, %s must be provided", QUEUE_NAME_PARAM,
-                    TOPIC_NAME_PARAM));
+                                                     TOPIC_NAME_PARAM));
         }
 
-        //Create the default container
-        final Map<String, String> testParams = new HashMap<>();
-        testParams.put("param0", params.get(ROOT_URL_PARAM));
-        testParams.put("param1", TestSuiteGlobals.containerTestSuite(params.get(ROOT_URL_PARAM), params.get(
-                ADMIN_NAME_PARAM), params.get(ADMIN_PASS_PARAM)));
-        testParams.put("param2", params.get(ADMIN_NAME_PARAM));
-        testParams.put("param3", params.get(ADMIN_PASS_PARAM));
-        testParams.put("param4", params.get(USER_NAME_PARAM));
-        testParams.put("param5", params.get(USER_PASS_PARAM));
-        testParams.put(BROKER_URL_PARAM, params.get(BROKER_URL_PARAM));
-        testParams.put(QUEUE_NAME_PARAM, params.get(QUEUE_NAME_PARAM));
-        testParams.put(TOPIC_NAME_PARAM, params.get(TOPIC_NAME_PARAM));
-        testParams.put(CONSTRAINT_ERROR_GENERATOR_PARAM, params.get(CONSTRAINT_ERROR_GENERATOR_PARAM));
+        //validate that the webids are URIs
+        try {
+            URI.create(tp.getRootControllerUserWebId());
+            URI.create(tp.getPermissionlessUserWebId());
+        } catch (Exception ex) {
+            printHelpAndExit("WebID parameters must be well-formed URIs: " + ex.getMessage(),
+                             options);
+        }
+
+        if (isNullOrEmpty(tp.getPermissionlessUserAuthHeader()) ||
+            isNullOrEmpty(tp.getRootControllerUserAuthHeader())) {
+            try {
+                //initialize the resolver
+                AuthenticatorResolver.initialize(cmd.getOptionValue(AUTHENTICATOR_CLASS_PARAM, null));
+            } catch (final Exception e) {
+                System.err.println(e.getMessage());
+                System.exit(1);
+                return;
+            }
+        }
+
+        tp.setTestContainerUrl(TestSuiteGlobals.containerTestSuite());
 
         InputStream inputStream = null;
         if (params.get(TESTNGXML_PARAM).toString().isEmpty()) {
@@ -205,10 +218,9 @@ public class App {
         }
 
         final String testFilename = params.get(TESTNGXML_PARAM).isEmpty() ? "Default testng.xml" : params.get(
-                TESTNGXML_PARAM);
+            TESTNGXML_PARAM);
         final SuiteXmlParser xmlParser = new SuiteXmlParser();
         final XmlSuite xmlSuite = xmlParser.parse(testFilename, inputStream, true);
-        xmlSuite.setParameters(testParams);
 
         final TestNG testng = new TestNG();
         testng.setCommandLineSuite(xmlSuite);
@@ -225,11 +237,19 @@ public class App {
         }
     }
 
+    private static void printHelpAndExit(final String errorMessage, final Options options) {
+        final HelpFormatter formatter = new HelpFormatter();
+        System.err.println(errorMessage);
+        formatter.printHelp("Fedora Test Suite", options);
+        System.exit(1);
+
+    }
+
     /**
      * This method parses the provided configFile into its equivalent command-line args
      *
      * @param configFile containing config args
-     * @param siteName the site name from the config file to use
+     * @param siteName   the site name from the config file to use
      * @return Array of args
      */
     @SuppressWarnings("unchecked")

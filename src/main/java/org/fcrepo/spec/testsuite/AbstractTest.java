@@ -23,6 +23,7 @@ import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
+import static org.fcrepo.spec.testsuite.authn.AuthUtil.auth;
 import static org.testng.AssertJUnit.fail;
 
 import java.io.File;
@@ -70,35 +71,18 @@ public class AbstractTest {
 
     protected PrintStream ps;
 
-    private final String adminUsername;
-    private final String adminPassword;
-    protected final String username;
-    protected final String password;
-
+    private String rootControllerUserWebId;
+    protected String permissionlessUserWebId;
+    protected String uri;
+    protected String rootUri;
     /**
      * Constructor
-     *
-     * @param adminUsername admin password
-     * @param adminPassword admin username
-     * @param username username
-     * @param password password
      */
-    public AbstractTest(final String adminUsername, final String adminPassword, final String username,
-                        final String password) {
-        this.adminUsername = adminUsername;
-        this.adminPassword = adminPassword;
-        this.username = username;
-        this.password = password;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param adminUsername admin username
-     * @param adminPassword admin password
-     */
-    public AbstractTest(final String adminUsername, final String adminPassword) {
-        this(adminUsername, adminPassword, null, null);
+    public AbstractTest() {
+        this.rootControllerUserWebId = TestParameters.get().getRootControllerUserWebId();
+        this.permissionlessUserWebId =  TestParameters.get().getPermissionlessUserWebId();
+        this.uri = TestParameters.get().getTestContainerUrl();
+        this.rootUri = TestParameters.get().getRootUrl();
     }
 
     /**
@@ -224,7 +208,7 @@ public class AbstractTest {
     /**
      * Do a POST request.
      *
-     * @param uri the URI of the request.
+     * @param uri the URI of the request
      * @param headers the request headers.
      * @param body the request body.
      * @param admin use the admin user credentials.
@@ -262,7 +246,7 @@ public class AbstractTest {
     /**
      * Do a POST and confirm a 201 status code.
      *
-     * @param uri the URI for the request.
+     * @param uri the URI of the request
      * @param headers the request headers.
      * @param body the request body.
      * @param admin use the admin user credentials.
@@ -367,15 +351,14 @@ public class AbstractTest {
 
     private RequestSpecification createRequestAuthOnly(final boolean admin) {
         if (admin) {
-            return createRequestAuthOnly(this.adminUsername, this.adminPassword);
+            return createRequestAuthOnly(this.rootControllerUserWebId);
         } else {
-            return createRequestAuthOnly(this.username, this.password);
+            return createRequestAuthOnly(this.permissionlessUserWebId);
         }
     }
 
-    private RequestSpecification createRequestAuthOnly(final String username, final String password) {
-        return RestAssured.given()
-                          .auth().basic(username, password).urlEncodingEnabled(false);
+    private RequestSpecification createRequestAuthOnly(final String webId) {
+        return auth(RestAssured.given(), webId).urlEncodingEnabled(false);
     }
 
     protected Response doGet(final String uri, final Header header) {
