@@ -111,6 +111,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "copy")),
                 new Header(SLUG, info.getId()));
@@ -128,6 +132,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "copy")),
@@ -147,6 +155,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "redirect")),
                 new Header(SLUG, info.getId()));
@@ -163,6 +175,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "redirect")),
@@ -181,6 +197,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy")),
                 new Header(SLUG, info.getId()));
@@ -198,6 +218,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "proxy")),
                 new Header(SLUG, info.getId()));
@@ -214,6 +238,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
@@ -233,6 +261,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "copy")));
@@ -250,6 +282,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
@@ -269,6 +305,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "redirect")));
@@ -286,6 +326,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
@@ -305,6 +349,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final String location = joinLocation(uri, info.getId());
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalFileUri, "proxy")));
@@ -322,6 +370,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String locationHeader = createNonRdfSource(uri, info.getId());
 
@@ -341,6 +393,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
@@ -358,6 +414,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String locationHeader = createNonRdfSource(uri, info.getId());
 
@@ -377,6 +437,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
@@ -395,6 +459,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final String locationHeader = createNonRdfSource(uri, info.getId());
 
         final Headers headers2 = new Headers(
@@ -412,6 +480,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String locationHeader = createNonRdfSource(uri, info.getId());
 
@@ -475,6 +547,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "copy, redirect, and/or proxy.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final List<String> acceptedHandlingTypes = getAcceptedHandlingTypes(uri);
 
         final List<String> acceptedAndExpected = acceptedHandlingTypes.stream()
@@ -504,6 +580,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "is not present or cannot be respected.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, null)),
                 new Header(SLUG, info.getId()));
@@ -524,6 +604,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link response header.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "unsupported")),
                 new Header(SLUG, info.getId()));
@@ -542,6 +626,10 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUriWithNoType, "proxy", "text/special")),
@@ -565,6 +653,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "specified scheme (e.g. the Content-Type header for external content accessed via http).",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy")),
                 new Header(SLUG, info.getId()));
@@ -584,6 +676,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "type of the external content, if provided. If there is no type attribute: " +
                         "Servers may use a default media type.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUriWithNoType, "proxy")),
@@ -606,6 +702,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "Servers may reject the request with a 4xx range status code.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUriWithNoType, "proxy")),
                 new Header(SLUG, info.getId()));
@@ -623,6 +723,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "type of the external content, if provided. Any Content-Type header in the request should be " +
                         "ignored.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "proxy", "text/special")),
@@ -647,6 +751,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "ignored.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         // Providing external content which does not return Content-Type
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUriWithNoType, "proxy", "text/special")),
@@ -668,6 +776,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
                         "required by the LDP-NR interaction model in this specification.",
                 "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String location = createExternalBinary(uri, info.getId(), "proxy", null);
 
@@ -693,6 +805,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "header in response to \"OPTIONS\" request.",
                 "https://fedora.info/2018/06/25/spec/#external-content-options", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         doOptions(uri).then()
                 .assertThat().header("Accept-External-Content-Handling", is(notNullValue()));
     }
@@ -706,6 +822,10 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers supporting \"redirect\" external content types MUST correctly respond to the " +
                         "\"Want-Digest\" header.",
                 "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final String location = createExternalBinary(uri, info.getId(), "redirect", null);
 
@@ -728,6 +848,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "\"Want-Digest\" header.",
                 "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final String location = createExternalBinary(uri, info.getId(), "proxy", null);
 
         final String checksum = "md5;q=0.3,sha;q=1";
@@ -749,6 +873,10 @@ public class ExternalBinaryContent extends AbstractTest {
                         "must have status code of either 302 (Found) or 307 (Temporary Redirect)",
                 "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
 
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
+
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "redirect")),
                 new Header(SLUG, info.getId()));
@@ -767,6 +895,10 @@ public class ExternalBinaryContent extends AbstractTest {
                 "A successful response to a HEAD request for external content with handling of redirect " +
                         "must have status code of either 302 (Found) or 307 (Temporary Redirect)",
                 "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+
+        if (!externalContentSupported(uri)) {
+            throw new SkipException("External Binaries are NOT supported");
+        }
 
         final Headers headers = new Headers(
                 new Header(LINK, externalContentHeader(externalUri, "redirect")),
