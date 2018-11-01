@@ -88,19 +88,18 @@ public class AbstractTest {
     /**
      * setup
      */
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setup() {
         ps = TestSuiteGlobals.logFile();
         ps.append("************************************************\n");
         ps.append("**** Test Start ********************************\n");
         ps.append("************************************************\n");
-
     }
 
     /**
      * tearDown
      */
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
         ps.append("\n************************************************");
         ps.append("\n**** Test End **********************************");

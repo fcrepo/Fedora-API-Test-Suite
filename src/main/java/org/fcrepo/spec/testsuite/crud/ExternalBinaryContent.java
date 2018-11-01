@@ -95,7 +95,7 @@ public class ExternalBinaryContent extends AbstractTest {
     /**
      * Stop the mock server
      */
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void stopServer() {
         wireMockServer.stop();
     }

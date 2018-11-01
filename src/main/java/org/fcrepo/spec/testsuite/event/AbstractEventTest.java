@@ -26,6 +26,7 @@ import javax.jms.Session;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestParameters;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
 /**
  * Abstract Event testing class.
@@ -35,7 +36,7 @@ import org.testng.annotations.AfterClass;
  */
 public class AbstractEventTest extends AbstractTest {
 
-    private final ConnectionFactory connFactory;
+    private ConnectionFactory connFactory;
 
     protected Connection connection;
 
@@ -43,17 +44,17 @@ public class AbstractEventTest extends AbstractTest {
 
     protected MessageConsumer consumer;
 
-    private final String queueName;
+    private String queueName;
 
-    private final String topicName;
+    private String topicName;
 
     /**
-     * Constructor
-     * @throws JMSException unable to create connection.
+     * Setup the messaging connection and queues/topics
+     *
+     * @throws JMSException on error
      */
-    public AbstractEventTest()
-            throws JMSException {
-        super();
+    @BeforeClass(alwaysRun = true)
+    public void beforeClass() throws JMSException {
         final TestParameters params = TestParameters.get();
         final String queue = params.getQueueName();
         final String topic  = params.getTopicName();
@@ -98,7 +99,7 @@ public class AbstractEventTest extends AbstractTest {
      *
      * @throws JMSException error closing connections.
      */
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     public void closeConnection() throws JMSException {
         if (session != null) {
             session.close();
