@@ -75,13 +75,6 @@ public class NotificationTest extends AbstractEventTest {
             ldpIndirectContainer);
 
     /**
-     * Constructor
-     * @throws JMSException
-     */
-    public NotificationTest() throws JMSException {
-        super();
-    }
-    /**
      * 6.1 Notification Events
      * @throws JMSException problems connecting to broker
      * @throws InterruptedException interrupt the thread.sleep
