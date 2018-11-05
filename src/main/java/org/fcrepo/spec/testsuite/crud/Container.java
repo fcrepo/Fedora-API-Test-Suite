@@ -28,6 +28,7 @@ import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import static org.fcrepo.spec.testsuite.Constants.DIRECT_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.Constants.INDIRECT_CONTAINER_BODY;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -71,13 +72,17 @@ public class Container extends AbstractTest {
     }
 
     private void skipIfDirectContainersNotSupported() {
-        if (clientErrorRange().matches(createDirectContainerUnverifed(uri, "").getStatusCode())) {
+        final String membershipResource = getLocation(doPost(uri));
+        if (clientErrorRange().matches(createDirectContainerUnverified(uri, DIRECT_CONTAINER_BODY
+            .replace("%membershipResource%", membershipResource)).getStatusCode())) {
             throw new SkipException("This implementation does not support DirectContainers");
         }
     }
 
     private void skipIfIndirectContainersNotSupported() {
-        if (clientErrorRange().matches(createIndirectContainerUnverifed(uri, "").getStatusCode())) {
+        final String membershipResource = getLocation(doPost(uri));
+        if (clientErrorRange().matches(createIndirectContainerUnverified(uri, INDIRECT_CONTAINER_BODY
+            .replace("%membershipResource%", membershipResource)).getStatusCode())) {
             throw new SkipException("This implementation does not support IndirectContainers");
         }
     }
@@ -150,7 +155,7 @@ public class Container extends AbstractTest {
                 .replace("dcterms:hasPart", "ldp:contains");
 
         // Test if ldp:contains is an allowed `hasMemberRelation`
-        final Response direct = createDirectContainerUnverifed(getLocation(base), directBody);
+        final Response direct = createDirectContainerUnverified(getLocation(base), directBody);
         if (direct.getStatusCode() == 409) {
             verifyConstraintHeader(direct);
 
