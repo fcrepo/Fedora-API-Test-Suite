@@ -50,7 +50,10 @@ public class StateToken extends AbstractTest {
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
-        checkStateTokensSupported(getResponse);
+
+        //throw skip exception if state token not supported
+        skipIfStateTokenNotSupported(getResponse);
+
         final String value = getResponse.getHeader(STATE_TOKEN);
         assertNotNull(STATE_TOKEN + " must not be null.", value);
         final String sparqlUpdate =
@@ -60,12 +63,10 @@ public class StateToken extends AbstractTest {
                      doGet(resourceUri).header(STATE_TOKEN));
     }
 
-    private void checkStateTokensSupported(final Response response) throws SkipException {
+    private void skipIfStateTokenNotSupported(final Response response) throws SkipException {
         if (!isStateTokenSupported(response)) {
             throw new SkipException("This implementation does not support " + STATE_TOKEN);
         }
-
-        return;
     }
 
     private boolean isStateTokenSupported(final Response response) {
@@ -87,7 +88,10 @@ public class StateToken extends AbstractTest {
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response headResponse = doHead(resourceUri);
-        checkStateTokensSupported(headResponse);
+
+        //throw skip exception if state token not supported
+        skipIfStateTokenNotSupported(headResponse);
+
         final String value = headResponse.getHeader(STATE_TOKEN);
         assertNotNull(STATE_TOKEN + " must not be null.", value);
         final String sparqlUpdate =
@@ -107,7 +111,7 @@ public class StateToken extends AbstractTest {
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value. If an implementation does not support state tokens, it " +
                                         "may ignore any X-If-State-Token header in HTTP PATCH requests.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-state-token", ps);
+                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
@@ -133,11 +137,14 @@ public class StateToken extends AbstractTest {
                                         "rejected with a 412 (Precondition Failed) response if the implementation " +
                                         "supports state tokens, but the client-supplied value does not match the " +
                                         "resource's current state token.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-state-token", ps);
+                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
-        checkStateTokensSupported(getResponse);
+
+        //throw skip exception if state token not supported
+        skipIfStateTokenNotSupported(getResponse);
+
         final String value = getResponse.getHeader(STATE_TOKEN);
         assertNotNull(STATE_TOKEN + " must not be null.", value);
         final String sparqlUpdate =
@@ -157,7 +164,7 @@ public class StateToken extends AbstractTest {
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value. If an implementation does not support state tokens, it " +
                                         "may ignore any X-If-State-Token header in HTTP PUT requests.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-state-token", ps);
+                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
@@ -182,11 +189,14 @@ public class StateToken extends AbstractTest {
                                         "rejected with a 412 (Precondition Failed) response if the implementation " +
                                         "supports state tokens, but the client-supplied value does not match the " +
                                         "resource's current state token.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-state-token", ps);
+                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
-        checkStateTokensSupported(getResponse);
+
+        //throw skip exception if state token not supported
+        skipIfStateTokenNotSupported(getResponse);
+
         final String value = getResponse.getHeader(STATE_TOKEN);
         assertNotNull(STATE_TOKEN + " must not be null.", value);
         final String responseTxt = getResponse.getBody().asString();
