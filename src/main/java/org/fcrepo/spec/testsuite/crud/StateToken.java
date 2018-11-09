@@ -104,9 +104,35 @@ public class StateToken extends AbstractTest {
     /**
      * 3.10.2-A
      */
+    @Test(groups = {"MUST"})
+    public void goodStateTokenOnPatchWhenStateTokensSupported() {
+        final TestInfo info = setupTest("3.10.2-A",
+                                        "A client may include the X-If-State-Token header field in a PATCH request to" +
+                                        " make the request conditional on the resource's current state token matching" +
+                                        " the client's value.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+        final Response createResponse = createBasicContainer(uri, info.getId());
+        final String resourceUri = getLocation(createResponse);
+        final Response getResponse = doGet(resourceUri);
+
+        //throw skip exception if state token not supported
+        skipIfStateTokenNotSupported(getResponse);
+
+        final String value = getResponse.getHeader(STATE_TOKEN);
+        assertNotNull(STATE_TOKEN + " must not be null.", value);
+        final String sparqlUpdate =
+            "INSERT { <> <http://purl.org/dc/elements/1.1/title> \"test\" . } WHERE {} ";
+        doPatch(resourceUri, new Headers(new Header(IF_STATE_TOKEN, value),
+                                         new Header("Content-Type", "application/sparql-update")),
+                sparqlUpdate);
+    }
+
+    /**
+     * 3.10.2-B
+     */
     @Test(groups = {"MAY"})
     public void badStateTokenOnPatchWhenStateTokensIgnored() {
-        final TestInfo info = setupTest("3.10.2-A",
+        final TestInfo info = setupTest("3.10.2-B",
                                         "A client may include the X-If-State-Token header field in a PATCH request to" +
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value. If an implementation does not support state tokens, it " +
@@ -125,11 +151,11 @@ public class StateToken extends AbstractTest {
     }
 
     /**
-     * 3.10.2-B
+     * 3.10.2-C
      */
     @Test(groups = {"MUST"})
     public void badStateTokenOnPatchWhenStateTokensSupported() {
-        final TestInfo info = setupTest("3.10.2-B",
+        final TestInfo info = setupTest("3.10.2-C",
                                         "A client may include the X-If-State-Token header field in a PATCH request to" +
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value.  An HTTP " +
@@ -154,12 +180,40 @@ public class StateToken extends AbstractTest {
                           sparqlUpdate).then().statusCode(412);
     }
 
+
     /**
-     * 3.10.2-C
+     * 3.10.2-D
+     */
+    @Test(groups = {"MUST"})
+    public void goodStateTokenOnPutSucceedsWhenStateTokensSupported() {
+        final TestInfo info = setupTest("3.10.2-D",
+                                        "A client may include the X-If-State-Token header field in a PUT request to" +
+                                        " make the request conditional on the resource's current state token matching" +
+                                        " the client's value.",
+                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+        final Response createResponse = createBasicContainer(uri, info.getId());
+        final String resourceUri = getLocation(createResponse);
+        final Response getResponse = doGet(resourceUri);
+
+        //throw skip exception if state token not supported
+        skipIfStateTokenNotSupported(getResponse);
+
+        final String value = getResponse.getHeader(STATE_TOKEN);
+        assertNotNull(STATE_TOKEN + " must not be null.", value);
+        final String responseTxt = getResponse.getBody().asString();
+
+        final String newBody = responseTxt + "\n<> <http://example.org/test> \"any value\".";
+
+        doPut(resourceUri, new Headers(new Header(IF_STATE_TOKEN, value),
+                                       new Header("Content-Type", "text/turtle")), newBody);
+    }
+
+    /**
+     * 3.10.2-E
      */
     @Test(groups = {"MAY"})
     public void badStateTokenOnPutWhenStateTokensIgnored() {
-        final TestInfo info = setupTest("3.10.2-C",
+        final TestInfo info = setupTest("3.10.2-E",
                                         "A client may include the X-If-State-Token header field in a PUT request to" +
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value. If an implementation does not support state tokens, it " +
@@ -177,11 +231,11 @@ public class StateToken extends AbstractTest {
     }
 
     /**
-     * 3.10.2-D
+     * 3.10.2-F
      */
     @Test(groups = {"MUST"})
     public void badStateTokenOnPutWhenStateTokensSupported() {
-        final TestInfo info = setupTest("3.10.2-D",
+        final TestInfo info = setupTest("3.10.2-F",
                                         "A client may include the X-If-State-Token header field in a PUT request to" +
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value.  An HTTP " +
@@ -200,9 +254,10 @@ public class StateToken extends AbstractTest {
         final String value = getResponse.getHeader(STATE_TOKEN);
         assertNotNull(STATE_TOKEN + " must not be null.", value);
         final String responseTxt = getResponse.getBody().asString();
+        final String newBody = responseTxt + "\n<> <http://example.org/test> \"any value\".";
+
         doPutUnverified(resourceUri, new Headers(new Header(IF_STATE_TOKEN, "random-token"),
                                                  new Header("Content-Type", "text/turtle")),
-                        responseTxt).then().statusCode(412);
+                        newBody).then().statusCode(412);
     }
-
 }
