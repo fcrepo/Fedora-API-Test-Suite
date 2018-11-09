@@ -29,6 +29,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Date;
 
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.rendersnake.HtmlCanvas;
@@ -71,6 +73,22 @@ public class HtmlReporter implements IReporter {
                 html.title().content("Fedora API Test Suite Report")._head()
                     .body();
                 html.h1().content("Fedora API Test Suite Summary");
+
+                final Properties properties = new Properties();
+                properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
+                final String version = properties.getProperty("version");
+                final Date date = new Date();
+
+                html.table(class_("indented"));
+                html.tr();
+                html.td().a().write("Date")._a()._td();
+                html.td().content(date.toString());
+                html._tr();
+                html.tr();
+                html.td().a().write("Version")._a()._td();
+                html.td().content(version);
+                html._tr();
+                html._table();
 
                 // Getting the results for the said suite
                 final Map<String, ISuiteResult> suiteResults = suite.getResults();
