@@ -24,9 +24,11 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import static org.fcrepo.spec.testsuite.Constants.DIRECT_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.Constants.INDIRECT_CONTAINER_BODY;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -35,15 +37,56 @@ import static org.testng.Assert.assertTrue;
 public class Container extends AbstractTest {
 
     /**
-     * 3.1.1-A
+     * 3.1.1-A-1
      */
     @Test(groups = {"MUST"})
     public void createLDPC() {
-        final TestInfo info = setupTest("3.1.1-A",
+        final TestInfo info = setupTest("3.1.1-A-1",
                                         "Implementations must support the creation and management of [LDP] Containers.",
                                         "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
         createBasicContainer(uri, info);
     }
+
+    /**
+     * 3.1.1-A-2
+     */
+    @Test(groups = {"MAY"})
+    public void createLDPDirectContainer() {
+        final TestInfo info = setupTest("3.1.1-A-2",
+                                        "Implementations may support the creation and management of [LDP] Direct " +
+                                        "Containers",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
+        skipIfDirectContainersNotSupported();
+    }
+
+    /**
+     * 3.1.1-A-3
+     */
+    @Test(groups = {"MAY"})
+    public void createLDPIndirectContainer() {
+        final TestInfo info = setupTest("3.1.1-A-3",
+                                        "Implementations may support the creation and management of [LDP] Indirect " +
+                                        "Containers",
+                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
+        skipIfIndirectContainersNotSupported();
+    }
+
+    private void skipIfDirectContainersNotSupported() {
+        final String membershipResource = getLocation(doPost(uri));
+        if (clientErrorRange().matches(createDirectContainerUnverified(uri, DIRECT_CONTAINER_BODY
+            .replace("%membershipResource%", membershipResource)).getStatusCode())) {
+            throw new SkipException("This implementation does not support DirectContainers");
+        }
+    }
+
+    private void skipIfIndirectContainersNotSupported() {
+        final String membershipResource = getLocation(doPost(uri));
+        if (clientErrorRange().matches(createIndirectContainerUnverified(uri, INDIRECT_CONTAINER_BODY
+            .replace("%membershipResource%", membershipResource)).getStatusCode())) {
+            throw new SkipException("This implementation does not support IndirectContainers");
+        }
+    }
+
 
     /**
      * 3.1.1-B
@@ -112,7 +155,7 @@ public class Container extends AbstractTest {
                 .replace("dcterms:hasPart", "ldp:contains");
 
         // Test if ldp:contains is an allowed `hasMemberRelation`
-        final Response direct = createDirectContainerUnverifed(getLocation(base), directBody);
+        final Response direct = createDirectContainerUnverified(getLocation(base), directBody);
         if (direct.getStatusCode() == 409) {
             verifyConstraintHeader(direct);
 

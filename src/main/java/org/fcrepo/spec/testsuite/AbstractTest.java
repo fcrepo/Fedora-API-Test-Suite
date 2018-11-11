@@ -189,7 +189,7 @@ public class AbstractTest {
     }
 
     protected Response createDirectContainer(final String uri, final String body) {
-        final Response response = createDirectContainerUnverifed(uri, body);
+        final Response response = createDirectContainerUnverified(uri, body);
 
         response.then().statusCode(201);
         registerTestResource(response);
@@ -197,10 +197,17 @@ public class AbstractTest {
         return response;
     }
 
-    protected Response createDirectContainerUnverifed(final String uri, final String body) {
+    protected Response createDirectContainerUnverified(final String uri, final String body) {
         final Headers headers = new Headers(
                 new Header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\""),
                 new Header("Content-Type", "text/turtle"));
+        return doPostUnverified(uri, headers, body);
+    }
+
+    protected Response createIndirectContainerUnverified(final String uri, final String body) {
+        final Headers headers = new Headers(
+            new Header("Link", "<http://www.w3.org/ns/ldp#IndirectContainer>; rel=\"type\""),
+            new Header("Content-Type", "text/turtle"));
         return doPostUnverified(uri, headers, body);
     }
 
@@ -228,10 +235,6 @@ public class AbstractTest {
 
     protected Response doPostUnverified(final String uri, final Headers headers, final String body) {
         return doPostUnverified(uri, headers, body, true);
-    }
-
-    protected Response doPostUnverified(final String uri, final String body) {
-        return doPostUnverified(uri, null, body, true);
     }
 
     protected Response doPostUnverified(final String uri, final Headers headers) {

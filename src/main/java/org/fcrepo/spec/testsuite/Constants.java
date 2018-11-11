@@ -37,9 +37,20 @@ public class Constants {
     public static final String DIRECT_CONTAINER_BODY = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
             + "@prefix dcterms: <http://purl.org/dc/terms/> ."
             + "<> dcterms:title 'A Direct Container' ; "
-            + "dcterms:description 'This is a direct container for the Fedora ' ;"
+            + "dcterms:description 'This is a direct container for the Fedora API Test Suite' ;"
             + "ldp:membershipResource <%membershipResource%> ;"
             + "ldp:hasMemberRelation dcterms:hasPart ." ;
+
+    public static final String INDIRECT_CONTAINER_BODY = "@prefix ldp: <http://www.w3.org/ns/ldp#> ."
+                                                         + "@prefix dcterms: <http://purl.org/dc/terms/> ."
+                                                         + "<> dcterms:title 'An Indirect Container' ; "
+                                                         + "dcterms:description 'This is an indirect container for the "
+                                                         + "Fedora API Test Suite ' ;"
+                                                         + "ldp:membershipResource <%membershipResource%> ;"
+                                                         + "ldp:hasMemberRelation dcterms:hasPart ;"
+                                                         + "ldp:insertedContentRelation ldp:MemberSubject .";
+
+
 
     public static final String RDF_BODY = "@prefix dc: <http://purl.org/dc/terms/> . "
             + "@prefix foaf: <http://xmlns.com/foaf/0.1/> . "
