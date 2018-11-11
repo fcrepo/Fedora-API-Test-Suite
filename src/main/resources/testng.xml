@@ -54,6 +54,7 @@
       <class name="org.fcrepo.spec.testsuite.crud.HttpPatch"/>
       <class name="org.fcrepo.spec.testsuite.crud.HttpDelete"/>
       <class name="org.fcrepo.spec.testsuite.crud.ExternalBinaryContent"/>
+      <class name="org.fcrepo.spec.testsuite.crud.StateToken"/>
       <class name="org.fcrepo.spec.testsuite.versioning.LdprvHttpGet"/>
       <class name="org.fcrepo.spec.testsuite.versioning.LdprvHttpPut"/>
       <class name="org.fcrepo.spec.testsuite.versioning.LdprmHttpGet"/>
