@@ -17,8 +17,11 @@
  */
 package org.fcrepo.spec.testsuite.authn;
 
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_PASSWORD_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_PASSWORD_PARAM;
+import static org.testng.util.Strings.isNullOrEmpty;
 
 import java.net.URI;
 
@@ -26,7 +29,7 @@ import org.fcrepo.spec.testsuite.TestParameters;
 
 /**
  * This implementation of the Authenticator interface implements Basic Auth by
- * resolving the password associated with the specified WebId based on the passwords
+ * resolving the username and password associated with the specified WebId based on the values
  * supplied via the commandline or YAML parameters file.
  * @author dbernstein
  */
@@ -35,16 +38,21 @@ public class DefaultAuthenticator implements Authenticator {
     public AuthenticationToken createAuthToken(final URI webid) {
         //get username by taking string after the last forward slash.
         final String webidStr = webid.toString();
-        final String username = webidStr.substring(webidStr.lastIndexOf('/') + 1);
         final TestParameters params = TestParameters.get();
+        final String username =
+           webidStr.equals(params.getRootControllerUserWebId()) ? params.getRootControllerUsername() :
+            params.getPermissionlessUsername();
+
         final String password =
-            webid.toString().equals(params.getRootControllerUserWebId()) ? params.getRootControllerUserPassword() :
+            webidStr.equals(params.getRootControllerUserWebId()) ? params.getRootControllerUserPassword() :
             params.getPermissionlessUserPassword();
-        if (password == null) {
+        if (isNullOrEmpty(username) || isNullOrEmpty(password)) {
             throw new RuntimeException(
-                "When using the DefaultAuthenticator you must specify the optional password parameters in the command" +
-                " line, ie --" +
-                ROOT_CONTROLLER_USER_PASSWORD_PARAM + " and --" + PERMISSIONLESS_USER_PASSWORD_PARAM);
+                "When using the DefaultAuthenticator you must specify the optional username and password parameters " +
+                "in the command line, ie --" +
+                ROOT_CONTROLLER_USER_NAME_PARAM + ", --" + ROOT_CONTROLLER_USER_PASSWORD_PARAM + "," +
+                PERMISSIONLESS_USER_NAME_PARAM + ", and --" + PERMISSIONLESS_USER_PASSWORD_PARAM);
+
         }
         return new DefaultAuthToken(username, password);
     }

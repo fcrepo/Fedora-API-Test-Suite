@@ -34,6 +34,8 @@ public class TestParameters {
 
     public final static String PERMISSIONLESS_USER_WEBID_PARAM = "permissionless-user-webid";
 
+    public final static String PERMISSIONLESS_USER_NAME_PARAM = "permissionless-user-name";
+
     public final static String PERMISSIONLESS_USER_PASSWORD_PARAM = "permissionless-user-password";
 
     public final static String PERMISSIONLESS_USER_AUTH_HEADER = "permissionless-user-auth-header-value";
@@ -41,6 +43,8 @@ public class TestParameters {
     public final static String ROOT_CONTROLLER_USER_WEBID_PARAM = "root-controller-user-webid";
 
     public final static String ROOT_CONTROLLER_USER_AUTH_HEADER = "root-controller-user-auth-header-value";
+
+    public final static String ROOT_CONTROLLER_USER_NAME_PARAM = "root-controller-user-name";
 
     public final static String ROOT_CONTROLLER_USER_PASSWORD_PARAM = "root-controller-user-password";
 
@@ -103,6 +107,14 @@ public class TestParameters {
     }
 
     /**
+     * The root controller username
+     * @return the username
+     */
+    public String getRootControllerUsername() {
+        return params.get(ROOT_CONTROLLER_USER_NAME_PARAM);
+    }
+
+    /**
      * The root controller user password
      * @return the password
      */
@@ -125,6 +137,14 @@ public class TestParameters {
 
     public String getPermissionlessUserWebId() {
         return params.get(PERMISSIONLESS_USER_WEBID_PARAM);
+    }
+
+    /**
+     * The permissionless username
+     * @return the username
+     */
+    public String getPermissionlessUsername() {
+        return params.get(PERMISSIONLESS_USER_NAME_PARAM);
     }
 
     /**
