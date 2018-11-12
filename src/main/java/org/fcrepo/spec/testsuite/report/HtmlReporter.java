@@ -147,6 +147,13 @@ public class HtmlReporter implements IReporter {
         displayRequirementRow(passShould, failShould, skipShould, rateShould, "SHOULD");
         displayRequirementRow(passMay, failMay, skipMay, rateMay, "MAY");
 
+        final int passTotal = passMust + passShould + passMay;
+        final int failTotal = failMust + failShould + failMay;
+        final int skipTotal = skipMust + skipShould + skipMay;
+        final String rateTotal = getPassPercentage(passTotal, failTotal);
+
+        displayRequirementRow(passTotal, failTotal, skipTotal, rateTotal, "Total");
+
         html._table();
         html.br();
     }
