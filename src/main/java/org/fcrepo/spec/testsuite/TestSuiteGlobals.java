@@ -192,15 +192,16 @@ public abstract class TestSuiteGlobals {
             details[0] = info.getSpecLink();
             details[1] = outcome;
             details[2] = info.getDescription();
-            details[3] = formatTestLinkText(info);
+            details[3] = info.getId();
             details[4] = getStackTrace(result.getThrowable());
             details[5] = method.getGroups()[0];
+
+            // Ensure that no test IDs have accidentally been duplicated
+            if (results.containsKey(details[3])) {
+                throw new RuntimeException("Test identifier has been duplicated! - " + details[3]);
+            }
             results.put(details[3], details);
         }
-    }
-
-    private static String formatTestLinkText(final TestInfo info) {
-        return info.getId();
     }
 
     /**
