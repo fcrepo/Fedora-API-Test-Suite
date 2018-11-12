@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Date;
 
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.rendersnake.HtmlCanvas;
@@ -74,22 +73,6 @@ public class HtmlReporter implements IReporter {
                     .body();
                 html.h1().content("Fedora API Test Suite Summary");
 
-                final Properties properties = new Properties();
-                properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
-                final String version = properties.getProperty("version");
-                final Date date = new Date();
-
-                html.table(class_("indented"));
-                html.tr();
-                html.td().a().write("Date")._a()._td();
-                html.td().content(date.toString());
-                html._tr();
-                html.tr();
-                html.td().a().write("Version")._a()._td();
-                html.td().content(version);
-                html._tr();
-                html._table();
-
                 // Getting the results for the said suite
                 final Map<String, ISuiteResult> suiteResults = suite.getResults();
                 final ISuiteResult suiteResult = suiteResults.get("Fedora API Specification Tests");
@@ -109,6 +92,9 @@ public class HtmlReporter implements IReporter {
 
                 //Display methods summary
                 makeMethodSummaryTable();
+
+                // Add footer
+                displayFooter();
 
                 // send html to a file
                 createWriter(html.toHtml());
@@ -189,6 +175,18 @@ public class HtmlReporter implements IReporter {
         html.td().span(class_("SKIPPED")).content(skip)._td();
         html.td().content(rate);
         html._tr();
+    }
+
+    private void displayFooter() throws IOException {
+        final Properties properties = new Properties();
+        properties.load(this.getClass().getClassLoader().getResourceAsStream("project.properties"));
+        final String version = properties.getProperty("version");
+        final String buildNumber = properties.getProperty("buildNumber");
+        final String buildTimestamp = properties.getProperty("buildTimestamp");
+
+        html.footer();
+        html.p().content("Release: " + version + " | #" + buildNumber + " (" + buildTimestamp + ")");
+        html._footer();
     }
 
     private void writeCss() throws IOException {
