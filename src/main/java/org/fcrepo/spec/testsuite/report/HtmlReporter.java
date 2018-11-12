@@ -17,6 +17,7 @@
  */
 package org.fcrepo.spec.testsuite.report;
 
+import static org.fcrepo.spec.testsuite.TestSuiteGlobals.orderTestsResults;
 import static org.rendersnake.HtmlAttributesFactory.NO_ESCAPE;
 import static org.rendersnake.HtmlAttributesFactory.class_;
 import static org.rendersnake.HtmlAttributesFactory.href;
@@ -25,9 +26,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Date;
@@ -35,6 +35,7 @@ import java.util.Date;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.StringResource;
+import org.springframework.format.number.PercentFormatter;
 import org.testng.IReporter;
 import org.testng.IResultMap;
 import org.testng.ISuite;
@@ -48,8 +49,6 @@ import org.testng.xml.XmlSuite;
  */
 public class HtmlReporter implements IReporter {
 
-    private HashMap<String, Integer> failClasses;
-    private HashMap<String, Integer> skipClasses;
     private IResultMap passedTests;
     private IResultMap failedTests;
     private IResultMap skippedTests;
@@ -62,6 +61,7 @@ public class HtmlReporter implements IReporter {
      * @param suites
      * @param outputDirectory
      */
+    @Override
     public void generateReport(final List<XmlSuite> xmlSuites,
                                final List<ISuite> suites, final String outputDirectory) {
         try {
@@ -92,29 +92,103 @@ public class HtmlReporter implements IReporter {
 
                 // Getting the results for the said suite
                 final Map<String, ISuiteResult> suiteResults = suite.getResults();
-                for (ISuiteResult sr : suiteResults.values()) {
-                    final ITestContext tc = sr.getTestContext();
-                    passedTests = tc.getPassedTests();
-                    failedTests = tc.getFailedTests();
-                    skippedTests = tc.getSkippedTests();
+                final ISuiteResult suiteResult = suiteResults.get("Fedora API Specification Tests");
+
+                if (suiteResult == null) {
+                    throw new RuntimeException("Unable to find expected test-suite: " +
+                            "'Fedora API Specification Tests', configured in the <suite> tag of 'testng.xml'!");
                 }
 
-                final HashMap<String, Integer> passClasses = getClasses(passedTests);
-                failClasses = getClasses(failedTests);
-                skipClasses = getClasses(skippedTests);
+                final ITestContext tc = suiteResult.getTestContext();
+                passedTests = tc.getPassedTests();
+                failedTests = tc.getFailedTests();
+                skippedTests = tc.getSkippedTests();
 
-                html.br();
+                // Display results summary
+                displayResultsSummary();
 
                 //Display methods summary
-                displayMethodsSummary(suites);
+                makeMethodSummaryTable();
 
                 // send html to a file
                 createWriter(html.toHtml());
             }
-        } catch (IOException | InvocationTargetException | IllegalAccessException | InstantiationException |
-                NoSuchMethodException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void displayResultsSummary() throws IOException {
+        html.table(class_("indented"));
+        html.tr().th().content("Req Level");
+        html.th().content("Num Pass");
+        html.th().content("Num Fail");
+        html.th().content("Num Skip");
+        html.th().content("% Pass")._tr();
+
+        // Get all three requirement levels
+        final int passMust = getNumTestsByRequirement(passedTests, "MUST");
+        final int passShould = getNumTestsByRequirement(passedTests, "SHOULD");
+        final int passMay = getNumTestsByRequirement(passedTests, "MAY");
+
+        final int failMust = getNumTestsByRequirement(failedTests, "MUST");
+        final int failShould = getNumTestsByRequirement(failedTests, "SHOULD");
+        final int failMay = getNumTestsByRequirement(failedTests, "MAY");
+
+        final int skipMust = getNumTestsByRequirement(skippedTests, "MUST");
+        final int skipShould = getNumTestsByRequirement(skippedTests, "SHOULD");
+        final int skipMay = getNumTestsByRequirement(skippedTests, "MAY");
+
+        final String rateMust = getPassPercentage(passMust, failMust);
+        final String rateShould = getPassPercentage(passShould, failShould);
+        final String rateMay = getPassPercentage(passMay, failMay);
+
+        displayRequirementRow(passMust, failMust, skipMust, rateMust, "MUST");
+        displayRequirementRow(passShould, failShould, skipShould, rateShould, "SHOULD");
+        displayRequirementRow(passMay, failMay, skipMay, rateMay, "MAY");
+
+        final int passTotal = passMust + passShould + passMay;
+        final int failTotal = failMust + failShould + failMay;
+        final int skipTotal = skipMust + skipShould + skipMay;
+        final String rateTotal = getPassPercentage(passTotal, failTotal);
+
+        displayRequirementRow(passTotal, failTotal, skipTotal, rateTotal, "Total");
+
+        html._table();
+        html.br();
+    }
+
+    private int getNumTestsByRequirement(final IResultMap results, final String req) {
+        int numResults = 0;
+        for (final ITestResult result : results.getAllResults()) {
+            if (req.equalsIgnoreCase(result.getMethod().getGroups()[0])) {
+                numResults++;
+            }
+        }
+        return numResults;
+    }
+
+    private String getPassPercentage(final int pass, final int fail) {
+        if (pass + fail > 0) {
+            final Float number = pass / new Float(pass + fail);
+            final PercentFormatter formatter = new PercentFormatter();
+            return formatter.print(number, Locale.getDefault());
+        }
+        return "0";
+    }
+
+    private void displayRequirementRow(final int pass,
+                                       final int fail,
+                                       final int skip,
+                                       final String rate,
+                                       final String reqLevel) throws IOException {
+        html.tr();
+        html.td().content(reqLevel);
+        html.td().span(class_("PASS")).content(pass)._td();
+        html.td().span(class_("FAIL")).content(fail)._td();
+        html.td().span(class_("SKIPPED")).content(skip)._td();
+        html.td().content(rate);
+        html._tr();
     }
 
     private void writeCss() throws IOException {
@@ -138,49 +212,14 @@ public class HtmlReporter implements IReporter {
         }
     }
 
-    private HashMap<String, Integer> getClasses(final IResultMap tests) {
-        final HashMap<String, Integer> classes = new HashMap<>();
-        for (ITestResult iTestResult : tests.getAllResults()) {
-            String name = iTestResult.getTestClass().getName();
-            name = name.substring(name.lastIndexOf(".") + 1);
-
-            if (!classes.containsKey(name)) {
-                classes.put(name, 1);
-            } else {
-                classes.put(name, classes.get(name) + 1);
-            }
-        }
-        return classes;
-    }
-
-    private void displayMethodsSummary(final List<ISuite> suites) throws
-        IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        for (ISuite suite : suites) {
-            final Map<String, ISuiteResult> r = suite.getResults();
-            for (ISuiteResult r2 : r.values()) {
-                final ITestContext testContext = r2.getTestContext();
-                makeMethodsList(testContext);
-            }
-        }
-    }
-
-    private void makeMethodsList(final ITestContext testContext) throws
-        IOException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        final IResultMap failed = testContext.getFailedTests();
-        final IResultMap passed = testContext.getPassedTests();
-        final IResultMap skipped = testContext.getSkippedTests();
-        makeMethodSummaryTable(passed, skipped, failed);
-        html.br();
-    }
-
-    private void makeMethodSummaryTable(final IResultMap passed, final IResultMap skipped, final IResultMap failed)
+    private void makeMethodSummaryTable()
         throws IOException {
         html.table(class_("indented"));
         html.tr().th().content("Specification Section");
         html.th().content("Req Level");
         html.th().content("Result");
         html.th().content("Test Description")._tr();
-        final Map<String, String[]> results = TestSuiteGlobals.orderTestsResults(passed, skipped, failed);
+        final Map<String, String[]> results = orderTestsResults(passedTests, skippedTests, failedTests);
 
         for (String[] r : results.values()) {
             html.tr();
@@ -192,5 +231,6 @@ public class HtmlReporter implements IReporter {
         }
 
         html._table();
+        html.br();
     }
 }
