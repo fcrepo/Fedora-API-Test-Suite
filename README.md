@@ -17,11 +17,13 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
 
 ## Options
 * `rooturl` The repository base URL, e.g., `http://localhost:8080/rest/`
-* `root-controller-user-webid` An user with admin access to the repository.
-* `root-controller-user-password` The admin user's password.
+* `root-controller-user-webid` A URI representing the WebID of a user with read, write, and control permissions on root container (corresponding with either root-controller-user-name and root-controller-user-password, or root-controller-user-auth-header-value).
+* `root-controller-user-name` Username of user associated with root-controller-user-webid
+* `root-controller-user-password` Password of user associated with root-controller-user-webid 
 * `root-controller-user-auth-header-value` "Authorization" header value for a user with read, write, and control.  When present, this value will be added to the request effectively overriding Authenticator implementations, custom or default, found in the classpath.
-* `permissionless-user-webid` The username to connect to the repository with
-* `permissionless-user-password` The password to connect to the repository with
+* `permissionless-user-webid` A URI representing the WebID of a user with no permissions (corresponding with either permissionless-user-name and permissionless-user-password, or permissionless-user-auth-header-value). 
+* `permissionless-user-name` Username of user associated with the permissionless-user-webid
+* `permissionless-user-password` Password of user associated with permissionless-user-webid
 * `permissionless-user-auth-header-value` "Authorization" header value for a user with no preset permissions.  When present, this value will be added to the request, effectively overriding Authenticator implementations, custom or default, found in the classpath.
 * `testngxml` (optional) The custom testng.xml configuration ([documentation](http://testng.org/doc/documentation-main.html#testng-xml))
   * See example [testng.xml](https://github.com/fcrepo/Fedora-API-Test-Suite/tree/master/src/main/resources/testng.xml)

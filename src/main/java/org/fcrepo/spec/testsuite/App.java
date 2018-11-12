@@ -22,10 +22,12 @@ import static org.fcrepo.spec.testsuite.TestParameters.BROKER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.CONFIG_FILE_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.CONSTRAINT_ERROR_GENERATOR_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_AUTH_HEADER;
+import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_PASSWORD_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_WEBID_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.QUEUE_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_AUTH_HEADER;
+import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_PASSWORD_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.ROOT_CONTROLLER_USER_WEBID_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.ROOT_URL_PARAM;
@@ -78,9 +80,11 @@ public class App {
     static {
         configArgs.put(ROOT_URL_PARAM, true);
         configArgs.put(PERMISSIONLESS_USER_WEBID_PARAM, true);
+        configArgs.put(PERMISSIONLESS_USER_NAME_PARAM, false);
         configArgs.put(PERMISSIONLESS_USER_PASSWORD_PARAM, false);
         configArgs.put(PERMISSIONLESS_USER_AUTH_HEADER, false);
         configArgs.put(ROOT_CONTROLLER_USER_WEBID_PARAM, true);
+        configArgs.put(ROOT_CONTROLLER_USER_NAME_PARAM, false);
         configArgs.put(ROOT_CONTROLLER_USER_PASSWORD_PARAM, false);
         configArgs.put(ROOT_CONTROLLER_USER_AUTH_HEADER, false);
         configArgs.put(TESTNGXML_PARAM, false);
@@ -100,27 +104,36 @@ public class App {
         final Options options = new Options();
         options.addOption(new Option("b", ROOT_URL_PARAM, true, "The root URL of the repository"));
         options.addOption(new Option("u", PERMISSIONLESS_USER_WEBID_PARAM, true,
-                                     "A URI representing the WebID of a user with no permissions."));
+                                     "A URI representing the WebID of a user with no permissions  (corresponding with" +
+                                     " either " + PERMISSIONLESS_USER_NAME_PARAM + " and " +
+                                     PERMISSIONLESS_USER_PASSWORD_PARAM + ", or " +
+                                     PERMISSIONLESS_USER_AUTH_HEADER + ")."));
         options.addOption(
-            new Option("p", PERMISSIONLESS_USER_PASSWORD_PARAM, true, "Password of user with basic user role"));
+            new Option("p", PERMISSIONLESS_USER_PASSWORD_PARAM, true,
+                       "Password associated with " + PERMISSIONLESS_USER_NAME_PARAM));
         options.addOption(new Option("a", ROOT_CONTROLLER_USER_WEBID_PARAM, true,
                                      "A URI representing the WebID of a user with read, write, and control" +
-                                     " permissions on root container."));
+                                     " permissions on root container  (corresponding with either " +
+                                     ROOT_CONTROLLER_USER_NAME_PARAM + " and " + ROOT_CONTROLLER_USER_PASSWORD_PARAM +
+                                     ", or " +
+                                     ROOT_CONTROLLER_USER_AUTH_HEADER + ")."));
         options.addOption(
-            new Option("s", ROOT_CONTROLLER_USER_PASSWORD_PARAM, true, "Password of user with admin role"));
-
+            new Option("A", ROOT_CONTROLLER_USER_NAME_PARAM, true,
+                       "Username associated with " + ROOT_CONTROLLER_USER_WEBID_PARAM));
+        options.addOption(
+            new Option("s", ROOT_CONTROLLER_USER_PASSWORD_PARAM, true,
+                       "Password of user associated with " + ROOT_CONTROLLER_USER_WEBID_PARAM));
         options.addOption(new Option("R", ROOT_CONTROLLER_USER_AUTH_HEADER, true,
                                      "\"Authorization\" header value for a user with read, write, and control. " +
                                      "When present, this value will be added to the request effectively " +
                                      "overriding Authenticator implementations, custom or default, found in the " +
                                      "classpath."));
-
         options.addOption(new Option("P", PERMISSIONLESS_USER_AUTH_HEADER, true,
                                      "\"Authorization\" header value for a user with no permissions. " +
                                      "When present, this value will be added to the request effectively " +
                                      "overriding Authenticator implementations, custom or default, found in the " +
                                      "classpath."));
-        options.addOption( new Option("x", TESTNGXML_PARAM, true, "TestNG XML file"));
+        options.addOption(new Option("x", TESTNGXML_PARAM, true, "TestNG XML file"));
         options.addOption(new Option("r", REQUIREMENTS_PARAM, true,
                                      "Requirement levels. One or more of the following, " +
                                      "separated by ',': [ALL|MUST|SHOULD|MAY]"));
