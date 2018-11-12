@@ -197,7 +197,7 @@ public class TestParameters {
 
     /**
      * Get the name of the implementation under test.
-     * @return the name of the implemenation
+     * @return the name of the implementation
      */
     public String getImplementationName() {
         return params.get(IMPLEMENTATION_NAME_PARAM);
@@ -205,7 +205,7 @@ public class TestParameters {
 
     /**
      * Get the version of the implementation under test.
-     * @return the version of the implemenation
+     * @return the version of the implementation
      */
     public String getImplementationVersion() {
         return params.get(IMPLEMENTATION_VERSION_PARAM);
