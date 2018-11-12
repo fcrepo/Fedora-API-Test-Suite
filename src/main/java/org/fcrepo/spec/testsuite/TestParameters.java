@@ -56,6 +56,10 @@ public class TestParameters {
 
     public final static String AUTHENTICATOR_CLASS_PARAM = "auth-class";
 
+    public final static String IMPLEMENTATION_NAME_PARAM = "implementation-name";
+
+    public final static String IMPLEMENTATION_VERSION_PARAM = "implementation-version";
+
     private static TestParameters instance;
 
     private Map<String, String> params = null;
@@ -189,5 +193,21 @@ public class TestParameters {
      */
     public String getConstraintErrorGenerator() {
         return params.get(CONSTRAINT_ERROR_GENERATOR_PARAM);
+    }
+
+    /**
+     * Get the name of the implementation under test.
+     * @return the name of the implemenation
+     */
+    public String getImplementationName() {
+        return params.get(IMPLEMENTATION_NAME_PARAM);
+    }
+
+    /**
+     * Get the version of the implementation under test.
+     * @return the version of the implemenation
+     */
+    public String getImplementationVersion() {
+        return params.get(IMPLEMENTATION_VERSION_PARAM);
     }
 }

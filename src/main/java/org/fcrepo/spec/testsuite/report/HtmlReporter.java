@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.fcrepo.spec.testsuite.TestParameters;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.StringResource;
@@ -72,6 +73,9 @@ public class HtmlReporter implements IReporter {
                 html.title().content("Fedora API Test Suite Report")._head()
                     .body();
                 html.h1().content("Fedora API Test Suite Summary");
+
+                html.h2().content("for " + TestParameters.get().getImplementationName() + " " +
+                                  TestParameters.get().getImplementationVersion());
 
                 // Getting the results for the said suite
                 final Map<String, ISuiteResult> suiteResults = suite.getResults();
