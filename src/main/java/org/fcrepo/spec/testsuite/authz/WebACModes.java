@@ -38,7 +38,7 @@ public class WebACModes extends AbstractAuthzTest {
      */
     @Test(groups = {"MUST"})
     public void readAllowedHEAD() {
-        final TestInfo info = setupTest("5.0-F",
+        final TestInfo info = setupTest("5.0-G-1",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs HEAD.",
@@ -56,7 +56,7 @@ public class WebACModes extends AbstractAuthzTest {
      */
     @Test(groups = {"MUST"})
     public void readAllowedGET() {
-        final TestInfo info = setupTest("5.0-G",
+        final TestInfo info = setupTest("5.0-G-2",
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs GET.",
