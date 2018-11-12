@@ -35,11 +35,11 @@ import org.testng.annotations.Test;
 public class Ldpnr extends AbstractTest {
 
     /**
-     * 3.1.2.-A
+     * 3.1.4-A
      */
     @Test(groups = {"SHOULD"})
     public void ldpnrCreationLinkType() {
-        final TestInfo info = setupTest("3.1.2-A",
+        final TestInfo info = setupTest("3.1.4-A",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
                                         +
@@ -93,11 +93,11 @@ public class Ldpnr extends AbstractTest {
     }
 
     /**
-     * 3.1.2.-B
+     * 3.1.4-B
      */
     @Test(groups = {"SHOULD"})
     public void ldpnrCreationWrongLinkType() {
-        final TestInfo info = setupTest("3.1.2-B",
+        final TestInfo info = setupTest("3.1.4-B",
                                         "If, in a successful resource creation request, a Link: rel=\"type\" request " +
                                         "header specifies"
                                         +
