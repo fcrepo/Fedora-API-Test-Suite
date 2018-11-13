@@ -21,6 +21,8 @@ import static org.fcrepo.spec.testsuite.TestParameters.AUTHENTICATOR_CLASS_PARAM
 import static org.fcrepo.spec.testsuite.TestParameters.BROKER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.CONFIG_FILE_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.CONSTRAINT_ERROR_GENERATOR_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.IMPLEMENTATION_NAME_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.IMPLEMENTATION_VERSION_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_AUTH_HEADER;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_PASSWORD_PARAM;
@@ -93,6 +95,8 @@ public class App {
         configArgs.put(QUEUE_NAME_PARAM, false);
         configArgs.put(TOPIC_NAME_PARAM, false);
         configArgs.put(CONSTRAINT_ERROR_GENERATOR_PARAM, false);
+        configArgs.put(IMPLEMENTATION_NAME_PARAM, false);
+        configArgs.put(IMPLEMENTATION_VERSION_PARAM, false);
     }
 
     /**
@@ -153,6 +157,11 @@ public class App {
                                   "the 'authenticators' directory, it will be discovered and used automatically.  " +
                                   "In other words, if you have only one implementation you don't need to use this " +
                                   "optional parameter."));
+        options.addOption(
+            new Option("w", IMPLEMENTATION_NAME_PARAM, true, "The name of the Fedora implementation being tested."));
+        options.addOption(
+            new Option("v", IMPLEMENTATION_VERSION_PARAM, true,
+                       "The version of the Fedora implementation being tested."));
 
         final CommandLineParser parser = new BasicParser();
         final CommandLine cmd;
@@ -185,6 +194,16 @@ public class App {
                 // Fill in missing parts with blanks
                 params.put(opt, "");
             }
+        }
+
+        if (isNullOrEmpty(params.get(IMPLEMENTATION_NAME_PARAM))) {
+            params.put(IMPLEMENTATION_NAME_PARAM,
+                       "{ implementation name: please use --" + IMPLEMENTATION_NAME_PARAM + " to specify }");
+        }
+
+        if (isNullOrEmpty(params.get(IMPLEMENTATION_VERSION_PARAM))) {
+            params.put(IMPLEMENTATION_VERSION_PARAM,
+                       "{ implementation version: please use --" + IMPLEMENTATION_VERSION_PARAM + " to specify}");
         }
 
         TestParameters.initialize(params);

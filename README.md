@@ -33,6 +33,8 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
 * `site-name` (optional) The above yaml file can contain multiple configurations, this chooses one. Defaults to "default"
 * `constraint-error-generator` (optional)  A file containing a SPARQL query that will trigger a constraint error. If no file is specified, the test suite will use a default constraint error generating test.
 * `auth-class` (optional) The class name of an implementation of the org.fcrepo.spec.testsuite.authn.Authenticator interface.
+* `implementation-name` (optional) The name of the implementation being tested.
+* `implementation-version` (optional) The version of the implementation being tested.
 
 ### Authenticators
 The Fedora Specification does not have anything to say about how requests are authenticated by implementations.  Therefore it is necessary for each implementation to perform
