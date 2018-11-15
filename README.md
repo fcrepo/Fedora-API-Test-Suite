@@ -35,6 +35,9 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
 * `auth-class` (optional) The class name of an implementation of the org.fcrepo.spec.testsuite.authn.Authenticator interface.
 * `implementation-name` (optional) The name of the implementation being tested.
 * `implementation-version` (optional) The version of the implementation being tested.
+* `broker-url` The URL of the JMS broker
+* `queue-name` Queue name for events (if applicable). NB: you must specify either a topic name or queue name.
+* `topic-name` Topic name for events (if applicable). NB: you must specify either a topic name or queue name.
 
 ### Authenticators
 The Fedora Specification does not have anything to say about how requests are authenticated by implementations.  Therefore it is necessary for each implementation to perform
