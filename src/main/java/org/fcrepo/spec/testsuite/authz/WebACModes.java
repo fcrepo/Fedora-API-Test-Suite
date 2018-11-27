@@ -42,7 +42,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs HEAD.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
@@ -60,7 +60,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Read gives access to a class of operations that can be described as " +
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs GET.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
@@ -78,7 +78,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "\"Read Access\". " +
                                         "In a typical REST API, this includes access to HTTP verbs GET. Its absence " +
                                         "must prevent reads",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
@@ -98,7 +98,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include PUT.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
@@ -121,7 +121,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include POST.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
@@ -140,7 +140,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include DELETE",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-write.ttl", this.permissionlessUserWebId);
@@ -157,7 +157,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Write gives access to a class of operations that can modify the resource" +
                                         ". In a REST API " +
                                         "context, this would include PATCH.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
                             + " INSERT {"
                             + " <> dcterms:description \"Patch Updated Description\" ."
@@ -180,7 +180,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.0-M-1",
                                         "acl:Write gives access to PUT a resource. When not present, " +
                                         "writes should be disallowed.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
@@ -201,7 +201,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.0-M-2",
                                         "acl:Write gives access to POST a resource. When not present, " +
                                         "writes should be disallowed.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
@@ -219,7 +219,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.0-M-3",
                                         "acl:Write gives access to DELETE a resource. When not present, " +
                                         "writes should be disallowed.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
@@ -236,7 +236,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.0-M-4",
                                         "acl:Write gives access to PATCH a resource. When not present, " +
                                         "writes should be disallowed.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
                             + " INSERT {"
                             + " <> dcterms:description \"Patch Updated Description\" ."
@@ -262,7 +262,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
                                         "This generally includes the HTTP verb POST.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
@@ -281,7 +281,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Append gives a more limited ability to write to a resource -- " +
                                         "Append-Only. " +
                                         "This generally includes the INSERT-only portion of SPARQL-based PATCHes.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
                             + " INSERT {"
                             + " <> dcterms:description \"Patch Updated Description\" ."
@@ -306,7 +306,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "may also extend " +
                                         "this mode to cover non-overwriting PUTs, as well as the INSERT-only portion " +
                                         "of SPARQL-based PATCHes. Its absence must prevent append updates.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         final String body = "PREFIX acl: <http://www.w3.org/ns/auth/acl#>"
                             + " DELETE {"
                             + " <#restricted> acl:mode acl:Read ."
@@ -332,7 +332,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view the ACL of a " +
                                         "resource.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         final String resourceUri = createResource(uri, info.getId());
         final String aclUri = createAclForResource(resourceUri, "user-control.ttl", this.permissionlessUserWebId);
         //perform verified get as non-admin
@@ -349,7 +349,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " modify the ACL of a " +
                                         "resource.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String body = "PREFIX acl: <http://www.w3.org/ns/auth/acl#>"
                             + " INSERT {"
@@ -372,7 +372,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " modify the ACL of a " +
                                         "resource.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
 
@@ -408,7 +408,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
                                         "ACL of a resource. Its absence must prevent viewing the ACL.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         final String aclUri = createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
@@ -426,7 +426,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
                                         "ACL of a resource. Its absence must prevent updating the ACL.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String body = "PREFIX acl: <http://www.w3.org/ns/auth/acl#>"
                             + " INSERT {"
@@ -452,7 +452,7 @@ public class WebACModes extends AbstractAuthzTest {
                                         "acl:Control is a special-case access mode that gives an agent the ability to" +
                                         " view and modify the " +
                                         "ACL of a resource. Its absence must prevent updating the ACL.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-write.ttl", this.permissionlessUserWebId);
@@ -481,7 +481,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.7.1-A",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they MUST " +
                         "not DELETE, not PATCH that deletes triples, not PUT on the resource",
-                "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
+                SPEC_BASE_URL + "#append-ldprs", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
@@ -524,7 +524,7 @@ public class WebACModes extends AbstractAuthzTest {
                 "When a client has acl:Append but not acl:Write for an LDP-RS and the " +
                         "implementation supports PUT to create they MUST " +
                         "allow the addition of a new child resource.",
-                "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
+                SPEC_BASE_URL + "#append-ldprs", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
@@ -545,7 +545,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.7.1-C",
                 "When a client has acl:Append but not acl:Write for an LDP-RS they SHOULD " +
                         "allow a PATCH request that only adds triples.",
-                "https://fedora.info/2018/06/25/spec/#append-ldprs", ps);
+                SPEC_BASE_URL + "#append-ldprs", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
@@ -576,7 +576,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.7.2",
                 "When a client has acl:Append but not acl:Write for an LDPC they MUST " +
                         "allow a POST request.",
-                "https://fedora.info/2018/06/25/spec/#append-ldpc", ps);
+                SPEC_BASE_URL + "#append-ldpc", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-append.ttl", this.permissionlessUserWebId);
@@ -597,7 +597,7 @@ public class WebACModes extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.7.3",
                 "When a client has acl:Append but not acl:Write for an LDP-NR they MUST " +
                         "deny all DELETE, POST, and PUT requests.",
-                "https://fedora.info/2018/06/25/spec/#append-ldpnr", ps);
+                SPEC_BASE_URL + "#append-ldpnr", ps);
 
         final Headers headers = new Headers(new Header("Content-type", "text/plain"));
         final Response postLdpNr = doPost(uri, headers, "test image");

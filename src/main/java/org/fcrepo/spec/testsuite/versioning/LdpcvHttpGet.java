@@ -40,7 +40,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     public void ldpcvMustSupportGet() {
         final TestInfo info = setupTest("4.3.1-A",
                                         "LDPCv must support GET, as is the case for any LDPR",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
+                                        SPEC_BASE_URL + "#ldpcv-get",
                                         ps);
 
         final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
@@ -55,7 +55,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     public void ldpcvMustHaveTimeMapLinkHeader() {
         final TestInfo info = setupTest("4.3.1-B",
                                         "LDPCv contain TimeMap type link header.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
+                                        SPEC_BASE_URL + "#ldpcv-get",
                                         ps);
 
         final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
@@ -77,7 +77,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.3.1-C",
                                         "An LDPCv must respond to GET Accept: application/link-format as " +
                                         "indicated in [ RFC7089 ] section 5 and specified in [ RFC6690 ] section 7.3.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
+                                        SPEC_BASE_URL + "#ldpcv-get",
                                         ps);
 
         final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
@@ -92,7 +92,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     public void lpcvMustIncludeAllowHeader() {
         final TestInfo info = setupTest("4.3.1-D",
                                         "LDPCv resources must include the Allow header",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
+                                        SPEC_BASE_URL + "#ldpcv-get",
                                         ps);
 
         final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
@@ -110,7 +110,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     public void ldpcvMustIncludeAcceptPostIfPostAllowed() {
         final TestInfo info = setupTest("4.3.1-E",
                                         "If an LDPCv supports POST, then it must include the Accept-Post header",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
+                                        SPEC_BASE_URL + "#ldpcv-get",
                                         ps);
         final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
         final Response timeMapResponse = doGet(timeMap);
@@ -128,7 +128,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
     public void ldpcvMustIncludeAcceptPatchIfPatchAllowed() {
         final TestInfo info = setupTest("4.3.1-F",
                                         "If an LDPCv supports PATCH, then it must include the Accept-Patch header",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
+                                        SPEC_BASE_URL + "#ldpcv-get",
                                         ps);
         final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);
         final Response timeMapResponse = doGet(timeMap);
@@ -149,7 +149,7 @@ public class LdpcvHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.3.1-G",
                                         "An LDPCv, being a container must have a \"Link: <http://www" +
                                         ".w3.org/ns/ldp#Container>;rel=\"type\"\"",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-get",
+                                        SPEC_BASE_URL + "#ldpcv-get",
                                         ps);
 
         final String timeMap = createVersionedResourceAndGetTimeMapURL(uri, info);

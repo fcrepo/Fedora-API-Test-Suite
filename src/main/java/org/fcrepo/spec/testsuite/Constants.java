@@ -22,6 +22,8 @@ package org.fcrepo.spec.testsuite;
  */
 public class Constants {
 
+    public static final String SPEC_BASE_URL = "https://fedora.info/2018/11/22/spec/";
+
     public static final String NON_RDF_SOURCE_INTERACTION_MODEL = "http://www.w3.org/ns/ldp#NonRDFSource";
     public static final String RDF_SOURCE_LINK_HEADER = "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\"";
     public static final String NON_RDF_SOURCE_LINK_HEADER = "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\"";

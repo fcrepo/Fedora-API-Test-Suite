@@ -43,7 +43,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
                                         "header specifying type http://mementoweb.org/ns#OriginalResource " +
                                         "to indicate versioning, it MUST be created as an LDPRv and a version " +
                                         "container (LDPCv) MUST be created to contain Memento resources",
-                "https://fcrepo.github.io/fcrepo-specification/#resource-versioning",
+                SPEC_BASE_URL + "#resource-versioning",
                 ps);
 
         // create an LDPRv using a post
@@ -67,7 +67,7 @@ public class ResourceVersioning extends AbstractVersioningTest {
                 "specifying type http://mementoweb.org/ns#OriginalResource to convert an existing LDPR into an LDPRv." +
                 " If such a conversion from an LDPR to an LDPRv is supported, it MUST be accompanied by the creation " +
                 "of a version container (LDPCv), as noted above.",
-                "https://fcrepo.github.io/fcrepo-specification/#resource-versioning",
+                SPEC_BASE_URL + "#resource-versioning",
                                         ps);
 
         //create a container

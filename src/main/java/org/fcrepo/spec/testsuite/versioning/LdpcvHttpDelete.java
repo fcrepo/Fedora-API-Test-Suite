@@ -38,7 +38,7 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
     public void ldpcvMaySupportDelete() {
         final TestInfo info = setupTest("4.3.6-A",
                                         "An implementation MAY support DELETION of LDPCvs.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-delete",
+                                        SPEC_BASE_URL + "#ldpcv-delete",
                                         ps);
         //create a versioned resource
         final Response response = createVersionedResource(uri, info);
@@ -59,7 +59,7 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
                                         "An implementation that does support DELETE should do so by both " +
                                         "removing the LDPCv and removing the versioning interaction model from the " +
                                         "original LDPRv.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-delete",
+                                        SPEC_BASE_URL + "#ldpcv-delete",
                                         ps);
 
         //create a versioned resource

@@ -50,7 +50,7 @@ public class HttpHead extends AbstractTest {
                                         "The HEAD method is identical to GET except that the server must not return a "
                                         + "message-body in the response, as "
                                         + "specified in [RFC7231] section 4.3.2.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-head",
+                                        SPEC_BASE_URL + "#http-head",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
@@ -67,7 +67,7 @@ public class HttpHead extends AbstractTest {
                                         +
                                         " would have sent if the request had been a GET (or omit it if it would have " +
                                         "been omitted for a GET).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-head",
+                                        SPEC_BASE_URL + "#http-head",
                                         ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"headerwantdigest.txt\""),
@@ -119,7 +119,7 @@ public class HttpHead extends AbstractTest {
                                         +
                                         "been a GET, except that the payload headers (defined in [RFC7231] section " +
                                         "3.3) may be omitted.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-head",
+                                        SPEC_BASE_URL + "#http-head",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);

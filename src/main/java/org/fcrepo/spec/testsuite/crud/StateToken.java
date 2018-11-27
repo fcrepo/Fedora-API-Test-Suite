@@ -45,7 +45,7 @@ public class StateToken extends AbstractTest {
                                         "to provide a token representing the current state of resource. If provided, " +
                                         "this value must change whenever the underlying state of the resource has " +
                                         "changed.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-state-token", ps);
+                                        SPEC_BASE_URL + "#x-state-token", ps);
 
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
@@ -83,7 +83,7 @@ public class StateToken extends AbstractTest {
                                         "responses to provide a token representing the current state of resource. If " +
                                         "provided, this value must change whenever the underlying state of the " +
                                         "resource has changed.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-state-token", ps);
+                                        SPEC_BASE_URL + "#x-state-token", ps);
 
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
@@ -110,7 +110,7 @@ public class StateToken extends AbstractTest {
                                         "A client may include the X-If-State-Token header field in a PATCH request to" +
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+                                        SPEC_BASE_URL + "#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
@@ -137,7 +137,7 @@ public class StateToken extends AbstractTest {
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value. If an implementation does not support state tokens, it " +
                                         "may ignore any X-If-State-Token header in HTTP PATCH requests.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+                                        SPEC_BASE_URL + "#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
@@ -163,7 +163,7 @@ public class StateToken extends AbstractTest {
                                         "rejected with a 412 (Precondition Failed) response if the implementation " +
                                         "supports state tokens, but the client-supplied value does not match the " +
                                         "resource's current state token.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+                                        SPEC_BASE_URL + "#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
@@ -190,7 +190,7 @@ public class StateToken extends AbstractTest {
                                         "A client may include the X-If-State-Token header field in a PUT request to" +
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+                                        SPEC_BASE_URL + "#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
@@ -218,7 +218,7 @@ public class StateToken extends AbstractTest {
                                         " make the request conditional on the resource's current state token matching" +
                                         " the client's value. If an implementation does not support state tokens, it " +
                                         "may ignore any X-If-State-Token header in HTTP PUT requests.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+                                        SPEC_BASE_URL + "#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);
@@ -243,7 +243,7 @@ public class StateToken extends AbstractTest {
                                         "rejected with a 412 (Precondition Failed) response if the implementation " +
                                         "supports state tokens, but the client-supplied value does not match the " +
                                         "resource's current state token.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#x-if-state-token", ps);
+                                        SPEC_BASE_URL + "#x-if-state-token", ps);
         final Response createResponse = createBasicContainer(uri, info.getId());
         final String resourceUri = getLocation(createResponse);
         final Response getResponse = doGet(resourceUri);

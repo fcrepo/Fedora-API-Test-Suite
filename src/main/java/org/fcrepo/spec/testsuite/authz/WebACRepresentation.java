@@ -42,7 +42,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
                                         "are identified by type definition triples of the form authorization_N " +
                                         "rdf:type acl:Authorization, where authorization_N is the URI of an " +
                                         "authorization.",
-                                        "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+                                        SPEC_BASE_URL + "#acl-representation", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
@@ -60,7 +60,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
                                         "Implementations must use only statements associated with an authorization in" +
                                         " the ACL RDF to determine access, except in the case of acl:agentGroup " +
                                         "statements where the group listing document is dereferenced.",
-                                        "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+                                        SPEC_BASE_URL + "#acl-representation", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
@@ -81,7 +81,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
                 "Implementations must use only statements associated with an authorization in the ACL RDF to " +
                         "determine access, except in the case of acl:agentGroup statements where the group listing " +
                         "document is dereferenced.",
-                "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+                SPEC_BASE_URL + "#acl-representation", ps);
 
         //create test container
         final String testContainerUri = createResource(uri, info.getId());
@@ -112,7 +112,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.2-D",
                                         "The authorizations must be examined to see whether they grant the requested " +
                                         "access to the controlled resource.",
-                                        "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+                                        SPEC_BASE_URL + "#acl-representation", ps);
         //create a resource
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-write-in-multiple-authorizations.ttl",
@@ -130,7 +130,7 @@ public class WebACRepresentation extends AbstractAuthzTest {
     public void accessDenied() {
         final TestInfo info = setupTest("5.2-E",
                 "If none of the authorizations grant the requested access then the request must be denied.",
-                "https://fedora.info/2018/06/25/spec/#acl-representation", ps);
+                SPEC_BASE_URL + "#acl-representation", ps);
 
         //create a resource
         final String resourceUri = createResource(uri, info.getId());

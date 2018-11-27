@@ -45,7 +45,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
                                         ".org/ns#OriginalResource to convert an existing LDPR into an LDPRv. If such " +
                                         "a conversion from an LDPR to an LDPRv is supported, it must be accompanied " +
                                         "by the creation of a version container (LDPCv), as noted above.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#resource-versioning",
+                                        SPEC_BASE_URL + "#resource-versioning",
                                         ps);
 
         //create a resource
@@ -73,7 +73,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     public void ldprvMustSupportPUT() {
         final TestInfo info = setupTest("4.1.2-A",
                                         "Must support PUT for creating new LDPRv",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
+                                        SPEC_BASE_URL + "#ldprv-put",
                                         ps);
 
         //create an LDPRv using a put
@@ -92,7 +92,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     public void ldprvMustSupportPUTForExistingResources() {
         final TestInfo info = setupTest("4.1.2-B",
                                         "Must support PUT for updating existing LDPRvs",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
+                                        SPEC_BASE_URL + "#ldprv-put",
                                         ps);
         //create an LDPRv
         final Response response = putVersionedResourceUnverified(uri, info);
@@ -129,7 +129,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     public void ldpnrvMustSupportPUT() {
         final TestInfo info = setupTest("4.1.2-C",
                                         "Must support PUT for creating new LDPNRv",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
+                                        SPEC_BASE_URL + "#ldprv-put",
                                         ps);
 
         //create an LDPNRv using a put
@@ -151,7 +151,7 @@ public class LdprvHttpPut extends AbstractVersioningTest {
     public void ldpnrvMustSupportPUTForExistingResources() {
         final TestInfo info = setupTest("4.1.2-D",
                                         "Must support PUT for updating existing  LDPNRvs",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-put",
+                                        SPEC_BASE_URL + "#ldprv-put",
                                         ps);
         //create an LDPNRv
         final Response response = putVersionedResourceWithBodyUnverified(uri, info, "test");

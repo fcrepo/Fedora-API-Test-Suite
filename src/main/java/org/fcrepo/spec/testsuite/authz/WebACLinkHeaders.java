@@ -40,7 +40,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
                                         "A conforming server must advertise the individual resource ACL for every " +
                                         "controlled resource in HTTP responses with a rel=\"acl\" link in the Link " +
                                         "header, whether or not the ACL exists.",
-                                        "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
+                                        SPEC_BASE_URL + "#link-rel-acl", ps);
 
         // check for Link header with existing ACL.
         final String resourceUri = createResource(uri, info.getId());
@@ -61,7 +61,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
                                         "A conforming server must advertise the individual resource ACL for every " +
                                         "controlled resource in HTTP responses with a rel=\"acl\" link in the Link " +
                                         "header, whether or not the ACL exists.",
-                                        "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
+                                        SPEC_BASE_URL + "#link-rel-acl", ps);
 
         // check for Link header with existing ACL.
         final String resourceUri = createResource(uri, info.getId());
@@ -77,7 +77,7 @@ public class WebACLinkHeaders extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.3-C",
                                         "The ACL resource should be located in the same server as the controlled " +
                                         "resource.",
-                                        "https://fedora.info/2018/06/25/spec/#link-rel-acl", ps);
+                                        SPEC_BASE_URL + "#link-rel-acl", ps);
         final String resourceUri = createResource(uri, info.getId());
         final String aclUri = getAclLocation(resourceUri);
         assertEquals("ACL should be on the same host as the controlled source", URI.create(uri).getHost(),

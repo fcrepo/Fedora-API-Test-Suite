@@ -40,7 +40,7 @@ public class WebACRdfSources extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.1",
                                         "An ACL for a controlled resource on a conforming server must itself be an " +
                                         "LDP-RS.",
-                                        "https://fedora.info/2018/06/25/spec/#solid-ldp-acls", ps);
+                                        SPEC_BASE_URL + "#solid-ldp-acls", ps);
 
         //attempt to create a LDP-NR at an acl location and confirm that it fails.
         //create resource

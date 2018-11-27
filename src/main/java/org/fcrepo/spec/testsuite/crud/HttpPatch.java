@@ -76,7 +76,7 @@ public class HttpPatch extends AbstractTest {
                                         "Any LDP-RS must support PATCH ([LDP] 4.2.7 may becomes must). " +
                                         "[sparql11-update] must be an accepted "
                                         + "content-type for PATCH.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch",
+                                        SPEC_BASE_URL + "#http-patch",
                                         ps);
         final Response resource = createBasicContainer(uri, info.getId(), BASIC_CONTAINER_BODY);
         final String locationHeader = getLocation(resource);
@@ -91,7 +91,7 @@ public class HttpPatch extends AbstractTest {
     public void ldpPatchContentTypeSupport() {
         final TestInfo info = setupTest("3.7-B",
                                         "Other content-types (e.g. [ldpatch]) may be available.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
+                                        SPEC_BASE_URL + "#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
         final Headers headers = new Headers(new Header("Content-Type", "text/ldpatch"));
@@ -108,7 +108,7 @@ public class HttpPatch extends AbstractTest {
                                         + "statements to a resource that a server disallows (not ignores per [LDP] "
                                         + "4.2.4.1), the server must fail the request by responding with a 4xx range"
                                         + " status code (e.g. 409 Conflict).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
+                                        SPEC_BASE_URL + "#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
         patchWithDisallowedStatement(resourceUri).then().statusCode(clientErrorRange());
@@ -135,7 +135,7 @@ public class HttpPatch extends AbstractTest {
                                         "The server must provide a corresponding response body containing information"
                                         + " about which statements could not be persisted."
                                         + " ([LDP] 4.2.4.4 should becomes must).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
+                                        SPEC_BASE_URL + "#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
         //the check for not null body is not ideal,
@@ -156,7 +156,7 @@ public class HttpPatch extends AbstractTest {
                                         + " described in a resource indicated by a Link: "
                                         + "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" "
                                         + "response header per [LDP] 4.2.1.6.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
+                                        SPEC_BASE_URL + "#http-patch", ps);
 
         final Response resource = createBasicContainer(uri, info);
         final String resourceUri = getLocation(resource);
@@ -174,7 +174,7 @@ public class HttpPatch extends AbstractTest {
                                         "A successful PATCH request must respond with a 2xx status code; the "
                                         + "specific code in the 2xx range may vary according to the response "
                                         + "body or request state.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch", ps);
+                                        SPEC_BASE_URL + "#http-patch", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
         ps.append("Request method:\tPATCH\n");
@@ -208,7 +208,7 @@ public class HttpPatch extends AbstractTest {
                                         "triples; if"
                                         + " the server receives such a request, it should respond with a"
                                         + " 409 (Conflict) status code.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch-containment-triples",
+                                        SPEC_BASE_URL + "#http-patch-containment-triples",
                                         ps);
         final Response container = createBasicContainer(uri, info);
         final String locationHeader = getLocation(container);
@@ -230,7 +230,7 @@ public class HttpPatch extends AbstractTest {
                                         + " interaction model of a resource to a type that is not a subtype"
                                         + " of the current resource type. That request must be rejected"
                                         + " with a 409 Conflict response.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-patch-ixn-models", ps);
+                                        SPEC_BASE_URL + "#http-patch-ixn-models", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
 

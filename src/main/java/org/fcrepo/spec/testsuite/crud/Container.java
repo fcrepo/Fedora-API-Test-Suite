@@ -62,7 +62,7 @@ public class Container extends AbstractTest {
     public void createLDPC() {
         final TestInfo info = setupTest("3.1.1-A-1",
                                         "Implementations must support the creation and management of [LDP] Containers.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
+                                        SPEC_BASE_URL + "#ldpc", ps);
         createBasicContainer(uri, info);
     }
 
@@ -74,7 +74,7 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-A-2",
                                         "Implementations may support the creation and management of [LDP] Direct " +
                                         "Containers",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
+                                        SPEC_BASE_URL + "#ldpc", ps);
         skipIfDirectContainersNotSupported();
     }
 
@@ -86,7 +86,7 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-A-3",
                                         "Implementations may support the creation and management of [LDP] Indirect " +
                                         "Containers",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc", ps);
+                                        SPEC_BASE_URL + "#ldpc", ps);
         skipIfIndirectContainersNotSupported();
     }
 
@@ -125,7 +125,7 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-B",
                                         "ldpcContainmentTriples",
                                         "LDP Containers must distinguish [containment triples]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc",
+                                        SPEC_BASE_URL + "#ldpc",
                                         ps);
         final Response base = createBasicContainer(uri, info);
 
@@ -164,7 +164,7 @@ public class Container extends AbstractTest {
     public void ldpcMembershipTriples() {
         final TestInfo info = setupTest("3.1.1-C",
                                         "LDP Containers must distinguish [membership] triples.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc",
+                                        SPEC_BASE_URL + "#ldpc",
                                         ps);
         final Response base = createBasicContainer(uri, info);
 
@@ -250,7 +250,7 @@ public class Container extends AbstractTest {
     public void ldpcMinimalContainerTriples() {
         final TestInfo info = setupTest("3.1.1-D",
                                         "LDP Containers must distinguish [minimal-container] triples.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpc",
+                                        SPEC_BASE_URL + "#ldpc",
                                         ps);
         final Response base = createBasicContainer(uri, info);
 
@@ -314,7 +314,7 @@ public class Container extends AbstractTest {
                   "Implementations " +
                   "MUST allow the membership constant URI to be set via the " +
                   "ldp:membershipResource property of the content RDF on container creation.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -337,7 +337,7 @@ public class Container extends AbstractTest {
         setupTest("3.1.2-B",
                   "Implementations MUST set the ldp:membershipResource by default when" +
                   " not specified on creation.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -360,7 +360,7 @@ public class Container extends AbstractTest {
         setupTest("3.1.2-C",
                   "Implementations SHOULD set the ldp:membershipResource to the LDPC " +
                   " by default when not specified on creation.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -393,7 +393,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership constant URI to be updated by " +
                   "subsequent PUT requests that change the ldp:membershipResource " +
                   "property of the resource content.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
 
         //throw skip exception if direct containers not supported
@@ -429,7 +429,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership constant URI to be updated by " +
                   "subsequent PATCH requests that change the ldp:membershipResource " +
                   "property of the resource content.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -472,7 +472,7 @@ public class Container extends AbstractTest {
                   "of the content RDF on container creation, or otherwise default to an " +
                   "implementation defined value. Implementations should use the default <> " +
                   "ldp:hasMemberRelation ldp:member",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -496,7 +496,7 @@ public class Container extends AbstractTest {
                   "of the content RDF on container creation, or otherwise default to an " +
                   "implementation defined value. Implementations should use the default <> " +
                   "ldp:hasMemberRelation ldp:member",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -517,7 +517,7 @@ public class Container extends AbstractTest {
         setupTest("3.1.2-H",
                   "Implementations must allow the membership predicate  to be set by " +
                   "default to an implementation defined value. ",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -545,7 +545,7 @@ public class Container extends AbstractTest {
     public void ldpDirectContainerShouldUseLdpMemberByDefault() {
         setupTest("3.1.2-I",
                   "Implementations should use the default <> ldp:hasMemberRelation ldp:member",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -567,7 +567,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PUT requests that change the ldp:hasMemberRelation " +
                   "property of the resource content.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -604,7 +604,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PATCH requests that change the ldp:hasMemberRelation " +
                   "property of the resource content.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -646,7 +646,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PUT requests that change the ldp:isMemberOfRelation property of " +
                   "the resource content.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
 
         //throw skip exception if direct containers not supported
@@ -691,7 +691,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PATCH requests that change the ldp:isMemberOfRelation " +
                   "property of the resource content.",
-                  "https://fcrepo.github.io/fcrepo-specification/#ldpdc",
+                  SPEC_BASE_URL + "#ldpdc",
                   ps);
 
         //throw skip exception if direct containers not supported

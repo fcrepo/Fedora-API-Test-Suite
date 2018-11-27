@@ -51,7 +51,7 @@ public class HttpPut extends AbstractTest {
                 "Implementations MAY allow the interaction model of an existing " +
                         "resource to be changed by specification of a new LDP type in a " +
                         "rel=\"type\" link in the HTTP Link header",
-                "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
+                SPEC_BASE_URL + "#http-put", ps);
 
         final Headers headers = new Headers(
                 new Header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\""),
@@ -77,7 +77,7 @@ public class HttpPut extends AbstractTest {
                                         "namespace and is not either a current type of the resource or a subtype " +
                                         "of a current type of the resource, the request must be " +
                                         "rejected with a 409 Conflict response.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put", ps);
+                                        SPEC_BASE_URL + "#http-put", ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
                 new Header(SLUG, info.getId()));
@@ -101,7 +101,7 @@ public class HttpPut extends AbstractTest {
                                         "Any LDP-RS must support PUT to update statements that are not server-managed" +
                                         " triples (as defined "
                                         + "in [LDP] 2). [LDP] 4.2.4.1 and 4.2.4.3 remain in effect.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
+                                        SPEC_BASE_URL + "#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
 
@@ -148,7 +148,7 @@ public class HttpPut extends AbstractTest {
                                         " by "
                                         + "responding with a 4xx "
                                         + "range status code (e.g. 409 Conflict).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
+                                        SPEC_BASE_URL + "#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
 
         final String locationHeader = getLocation(resource);
@@ -189,7 +189,7 @@ public class HttpPut extends AbstractTest {
                                         "The server must provide a corresponding response body containing information "
                                         + "about which statements could"
                                         + " not be persisted. ([LDP] 4.2.4.4 should becomes must).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
+                                        SPEC_BASE_URL + "#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
 
@@ -233,7 +233,7 @@ public class HttpPut extends AbstractTest {
                                         +
                                         " by a Link: rel=\"http://www.w3.org/ns/ldp#constrainedBy\" response header " +
                                         "per [LDP] 4.2.1.6.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put-ldprs", ps);
+                                        SPEC_BASE_URL + "#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
 
         final String locationHeader = getLocation(resource);
@@ -274,7 +274,7 @@ public class HttpPut extends AbstractTest {
     public void httpPutNR() {
         final TestInfo info = setupTest("3.6.2-A",
                                         "Any LDP-NR must support PUT to replace the binary content of that resource.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
+                                        SPEC_BASE_URL + "#http-put-ldpnr", ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
                 new Header(SLUG, info.getId()));
@@ -313,7 +313,7 @@ public class HttpPut extends AbstractTest {
                                         "instance-digest in that header does not match the instance it describes, " +
                                         "must be rejected "
                                         + "with a 409 Conflict response.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
+                                        SPEC_BASE_URL + "#http-put-ldpnr", ps);
         final String checksum = "MD5=97c4627dc7734f65f5195f1d5f556d7a";
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"digestAuth.txt\""),
@@ -338,7 +338,7 @@ public class HttpPut extends AbstractTest {
                                         "An HTTP PUT request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), should"
                                         + " be rejected with a 400 (Bad Request) response.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-put-ldpnr", ps);
+                                        SPEC_BASE_URL + "#http-put-ldpnr", ps);
         final String checksum = "abc=abc";
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
@@ -361,7 +361,7 @@ public class HttpPut extends AbstractTest {
     public void putCreateRDFSource() {
         final TestInfo info = setupTest("3.6.3-A",
                 "Implementations may accept HTTP PUT to create resources",
-                "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
+                SPEC_BASE_URL + "#http-put-create", ps);
 
         // Create (POST) parent container
         final String containerLocation = getLocation(createBasicContainer(uri, info));
@@ -390,7 +390,7 @@ public class HttpPut extends AbstractTest {
     public void putCreateNonRDFSource() {
         final TestInfo info = setupTest("3.6.3-B",
                 "Implementations may accept HTTP PUT to create non-RDF resources",
-                "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
+                SPEC_BASE_URL + "#http-put-create", ps);
 
         // Create (POST) parent container
         final String containerLocation = getLocation(createBasicContainer(uri, info));
@@ -422,7 +422,7 @@ public class HttpPut extends AbstractTest {
                 "On creation of an LDP-NR with HTTP PUT, implementations MUST create " +
                         "an associated LDP-RS describing that LDP-NR in the same way that it " +
                         "would when 3.5.1 Creating LDP-NRs with HTTP POST",
-                "https://fcrepo.github.io/fcrepo-specification/#http-put-create", ps);
+                SPEC_BASE_URL + "#http-put-create", ps);
 
         final String location = joinLocation(uri, info.getId());
 

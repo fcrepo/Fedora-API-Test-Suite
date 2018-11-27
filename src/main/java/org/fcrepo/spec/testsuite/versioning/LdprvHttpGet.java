@@ -47,7 +47,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.1.1-A-1",
                                         "If no LDPRm is appropriate to the Accept-Datetime value, " +
                                         "implementations should return a 406 (Unacceptable).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         //create ldprv
@@ -81,7 +81,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
                                         "The Accept-Datetime header is used to request a past state, " +
                                         "exactly as per [RFC7089] section 2.1.1. A successful response must be a 302 " +
                                         "(Found) redirect to the appropriate LDPRm.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         //create ldprv
@@ -122,7 +122,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.1.1-B",
                                         "The response to a GET request on an LDPRv must return " +
                                         " a rel=\"timegate\" Link header referencing itself ",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         final Response createdResponse = createVersionedResource(uri, info);
@@ -140,7 +140,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.1.1-C",
                                         "The response to a GET request on an LDPRv must return " +
                                         " a rel=\"timegate\" Link header referencing itself",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         final Response createdResponse = createVersionedResource(uri, info);
@@ -159,7 +159,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
                                         "The response to a GET request on an LDPRv must return a " +
                                         "<http://mementoweb.org/ns#OriginalResource>; rel=\"type\" link in the " +
                                         "Link header.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         final Response createdResponse = createVersionedResource(uri, info);
@@ -177,7 +177,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
                                         "The response to a GET request on an LDPRv must return a " +
                                         "<http://mementoweb.org/ns#OriginalResource>; rel=\"type\" link in the " +
                                         "Link header.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         final Response createdResponse = createVersionedResource(uri, info);
@@ -194,7 +194,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.1.1-F",
                                         "The response to a GET request on an LDPRv must return At least one " +
                                         "rel=\"timemap\" link in the Link header referencing an associated LDPCv",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         final Response createdResponse = createVersionedResource(uri, info);
@@ -212,7 +212,7 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.1.1-G",
                                         "The response to a GET request on an LDPRv must return " +
                                         "a Vary: Accept-Datetime header, exactly as per [RFC7089] section 2.1.2.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprv-get",
+                                        SPEC_BASE_URL + "#ldprv-get",
                                         ps);
 
         final Response createdResponse = createVersionedResource(uri, info);

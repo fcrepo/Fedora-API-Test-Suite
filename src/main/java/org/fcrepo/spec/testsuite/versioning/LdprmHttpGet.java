@@ -44,7 +44,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     public void ldprmMustSupportGet() {
         final TestInfo info = setupTest("4.2.1-A",
                                         "LDPR mementos must support GET",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
+                                        SPEC_BASE_URL + "#ldprm-get",
                                         ps);
 
         //create an LDPRm
@@ -63,7 +63,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     public void ldpnrmMustSupportGet() {
         final TestInfo info = setupTest("4.2.1-B",
                                         "LDP-NR mementos must support GET",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
+                                        SPEC_BASE_URL + "#ldprm-get",
                                         ps);
 
         //create an LDP-NR memento
@@ -83,7 +83,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     public void ldprmMustHaveCorrectTimeGate() {
         final TestInfo info = setupTest("4.2.1-C",
                 "TimeGate for an  LDP-RS memento is the original versioned LDP-RS",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
+                                        SPEC_BASE_URL + "#ldprm-get",
                                         ps);
 
         //create an LDPR memento
@@ -108,7 +108,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
     public void ldpnrmMustHaveCorrectTimeGate() {
         final TestInfo info = setupTest("4.2.1-D",
                                         "TimeGate  for an  LDP-NR memento  is the original versioned LDP-NR",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
+                                        SPEC_BASE_URL + "#ldprm-get",
                                         ps);
 
         //create an LDP-NR memento
@@ -134,7 +134,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.2.1-E",
                                         "Any response to a GET request on an LDP-RS Memento must include a " +
                                         "<http://mementoweb.org/ns#Memento>; rel=\"type\" link in the Link header",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
+                                        SPEC_BASE_URL + "#ldprm-get",
                                         ps);
 
         //create an LDP-NR memento
@@ -155,7 +155,7 @@ public class LdprmHttpGet extends AbstractVersioningTest {
         final TestInfo info = setupTest("4.2.1-F",
                                         "Any response to a GET request on an LDP-NR Memento must include a " +
                                         "<http://mementoweb.org/ns#Memento>; rel=\"type\" link in the Link header",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-get",
+                                        SPEC_BASE_URL + "#ldprm-get",
                                         ps);
 
         //create an LDP-NR memento
