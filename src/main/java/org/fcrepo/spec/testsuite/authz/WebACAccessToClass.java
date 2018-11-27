@@ -39,7 +39,7 @@ public class WebACAccessToClass extends AbstractAuthzTest {
                                         "all " +
                                         "resources with the specified type, whether that type is client-managed or " +
                                         "server-managed",
-                                        "https://fedora.info/2018/06/25/spec/#access-to-class", ps);
+                                        SPEC_BASE_URL + "#access-to-class", ps);
 
         //create an resource
         final String testContainerUri = createResource(uri, info.getId());
@@ -69,7 +69,7 @@ public class WebACAccessToClass extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.8-B",
                                         " Implementations may use inference to infer types not present in a " +
                                         "resource's triples or rel=\"type\" links in the Link header",
-                                        "https://fedora.info/2018/06/25/spec/#access-to-class", ps);
+                                        SPEC_BASE_URL + "#access-to-class", ps);
 
         //create an resource
         final String testContainerUri = createResource(uri, info.getId());

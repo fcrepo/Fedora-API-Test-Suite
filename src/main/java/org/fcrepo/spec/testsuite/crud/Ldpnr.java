@@ -49,7 +49,7 @@ public class Ldpnr extends AbstractTest {
                                         "Content-Type: value), then the server should handle subsequent requests to " +
                                         "the newly "
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
+                                        SPEC_BASE_URL + "#ldpnr-ixn-model", ps);
 
         final Headers headers = new Headers(
                 new Header(SLUG, info.getId()),
@@ -107,7 +107,7 @@ public class Ldpnr extends AbstractTest {
                                         "Content-Type: value), then the server should handle subsequent requests to " +
                                         "the newly "
                                         + "created resource as if it is an LDP-NR. ([LDP] 5.2.3.4 extension)",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpnr-ixn-model", ps);
+                                        SPEC_BASE_URL + "#ldpnr-ixn-model", ps);
         final Headers headers = new Headers(
                 new Header(SLUG, info.getId()),
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"sample.txt\""),

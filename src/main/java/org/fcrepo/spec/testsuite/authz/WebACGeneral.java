@@ -43,7 +43,7 @@ public class WebACGeneral extends AbstractAuthzTest {
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
                                         "the acl:agent predicate",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-only.ttl", this.permissionlessUserWebId);
@@ -59,7 +59,7 @@ public class WebACGeneral extends AbstractAuthzTest {
                                         "An authorization may list any number of individual agents (that are being " +
                                         "given access) by using " +
                                         "the acl:agent predicate.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "user-read-only-multiple-agents.ttl", this.permissionlessUserWebId);
         doGet(resourceUri, false);
@@ -76,7 +76,7 @@ public class WebACGeneral extends AbstractAuthzTest {
                                         "agentGroup statement is a link to a Group Listing document. The group " +
                                         "members are " +
                                         "listed in it, using the vcard:hasMember predicate.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         //create test container
         final String testContainerUri = createResource(uri, info.getId());
 
@@ -108,7 +108,7 @@ public class WebACGeneral extends AbstractAuthzTest {
                                         "object of an agentGroup statement is a link with a hash URI to a Group " +
                                         "Listing document. The group members are listed in it, using the " +
                                         "vcard:hasMember predicate. ",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
         //create test container
         final String testContainerUri = createResource(uri, info.getId());
 
@@ -141,7 +141,7 @@ public class WebACGeneral extends AbstractAuthzTest {
                                         "can use acl:agentClass " +
                                         "foaf:Agent to denote that you're giving access to the class of all agents " +
                                         "(the general public).",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String resourceUri = createResource(uri, info.getId());
         createAclForResource(resourceUri, "everyone-read-only.ttl", "");
@@ -175,7 +175,7 @@ public class WebACGeneral extends AbstractAuthzTest {
                                         "The acl:accessTo predicate specifies which resources you're giving access " +
                                         "to, using their URLs as " +
                                         "the subjects.",
-                                        "https://fedora.info/2018/06/25/spec/#resource-authorization", ps);
+                                        SPEC_BASE_URL + "#resource-authorization", ps);
 
         final String parentResource = createResource(uri, info.getId());
         final String child1resource = createResource(parentResource, "child1");

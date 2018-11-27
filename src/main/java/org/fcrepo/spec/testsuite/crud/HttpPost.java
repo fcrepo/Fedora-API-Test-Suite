@@ -42,7 +42,7 @@ public class HttpPost extends AbstractTest {
         final TestInfo info = setupTest("3.5-A",
                                         "Any LDPC (except Version Containers (LDPCv)) must support POST ([LDP] 4.2.3 " +
                                         "/ 5.2.3). ",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
+                                        SPEC_BASE_URL + "#http-post", ps);
 
         createBasicContainer(uri, info);
     }
@@ -55,7 +55,7 @@ public class HttpPost extends AbstractTest {
         final TestInfo info = setupTest("3.5.1-A",
                                         "Any LDPC must support creation of LDP-NRs on POST ([LDP] 5.2.3.3 may becomes" +
                                         " must).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
+                                        SPEC_BASE_URL + "#http-post", ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postNonRDFSource.txt\""),
                 new Header(SLUG, info.getId()));
@@ -71,7 +71,7 @@ public class HttpPost extends AbstractTest {
                                         "On creation of an LDP-NR, an implementation must create an associated LDP-RS" +
                                         " describing"
                                         + " that LDP-NR ([LDP] 5.2.3.12 may becomes must).",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-post", ps);
+                                        SPEC_BASE_URL + "#http-post", ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"postResourceAndCheckAssociatedResource.txt\""),
                 new Header(SLUG, info.getId()));
@@ -91,7 +91,7 @@ public class HttpPost extends AbstractTest {
                                         " in [RFC3230]) for which the instance-digest in that header does not match " +
                                         "that of the "
                                         + "new LDP-NR must be rejected with a 409 Conflict response.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
+                                        SPEC_BASE_URL + "#http-post-ldpnr", ps);
         final String checksum = "md5=1234";
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"test1digesttext.txt\""),
@@ -111,7 +111,7 @@ public class HttpPost extends AbstractTest {
                                         "An HTTP POST request that includes an unsupported Digest type (as described " +
                                         "in [RFC3230]), "
                                         + "should be rejected with a 400 Bad Request response.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-post-ldpnr", ps);
+                                        SPEC_BASE_URL + "#http-post-ldpnr", ps);
         final String checksum = "abc=abc";
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION,"attachment; filename=\"test1digesttext2.txt\""),

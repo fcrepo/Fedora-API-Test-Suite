@@ -37,7 +37,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     public void ldprmMustSupportOptions() {
         final TestInfo info = setupTest("4.2.2-A",
                                         "LDPRm resources must support OPTIONS",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-options",
+                                        SPEC_BASE_URL + "#ldprm-options",
                                         ps);
 
         //create an LDPRm
@@ -60,7 +60,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     public void ldprmOptionsMustSupportGetHeadAndOptions() {
         final TestInfo info = setupTest("4.2.2-B",
                                         "A response to an OPTIONS request must include Allow: GET, HEAD, OPTIONS",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-options",
+                                        SPEC_BASE_URL + "#ldprm-options",
                                         ps);
 
         //create an LDPRm
@@ -79,7 +79,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     public void ldprmOptionsMaySupportDelete() {
         final TestInfo info = setupTest("4.2.2-C",
                                         "A response to an OPTIONS request may include Allow: DELETE",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-options",
+                                        SPEC_BASE_URL + "#ldprm-options",
                                         ps);
 
         //create an LDPRm
@@ -97,7 +97,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     public void ldprmMustNotSupportPost() {
         final TestInfo info = setupTest("4.2.3",
                                         "An LDPRm must not support POST",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-post",
+                                        SPEC_BASE_URL + "#ldprm-post",
                                         ps);
         //create an LDPRm
         final String mementoURI = createMemento(uri, info);
@@ -116,7 +116,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     public void ldprmMustNotSupportPut() {
         final TestInfo info = setupTest("4.2.4",
                                         "An LDPRm must not support PUT",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-put",
+                                        SPEC_BASE_URL + "#ldprm-put",
                                         ps);
 
         //create an LDPRm
@@ -137,7 +137,7 @@ public class LdprmHttpOptions extends AbstractVersioningTest {
     public void ldprmMustNotSupportPatch() {
         final TestInfo info = setupTest("4.2.5",
                                         "An LDPRm must not support PATCH",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldprm-patch",
+                                        SPEC_BASE_URL + "#ldprm-patch",
                                         ps);
 
         //create an LDPRm

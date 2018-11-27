@@ -84,7 +84,7 @@ public class NotificationTest extends AbstractEventTest {
         final TestInfo info = setupTest("6.1",
                 "For every resource whose state is changed as a result of an HTTP operation, there MUST be a " +
                         "corresponding notification made available describing that change.",
-                "https://fedora.info/2018/06/25/spec/#notification-events", ps);
+                SPEC_BASE_URL + "#notification-events", ps);
         // Start with a clean JMS connection.
         resetConnection();
         // Get a new consumer.
@@ -144,7 +144,7 @@ public class NotificationTest extends AbstractEventTest {
         final TestInfo info = setupTest("6.2-A",
                 "The notification serialization MUST conform to the [activitystreams-core] specification, " +
                         "and each event MUST contain the IRI of the resource and the event type.",
-                "https://fedora.info/2018/06/25/spec/#notification-serialization", ps);
+                SPEC_BASE_URL + "#notification-serialization", ps);
         // Start with a clean JMS connection.
         resetConnection();
         // Get a new consumer.
@@ -211,7 +211,7 @@ public class NotificationTest extends AbstractEventTest {
     public void testEventSerializationShould() throws JMSException {
         final TestInfo info = setupTest("6.2-B",
                 "Wherever possible, data SHOULD be expressed using the [activitystreams-vocabulary]. ",
-                "https://fedora.info/2018/06/25/spec/#notification-serialization", ps);
+                SPEC_BASE_URL + "#notification-serialization", ps);
         // Start with a clean JMS connection.
         resetConnection();
         // Get a new consumer.

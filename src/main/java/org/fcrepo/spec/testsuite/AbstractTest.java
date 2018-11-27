@@ -69,6 +69,8 @@ import org.testng.annotations.BeforeMethod;
  */
 public class AbstractTest {
 
+    protected static final String SPEC_BASE_URL = Constants.SPEC_BASE_URL;
+
     protected PrintStream ps;
 
     private String rootControllerUserWebId;

@@ -44,7 +44,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
             setupTest("5.9-A", "Inheritance of ACLs in Fedora implementations is defined by the [SOLIDWEBAC]" +
                                "ACL Inheritance Algorithm and must be reckoned along the [LDP] containment " +
                                "relationships linking controlled resources",
-                      "https://fedora.info/2018/06/25/spec/#inheritance", ps);
+                      SPEC_BASE_URL + "#inheritance", ps);
         final String simpleRDFBody = "@prefix dc: <http://purl.org/dc/terms/> \n" +
                                      "<> dc:title \"Test\".";
         final Headers headers = new Headers(new Header("Content-Type", "text/turtle"));
@@ -84,7 +84,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
         setupTest("5.9-B", "In the case that the controlled resource is uncontained and has no ACL, or " +
                            "that there is no ACL at any point in the containment hierarchy of the " +
                            "controlled resource, then the server must supply a default ACL.",
-                  "https://fedora.info/2018/06/25/spec/#inheritance", ps);
+                  SPEC_BASE_URL + "#inheritance", ps);
 
         //retrieve the default acl resource link from the root resource
         final String aclUri = getAclLocation(rootUri);
@@ -99,7 +99,7 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
     public void defaultAclOnSameServer() {
         setupTest("5.9-C", "The default ACL resource should be located in the same server (host and port) as the " +
                            "controlled resource.",
-                  "https://fedora.info/2018/06/25/spec/#inheritance", ps);
+                  SPEC_BASE_URL + "#inheritance", ps);
         //GET the default acl and verify that it is on the same server as the root uri.
         final String aclUri = getAclLocation(rootUri);
         assertEquals("The default ACL resource is not located on the same host as the controlled resource.",

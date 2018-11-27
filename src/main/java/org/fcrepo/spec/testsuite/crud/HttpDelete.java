@@ -43,7 +43,7 @@ public class HttpDelete extends AbstractTest {
                                         "An implementation that cannot recurse should not advertise DELETE in " +
                                         "response to OPTIONS "
                                         + "requests for containers with contained resources.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
+                                        SPEC_BASE_URL + "#http-delete-recursion",
                                         ps);
 
         final Response resourceOp = createBasicContainer(uri, info);
@@ -106,7 +106,7 @@ public class HttpDelete extends AbstractTest {
         final TestInfo info = setupTest("3.8.1-C",
                                         "An implementation must not return a 200 (OK) or 204 (No Content) response "
                                         + "unless the entire operation successfully completed.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
+                                        SPEC_BASE_URL + "#http-delete-recursion",
                                         ps);
         // Create resources
         final Response rootres = createBasicContainer(uri, info);
@@ -184,7 +184,7 @@ public class HttpDelete extends AbstractTest {
                                         "An implementation must not emit a message that implies the successful DELETE" +
                                         " of a resource until "
                                         + "the resource has been successfully removed.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-delete-recursion",
+                                        SPEC_BASE_URL + "#http-delete-recursion",
                                         ps);
         // Create resources
         final Response rootres = createBasicContainer(uri, info);

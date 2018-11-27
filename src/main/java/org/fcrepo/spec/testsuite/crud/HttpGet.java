@@ -52,7 +52,7 @@ public class HttpGet extends AbstractTest {
                                         "should support the value " +
                                         "http://fedora.info/definitions/fcrepo#PreferInboundReferences for the " +
                                         "Prefer header when making GET requests on LDPC resources.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
+                                        SPEC_BASE_URL + "#additional-prefer-values",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
@@ -84,7 +84,7 @@ public class HttpGet extends AbstractTest {
                         "may support the value " +
                         "http://www.w3.org/ns/oa#PreferContainedDescriptions for the " +
                         "Prefer header when making GET requests on LDPC resources.",
-                "https://fcrepo.github.io/fcrepo-specification/#additional-prefer-values",
+                SPEC_BASE_URL + "#additional-prefer-values",
                 ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
@@ -114,7 +114,7 @@ public class HttpGet extends AbstractTest {
                                         "must "
                                         + "include the Preference-Applied"
                                         + " response header as defined in [RFC7240] section 3.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
+                                        SPEC_BASE_URL + "#http-get-ldprs",
                                         ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
@@ -136,7 +136,7 @@ public class HttpGet extends AbstractTest {
                                         "the response must include a Link: rel=\"describes\" header referencing the " +
                                         "LDP-NR "
                                         + "in question, as defined in [RFC6892].",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldprs",
+                                        SPEC_BASE_URL + "#http-get-ldprs",
                                         ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"responseDescribesHeader.txt\""),
@@ -167,7 +167,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing for supported digest: md5 . "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
         final String checksum = "md5";
 
@@ -191,7 +191,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing for supported digest: sha . "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
         final String checksum = "sha";
 
@@ -215,7 +215,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing for supported digest: sha-256 . "
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
         final String checksum = "sha-256";
 
@@ -240,7 +240,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing for two supported digests with no weights"
                                         + " GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantdigestTwoSupported.txt\""),
@@ -273,7 +273,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing for two supported digests with different weights"
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
 
         final Headers headers = new Headers(
@@ -306,7 +306,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing for two supported digests with different weights q=0.3,q=0"
                                         + " GET requests to any LDP-NR must correctly respond to the Want-Digest"
                                         + " header defined in [RFC3230]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestTwoSupportedQvalueZero.txt\""),
@@ -329,7 +329,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing for one supported digest and one unsupported digest."
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230]",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
         final Headers headers = new Headers(
                 new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestNonSupported.txt\""),
@@ -352,7 +352,7 @@ public class HttpGet extends AbstractTest {
                                         "Testing that unsupported digest is rejected with a 400."
                                         + "GET requests to any LDP-NR must correctly respond to the Want-Digest "
                                         + "header defined in [RFC3230].",
-                                        "https://fcrepo.github.io/fcrepo-specification/#http-get-ldpnr",
+                                        SPEC_BASE_URL + "#http-get-ldpnr",
                                         ps);
         final Headers headers = new Headers(
             new Header(CONTENT_DISPOSITION, "attachment; filename=\"wantDigestNonSupported.txt\""),

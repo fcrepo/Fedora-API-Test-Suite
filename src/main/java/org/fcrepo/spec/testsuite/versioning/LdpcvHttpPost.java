@@ -44,7 +44,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     public void ldpcvMayDisallowPost() {
         final TestInfo info = setupTest("4.3",
                 "Although an LDPCv is both a TimeMap and an LDPC, implementations MAY disallow POST requests.",
-                "https://fedora.info/2018/06/25/spec/#ldpcv-post",
+                SPEC_BASE_URL + "#ldpcv-post",
                 ps);
 
         // create the versioned resource
@@ -65,7 +65,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         " a Memento-Datetime header should be understood to create a new LDPRm " +
                                         "contained by the LDPCv, reflecting the state of the LDPRv at the time of " +
                                         "the POST. ",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
+                                        SPEC_BASE_URL + "#ldpcv-post",
                                         ps);
 
         final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
@@ -103,7 +103,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         " a Memento-Datetime header should be understood to create a new LDPRm " +
                                         "contained by the LDPCv, reflecting the state of the LDPRv at the time of " +
                                         "the POST. ",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
+                                        SPEC_BASE_URL + "#ldpcv-post",
                                         ps);
 
         // same as previous test but with LDP-NR
@@ -138,7 +138,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "If an LDPCv of an LDP-RS supports POST, a POST request that does not contain" +
                                         " a " +
                                         "Memento-Datetime header MUST ignore any request body.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
+                                        SPEC_BASE_URL + "#ldpcv-post",
                                         ps);
 
         final Header acceptNTriplesHeader = new Header("Accept", "application/n-triples");
@@ -174,7 +174,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "If an LDPCv of an LDP-NR supports POST, a POST request that does not contain" +
                                         " a " +
                                         "Memento-Datetime header MUST ignore any request body.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
+                                        SPEC_BASE_URL + "#ldpcv-post",
                                         ps);
         //same as previous but with LDP-NR
         // create the versioned resource
@@ -208,7 +208,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "If an LDPCv supports POST, a POST with a Memento-Datetime header " +
                                         "should be understood to create a new LDPRm contained by the LDPCv, with the " +
                                         "state given in the request body.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
+                                        SPEC_BASE_URL + "#ldpcv-post",
                                         ps);
         //create a versioned resource
         final Response createResponse = createVersionedResource(uri, info);
@@ -241,7 +241,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         " If an LDPCv supports POST, a POST with a Memento-Datetime header " +
                                         "should be understood to create a new LDPRm contained by the LDPCv, with the " +
                                         "datetime given in the Memento-Datetime request header.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
+                                        SPEC_BASE_URL + "#ldpcv-post",
                                         ps);
 
         final String mementoDateTime = "Sat, 1 Jan 2000 00:00:00 GMT";
@@ -271,7 +271,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                                         "If an implementation does not support one or both of POST cases " +
                                         "above, it must respond to such requests with a 4xx range status code and a " +
                                         "link to an appropriate constraints document",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-post",
+                                        SPEC_BASE_URL + "#ldpcv-post",
                                         ps);
 
         final Response createResponse = createVersionedResource(uri, info);
@@ -306,7 +306,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     public void ldpcvMayDisallowPut() {
         final TestInfo info = setupTest("4.3.4",
                                         "Implementations MAY disallow PUT.",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-put",
+                                        SPEC_BASE_URL + "#ldpcv-put",
                                         ps);
 
         final Response createResponse = createVersionedResource(uri, info);
@@ -327,7 +327,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
     public void ldpcvMayDisallowPatch() {
         final TestInfo info = setupTest("4.3.5",
                                         "Implementations MAY disallow PATCH",
-                                        "https://fcrepo.github.io/fcrepo-specification/#ldpcv-patch",
+                                        SPEC_BASE_URL + "#ldpcv-patch",
                                         ps);
         final Response createResponse = createVersionedResource(uri, info);
         final String originalResource = getLocation(createResponse);

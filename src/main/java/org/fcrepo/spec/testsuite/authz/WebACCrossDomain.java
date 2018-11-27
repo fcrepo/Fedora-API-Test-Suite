@@ -42,7 +42,7 @@ public class WebACCrossDomain extends AbstractAuthzTest {
     public void restrictAclToLocal() {
         final TestInfo info = setupTest("5.5-A",
                                         "Implementations may restrict support for ACLs to local resources.",
-                                        "https://fedora.info/2018/06/25/spec/#cross-domain-acls", ps);
+                                        SPEC_BASE_URL + "#cross-domain-acls", ps);
 
         final Response resource = createResourceWithRemoteAcl();
         if (successRange().matches(resource.getStatusCode())) {
@@ -74,7 +74,7 @@ public class WebACCrossDomain extends AbstractAuthzTest {
                                         "If an implementation chooses to reject requests concerning remote ACLs, it " +
                                         "must respond with a " +
                                         "4xx range status code.",
-                                        "https://fedora.info/2018/06/25/spec/#cross-domain-acls", ps);
+                                        SPEC_BASE_URL + "#cross-domain-acls", ps);
 
         final Response resource = createResourceWithRemoteAcl();
 
@@ -94,7 +94,7 @@ public class WebACCrossDomain extends AbstractAuthzTest {
                                         "restriction with a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in " +
                                         "the Link " +
                                         "response header.",
-                                        "https://fedora.info/2018/06/25/spec/#cross-domain-acls", ps);
+                                        SPEC_BASE_URL + "#cross-domain-acls", ps);
         final Response resource = createResourceWithRemoteAcl();
 
         if (!successRange().matches(resource.getStatusCode())) {
@@ -113,7 +113,7 @@ public class WebACCrossDomain extends AbstractAuthzTest {
         final TestInfo info = setupTest("5.6-A",
                                         "Implementations may restrict support for groups of agents to local Group " +
                                         "Listing documents.",
-                                        "https://fedora.info/2018/06/25/spec/#cross-domain-groups", ps);
+                                        SPEC_BASE_URL + "#cross-domain-groups", ps);
 
         final Response response = createResourceWithRemoteGroupListInAcl(info);
 
@@ -147,7 +147,7 @@ public class WebACCrossDomain extends AbstractAuthzTest {
                                         "If an implementation chooses to reject requests concerning remote Group " +
                                         "Listings, it must respond " +
                                         "with a 4xx range status code.",
-                                        "https://fedora.info/2018/06/25/spec/#cross-domain-groups", ps);
+                                        SPEC_BASE_URL + "#cross-domain-groups", ps);
 
         final Response aclResponse = createResourceWithRemoteGroupListInAcl(info);
 
@@ -169,7 +169,7 @@ public class WebACCrossDomain extends AbstractAuthzTest {
                                         "the restriction with a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link " +
                                         "in the Link " +
                                         "response header.",
-                                        "https://fedora.info/2018/06/25/spec/#cross-domain-groups", ps);
+                                        SPEC_BASE_URL + "#cross-domain-groups", ps);
 
         final Response aclResponse = createResourceWithRemoteGroupListInAcl(info);
         if (!successRange().matches(aclResponse.getStatusCode())) {

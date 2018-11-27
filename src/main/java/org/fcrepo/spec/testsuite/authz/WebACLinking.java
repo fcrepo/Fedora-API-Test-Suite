@@ -40,7 +40,7 @@ public class WebACLinking extends AbstractTest {
                                         "rel=\"acl\" link in the " +
                                         "Link header referencing an existing LDP-RS to use as the ACL for the new " +
                                         "LDPR.",
-                                        "https://fedora.info/2018/06/25/spec/#link-acl-on-create", ps);
+                                        SPEC_BASE_URL + "#link-acl-on-create", ps);
 
         //create a resource to be used for the acl link
         final Response aclResponse = createBasicContainer(uri, info.getId() + "-acl");
@@ -70,7 +70,7 @@ public class WebACLinking extends AbstractTest {
                                         "resource indicated by a rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link " +
                                         "in the Link " +
                                         "response header",
-                                        "https://fedora.info/2018/06/25/spec/#link-acl-on-create", ps);
+                                        SPEC_BASE_URL + "#link-acl-on-create", ps);
 
         //create a resource to be used for the acl link
         final Response aclResponse = createBasicContainer(uri, info.getId() + "-acl");

@@ -109,7 +109,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -131,7 +131,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -153,7 +153,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -174,7 +174,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -195,7 +195,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -216,7 +216,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -237,7 +237,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -259,7 +259,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -281,7 +281,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -303,7 +303,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -325,7 +325,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -347,7 +347,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the creation of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -369,7 +369,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -391,7 +391,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -413,7 +413,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -435,7 +435,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -457,7 +457,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -479,7 +479,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers should support the update of LDP-NRs with content external to the " +
                         "request entity, as indicated by a link with " +
                         "rel=\"http://fedora.info/definitions/fcrepo#ExternalContent\"",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -500,7 +500,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9-D-1",
                 "Fedora servers that do not support the creation of LDP-NRs with content external must reject " +
                         "with a 4xx range status code",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (externalContentSupported(uri)) {
             throw new SkipException("External Binaries are supported");
@@ -523,7 +523,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers that do not support the creation of LDP-NRs with content external must describe " +
                         "this restriction in a resource indicated by a " +
                         "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link response header.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (externalContentSupported(uri)) {
             throw new SkipException("External Binaries are supported");
@@ -545,7 +545,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers must use the handling attribute in the external content link to determine how to " +
                         "process the request. At least one of the following handling attributes must be supported: " +
                         "copy, redirect, and/or proxy.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -578,7 +578,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9-E-2",
                 "Fedora servers must reject with a 4xx range status code requests for which the handling attribute " +
                         "is not present or cannot be respected.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -602,7 +602,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "In the case that the specified handling cannot be respected, the restrictions causing the request " +
                         "to fail must be described in a resource indicated by a " +
                         "rel=\"http://www.w3.org/ns/ldp#constrainedBy\" link in the Link response header.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -625,7 +625,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9-F-1",
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -651,7 +651,7 @@ public class ExternalBinaryContent extends AbstractTest {
                         "type of the external content, if provided. If there is no type attribute: " +
                         "Servers may use the media type obtained when accessing the external content via the " +
                         "specified scheme (e.g. the Content-Type header for external content accessed via http).",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -675,7 +675,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. If there is no type attribute: " +
                         "Servers may use a default media type.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -700,7 +700,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. If there is no type attribute: " +
                         "Servers may reject the request with a 4xx range status code.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -722,7 +722,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. Any Content-Type header in the request should be " +
                         "ignored.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -749,7 +749,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "Fedora servers must use the value of the type attribute in the external content link as the media " +
                         "type of the external content, if provided. Any Content-Type header in the request should be " +
                         "ignored.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -775,7 +775,7 @@ public class ExternalBinaryContent extends AbstractTest {
                 "A Fedora server receiving requests that would create or update an LDP-NR with content external to " +
                         "the request entity must reject request if it cannot guarantee all of the response headers " +
                         "required by the LDP-NR interaction model in this specification.",
-                "https://fcrepo.github.io/fcrepo-specification/#external-content", ps);
+                SPEC_BASE_URL + "#external-content", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -803,7 +803,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9.1",
                 "Fedora servers supporting external content MUST include \"Accept-External-Content-Handling\" " +
                         "header in response to \"OPTIONS\" request.",
-                "https://fedora.info/2018/06/25/spec/#external-content-options", ps);
+                SPEC_BASE_URL + "#external-content-options", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -821,7 +821,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9.3-A-1",
                 "Fedora servers supporting \"redirect\" external content types MUST correctly respond to the " +
                         "\"Want-Digest\" header.",
-                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+                SPEC_BASE_URL + "#redirect-and-proxy", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -846,7 +846,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9.3-A-2",
                 "Fedora servers supporting \"redirect\" external content types MUST correctly respond to the " +
                         "\"Want-Digest\" header.",
-                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+                SPEC_BASE_URL + "#redirect-and-proxy", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -871,7 +871,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9.3-B-1",
                 "A successful response to a GET request for external content with handling of redirect " +
                         "must have status code of either 302 (Found) or 307 (Temporary Redirect)",
-                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+                SPEC_BASE_URL + "#redirect-and-proxy", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
@@ -894,7 +894,7 @@ public class ExternalBinaryContent extends AbstractTest {
         final TestInfo info = setupTest("3.9.3-B-2",
                 "A successful response to a HEAD request for external content with handling of redirect " +
                         "must have status code of either 302 (Found) or 307 (Temporary Redirect)",
-                "https://fedora.info/2018/06/25/spec/#redirect-and-proxy", ps);
+                SPEC_BASE_URL + "#redirect-and-proxy", ps);
 
         if (!externalContentSupported(uri)) {
             throw new SkipException("External Binaries are NOT supported");
