@@ -58,7 +58,7 @@ public class Container extends AbstractTest {
         "http://www.w3.org/ns/ldp#insertedContentRelation";
     private static final String LDP_MEMBER_SUBJECT = "http://www.w3.org/ns/ldp#MemberSubject";
     private static final String CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpc";
-    private static final String DIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpc";
+    private static final String DIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpdc";
     private static final String INDIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpic";
 
     /**
