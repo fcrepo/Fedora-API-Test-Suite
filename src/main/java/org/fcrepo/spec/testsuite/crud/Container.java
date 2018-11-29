@@ -54,6 +54,12 @@ public class Container extends AbstractTest {
 
     private Boolean directContainersSupported = null;
     private Boolean indirectContainersSupported = null;
+    private static final String LDP_INSERTED_CONTENT_RELATION_PREDICATE =
+        "http://www.w3.org/ns/ldp#insertedContentRelation";
+    private static final String LDP_MEMBER_SUBJECT = "http://www.w3.org/ns/ldp#MemberSubject";
+    private static final String CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpc";
+    private static final String DIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpdc";
+    private static final String INDIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpic";
 
     /**
      * 3.1.1-A-1
@@ -62,7 +68,7 @@ public class Container extends AbstractTest {
     public void createLDPC() {
         final TestInfo info = setupTest("3.1.1-A-1",
                                         "Implementations must support the creation and management of [LDP] Containers.",
-                                        SPEC_BASE_URL + "#ldpc", ps);
+                                        CONTAINER_SPEC_LINK, ps);
         createBasicContainer(uri, info);
     }
 
@@ -74,7 +80,7 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-A-2",
                                         "Implementations may support the creation and management of [LDP] Direct " +
                                         "Containers",
-                                        SPEC_BASE_URL + "#ldpc", ps);
+                                        CONTAINER_SPEC_LINK, ps);
         skipIfDirectContainersNotSupported();
     }
 
@@ -86,7 +92,7 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-A-3",
                                         "Implementations may support the creation and management of [LDP] Indirect " +
                                         "Containers",
-                                        SPEC_BASE_URL + "#ldpc", ps);
+                                        CONTAINER_SPEC_LINK, ps);
         skipIfIndirectContainersNotSupported();
     }
 
@@ -125,7 +131,7 @@ public class Container extends AbstractTest {
         final TestInfo info = setupTest("3.1.1-B",
                                         "ldpcContainmentTriples",
                                         "LDP Containers must distinguish [containment triples]",
-                                        SPEC_BASE_URL + "#ldpc",
+                                        CONTAINER_SPEC_LINK,
                                         ps);
         final Response base = createBasicContainer(uri, info);
 
@@ -164,7 +170,7 @@ public class Container extends AbstractTest {
     public void ldpcMembershipTriples() {
         final TestInfo info = setupTest("3.1.1-C",
                                         "LDP Containers must distinguish [membership] triples.",
-                                        SPEC_BASE_URL + "#ldpc",
+                                        CONTAINER_SPEC_LINK,
                                         ps);
         final Response base = createBasicContainer(uri, info);
 
@@ -250,7 +256,7 @@ public class Container extends AbstractTest {
     public void ldpcMinimalContainerTriples() {
         final TestInfo info = setupTest("3.1.1-D",
                                         "LDP Containers must distinguish [minimal-container] triples.",
-                                        SPEC_BASE_URL + "#ldpc",
+                                        CONTAINER_SPEC_LINK,
                                         ps);
         final Response base = createBasicContainer(uri, info);
 
@@ -314,7 +320,7 @@ public class Container extends AbstractTest {
                   "Implementations " +
                   "MUST allow the membership constant URI to be set via the " +
                   "ldp:membershipResource property of the content RDF on container creation.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -337,7 +343,7 @@ public class Container extends AbstractTest {
         setupTest("3.1.2-B",
                   "Implementations MUST set the ldp:membershipResource by default when" +
                   " not specified on creation.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -360,7 +366,7 @@ public class Container extends AbstractTest {
         setupTest("3.1.2-C",
                   "Implementations SHOULD set the ldp:membershipResource to the LDPC " +
                   " by default when not specified on creation.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -393,7 +399,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership constant URI to be updated by " +
                   "subsequent PUT requests that change the ldp:membershipResource " +
                   "property of the resource content.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
 
         //throw skip exception if direct containers not supported
@@ -429,7 +435,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership constant URI to be updated by " +
                   "subsequent PATCH requests that change the ldp:membershipResource " +
                   "property of the resource content.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -472,7 +478,7 @@ public class Container extends AbstractTest {
                   "of the content RDF on container creation, or otherwise default to an " +
                   "implementation defined value. Implementations should use the default <> " +
                   "ldp:hasMemberRelation ldp:member",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -496,7 +502,7 @@ public class Container extends AbstractTest {
                   "of the content RDF on container creation, or otherwise default to an " +
                   "implementation defined value. Implementations should use the default <> " +
                   "ldp:hasMemberRelation ldp:member",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -517,7 +523,7 @@ public class Container extends AbstractTest {
         setupTest("3.1.2-H",
                   "Implementations must allow the membership predicate  to be set by " +
                   "default to an implementation defined value. ",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -545,7 +551,7 @@ public class Container extends AbstractTest {
     public void ldpDirectContainerShouldUseLdpMemberByDefault() {
         setupTest("3.1.2-I",
                   "Implementations should use the default <> ldp:hasMemberRelation ldp:member",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -567,7 +573,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PUT requests that change the ldp:hasMemberRelation " +
                   "property of the resource content.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -604,7 +610,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PATCH requests that change the ldp:hasMemberRelation " +
                   "property of the resource content.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
@@ -646,7 +652,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PUT requests that change the ldp:isMemberOfRelation property of " +
                   "the resource content.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
 
         //throw skip exception if direct containers not supported
@@ -691,7 +697,7 @@ public class Container extends AbstractTest {
                   "Implementations may allow the membership predicate to be updated by " +
                   "subsequent PATCH requests that change the ldp:isMemberOfRelation " +
                   "property of the resource content.",
-                  SPEC_BASE_URL + "#ldpdc",
+                  DIRECT_CONTAINER_SPEC_LINK,
                   ps);
 
         //throw skip exception if direct containers not supported
@@ -729,4 +735,570 @@ public class Container extends AbstractTest {
                                                    LDP_IS_MEMBER_OF_RELATION_PREDICATE, isMemberOfPredicate1, false);
 
     }
+
+
+    /**
+     * 3.1.3-A
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerMustAllowMembershipConstantURIToBeSet() {
+        setupTest("3.1.3-A",
+                  "Implementations " +
+                  "MUST allow the indirect container's membership constant URI to be set via the " +
+                  "ldp:membershipResource property of the content RDF on container creation.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String membershipResource = getLocation(doPost(uri));
+
+        final String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> .\n"
+                            + "<> ldp:membershipResource <" + membershipResource + "> ;";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource, true);
+    }
+
+    /**
+     * 3.1.3-B
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerMustSetLdpMembershipResourceByDefault() {
+        setupTest("3.1.3-B",
+                  "Implementations MUST set the indirect container's ldp:membershipResource by default when" +
+                  " not specified on creation.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String body = "";
+        final Response directContainer = createIndirectContainer(uri, body);
+        final String directContainerResource = getLocation(directContainer);
+        final String responseBody = doGet(getLocation(directContainer)).getBody().asString();
+        try (CloseableDataset dataset = parseTriples(IOUtils.toInputStream(responseBody))) {
+            final DatasetGraph graph = dataset.asDatasetGraph();
+            assertTrue(graph.contains(ANY, createURI(directContainerResource),
+                                      createURI(LDP_MEMBERSHIP_RESOURCE_PREDICATE), ANY));
+        }
+    }
+
+    /**
+     * 3.1.3-C
+     */
+    @Test(groups = {"SHOULD"})
+    public void ldpIndirectContainerMustSetLdpMembershipResourceValueToLDPCByDefault() {
+        setupTest("3.1.3-C",
+                  "Implementations SHOULD set the indirect container's ldp:membershipResource to the LDPC " +
+                  " by default when not specified on creation.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String membershipResource = getLocation(doPost(uri));
+        final String body = "";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource, true);
+    }
+
+    /**
+     * 3.1.3-D
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpMembershipToBeUpdatedByPut() {
+        setupTest("3.1.3-D",
+                  "Implementations may allow the indirect container's membership constant URI to be updated by " +
+                  "subsequent PUT requests that change the ldp:membershipResource " +
+                  "property of the resource content.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String membershipResource1 = getLocation(doPost(uri));
+        final String membershipResource2 = getLocation(doPost(uri));
+
+        final Response response = createIndirectContainer(uri, INDIRECT_CONTAINER_BODY
+            .replace("%membershipResource%", membershipResource1));
+        final String containerResource = getLocation(response);
+        final String body = doGet(containerResource).getBody().asString();
+        final String newBody = body.replace(membershipResource1, membershipResource2);
+        final Response updateResponse =
+            doPutUnverified(containerResource, new Headers(new Header("Content-Type", "text/turtle")), newBody);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException("This implementation does not support PUT updates on ldp:membershipResource");
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource2, true);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource1, false);
+    }
+
+    /**
+     * 3.1.3-E
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpMembershipToBeUpdatedByPatch() {
+        setupTest("3.1.3-E",
+                  "Implementations may allow the indirect container's membership constant URI to be updated by " +
+                  "subsequent PATCH requests that change the ldp:membershipResource " +
+                  "property of the resource content.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String membershipResource1 = getLocation(doPost(uri));
+        final String membershipResource2 = getLocation(doPost(uri));
+
+        final Response response = createIndirectContainer(uri, INDIRECT_CONTAINER_BODY
+            .replace("%membershipResource%", membershipResource1));
+        final String containerResource = getLocation(response);
+
+        final String sparqlUpdate =
+            "DELETE { <> <" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + "> <" + membershipResource1 + ">  } \n" +
+            "INSERT { <> <" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + "> <" + membershipResource2 + ">  } \n" +
+            "WHERE {}";
+
+        final Response updateResponse =
+            doPatchUnverified(containerResource,
+                              new Headers(new Header("Content-Type", "application/sparql-update")),
+                              sparqlUpdate);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException("This implementation does not support PATCH updates on ldp:membershipResource");
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource2, true);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource1, false);
+    }
+
+    /**
+     * 3.1.3-F
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerMustAllowHasMemberRelationPredicateToBeSetOnCreate() {
+        setupTest("3.1.3-F",
+                  "Implementations must allow the membership predicate to be set on indirect containers " +
+                  "via either the ldp:hasMemberRelation or ldp:isMemberOfRelation property " +
+                  "of the content RDF on container creation.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String hasMemberPredicate = "http://example.org/ldp/member";
+        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
+                                                   LDP_HAS_MEMBER_RELATION_PREDICATE, hasMemberPredicate, true);
+    }
+
+    /**
+     * 3.1.3-G
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerMustAllowIsMemberOfRelationPredicateToBeSetOnCreate() {
+        setupTest("3.1.3-G",
+                  "Implementations must allow the membership predicate to be set on indirect containers" +
+                  "via ldp:isMemberOfRelation property " +
+                  "of the content RDF on container creation.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String isMemberPredicate = "http://example.org/ldp/isMemberOf";
+        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
+                                                   LDP_IS_MEMBER_OF_RELATION_PREDICATE, isMemberPredicate, true);
+    }
+
+    /**
+     * 3.1.3-H
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerMustAllowMembershipPredicateToBeSetByDefault() {
+        setupTest("3.1.3-H",
+                  "Implementations must allow the indirect container's membership predicate to be set by " +
+                  "default to an implementation defined value. ",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String body = "";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        final String responseBody = doGet(getLocation(container)).getBody().asString();
+        try (CloseableDataset dataset = parseTriples(IOUtils.toInputStream(responseBody))) {
+            final DatasetGraph graph = dataset.asDatasetGraph();
+            if (!graph.contains(ANY, createURI(containerResource), createURI(LDP_HAS_MEMBER_RELATION_PREDICATE), ANY) &&
+                !graph.contains(ANY, createURI(containerResource), createURI(LDP_IS_MEMBER_OF_RELATION_PREDICATE),
+                                ANY)) {
+                fail("Neither the " + LDP_HAS_MEMBER_RELATION_PREDICATE + " nor the " +
+                     LDP_IS_MEMBER_OF_RELATION_PREDICATE + " predicate found");
+            }
+        }
+    }
+
+
+    /**
+     * 3.1.3-I
+     */
+    @Test(groups = {"SHOULD"})
+    public void ldpIndirectContainerShouldUseLdpMemberByDefault() {
+        setupTest("3.1.3-I",
+                  "Implementations should use the default <> ldp:hasMemberRelation ldp:member",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String body = "";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        final Response response = doGet(getLocation(container));
+        confirmPresenceOrAbsenceOfTripleInResponse(response, containerResource, LDP_HAS_MEMBER_RELATION_PREDICATE,
+                                                   LDP_MEMBER, true);
+    }
+
+    /**
+     * 3.1.3-J
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpHasMemberRelationPredicateToBeUpdatedByPut() {
+        setupTest("3.1.3-J",
+                  "Implementations may allow the membership predicate to be updated by " +
+                  "subsequent PUT requests that change the ldp:hasMemberRelation " +
+                  "property of the resource content.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String hasMemberPredicate1 = "http://example.org/ldp/member1";
+        final String hasMemberPredicate2 = "http://example.org/ldp/member2";
+
+        final String requestBody = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate1 + "> ;\n";
+
+        final Response response = createIndirectContainer(uri, requestBody);
+        final String containerResource = getLocation(response);
+        final String body = doGet(containerResource).getBody().asString();
+        final String newBody = body.replace(hasMemberPredicate1, hasMemberPredicate2);
+        final Response updateResponse =
+            doPutUnverified(containerResource, new Headers(new Header("Content-Type", "text/turtle")), newBody);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException(
+                "This implementation does not support PUT updates on " + LDP_HAS_MEMBER_RELATION_PREDICATE);
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_HAS_MEMBER_RELATION_PREDICATE, hasMemberPredicate2, true);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_HAS_MEMBER_RELATION_PREDICATE, hasMemberPredicate1, false);
+    }
+
+    /**
+     * 3.1.3-K
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpHasMemberRelationToBeUpdatedByPatch() {
+        setupTest("3.1.3-K",
+                  "Implementations may allow the membership predicate to be updated by " +
+                  "subsequent PATCH requests that change the ldp:hasMemberRelation " +
+                  "property of the resource content.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String hasMemberPredicate = "http://example.org/ldp/member";
+        final String requestBody = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + LDP_MEMBER + "> ;\n";
+        final Response response = createIndirectContainer(uri, requestBody);
+        final String containerResource = getLocation(response);
+
+        final String sparqlUpdate =
+            "DELETE { <> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + LDP_MEMBER + ">  } \n" +
+            "INSERT { <> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + ">  } \n" +
+            "WHERE {}";
+
+        final Response updateResponse =
+            doPatchUnverified(containerResource,
+                              new Headers(new Header("Content-Type", "application/sparql-update")),
+                              sparqlUpdate);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException(
+                "This implementation does not support PATCH updates on " + LDP_HAS_MEMBER_RELATION_PREDICATE);
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_HAS_MEMBER_RELATION_PREDICATE, hasMemberPredicate, true);
+
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_HAS_MEMBER_RELATION_PREDICATE, LDP_MEMBER, false);
+
+    }
+
+    /**
+     * 3.1.3-L
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpIsMemberRelationPredicateToBeUpdatedByPut() {
+        setupTest("3.1.3-L",
+                  "Implementations may allow the membership predicate to be updated by " +
+                  "subsequent PUT requests that change the ldp:isMemberOfRelation property of " +
+                  "the resource content.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String isMemberOfPredicate1 = "http://example.org/ldp/isMemberOf1";
+        final String isMemberOfPredicate2 = "http://example.org/ldp/isMemberOf2";
+
+        final String requestBody =
+            "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberOfPredicate1 + "> ;\n";
+
+        final Response response = createIndirectContainer(uri, requestBody);
+        final String containerResource = getLocation(response);
+        final String body = doGet(containerResource).getBody().asString();
+
+        final String newBody = body.replace(isMemberOfPredicate1, isMemberOfPredicate2);
+        final Response updateResponse =
+            doPutUnverified(containerResource, new Headers(new Header("Content-Type", "text/turtle")), newBody);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException(
+                "This implementation does not support PUT updates on " + LDP_IS_MEMBER_OF_RELATION_PREDICATE);
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        if (!testForPresenceOfTrip(getUpdatedResource, containerResource,
+                                   LDP_IS_MEMBER_OF_RELATION_PREDICATE, isMemberOfPredicate2, true)) {
+            throw new SkipException(
+                "This implementation does not support PUT updates on " + LDP_IS_MEMBER_OF_RELATION_PREDICATE);
+        }
+
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_IS_MEMBER_OF_RELATION_PREDICATE, isMemberOfPredicate1, false);
+
+    }
+
+    /**
+     * 3.1.3-M
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpIsMemberRelationToBeUpdatedByPatch() {
+        setupTest("3.1.3-M",
+                  "Implementations may allow the membership predicate to be updated by " +
+                  "subsequent PATCH requests that change the ldp:isMemberOfRelation " +
+                  "property of the resource content.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if direct containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String isMemberOfPredicate1 = "http://example.org/ldp/isMemberOf1";
+        final String isMemberOfPredicate2 = "http://example.org/ldp/isMemberOf2";
+        final String requestBody =
+            "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberOfPredicate1 + "> ;\n";
+        final Response response = createIndirectContainer(uri, requestBody);
+        final String containerResource = getLocation(response);
+
+        final String sparqlUpdate =
+            "DELETE { <> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberOfPredicate1 + ">  } \n" +
+            "INSERT { <> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberOfPredicate2 + ">  } \n" +
+            "WHERE {}";
+
+        final Response updateResponse =
+            doPatchUnverified(containerResource,
+                              new Headers(new Header("Content-Type", "application/sparql-update")),
+                              sparqlUpdate);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException(
+                "This implementation does not support PATCH updates on " + LDP_IS_MEMBER_OF_RELATION_PREDICATE);
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        if (!testForPresenceOfTrip(getUpdatedResource, containerResource,
+                                   LDP_IS_MEMBER_OF_RELATION_PREDICATE, isMemberOfPredicate2, true)) {
+            throw new SkipException(
+                "This implementation does not support PATCH updates on " + LDP_IS_MEMBER_OF_RELATION_PREDICATE);
+        }
+
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_IS_MEMBER_OF_RELATION_PREDICATE, isMemberOfPredicate1, false);
+
+    }
+
+    /**
+     * 3.1.3-N
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerMustAllowInsertedContentRelationPredicateToBeSetOnCreate() {
+        setupTest("3.1.3-N",
+                  "Implementations must allow the ldp:insertedContentRelation property to be set via the content RDF " +
+                  "on container creation",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String memberSubject = "http://example.org/ldp/MemberSubject";
+        final String body = "<> <" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberSubject + "> ;";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
+                                                   LDP_INSERTED_CONTENT_RELATION_PREDICATE, memberSubject, true);
+    }
+
+    /**
+     * 3.1.3-O
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerMustAllowInsertedContentRelationToBeSetByDefault() {
+        setupTest("3.1.3-O",
+                  "Implementations must allow the ldp:insertedContentRelation property to be set by default to an " +
+                  "implementation defined value.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String body = "";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        final String responseBody = doGet(getLocation(container)).getBody().asString();
+        try (CloseableDataset dataset = parseTriples(IOUtils.toInputStream(responseBody))) {
+            final DatasetGraph graph = dataset.asDatasetGraph();
+            if (!graph
+                .contains(ANY, createURI(containerResource), createURI(LDP_INSERTED_CONTENT_RELATION_PREDICATE), ANY)) {
+                fail("The " + LDP_INSERTED_CONTENT_RELATION_PREDICATE + " predicate was expected but not found");
+            }
+        }
+    }
+
+    /**
+     * 3.1.3-P
+     */
+    @Test(groups = {"SHOULD"})
+    public void ldpIndirectContainerShouldUseLdpMemberSubjectByDefault() {
+        setupTest("3.1.3-P",
+                  "Implementations SHOULD allow the ldp:insertedContentRelation property to be set by default to " +
+                  "ldp:MemberSubject.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String body = "";
+        final Response container = createIndirectContainer(uri, body);
+        final String containerResource = getLocation(container);
+        final Response response = doGet(getLocation(container));
+        confirmPresenceOrAbsenceOfTripleInResponse(response, containerResource, LDP_INSERTED_CONTENT_RELATION_PREDICATE,
+                                                   LDP_MEMBER_SUBJECT, true);
+    }
+
+    /**
+     * 3.1.3-Q
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpInsertedContentRelationPredicateToBeUpdatedByPut() {
+        setupTest("3.1.3-Q",
+                  "Implementations may allow the ldp:insertedContentRelation property to be updated via the content " +
+                  "RDF by subsequent PUT requests.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String value1 = "http://example.org/ldp/MemberSubject1";
+        final String value2 = "http://example.org/ldp/MemberSubject2";
+
+        final String requestBody = "<> <" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + value1 + "> ;\n";
+
+        final Response response = createIndirectContainer(uri, requestBody);
+        final String containerResource = getLocation(response);
+        final String body = doGet(containerResource).getBody().asString();
+        final String newBody = body.replace(value1, value2);
+        final Response updateResponse =
+            doPutUnverified(containerResource, new Headers(new Header("Content-Type", "text/turtle")), newBody);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException(
+                "This implementation does not support PUT updates on " + LDP_INSERTED_CONTENT_RELATION_PREDICATE);
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_INSERTED_CONTENT_RELATION_PREDICATE, value2, true);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_INSERTED_CONTENT_RELATION_PREDICATE, value1, false);
+    }
+
+    /**
+     * 3.1.3-R
+     */
+    @Test(groups = {"MAY"})
+    public void ldpIndirectContainerMayAllowLdpInsertedContentRelationToBeUpdatedByPatch() {
+        setupTest("3.1.3-R",
+                  "Implementations may allow the ldp:insertedContentRelation property to be updated via the content " +
+                  "RDF by subsequent PATCH requests.",
+                  INDIRECT_CONTAINER_SPEC_LINK,
+                  ps);
+        //throw skip exception if indirect containers not supported
+        skipIfIndirectContainersNotSupported();
+
+        final String memberSubject = "http://example.org/ldp/MemberSubject";
+        final String requestBody =
+            "<> <" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + LDP_MEMBER_SUBJECT + "> ;\n";
+        final Response response = createIndirectContainer(uri, requestBody);
+        final String containerResource = getLocation(response);
+
+        final String sparqlUpdate =
+            "DELETE { <> <" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + LDP_MEMBER_SUBJECT + ">  } \n" +
+            "INSERT { <> <" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberSubject + ">  } \n" +
+            "WHERE {}";
+
+        final Response updateResponse =
+            doPatchUnverified(containerResource,
+                              new Headers(new Header("Content-Type", "application/sparql-update")),
+                              sparqlUpdate);
+        if (clientErrorRange().matches(updateResponse.statusCode())) {
+            throw new SkipException(
+                "This implementation does not support PATCH updates on " + LDP_INSERTED_CONTENT_RELATION_PREDICATE);
+        }
+
+        final Response getUpdatedResource = doGet(containerResource);
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_INSERTED_CONTENT_RELATION_PREDICATE, memberSubject, true);
+
+        confirmPresenceOrAbsenceOfTripleInResponse(getUpdatedResource, containerResource,
+                                                   LDP_INSERTED_CONTENT_RELATION_PREDICATE, LDP_MEMBER_SUBJECT, false);
+
+    }
+
+
 }

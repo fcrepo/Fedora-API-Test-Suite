@@ -199,6 +199,15 @@ public class AbstractTest {
         return response;
     }
 
+    protected Response createIndirectContainer(final String uri, final String body) {
+        final Response response = createIndirectContainerUnverified(uri, body);
+
+        response.then().statusCode(201);
+        registerTestResource(response);
+
+        return response;
+    }
+
     protected Response createDirectContainerUnverified(final String uri, final String body) {
         final Headers headers = new Headers(
                 new Header("Link", "<http://www.w3.org/ns/ldp#DirectContainer>; rel=\"type\""),
