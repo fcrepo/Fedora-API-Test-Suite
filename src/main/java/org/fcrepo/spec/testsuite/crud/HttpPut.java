@@ -56,7 +56,10 @@ public class HttpPut extends AbstractTest {
         final Headers headers = new Headers(
                 new Header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\""),
                 new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers);
+        final Response resource = doPostUnverified(uri, headers);
+        if (!successRange().matches(resource.statusCode())) {
+            throw new SkipException("Creation of RDFSource not supported");
+        }
 
         final String locationHeader = getLocation(resource);
         final Headers headers1 = new Headers(
