@@ -61,15 +61,18 @@ public class HttpPut extends AbstractTest {
         final String locationHeader = getLocation(resource);
         final Headers headers1 = new Headers(
                 new Header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\""));
-        doPutUnverified(locationHeader, headers1)
-                .then()
-                .statusCode(successRange());
+        final Response response = doPutUnverified(locationHeader, headers1);
+
+        // Is changing interaction model supported?
+        if (!successRange().matches(response.statusCode())) {
+            throw new SkipException("PUT to change interaction model not supported");
+        }
     }
 
     /**
      * 3.6-B
      */
-    @Test(groups = {"MAY"})
+    @Test(groups = {"MUST"})
     public void httpPutChangeTypeNotAllowed() {
         final TestInfo info = setupTest("3.6-B",
                                         "When accepting a PUT request against an existant resource, an HTTP Link: " +

@@ -33,6 +33,7 @@ import org.apache.jena.rdf.model.Statement;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.Link;
@@ -97,11 +98,18 @@ public class HttpGet extends AbstractTest {
                 ResourceFactory.createProperty("http://xmlns.com/foaf/0.1/name"),
                 ResourceFactory.createStringLiteral("Pythagoras"));
 
-        doGet(locationHeader, new Header("Prefer", "return=representation; "
-                + "include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""))
-                .then()
-                .header("preference-applied", containsString("return=representation"))
-                .body(new TripleMatcher(triple));
+        final Response response = doGet(locationHeader, new Header("Prefer", "return=representation; "
+                + "include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""));
+
+        final String header = response.getHeader("preference-applied");
+        if (header.contains("return=representation")) {
+            // Verify child triple is returned in parent response
+            response.then().body(new TripleMatcher(triple));
+
+        } else {
+            // Preference not supported
+            throw new SkipException("PreferContainedDescriptions not supported");
+        }
     }
 
     /**

@@ -22,6 +22,7 @@ import static org.testng.AssertJUnit.assertEquals;
 
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 /**
@@ -45,9 +46,15 @@ public class LdpcvHttpDelete extends AbstractVersioningTest {
         final String versionedResource = getLocation(response);
         final String timeMap = getTimeMapUri(doGet(versionedResource)).toString();
         final Response timeMapGet = doGet(timeMap);
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "DELETE", timeMapGet);
-        //delete the ldpcv
-        doDelete(timeMap);
+
+        if (hasHeaderValueInMultiValueHeader("Allow", "DELETE", timeMapGet)) {
+            //delete the ldpcv
+            doDelete(timeMap);
+        } else {
+            //delete not supported on LDPCv
+            throw new SkipException("DELETE not supported on LDPCv");
+        }
+
     }
 
     /**

@@ -22,6 +22,7 @@ import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 /**
@@ -48,11 +49,18 @@ public class WebACLinking extends AbstractTest {
 
         //PUT the new Resource
         final String aclLinkValue = "<" + aclUri + ">; rel=\"acl\"";
-        final Response resource = doPut(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
-        final String resourceUri = getLocation(resource);
-        final Response getResource = doGet(resourceUri);
-        confirmPresenceOfLinkValue(aclLinkValue, getResource);
+        final Response resource = doPutUnverified(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
 
+        if (successRange().matches(resource.statusCode())) {
+            // Verify creation of LDPR with ACL Link is supported
+            final String resourceUri = getLocation(resource);
+            final Response getResource = doGet(resourceUri);
+            confirmPresenceOfLinkValue(aclLinkValue, getResource);
+
+        } else {
+            // Creation of LDPR with ACL Link is not supported
+            throw new SkipException("Creation of LDPR with ACL Link not supported");
+        }
     }
 
     /**

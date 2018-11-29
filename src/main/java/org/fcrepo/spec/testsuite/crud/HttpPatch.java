@@ -29,6 +29,7 @@ import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.AbstractTest;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.fcrepo.spec.testsuite.TestParameters;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 /**
@@ -95,7 +96,12 @@ public class HttpPatch extends AbstractTest {
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
         final Headers headers = new Headers(new Header("Content-Type", "text/ldpatch"));
-        doPatch(locationHeader, headers, ldpatch);
+        final Response response = doPatchUnverified(locationHeader, headers, ldpatch);
+
+        // Is text/patch supported?
+        if (!successRange().matches(response.statusCode())) {
+            throw new SkipException("PATCH with 'text/ldpatch' not supported");
+        }
     }
 
     /**

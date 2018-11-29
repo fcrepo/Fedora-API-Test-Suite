@@ -20,7 +20,6 @@ package org.fcrepo.spec.testsuite.versioning;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
 import static org.testng.AssertJUnit.fail;
-import static org.testng.Assert.assertFalse;
 
 import java.net.URI;
 
@@ -28,6 +27,8 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.junit.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 /**
@@ -52,7 +53,16 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
 
         final URI timeMapURI = getTimeMapUri(createResponse);
         final String allow = doOptions(timeMapURI.toString()).getHeader("Allow");
-        assertFalse(allow.contains("POST"));
+
+        if (!allow.contains("POST")) {
+            // Verify POST is not supported
+            final Response response = doPostUnverified(timeMapURI.toString());
+            Assert.assertFalse(successRange().matches(response.statusCode()));
+
+        } else {
+            // POST is supported
+            throw new SkipException("POST on LDPCv is supported");
+        }
     }
 
     /**

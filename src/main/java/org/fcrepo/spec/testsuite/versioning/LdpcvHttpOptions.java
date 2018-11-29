@@ -20,10 +20,15 @@ package org.fcrepo.spec.testsuite.versioning;
 
 import java.net.URI;
 
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
+
+import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 
 /**
  * @author Daniel Bernstein
@@ -97,7 +102,15 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         final URI timeMapURI = getTimeMapUri(response);
         final Response optionsResponse = doOptions(timeMapURI.toString());
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "DELETE", optionsResponse);
+
+        if (hasHeaderValueInMultiValueHeader("Allow", "DELETE", optionsResponse)) {
+            // Verify DELETE is supported on LDPCv
+            doDelete(timeMapURI.toString());
+
+        } else {
+            // DELETE not supported on LDPCv
+            throw new SkipException("DELETE on LDPCv not supported");
+        }
     }
 
     /**
@@ -119,7 +132,22 @@ public class LdpcvHttpOptions extends AbstractVersioningTest {
 
         final URI timeMapURI = getTimeMapUri(response);
         final Response optionsResponse = doOptions(timeMapURI.toString());
-        confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "PATCH", optionsResponse);
+
+        if (hasHeaderValueInMultiValueHeader("Allow", "PATCH", optionsResponse)) {
+            final String body = "PREFIX dcterms: <http://purl.org/dc/terms/>"
+                    + " INSERT {"
+                    + " <> dcterms:description \"Patch Updated Description\" ."
+                    + "}"
+                    + " WHERE { }";
+            final Headers headers = new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE));
+
+            // Verify PATCH is supported on LDPCv
+            doPatch(timeMapURI.toString(), headers, body);
+
+        } else {
+            // PATCH not supported on LDPCv
+            throw new SkipException("PATCH on LDPCv not supported");
+        }
     }
 
     /**

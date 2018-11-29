@@ -21,6 +21,7 @@ import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
 import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 /**
@@ -87,7 +88,11 @@ public class WebACAccessToClass extends AbstractAuthzTest {
                               "PREFIX foaf: <http://xmlns.com/foaf/0.1/>  \n" +
                               "INSERT { <> rdf:type foaf:Image } WHERE {}";
         doPatch(descriptionUri, new Headers(new Header("Content-Type", "application/sparql-update")), sparql);
-        //verify user does have access
-        doGet(resourceUri, false);
+
+        final Response getResponse = doGetUnverified(resourceUri, false);
+        if (!successRange().matches(getResponse.statusCode())) {
+            // Inferencing on 'accessToClass' not supported
+            throw new SkipException("Inferencing on 'accessToClass' not supported");
+        }
     }
 }
