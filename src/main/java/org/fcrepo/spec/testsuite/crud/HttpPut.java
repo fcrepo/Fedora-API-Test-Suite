@@ -72,13 +72,13 @@ public class HttpPut extends AbstractTest {
     /**
      * 3.6-B
      */
-    @Test(groups = {"MUST"})
+    @Test(groups = {"SHOULD"})
     public void httpPutChangeTypeNotAllowed() {
         final TestInfo info = setupTest("3.6-B",
-                                        "When accepting a PUT request against an existant resource, an HTTP Link: " +
+                                        "When accepting a PUT request against an existent resource, an HTTP Link: " +
                                         "rel=\"type\" header may be included. If that type is a value in the LDP " +
                                         "namespace and is not either a current type of the resource or a subtype " +
-                                        "of a current type of the resource, the request must be " +
+                                        "of a current type of the resource, the request SHOULD be " +
                                         "rejected with a 409 Conflict response.",
                                         SPEC_BASE_URL + "#http-put", ps);
         final Headers headers = new Headers(
