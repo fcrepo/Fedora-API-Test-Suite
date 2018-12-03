@@ -1,9 +1,26 @@
 default:
-  rooturl: http://localhost:8080/rest
+  rooturl: http://localhost:8080/rest/
   root-controller-user-webid: http://example.com/fedoraAdmin
+  root-controller-user-name: fedoraAdmin
   root-controller-user-password: fedoraAdmin
   permissionless-user-webid: http://example.com/testuser
+  permissionless-user-name: testuser
   permissionless-user-password: testpass
   broker-url: tcp://127.0.0.1:61616
   topic-name: fedora
-  queue-name:
+  queue-name: 
+  implementation-name: Fedora
+  implementation-version: 5.0.0-RC
+tomcat:
+  rooturl: http://localhost:8080/fcrepo/rest/
+  root-controller-user-webid: http://example.com/fedoraAdmin
+  root-controller-user-name: fedoraAdmin
+  root-controller-user-password: secret3
+  permissionless-user-webid: http://example.com/testuser
+  permissionless-user-name: testuser
+  permissionless-user-password: password1
+  broker-url: tcp://127.0.0.1:61616
+  topic-name: fedora
+  queue-name: 
+  implementation-name: Fedora
+  implementation-version: 5.0.0-RC
