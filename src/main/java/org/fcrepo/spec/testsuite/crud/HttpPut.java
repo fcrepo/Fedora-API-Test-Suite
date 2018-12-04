@@ -91,9 +91,8 @@ public class HttpPut extends AbstractTest {
 
         final String locationHeader = getLocation(resource);
         final Headers headers1 = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"putUpdate.txt\""),
-                new Header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\""));
-        doPutUnverified(locationHeader, headers1, "TestString2.")
+                new Header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\""));
+        doPutUnverified(locationHeader, headers1)
                 .then()
                 .statusCode(409);
     }
