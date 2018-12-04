@@ -85,13 +85,16 @@ public class HttpPut extends AbstractTest {
                                         "rejected with a 409 Conflict response.",
                                         SPEC_BASE_URL + "#http-put", ps);
         final Headers headers = new Headers(
-                new Header(CONTENT_DISPOSITION, "attachment; filename=\"postCreate.txt\""),
+                new Header("Link", "<http://www.w3.org/ns/ldp#RDFSource>; rel=\"type\""),
                 new Header(SLUG, info.getId()));
-        final Response resource = doPost(uri, headers, "TestString.");
+        final Response resource = doPostUnverified(uri, headers);
+        if (!successRange().matches(resource.statusCode())) {
+            throw new SkipException("Creation of RDFSource not supported");
+        }
 
         final String locationHeader = getLocation(resource);
         final Headers headers1 = new Headers(
-                new Header("Link", "<http://www.w3.org/ns/ldp#BasicContainer>; rel=\"type\""));
+                new Header("Link", "<http://www.w3.org/ns/ldp#NonRDFSource>; rel=\"type\""));
         doPutUnverified(locationHeader, headers1)
                 .then()
                 .statusCode(409);
