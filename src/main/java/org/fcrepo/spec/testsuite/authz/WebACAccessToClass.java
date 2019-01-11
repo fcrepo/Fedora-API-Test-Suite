@@ -31,11 +31,41 @@ import org.testng.annotations.Test;
 public class WebACAccessToClass extends AbstractAuthzTest {
 
     /**
-     * 5.8-A - accessToClass MUST give access.
+     * 5.8-A-1 - accessToClass MUST give access.
      */
     @Test(groups = {"MUST"})
-    public void accessToClassMustGiveAccess() {
-        final TestInfo info = setupTest("5.8-A",
+    public void accessToClassMustGiveAccessToContainer() {
+        final TestInfo info = setupTest("5.8-A-1",
+                "When an ACL includes an acl:accessToClass statement, it MUST give access to " +
+                        "all " +
+                        "resources with the specified type, whether that type is client-managed or " +
+                        "server-managed",
+                SPEC_BASE_URL + "#access-to-class", ps);
+
+        //create an resource
+        final String testContainerUri = createResource(uri, info.getId());
+        //create a read acl with acl:accessToClass specified
+        createAclForResource(testContainerUri, "user-read-only-access-to-class.ttl", this.permissionlessUserWebId);
+        //create a child resource
+        final Response response = createBasicContainer(testContainerUri, "child");
+        final String resourceUri = getLocation(response);
+        //verify user does not have access.
+        doGetUnverified(resourceUri, false).then().statusCode(403);
+        //add the class/type triple to the child resource:
+        final String sparql = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
+                "PREFIX foaf: <http://xmlns.com/foaf/0.1/>  \n" +
+                "INSERT { <> rdf:type foaf:Document } WHERE {}";
+        doPatch(resourceUri, new Headers(new Header("Content-Type", "application/sparql-update")), sparql);
+        //verify user does have access
+        doGet(resourceUri, false);
+    }
+
+    /**
+     * 5.8-A-2 - accessToClass MUST give access.
+     */
+    @Test(groups = {"MUST"}, enabled = false)
+    public void accessToClassMustGiveAccessToBinary() {
+        final TestInfo info = setupTest("5.8-A-2",
                                         "When an ACL includes an acl:accessToClass statement, it MUST give access to " +
                                         "all " +
                                         "resources with the specified type, whether that type is client-managed or " +
@@ -52,7 +82,7 @@ public class WebACAccessToClass extends AbstractAuthzTest {
         final String resourceUri = getLocation(response);
         //verify user does not have access.
         doGetUnverified(resourceUri, false).then().statusCode(403);
-        //add the accessToClass triple to the description:
+        //add the class/type triple to the description:
         final String descriptionUri = getLdpNrDescription(resourceUri);
         final String sparql = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> \n" +
                               "PREFIX foaf: <http://xmlns.com/foaf/0.1/>  \n" +
