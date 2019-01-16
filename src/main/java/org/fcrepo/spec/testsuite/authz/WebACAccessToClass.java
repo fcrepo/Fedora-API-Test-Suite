@@ -63,7 +63,7 @@ public class WebACAccessToClass extends AbstractAuthzTest {
     /**
      * 5.8-A-2 - accessToClass MUST give access.
      */
-    @Test(groups = {"MUST"}, enabled = false)
+    @Test(groups = {"MUST"})
     public void accessToClassMustGiveAccessToBinary() {
         final TestInfo info = setupTest("5.8-A-2",
                                         "When an ACL includes an acl:accessToClass statement, it MUST give access to " +
