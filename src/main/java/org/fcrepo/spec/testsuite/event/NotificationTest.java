@@ -98,9 +98,9 @@ public class NotificationTest extends AbstractEventTest {
         final String location = getLocation(response);
         // Get the message bank back.
         final MessageBank listener = (MessageBank) consumer.getMessageListener();
-        // POST emits 2 events
+        // POST should emit at least 2 events
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() == 2);
+                .count() >= 2);
 
         // empty the message bank
         listener.clear();
@@ -110,23 +110,23 @@ public class NotificationTest extends AbstractEventTest {
 
         doPut(location, new Headers(new Header("Content-type", "text/turtle"), new Header("Prefer",
                 "handling=lenient; received=minimal")), body);
-        // PUT emits 1 event
+        // PUT should emit at least 1 event
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() == 1);
+                .count() >= 1);
 
         listener.clear();
         doPatch(location, new Headers(new Header("Content-type", "application/sparql-update")),
                 "prefix dc: <http://purl.org/dc/elements/1.1/> INSERT { <> dc:title \"This has been updated\"} " +
                         "WHERE {}");
-        // PATCH emits one event
+        // PATCH should emit at least 1 event
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() == 1);
+                .count() >= 1);
 
         listener.clear();
         doDelete(location);
-        // Delete emits 2 events.
+        // Delete should emit at least 2 events.
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() == 2);
+                .count() >= 2);
 
         consumer.close();
 
@@ -158,8 +158,9 @@ public class NotificationTest extends AbstractEventTest {
         final String location = getLocation(response);
         // Get the message bank back.
         final MessageBank listener = (MessageBank) consumer.getMessageListener();
+        // POST should emit at least 2 events
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() == 2);
+                .count() >= 2);
 
         final Resource locResource = ResourceFactory.createResource(location);
         final AtomicBoolean foundExpectedLocation = new AtomicBoolean(false);
@@ -244,8 +245,9 @@ public class NotificationTest extends AbstractEventTest {
         listener.clear();
         final Response resp = doPost(baseUri, new Headers(new Header("Link", "<" + type.getURI() + ">; rel=type")));
         final String location = getLocation(resp);
+        // system should emit at least 2 events
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() == 2);
+                .count() >= 2);
 
         final Resource locResource = ResourceFactory.createResource(location);
         listener.stream().forEach(m -> {
