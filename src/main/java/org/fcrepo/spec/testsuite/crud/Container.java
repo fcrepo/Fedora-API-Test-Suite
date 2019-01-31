@@ -370,12 +370,12 @@ public class Container extends AbstractTest {
                   ps);
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
-        final String membershipResource = getLocation(doPost(uri));
+        doPost(uri);
         final String body = "";
         final Response directContainer = createDirectContainer(uri, body);
         final String directContainerResource = getLocation(directContainer);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(directContainerResource), directContainerResource,
-                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource, true);
+                LDP_MEMBERSHIP_RESOURCE_PREDICATE, directContainerResource, true);
     }
 
     private CloseableDataset parseTriples(final InputStream content) {
@@ -801,12 +801,12 @@ public class Container extends AbstractTest {
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
-        final String membershipResource = getLocation(doPost(uri));
+        doPost(uri);
         final String body = "";
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
-                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource, true);
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, containerResource, true);
     }
 
     /**
