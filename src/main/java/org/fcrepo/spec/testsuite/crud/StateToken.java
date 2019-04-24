@@ -17,8 +17,8 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
-import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
+import static org.testng.AssertJUnit.assertNotSame;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -59,8 +59,8 @@ public class StateToken extends AbstractTest {
         final String sparqlUpdate =
             "INSERT { <> <http://purl.org/dc/elements/1.1/title> \"test\" . } WHERE {}";
         doPatch(resourceUri, new Headers(new Header("Content-Type", "application/sparql-update")), sparqlUpdate);
-        assertEquals("New " + STATE_TOKEN + "should not match previous token value", value,
-                     doGet(resourceUri).header(STATE_TOKEN));
+        assertNotSame("New " + STATE_TOKEN + " should not match previous token value", value,
+                      doGet(resourceUri).header(STATE_TOKEN));
     }
 
     private void skipIfStateTokenNotSupported(final Response response) throws SkipException {
@@ -97,8 +97,8 @@ public class StateToken extends AbstractTest {
         final String sparqlUpdate =
             "INSERT { <> <http://purl.org/dc/elements/1.1/title> \"test\" . } WHERE {}";
         doPatch(resourceUri, new Headers(new Header("Content-Type", "application/sparql-update")), sparqlUpdate);
-        assertEquals("New " + STATE_TOKEN + "should not match previous token value", value,
-                     doHead(resourceUri).header(STATE_TOKEN));
+        assertNotSame("New " + STATE_TOKEN + " should not match previous token value", value,
+                      doHead(resourceUri).header(STATE_TOKEN));
     }
 
     /**
