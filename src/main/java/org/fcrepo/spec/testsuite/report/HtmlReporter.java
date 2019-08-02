@@ -26,6 +26,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -201,7 +202,9 @@ public class HtmlReporter implements IReporter {
     }
 
     private void createWriter(final String output) {
-        final File dir = new File(TestSuiteGlobals.outputDirectory);
+        final String myOutputDirectory = Paths.get(App.getOutputDirectory(), TestSuiteGlobals.reportOutputDirectory)
+                .toString();
+        final File dir = new File(myOutputDirectory);
         dir.mkdirs();
 
         final String fileName = TestSuiteGlobals.outputName + "-execution-report.html";

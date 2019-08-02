@@ -19,6 +19,7 @@ package org.fcrepo.spec.testsuite.report;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Paths;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import java.util.Map;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DCTerms;
 import org.apache.jena.vocabulary.RDF;
+import org.fcrepo.spec.testsuite.App;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.testng.IReporter;
 import org.testng.IResultMap;
@@ -49,7 +51,9 @@ public class EarlReporter extends EarlCoreReporter implements IReporter {
     public void generateReport(final List<XmlSuite> xmlSuites, final List<ISuite> suites,
                                final String outputDirectory) {
         try {
-            createWriter(TestSuiteGlobals.outputDirectory);
+            final String myOutputDirectory = Paths.get(App.getOutputDirectory(),
+                    TestSuiteGlobals.reportOutputDirectory).toString();
+            createWriter(myOutputDirectory);
         } catch (IOException e) {
             e.printStackTrace(System.err);
             System.exit(1);
