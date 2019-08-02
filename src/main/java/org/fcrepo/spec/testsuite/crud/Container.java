@@ -138,12 +138,23 @@ public class Container extends AbstractTest {
         final Response container = createBasicContainer(getLocation(base), "container");
         final Response containerChild = createBasicContainer(getLocation(container), "child");
 
-        final Response direct = createDirectContainer(
-                getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
-        final Response directMember = createBasicContainer(getLocation(direct), "member");
+        // Skips adding a direct container and the triple check, if not supported
+        boolean directContainerTripleCheck = true;
+        Response directMember = null;
+        try {
+            skipIfDirectContainersNotSupported();
+            final Response direct = createDirectContainer(
+                    getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
+            directMember = createBasicContainer(getLocation(direct), "member");
+        } catch (SkipException e) { // DC not supported
+            directContainerTripleCheck = false;
+        }
 
+        // Only omit, not include, can guarantee the omission of specified triples.
         final Response resP = doGet(getLocation(container),
-                new Header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\""));
+                new Header("Prefer", "return=representation; " +
+                                     "omit=\"http://www.w3.org/ns/ldp#PreferMembership " +
+                                     "http://www.w3.org/ns/ldp#PreferMinimalContainer\""));
 
         ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();
@@ -158,9 +169,15 @@ public class Container extends AbstractTest {
         confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
                                                    getLocation(containerChild), true);
 
-        // Verify absence of unexpected triple in response body
-        confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
-                                                   getLocation(directMember), false);
+        if (directContainerTripleCheck) {
+            // Verify absence of unexpected triple in response body
+            confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
+                                                       getLocation(directMember), false);
+        }
+
+        // Check for presence of the dcterms:title triple.
+        confirmPresenceOrAbsenceOfPredicateInResponse(resP, getLocation(container), "http://purl.org/dc/terms/title",
+                false);
     }
 
     /**
@@ -263,13 +280,23 @@ public class Container extends AbstractTest {
         final Response container = createBasicContainer(getLocation(base), "container");
         final Response containerChild = createBasicContainer(getLocation(container), "child");
 
-        final Response direct = createDirectContainer(
-                getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
-        final Response directMember = createBasicContainer(getLocation(direct), "member");
+        // Skips adding a direct container and the triple check, if not supported
+        boolean directContainerTripleCheck = true;
+        Response directMember = null;
+        try {
+            skipIfDirectContainersNotSupported();
+            final Response direct = createDirectContainer(
+                    getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
+            directMember = createBasicContainer(getLocation(direct), "member");
+        } catch (SkipException e) { // DC not supported
+            directContainerTripleCheck = false;
+        }
 
+        // Only omit can guarantee the absence of certain triples.
         final Response resP = doGet(getLocation(container),
-                new Header("Prefer",
-                        "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\""));
+                                    new Header("Prefer", "return=representation; "
+                                               + "omit=\"http://www.w3.org/ns/ldp#PreferContainment "
+                                               + "http://www.w3.org/ns/ldp#PreferMembership\""));
 
         ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();
@@ -284,8 +311,14 @@ public class Container extends AbstractTest {
         confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
                                                    getLocation(containerChild), false);
 
-        confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
-                                                   getLocation(directMember), false);
+        if (directContainerTripleCheck) {
+            confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
+                                                       getLocation(directMember), false);
+        }
+
+        // Check for presence of the dcterms:title triple.
+        confirmPresenceOrAbsenceOfPredicateInResponse(resP, getLocation(container), "http://purl.org/dc/terms/title",
+                true);
     }
 
     private void confirmPresenceOrAbsenceOfTripleInResponse(final Response response, final String subjectUri,
@@ -309,6 +342,24 @@ public class Container extends AbstractTest {
             ResourceFactory.createProperty(predicateUri),
             ResourceFactory.createResource(objectUri));
         return new TripleMatcher(tripleMember, present).matches(response.getBody().asString());
+    }
+
+    private void confirmPresenceOrAbsenceOfPredicateInResponse(final Response response, final String subjectUri,
+            final String predicateUri, final boolean present) {
+        if (!testForPresenceOfPred(response, subjectUri, predicateUri, present)) {
+            if (present) {
+                fail("Predicate should have been present but wasn't.");
+            } else {
+                fail("Predicate should not have been present but was.");
+            }
+        }
+    }
+
+    private boolean testForPresenceOfPred(final Response response, final String subjectUri,
+            final String predicateUri, final boolean present) {
+        // Verify absence of a predicate in the response body
+        return new PredicateMatcher(ResourceFactory.createResource(subjectUri),
+                ResourceFactory.createProperty(predicateUri), present).matches(response.getBody().asString());
     }
 
     /**
