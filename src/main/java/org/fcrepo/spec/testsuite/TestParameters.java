@@ -64,6 +64,8 @@ public class TestParameters {
 
     public final static String IMPLEMENTATION_VERSION_PARAM = "implementation-version";
 
+    public final static String IMPLEMENTATION_NOTES_PARAM = "implementation-notes";
+
     private static TestParameters instance;
 
     private Map<String, String> params = null;

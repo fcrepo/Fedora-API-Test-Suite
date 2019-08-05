@@ -23,6 +23,7 @@ import static org.fcrepo.spec.testsuite.TestParameters.CONFIG_FILE_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.CONSTRAINT_ERROR_GENERATOR_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.IMPLEMENTATION_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.IMPLEMENTATION_VERSION_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.IMPLEMENTATION_NOTES_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_AUTH_HEADER;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.PERMISSIONLESS_USER_PASSWORD_PARAM;
@@ -44,10 +45,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -78,6 +82,16 @@ public class App {
      * Map of configuration options and whether they are required.
      */
     private static Map<String, Boolean> configArgs = new HashMap<>();
+
+    private static Map<String, String> implementationNotes = Collections.emptyMap();
+
+    /**
+     * Get implementation specific notes, per specifications section reference.
+     * @return Map of implementation notes
+     */
+    public static Map<String, String> getImplementationNotes() {
+        return App.implementationNotes;
+    }
 
     static {
         configArgs.put(ROOT_URL_PARAM, true);
@@ -178,7 +192,14 @@ public class App {
             if (configurationFile.exists()) {
                 final String sitename = cmd.getOptionValue(SITE_NAME_PARAM) == null ? "default" : cmd
                     .getOptionValue(SITE_NAME_PARAM);
-                params = retrieveConfig(configurationFile, sitename);
+                final Map<String, Object> configFileData = retrieveConfig(configurationFile, sitename);
+                params = configFileData.entrySet().stream().filter(e -> !e.getKey().equals(IMPLEMENTATION_NOTES_PARAM))
+                        .collect(Collectors.toMap(
+                            e -> e.getKey(),
+                            e -> (String)e.getValue()
+                        ));
+                App.implementationNotes = (Map<String, String>) configFileData
+                        .getOrDefault(IMPLEMENTATION_NOTES_PARAM, Collections.emptyMap());
             }
         }
 
@@ -285,13 +306,13 @@ public class App {
      * @return Array of args
      */
     @SuppressWarnings("unchecked")
-    protected static Map<String, String> retrieveConfig(final File configFile, final String siteName) {
+    protected static Map<String, Object> retrieveConfig(final File configFile, final String siteName) {
         if (!configFile.exists()) {
             printHelp("Configuration file does not exist: " + configFile);
         }
         try {
             final YamlReader reader = new YamlReader(new FileReader(configFile));
-            final Map<String, Map<String, String>> config = (Map<String, Map<String, String>>) reader.read();
+            final Map<String, Map<String, Object>> config = (Map<String, Map<String, Object>>) reader.read();
             if (config.containsKey(siteName)) {
                 return config.get(siteName);
             } else {

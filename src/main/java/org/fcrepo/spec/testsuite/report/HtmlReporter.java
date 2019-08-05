@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.fcrepo.spec.testsuite.App;
 import org.fcrepo.spec.testsuite.TestParameters;
 import org.fcrepo.spec.testsuite.TestSuiteGlobals;
 import org.rendersnake.HtmlCanvas;
@@ -220,15 +221,18 @@ public class HtmlReporter implements IReporter {
         html.tr().th().content("Specification Section");
         html.th().content("Req Level");
         html.th().content("Result");
-        html.th().content("Test Description")._tr();
+        html.th().content("Test Description");
+        html.th().content("Implementation Note")._tr();
         final Map<String, String[]> results = orderTestsResults(passedTests, skippedTests, failedTests);
 
+        final Map<String, String> implNotes = App.getImplementationNotes();
         for (String[] r : results.values()) {
             html.tr();
             html.td().a(href(r[0]).target("_blank")).write(r[3])._a()._td();
             html.td().content(r[5]);
             html.td().span(class_(r[1])).content(r[1])._td();
             html.td().content(r[2]);
+            html.td().content(implNotes.getOrDefault(r[3], ""));
             html._tr();
         }
 

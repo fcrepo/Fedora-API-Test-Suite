@@ -19,9 +19,9 @@ $ java -jar target/testSuite-1.0-SNAPSHOT-shaded.jar --rooturl http://localhost:
 * `rooturl` The repository base URL, e.g., `http://localhost:8080/rest/`
 * `root-controller-user-webid` A URI representing the WebID of a user with read, write, and control permissions on root container (corresponding with either root-controller-user-name and root-controller-user-password, or root-controller-user-auth-header-value).
 * `root-controller-user-name` Username of user associated with root-controller-user-webid
-* `root-controller-user-password` Password of user associated with root-controller-user-webid 
+* `root-controller-user-password` Password of user associated with root-controller-user-webid
 * `root-controller-user-auth-header-value` "Authorization" header value for a user with read, write, and control.  When present, this value will be added to the request effectively overriding Authenticator implementations, custom or default, found in the classpath.
-* `permissionless-user-webid` A URI representing the WebID of a user with no permissions (corresponding with either permissionless-user-name and permissionless-user-password, or permissionless-user-auth-header-value). 
+* `permissionless-user-webid` A URI representing the WebID of a user with no permissions (corresponding with either permissionless-user-name and permissionless-user-password, or permissionless-user-auth-header-value).
 * `permissionless-user-name` Username of user associated with the permissionless-user-webid
 * `permissionless-user-password` Password of user associated with permissionless-user-webid
 * `permissionless-user-auth-header-value` "Authorization" header value for a user with no preset permissions.  When present, this value will be added to the request, effectively overriding Authenticator implementations, custom or default, found in the classpath.
@@ -46,7 +46,7 @@ org.fcrepo.spec.testsuite.authn.DefaultAuthenticator for a sample implementation
 `authenticators` located in the same directory as your testsuite jar.
 
 ### Configuration file syntax
-The configuration file is Yaml and a simple structure. The first level groups a set of configuration parameters, these parameters are key value pairs with the keys being the above options.
+The configuration file is Yaml and a simple structure. The first level groups a set of configuration parameters, these parameters are key value pairs with the keys being the above options. You may also wish to document detailed implementation-specific behavior under the `implementation-notes` key. These notes are mapped by specification section references, E.G. "3.1.1-A", and they are included in the HTML test report.
 
 ```
 default:
@@ -58,6 +58,8 @@ default:
   broker-url: tcp://127.0.0.1:61616
   topic-name: fedora
   queue-name:
+  implementation-notes:
+    3.1.1-A: Direct containers are not supported.
 ```
 
 An example with multiple configurations looks like:
@@ -72,12 +74,14 @@ default:
   broker-url: tcp://127.0.0.1:61616
   topic-name: fedora
   queue-name:
+  implementation-notes:
+    3.1.1-A: Direct containers are not supported.
 othersite:
   rooturl: http://secondserver:8080/fcrepo/rest
   root-controller-user-webid: http://example.com/totalBoss
-  root-controller-user-password: totalBoss 
+  root-controller-user-password: totalBoss
   permissionless-user-webid: http://example.com/otherperson
-  permissionless-user-password: otherpassword 
+  permissionless-user-password: otherpassword
   broker-url: tcp://overtherainbow:61616
   topic-name:
   queue-name: fedora
