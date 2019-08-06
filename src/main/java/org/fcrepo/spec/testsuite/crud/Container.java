@@ -60,6 +60,7 @@ public class Container extends AbstractTest {
     private static final String CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpc";
     private static final String DIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpdc";
     private static final String INDIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpic";
+    private static final String CONTAINER_CONSTRAINTS_SPEC_LINK = SPEC_BASE_URL + "#constraints-document";
 
     /**
      * 3.1.1-A-1
@@ -189,6 +190,7 @@ public class Container extends AbstractTest {
                                         "LDP Containers must distinguish [membership] triples.",
                                         CONTAINER_SPEC_LINK,
                                         ps);
+        skipIfDirectContainersNotSupported();
         final Response base = createBasicContainer(uri, info);
 
         final Response container = createBasicContainer(getLocation(base), "container");
@@ -202,7 +204,6 @@ public class Container extends AbstractTest {
         final Response direct = createDirectContainerUnverified(getLocation(base), directBody);
         if (direct.getStatusCode() == 409) {
             verifyConstraintHeader(direct);
-
         } else if (direct.statusCode() == 201) {
             final Response directMember = createBasicContainer(getLocation(direct), "member");
 
@@ -1351,5 +1352,54 @@ public class Container extends AbstractTest {
 
     }
 
+    /**
+     * 3.1.5-1
+     */
+    @Test(groups = {"MUST"})
+    public void ldpDirectContainerSupportOrConstraintsDocument() {
+        setupTest("3.1.5-1",
+                  "When implementation choices result in failure to complete a client request, " +
+                  "response MUST include a Link header with a link relation of " +
+                  "http://www.w3.org/ns/ldp#constrainedBy, and a target URI identifying a document. " +
+                  "(direct container support)",
+                  CONTAINER_CONSTRAINTS_SPEC_LINK,
+                  ps);
+        try {
+            skipIfDirectContainersNotSupported();
+        } catch (SkipException e) {
+            final Response direct = createDirectContainerUnverified(uri, DIRECT_CONTAINER_BODY);
+            if (clientErrorRange().matches(direct.getStatusCode())) {
+                verifyConstraintHeader(direct);
+            }
+            if (direct.getStatusCode() != 409) {
+                Assert.fail("Unexpected response code: " + direct.getStatusCode());
+            }
+        }
+    }
+
+    /**
+     * 3.1.5-2
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerSupportOrConstraintsDocument() {
+        setupTest("3.1.5-2",
+                  "When implementation choices result in failure to complete a client request, " +
+                  "response MUST include a Link header with a link relation of " +
+                  "http://www.w3.org/ns/ldp#constrainedBy, and a target URI identifying a document. " +
+                  "(indirect container support)",
+                  CONTAINER_CONSTRAINTS_SPEC_LINK,
+                  ps);
+        try {
+            skipIfIndirectContainersNotSupported();
+        } catch (SkipException e) {
+            final Response indirect = createIndirectContainerUnverified(uri, INDIRECT_CONTAINER_BODY);
+            if (clientErrorRange().matches(indirect.getStatusCode())) {
+                verifyConstraintHeader(indirect);
+            }
+            if (indirect.getStatusCode() != 409) {
+                Assert.fail("Unexpected response code: " + indirect.getStatusCode());
+            }
+        }
+    }
 
 }
