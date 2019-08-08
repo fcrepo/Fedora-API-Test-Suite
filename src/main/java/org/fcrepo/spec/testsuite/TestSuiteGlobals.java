@@ -41,7 +41,7 @@ import org.testng.internal.Utils;
  */
 public abstract class TestSuiteGlobals {
     public static final String cssReport = "reportStyle.css";
-    public static final String outputDirectory = "report";
+    public static final String reportOutputDirectory = "report";
     public static final String outputName = "testsuite";
     public static final String earlReportSyntax = "TURTLE";
     public static final String ldptNamespace = "http://fedora.info/2017/06/30/spec/#";
@@ -85,14 +85,14 @@ public abstract class TestSuiteGlobals {
 
     private static void initialize() {
         //create output directory if does not exist
-        final File dir = new File(TestSuiteGlobals.outputDirectory);
+        final File dir = new File(TestSuiteGlobals.reportOutputDirectory);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         //remove existing log if exists
         final File f = new File(
-            TestSuiteGlobals.outputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
+            TestSuiteGlobals.reportOutputDirectory + "/" + TestSuiteGlobals.outputName + "-execution.log");
         if (f.exists()) {
             f.delete();
         }
@@ -159,7 +159,7 @@ public abstract class TestSuiteGlobals {
      */
     public static PrintStream logFile() {
         try {
-            final FileOutputStream fos = new FileOutputStream(new File(TestSuiteGlobals.outputDirectory + "/" +
+            final FileOutputStream fos = new FileOutputStream(new File(TestSuiteGlobals.reportOutputDirectory + "/" +
                                                                        TestSuiteGlobals.outputName + "-execution.log"),
                                                               true);
             return new PrintStream(fos);

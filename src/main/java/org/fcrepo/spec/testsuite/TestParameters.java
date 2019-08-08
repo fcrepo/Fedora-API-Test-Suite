@@ -56,6 +56,8 @@ public class TestParameters {
 
     public final static String CONFIG_FILE_PARAM = "config-file";
 
+    public final static String OUTPUT_DIRECTORY_PARAM = "output-directory";
+
     public final static String CONSTRAINT_ERROR_GENERATOR_PARAM = "constraint-error-generator";
 
     public final static String AUTHENTICATOR_CLASS_PARAM = "auth-class";

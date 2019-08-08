@@ -20,6 +20,7 @@ package org.fcrepo.spec.testsuite;
 import static org.fcrepo.spec.testsuite.TestParameters.AUTHENTICATOR_CLASS_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.BROKER_URL_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.CONFIG_FILE_PARAM;
+import static org.fcrepo.spec.testsuite.TestParameters.OUTPUT_DIRECTORY_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.CONSTRAINT_ERROR_GENERATOR_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.IMPLEMENTATION_NAME_PARAM;
 import static org.fcrepo.spec.testsuite.TestParameters.IMPLEMENTATION_VERSION_PARAM;
@@ -45,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +86,7 @@ public class App {
     private static Map<String, Boolean> configArgs = new HashMap<>();
 
     private static Map<String, String> implementationNotes = Collections.emptyMap();
+    private static String outputDirectory;
 
     /**
      * Get implementation specific notes, per specifications section reference.
@@ -91,6 +94,14 @@ public class App {
      */
     public static Map<String, String> getImplementationNotes() {
         return App.implementationNotes;
+    }
+
+    /**
+     * Get the high level output directory.
+     * @return String path to output directory
+     */
+    public static String getOutputDirectory() {
+        return App.outputDirectory;
     }
 
     static {
@@ -111,6 +122,7 @@ public class App {
         configArgs.put(CONSTRAINT_ERROR_GENERATOR_PARAM, false);
         configArgs.put(IMPLEMENTATION_NAME_PARAM, false);
         configArgs.put(IMPLEMENTATION_VERSION_PARAM, false);
+        configArgs.put(OUTPUT_DIRECTORY_PARAM, false);
     }
 
     /**
@@ -156,6 +168,8 @@ public class App {
                                      "Requirement levels. One or more of the following, " +
                                      "separated by ',': [ALL|MUST|SHOULD|MAY]"));
         options.addOption(new Option("c", CONFIG_FILE_PARAM, true, "Configuration file of test parameters."));
+        options.addOption(new Option("o", OUTPUT_DIRECTORY_PARAM, true,
+                "Output directory for reports and TestNG output."));
         options.addOption(new Option("n", SITE_NAME_PARAM, true,
                                      "Site name from configuration file (defaults to \"default\")"));
         options.addOption(new Option("k", BROKER_URL_PARAM, true, "The URL of the JMS broker."));
@@ -227,6 +241,12 @@ public class App {
                        "{ implementation version: please use --" + IMPLEMENTATION_VERSION_PARAM + " to specify}");
         }
 
+        if (isNullOrEmpty(params.get(OUTPUT_DIRECTORY_PARAM))) {
+            params.put(OUTPUT_DIRECTORY_PARAM,
+                       ".");
+        }
+        App.outputDirectory = params.get(OUTPUT_DIRECTORY_PARAM);
+
         TestParameters.initialize(params);
         final TestParameters tp = TestParameters.get();
         if (isNullOrEmpty(tp.getQueueName()) &&
@@ -277,6 +297,8 @@ public class App {
 
         final TestNG testng = new TestNG();
         testng.setCommandLineSuite(xmlSuite);
+        final String testngOutput = Paths.get(App.outputDirectory, "test-output").toString();
+        testng.setOutputDirectory(testngOutput);
 
         // Set requirement-level groups to be run
         if (!params.get(REQUIREMENTS_PARAM).isEmpty()) {
