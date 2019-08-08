@@ -380,7 +380,8 @@ public class Container extends AbstractTest {
         final String membershipResource = getLocation(doPost(uri));
 
         final String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> .\n"
-                            + "<> ldp:membershipResource <" + membershipResource + "> ;";
+                            + "<> ldp:membershipResource <" + membershipResource + "> ;\n"
+                            + "ldp:hasMemberRelation <ldp:member> .";
         final Response directContainer = createDirectContainer(uri, body);
         final String directContainerResource = getLocation(directContainer);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(directContainerResource), directContainerResource,
@@ -535,8 +536,11 @@ public class Container extends AbstractTest {
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
 
+        final String membershipResource = getLocation(doPost(uri));
+
         final String hasMemberPredicate = "http://example.org/ldp/member";
-        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <" + membershipResource + "> .";
         final Response directContainer = createDirectContainer(uri, body);
         final String directContainerResource = getLocation(directContainer);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(directContainerResource), directContainerResource,
@@ -559,8 +563,11 @@ public class Container extends AbstractTest {
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
 
+        final String membershipResource = getLocation(doPost(uri));
+
         final String isMemberPredicate = "http://example.org/ldp/isMemberOf";
-        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <" + membershipResource + "> .";
         final Response directContainer = createDirectContainer(uri, body);
         final String directContainerResource = getLocation(directContainer);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(directContainerResource), directContainerResource,
