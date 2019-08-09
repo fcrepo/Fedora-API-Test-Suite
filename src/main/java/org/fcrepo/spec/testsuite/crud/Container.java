@@ -811,14 +811,17 @@ public class Container extends AbstractTest {
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
-        final String membershipResource = getLocation(doPost(uri));
+        final String memberICR = "http://example.org/notldp/NotMemberSubject";
 
         final String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> .\n"
-                            + "<> ldp:membershipResource <" + membershipResource + "> ;";
+                            + "<> ldp:membershipResource <#it> ;\n"
+                            + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberICR + "> ;\n"
+                            + "ldp:hasMemberRelation <ldp:member> .";
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
-                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource, true);
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE,
+                                                   containerResource + "#it", true);
     }
 
     /**
@@ -952,15 +955,19 @@ public class Container extends AbstractTest {
     public void ldpIndirectContainerMustAllowHasMemberRelationPredicateToBeSetOnCreate() {
         setupTest("3.1.3-F",
                   "Implementations must allow the membership predicate to be set on indirect containers " +
-                  "via either the ldp:hasMemberRelation or ldp:isMemberOfRelation property " +
+                  "via either the ldp:hasMemberRelation property " +
                   "of the content RDF on container creation.",
                   INDIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
+        final String memberICR = "http://example.org/notldp/NotMemberSubject";
+
         final String hasMemberPredicate = "http://example.org/ldp/member";
-        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;\n"
+                + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberICR + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <#it> .";
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
@@ -981,8 +988,12 @@ public class Container extends AbstractTest {
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
+        final String memberICR = "http://example.org/notldp/NotMemberSubject";
+
         final String isMemberPredicate = "http://example.org/ldp/isMemberOf";
-        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;\n"
+                            + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberICR + "> ;\n"
+                            + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <#it> .";
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
@@ -1224,8 +1235,14 @@ public class Container extends AbstractTest {
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
+        final String membershipResource = getLocation(doPost(uri));
+        final String hasMemberPredicate = "http://example.org/ldp/member";
         final String memberSubject = "http://example.org/ldp/MemberSubject";
-        final String body = "<> <" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberSubject + "> ;";
+
+        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;\n"
+                + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberSubject + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <" + membershipResource + "> .";
+
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
