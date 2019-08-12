@@ -464,7 +464,7 @@ public class WebACModes extends AbstractAuthzTest {
         putResponse.then().statusCode(201);
 
         //create child resource acl
-        final String childResourceUri = getLocation(putResponse);
+        final String childResourceUri = resourceUri + "/child1";
         final String childAclUri = getAclLocation(childResourceUri);
         final Response childAclResponse =
             doPutUnverified(childAclUri, new Headers(new Header("Content-Type", "text/turtle")),
