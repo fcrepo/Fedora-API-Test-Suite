@@ -224,9 +224,7 @@ public class NotificationTest extends AbstractEventTest {
         // Start listening to the broker.
         connection.start();
 
-        containerTypes.stream().forEach(type -> {
-            doContainerTypeTest(uri, type, listener);
-        });
+        doContainerTypeTest(uri, ldpBasicContainer, listener);
 
         consumer.close();
 

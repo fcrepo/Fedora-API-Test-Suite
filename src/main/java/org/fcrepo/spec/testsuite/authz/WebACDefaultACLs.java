@@ -50,16 +50,17 @@ public class WebACDefaultACLs extends AbstractAuthzTest {
         final Headers headers = new Headers(new Header("Content-Type", "text/turtle"));
 
         //create a resource
-        final String grandParentUri = createResource(rootUri, info.getId());
+        final String grandParentUri = createResource(uri, info.getId());
         //create an acl with acl:default with write privileges
         createAclForResource(grandParentUri, "user-read-write.ttl", this.permissionlessUserWebId);
+
         //create a child  and child acl with read privileges and no acl:default
-        final Response childPost = doPost(grandParentUri, headers, simpleRDFBody);
+        final Response childPost = createBasicContainer(grandParentUri, "child", simpleRDFBody);
         final String childUri = getLocation(childPost);
         createAclForResource(childUri, "user-read-only-no-default.ttl", this.permissionlessUserWebId);
 
         //create a grandchild  with no acl.
-        final Response grandChildPost = doPost(childUri, headers, simpleRDFBody);
+        final Response grandChildPost = createBasicContainer(childUri, "grandchild", simpleRDFBody);
         final String grandChildUri = getLocation(grandChildPost);
 
         // verify that the user can read and write to the grandparent

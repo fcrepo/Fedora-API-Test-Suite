@@ -52,6 +52,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.message.BasicHeaderValueParser;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.CoreMatchers;
@@ -506,6 +508,37 @@ public class AbstractTest {
         public void describeTo(final Description description) {
             final String msg = expectMatch ? "To contain triple: " : "Not to contain triple: ";
             description.appendText(msg).appendText(triple.toString());
+        }
+    }
+
+    protected class PredicateMatcher<T> extends BaseMatcher<T> {
+
+        private final Resource mysubject;
+        private final Property mypredicate;
+        private final boolean expectMatch;
+
+        public PredicateMatcher(final Resource subject, final Property predicate) {
+            this(subject, predicate, true);
+        }
+
+        public PredicateMatcher(final Resource subject, final Property predicate, final boolean expect) {
+            mysubject = subject;
+            mypredicate = predicate;
+            expectMatch = expect;
+        }
+
+        @Override
+        public boolean matches(final Object item) {
+            final Model model = ModelFactory.createDefaultModel();
+            model.read(new StringReader(item.toString()), "", "TURTLE");
+
+            return model.contains(mysubject, mypredicate) == expectMatch;
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            final String msg = expectMatch ? "To contain predicate: " : "Not to contain predicate: ";
+            description.appendText(msg).appendText(mypredicate.toString());
         }
     }
 

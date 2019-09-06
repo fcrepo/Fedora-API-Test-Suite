@@ -60,6 +60,7 @@ public class Container extends AbstractTest {
     private static final String CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpc";
     private static final String DIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpdc";
     private static final String INDIRECT_CONTAINER_SPEC_LINK = SPEC_BASE_URL + "#ldpic";
+    private static final String CONTAINER_CONSTRAINTS_SPEC_LINK = SPEC_BASE_URL + "#constraints-document";
 
     /**
      * 3.1.1-A-1
@@ -138,12 +139,23 @@ public class Container extends AbstractTest {
         final Response container = createBasicContainer(getLocation(base), "container");
         final Response containerChild = createBasicContainer(getLocation(container), "child");
 
-        final Response direct = createDirectContainer(
-                getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
-        final Response directMember = createBasicContainer(getLocation(direct), "member");
+        // Skips adding a direct container and the triple check, if not supported
+        boolean directContainerTripleCheck = true;
+        Response directMember = null;
+        try {
+            skipIfDirectContainersNotSupported();
+            final Response direct = createDirectContainer(
+                    getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
+            directMember = createBasicContainer(getLocation(direct), "member");
+        } catch (SkipException e) { // DC not supported
+            directContainerTripleCheck = false;
+        }
 
+        // Only omit, not include, can guarantee the omission of specified triples.
         final Response resP = doGet(getLocation(container),
-                new Header("Prefer", "return=representation; include=\"http://www.w3.org/ns/ldp#PreferContainment\""));
+                new Header("Prefer", "return=representation; " +
+                                     "omit=\"http://www.w3.org/ns/ldp#PreferMembership " +
+                                     "http://www.w3.org/ns/ldp#PreferMinimalContainer\""));
 
         ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();
@@ -158,9 +170,15 @@ public class Container extends AbstractTest {
         confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
                                                    getLocation(containerChild), true);
 
-        // Verify absence of unexpected triple in response body
-        confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
-                                                   getLocation(directMember), false);
+        if (directContainerTripleCheck) {
+            // Verify absence of unexpected triple in response body
+            confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
+                                                       getLocation(directMember), false);
+        }
+
+        // Check for presence of the dcterms:title triple.
+        confirmPresenceOrAbsenceOfPredicateInResponse(resP, getLocation(container), "http://purl.org/dc/terms/title",
+                false);
     }
 
     /**
@@ -172,6 +190,7 @@ public class Container extends AbstractTest {
                                         "LDP Containers must distinguish [membership] triples.",
                                         CONTAINER_SPEC_LINK,
                                         ps);
+        skipIfDirectContainersNotSupported();
         final Response base = createBasicContainer(uri, info);
 
         final Response container = createBasicContainer(getLocation(base), "container");
@@ -185,7 +204,6 @@ public class Container extends AbstractTest {
         final Response direct = createDirectContainerUnverified(getLocation(base), directBody);
         if (direct.getStatusCode() == 409) {
             verifyConstraintHeader(direct);
-
         } else if (direct.statusCode() == 201) {
             final Response directMember = createBasicContainer(getLocation(direct), "member");
 
@@ -263,13 +281,23 @@ public class Container extends AbstractTest {
         final Response container = createBasicContainer(getLocation(base), "container");
         final Response containerChild = createBasicContainer(getLocation(container), "child");
 
-        final Response direct = createDirectContainer(
-                getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
-        final Response directMember = createBasicContainer(getLocation(direct), "member");
+        // Skips adding a direct container and the triple check, if not supported
+        boolean directContainerTripleCheck = true;
+        Response directMember = null;
+        try {
+            skipIfDirectContainersNotSupported();
+            final Response direct = createDirectContainer(
+                    getLocation(base), DIRECT_CONTAINER_BODY.replace("%membershipResource%", getLocation(container)));
+            directMember = createBasicContainer(getLocation(direct), "member");
+        } catch (SkipException e) { // DC not supported
+            directContainerTripleCheck = false;
+        }
 
+        // Only omit can guarantee the absence of certain triples.
         final Response resP = doGet(getLocation(container),
-                new Header("Prefer",
-                        "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\""));
+                                    new Header("Prefer", "return=representation; "
+                                               + "omit=\"http://www.w3.org/ns/ldp#PreferContainment "
+                                               + "http://www.w3.org/ns/ldp#PreferMembership\""));
 
         ps.append(resP.getStatusLine()).append("\n");
         final Headers headers = resP.getHeaders();
@@ -284,8 +312,14 @@ public class Container extends AbstractTest {
         confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
                                                    getLocation(containerChild), false);
 
-        confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
-                                                   getLocation(directMember), false);
+        if (directContainerTripleCheck) {
+            confirmPresenceOrAbsenceOfTripleInResponse(resP, getLocation(container), LDP_CONTAINS_PREDICATE,
+                                                       getLocation(directMember), false);
+        }
+
+        // Check for presence of the dcterms:title triple.
+        confirmPresenceOrAbsenceOfPredicateInResponse(resP, getLocation(container), "http://purl.org/dc/terms/title",
+                true);
     }
 
     private void confirmPresenceOrAbsenceOfTripleInResponse(final Response response, final String subjectUri,
@@ -311,6 +345,24 @@ public class Container extends AbstractTest {
         return new TripleMatcher(tripleMember, present).matches(response.getBody().asString());
     }
 
+    private void confirmPresenceOrAbsenceOfPredicateInResponse(final Response response, final String subjectUri,
+            final String predicateUri, final boolean present) {
+        if (!testForPresenceOfPred(response, subjectUri, predicateUri, present)) {
+            if (present) {
+                fail("Predicate should have been present but wasn't.");
+            } else {
+                fail("Predicate should not have been present but was.");
+            }
+        }
+    }
+
+    private boolean testForPresenceOfPred(final Response response, final String subjectUri,
+            final String predicateUri, final boolean present) {
+        // Verify absence of a predicate in the response body
+        return new PredicateMatcher(ResourceFactory.createResource(subjectUri),
+                ResourceFactory.createProperty(predicateUri), present).matches(response.getBody().asString());
+    }
+
     /**
      * 3.1.2-A
      */
@@ -328,7 +380,8 @@ public class Container extends AbstractTest {
         final String membershipResource = getLocation(doPost(uri));
 
         final String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> .\n"
-                            + "<> ldp:membershipResource <" + membershipResource + "> ;";
+                            + "<> ldp:membershipResource <" + membershipResource + "> ;\n"
+                            + "ldp:hasMemberRelation <ldp:member> .";
         final Response directContainer = createDirectContainer(uri, body);
         final String directContainerResource = getLocation(directContainer);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(directContainerResource), directContainerResource,
@@ -483,8 +536,11 @@ public class Container extends AbstractTest {
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
 
+        final String membershipResource = getLocation(doPost(uri));
+
         final String hasMemberPredicate = "http://example.org/ldp/member";
-        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <" + membershipResource + "> .";
         final Response directContainer = createDirectContainer(uri, body);
         final String directContainerResource = getLocation(directContainer);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(directContainerResource), directContainerResource,
@@ -507,8 +563,11 @@ public class Container extends AbstractTest {
         //throw skip exception if direct containers not supported
         skipIfDirectContainersNotSupported();
 
+        final String membershipResource = getLocation(doPost(uri));
+
         final String isMemberPredicate = "http://example.org/ldp/isMemberOf";
-        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <" + membershipResource + "> .";
         final Response directContainer = createDirectContainer(uri, body);
         final String directContainerResource = getLocation(directContainer);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(directContainerResource), directContainerResource,
@@ -752,14 +811,17 @@ public class Container extends AbstractTest {
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
-        final String membershipResource = getLocation(doPost(uri));
+        final String memberICR = "http://example.org/notldp/NotMemberSubject";
 
         final String body = "@prefix ldp: <http://www.w3.org/ns/ldp#> .\n"
-                            + "<> ldp:membershipResource <" + membershipResource + "> ;";
+                            + "<> ldp:membershipResource <#it> ;\n"
+                            + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberICR + "> ;\n"
+                            + "ldp:hasMemberRelation <ldp:member> .";
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
-                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE, membershipResource, true);
+                                                   LDP_MEMBERSHIP_RESOURCE_PREDICATE,
+                                                   containerResource + "#it", true);
     }
 
     /**
@@ -893,15 +955,19 @@ public class Container extends AbstractTest {
     public void ldpIndirectContainerMustAllowHasMemberRelationPredicateToBeSetOnCreate() {
         setupTest("3.1.3-F",
                   "Implementations must allow the membership predicate to be set on indirect containers " +
-                  "via either the ldp:hasMemberRelation or ldp:isMemberOfRelation property " +
+                  "via either the ldp:hasMemberRelation property " +
                   "of the content RDF on container creation.",
                   INDIRECT_CONTAINER_SPEC_LINK,
                   ps);
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
+        final String memberICR = "http://example.org/notldp/NotMemberSubject";
+
         final String hasMemberPredicate = "http://example.org/ldp/member";
-        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;\n"
+                + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberICR + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <#it> .";
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
@@ -922,8 +988,12 @@ public class Container extends AbstractTest {
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
+        final String memberICR = "http://example.org/notldp/NotMemberSubject";
+
         final String isMemberPredicate = "http://example.org/ldp/isMemberOf";
-        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;";
+        final String body = "<> <" + LDP_IS_MEMBER_OF_RELATION_PREDICATE + "> <" + isMemberPredicate + "> ;\n"
+                            + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberICR + "> ;\n"
+                            + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <#it> .";
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
@@ -1165,8 +1235,14 @@ public class Container extends AbstractTest {
         //throw skip exception if indirect containers not supported
         skipIfIndirectContainersNotSupported();
 
+        final String membershipResource = getLocation(doPost(uri));
+        final String hasMemberPredicate = "http://example.org/ldp/member";
         final String memberSubject = "http://example.org/ldp/MemberSubject";
-        final String body = "<> <" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberSubject + "> ;";
+
+        final String body = "<> <" + LDP_HAS_MEMBER_RELATION_PREDICATE + "> <" + hasMemberPredicate + "> ;\n"
+                + "<" + LDP_INSERTED_CONTENT_RELATION_PREDICATE + "> <" + memberSubject + "> ;\n"
+                + "<" + LDP_MEMBERSHIP_RESOURCE_PREDICATE + ">" + " <" + membershipResource + "> .";
+
         final Response container = createIndirectContainer(uri, body);
         final String containerResource = getLocation(container);
         confirmPresenceOrAbsenceOfTripleInResponse(doGet(containerResource), containerResource,
@@ -1300,5 +1376,54 @@ public class Container extends AbstractTest {
 
     }
 
+    /**
+     * 3.1.5-1
+     */
+    @Test(groups = {"MUST"})
+    public void ldpDirectContainerSupportOrConstraintsDocument() {
+        setupTest("3.1.5-1",
+                  "When implementation choices result in failure to complete a client request, " +
+                  "response MUST include a Link header with a link relation of " +
+                  "http://www.w3.org/ns/ldp#constrainedBy, and a target URI identifying a document. " +
+                  "(direct container support)",
+                  CONTAINER_CONSTRAINTS_SPEC_LINK,
+                  ps);
+        try {
+            skipIfDirectContainersNotSupported();
+        } catch (SkipException e) {
+            final Response direct = createDirectContainerUnverified(uri, DIRECT_CONTAINER_BODY);
+            if (clientErrorRange().matches(direct.getStatusCode())) {
+                verifyConstraintHeader(direct);
+            }
+            if (direct.getStatusCode() != 409) {
+                Assert.fail("Unexpected response code: " + direct.getStatusCode());
+            }
+        }
+    }
+
+    /**
+     * 3.1.5-2
+     */
+    @Test(groups = {"MUST"})
+    public void ldpIndirectContainerSupportOrConstraintsDocument() {
+        setupTest("3.1.5-2",
+                  "When implementation choices result in failure to complete a client request, " +
+                  "response MUST include a Link header with a link relation of " +
+                  "http://www.w3.org/ns/ldp#constrainedBy, and a target URI identifying a document. " +
+                  "(indirect container support)",
+                  CONTAINER_CONSTRAINTS_SPEC_LINK,
+                  ps);
+        try {
+            skipIfIndirectContainersNotSupported();
+        } catch (SkipException e) {
+            final Response indirect = createIndirectContainerUnverified(uri, INDIRECT_CONTAINER_BODY);
+            if (clientErrorRange().matches(indirect.getStatusCode())) {
+                verifyConstraintHeader(indirect);
+            }
+            if (indirect.getStatusCode() != 409) {
+                Assert.fail("Unexpected response code: " + indirect.getStatusCode());
+            }
+        }
+    }
 
 }
