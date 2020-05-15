@@ -20,7 +20,7 @@
     <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
     <maven.shade.plugin.version>3.0.0</maven.shade.plugin.version>
     <maven.source.plugin.version>3.0.1</maven.source.plugin.version>
-    <maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
+    <maven.javadoc.plugin.version>3.2.0</maven.javadoc.plugin.version>
     <commons.cli.version>1.2</commons.cli.version>
     <commons.lang3.version>3.3.2</commons.lang3.version>
     <commons.io.version>2.4</commons.io.version>
@@ -111,6 +111,7 @@
         <version>${maven.javadoc.plugin.version}</version>
         <configuration>
           <linksource>true</linksource>
+          <source>8</source>
         </configuration>
         <executions>
           <execution>
