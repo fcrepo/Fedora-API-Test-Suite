@@ -382,18 +382,15 @@ public class WebACModes extends AbstractAuthzTest {
         // Verify that non-admin user can not read the resource
         doGetUnverified(resourceUri, false).then().statusCode(403);
 
-        final String body = "PREFIX acl: <http://www.w3.org/ns/auth/acl#>\n"
-                + "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n"
-                + " INSERT {\n"
+        final String body = "@prefix acl: <http://www.w3.org/ns/auth/acl#> .\n"
+                + "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
                 + " <#openaccess> a acl:Authorization ;"
                 + " acl:mode acl:Read ;\n"
                 + " acl:agentClass foaf:Agent ; \n"
-                + " acl:accessTo <" + resourceUri + "> .\n"
-                + "}"
-                + " WHERE { }";
+                + " acl:accessTo <" + resourceUri + "> .";
 
         // Verify that non-admin user can update ACL
-        doPutUnverified(aclUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
+        doPutUnverified(aclUri, new Headers(new Header("Content-Type", "text/turtle")), body, false);
 
         // Verify that non-admin user can now read the resource
         doGet(resourceUri, false);
