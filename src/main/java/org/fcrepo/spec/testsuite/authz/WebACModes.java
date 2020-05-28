@@ -393,7 +393,7 @@ public class WebACModes extends AbstractAuthzTest {
                 + " WHERE { }";
 
         // Verify that non-admin user can update ACL
-        doPatch(aclUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
+        doPutUnverified(aclUri, new Headers(new Header("Content-Type", APPLICATION_SPARQL_UPDATE)), body, false);
 
         // Verify that non-admin user can now read the resource
         doGet(resourceUri, false);
