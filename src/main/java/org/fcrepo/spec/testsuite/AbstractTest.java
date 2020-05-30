@@ -597,7 +597,7 @@ public class AbstractTest {
 
     protected String joinLocation(final String uri, final String... subpaths) {
         final StringBuilder builder = new StringBuilder(uri);
-        builder.append(String.join("/", subpaths));
+        builder.append("/").append(String.join("/", subpaths));
         return builder.toString();
     }
 

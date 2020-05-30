@@ -1,5 +1,5 @@
 @prefix    acl:  <http://www.w3.org/ns/auth/acl#>.
 @prefix  vcard:  <http://www.w3.org/2006/vcard/ns#>.
 <>  a                vcard:Group;
-    vcard:hasMember  <${user}>;
+    vcard:hasMember  <${user}>.
 
