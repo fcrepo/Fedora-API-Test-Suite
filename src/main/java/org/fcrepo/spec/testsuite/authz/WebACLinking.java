@@ -86,7 +86,7 @@ public class WebACLinking extends AbstractTest {
 
         //PUT the new Resource
         final String aclLinkValue = "<" + aclUri + ">; rel=\"acl\"";
-        final Response resource = doPutUnverified(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
+        final Response resource = doPostUnverified(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
 
         if (resource.getStatusCode() >= 400) {
             confirmPresenceOfConstrainedByLink(resource);
