@@ -84,7 +84,7 @@ public class WebACLinking extends AbstractTest {
         final Response aclResponse = createBasicContainer(uri, info.getId() + "-acl");
         final String aclUri = getLocation(aclResponse);
 
-        //PUT the new Resource
+        //POST the new Resource
         final String aclLinkValue = "<" + aclUri + ">; rel=\"acl\"";
         final Response resource = doPostUnverified(uri, Headers.headers(new Header("Link", aclLinkValue)), "test body");
 
