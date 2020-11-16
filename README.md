@@ -1,5 +1,5 @@
 # Fedora-API-Test-Suite
-[![Build Status](https://travis-ci.org/fcrepo/Fedora-API-Test-Suite.svg?branch=master)](https://travis-ci.org/fcrepo/Fedora-API-Test-Suite)
+[![Build Status](https://github.com/fcrepo/Fedora-API-Test-Suite/workflows/Build/badge.svg)](https://github.com/fcrepo/Fedora-API-Test-Suite/actions?query=workflow%3A%22Build%22)
 [![LICENSE](https://img.shields.io/badge/license-Apache-blue.svg?style=flat-square)](./LICENSE)
 
 A Standalone testing suite that exercises the requirements in the Fedora API Specification indicating the degree of the server’s compliance with the specification.
