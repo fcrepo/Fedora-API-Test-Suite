@@ -17,9 +17,11 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
+import static org.fcrepo.spec.testsuite.Constants.LDP_CONSTRAINED_BY;
 import static org.fcrepo.spec.testsuite.Constants.NON_RDF_SOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
+import static org.junit.Assert.fail;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -116,10 +118,15 @@ public class LdprvHttpPut extends AbstractVersioningTest {
         final String newBody = body +  "@prefix dc: <http://purl.org/dc/elements/1.1/>\n\n" +
                 "<" + resourceUri + "> dc:title \"title test\" .";
         final Response response2 = doPutUnverified(resourceUri, headers, newBody);
-        assertEquals(response2.getStatusCode(), 204);
-        final Response getResponse2 = doGet(resourceUri, acceptTurtleHeader);
-        //verify that it was changed.
-        assertTrue(getResponse2.getBody().asString().contains("title test"));
+        if (response2.getStatusCode() == 204) {
+            final Response getResponse2 = doGet(resourceUri, acceptTurtleHeader);
+            //verify that it was changed.
+            assertTrue(getResponse2.getBody().asString().contains("title test"));
+        } else if (clientErrorRange().matches(response2.statusCode())) {
+            assertTrue(getLinksOfRelType(response2, LDP_CONSTRAINED_BY).count() > 0);
+        } else {
+            fail("PUT must succeed or fail with a 4xx and constrainedby link header");
+        }
     }
 
     /**

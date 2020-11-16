@@ -20,8 +20,11 @@ package org.fcrepo.spec.testsuite.crud;
 import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
 import static org.fcrepo.spec.testsuite.Constants.CONTENT_DISPOSITION;
 import static org.fcrepo.spec.testsuite.Constants.DIGEST;
+import static org.fcrepo.spec.testsuite.Constants.LDP_CONSTRAINED_BY;
 import static org.fcrepo.spec.testsuite.Constants.SLUG;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.fail;
+import static org.testng.Assert.assertTrue;
 
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
@@ -139,7 +142,12 @@ public class HttpPut extends AbstractTest {
             headers = new Headers(new Header("Content-Type", "text/turtle"));
         }
 
-        doPut(locationHeader, headers, newBody);
+        final Response response = doPutUnverified(locationHeader, headers, newBody);
+        if (clientErrorRange().matches(response.statusCode())) {
+            assertTrue(getLinksOfRelType(response, LDP_CONSTRAINED_BY).count() > 0);
+        } else if (response.getStatusCode() != 204) {
+            fail("PUT must succeed or fail with a 4xx and constrainedby link header");
+        }
     }
 
     /**

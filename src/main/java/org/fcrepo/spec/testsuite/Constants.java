@@ -80,6 +80,9 @@ public class Constants {
 
     public static final String MEMENTO_DATETIME_HEADER = "Memento-Datetime";
 
+    public static final String LDP_NAMESPACE = "http://www.w3.org/ns/ldp#";
+    public static final String LDP_CONSTRAINED_BY = LDP_NAMESPACE + "constrainedBy";
+
     private Constants() {
 
     }
