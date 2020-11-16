@@ -17,6 +17,9 @@
  */
 package org.fcrepo.spec.testsuite.crud;
 
+import static org.fcrepo.spec.testsuite.Constants.LDP_CONSTRAINED_BY;
+import static org.junit.Assert.fail;
+import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.assertNotNull;
 import static org.testng.AssertJUnit.assertNotSame;
 
@@ -204,8 +207,13 @@ public class StateToken extends AbstractTest {
 
         final String newBody = responseTxt + "\n<> <http://example.org/test> \"any value\".";
 
-        doPut(resourceUri, new Headers(new Header(IF_STATE_TOKEN, value),
+        final Response response = doPutUnverified(resourceUri, new Headers(new Header(IF_STATE_TOKEN, value),
                                        new Header("Content-Type", "text/turtle")), newBody);
+        if (clientErrorRange().matches(response.statusCode())) {
+            assertTrue(getLinksOfRelType(response, LDP_CONSTRAINED_BY).count() > 0);
+        } else if (response.getStatusCode() != 204) {
+            fail("PUT must succeed or fail with a 4xx and constrainedby link header");
+        }
     }
 
     /**
