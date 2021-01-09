@@ -98,9 +98,9 @@ public class NotificationTest extends AbstractEventTest {
         final String location = getLocation(response);
         // Get the message bank back.
         final MessageBank listener = (MessageBank) consumer.getMessageListener();
-        // POST should emit at least 2 events
+        // POST should emit at least 1 event
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() >= 2);
+                .count() >= 1);
 
         // empty the message bank
         listener.clear();
@@ -124,9 +124,9 @@ public class NotificationTest extends AbstractEventTest {
 
         listener.clear();
         doDelete(location);
-        // Delete should emit at least 2 events.
+        // Delete should emit at least 1 event.
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() >= 2);
+                .count() >= 1);
 
         consumer.close();
 
