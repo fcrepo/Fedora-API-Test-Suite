@@ -158,9 +158,9 @@ public class NotificationTest extends AbstractEventTest {
         final String location = getLocation(response);
         // Get the message bank back.
         final MessageBank listener = (MessageBank) consumer.getMessageListener();
-        // POST should emit at least 2 events
+        // POST should emit at least 1 event
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() >= 2);
+                .count() >= 1);
 
         final Resource locResource = ResourceFactory.createResource(location);
         final AtomicBoolean foundExpectedLocation = new AtomicBoolean(false);
@@ -241,11 +241,13 @@ public class NotificationTest extends AbstractEventTest {
      */
     private void doContainerTypeTest(final String baseUri, final Resource type, final MessageBank listener) {
         listener.clear();
-        final Response resp = doPost(baseUri, new Headers(new Header("Link", "<" + type.getURI() + ">; rel=type")));
+        final Response resp = doPost(baseUri, new Headers(
+                new Header("Link", "<" + type.getURI() + ">; rel=type"),
+                new Header("Content-Type", "text/turtle")));
         final String location = getLocation(resp);
-        // system should emit at least 2 events
+        // system should emit at least 1 event
         await().atMost(TEN_SECONDS).until(() -> listener.stream()
-                .count() >= 2);
+                .count() >= 1);
 
         final Resource locResource = ResourceFactory.createResource(location);
         listener.stream().forEach(m -> {
