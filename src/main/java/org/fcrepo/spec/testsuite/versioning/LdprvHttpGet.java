@@ -17,10 +17,11 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
-import static java.time.format.DateTimeFormatter.ISO_INSTANT;
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
-import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
+import io.restassured.http.Header;
+import io.restassured.response.Response;
+import org.fcrepo.spec.testsuite.TestInfo;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.time.Instant;
@@ -28,11 +29,10 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
-import io.restassured.http.Header;
-import io.restassured.response.Response;
-import org.fcrepo.spec.testsuite.TestInfo;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import static java.time.format.DateTimeFormatter.ISO_INSTANT;
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import static org.fcrepo.spec.testsuite.Constants.ORIGINAL_RESOURCE_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.TIME_GATE_LINK_HEADER;
 
 /**
  * @author Daniel Bernstein
@@ -45,10 +45,10 @@ public class LdprvHttpGet extends AbstractVersioningTest {
     @Test(groups = {"SHOULD"})
     public void shouldReturn406WhenNoLdprm() {
         final TestInfo info = setupTest("4.1.1-A-1",
-                                        "If no LDPRm is appropriate to the Accept-Datetime value, " +
-                                        "implementations should return a 406 (Unacceptable).",
-                                        SPEC_BASE_URL + "#ldprv-get",
-                                        ps);
+                "If no LDPRm is appropriate to the Accept-Datetime value, " +
+                        "implementations should return a 406 (Unacceptable).",
+                SPEC_BASE_URL + "#ldprv-get",
+                ps);
 
         //create ldprv
         final Response creationResponse = createVersionedResource(uri, info);
@@ -62,6 +62,17 @@ public class LdprvHttpGet extends AbstractVersioningTest {
         confirmPresenceOfTimeGateLink(response);
 
         //get timegate uri
+        final URI timemapUri = getTimeMapUri(response);
+        //check for any mementos on the time gate (they will exist if repository auto versions objects by default.
+        final Response timeMapResponse = doGet(timemapUri.toString(),
+                new Header("Accept", "application/link-format"));
+        final boolean hasMemento;
+        if (timeMapResponse.getBody().asString().contains("rel=\"memento\"")) {
+            hasMemento = true;
+        } else {
+            hasMemento = false;
+        }
+
         final URI timeGateUri = getTimeGateUri(response);
 
         //query timegate using Accept-Datetime
@@ -69,7 +80,9 @@ public class LdprvHttpGet extends AbstractVersioningTest {
 
         final String rfc1123Date = convertToRfc1123DateTimeString(isoDateString);
 
-        doGetUnverified(timeGateUri.toString(), new Header("Accept-Datetime", rfc1123Date)).then().statusCode(406);
+        //if no mementos created verify 406 otherwise 302
+        doGetUnverified(timeGateUri.toString(), new Header("Accept-Datetime", rfc1123Date)).then()
+                .statusCode(hasMemento ? 302 : 406);
     }
 
     /**
