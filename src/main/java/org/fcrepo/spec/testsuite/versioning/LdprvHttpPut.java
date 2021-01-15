@@ -101,7 +101,10 @@ public class LdprvHttpPut extends AbstractVersioningTest {
         final String resourceUri = getLocation(response);
 
         final Header acceptTurtleHeader = new Header("Accept", "text/turtle");
-        final Response getResponse = doGet(resourceUri, acceptTurtleHeader);
+        final Header preferHeader = new Header("Prefer", "return=representation; " +
+                "include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"; " +
+                "omit=\"http://fedora.info/definitions/fcrepo#ServerManaged\"");
+        final Response getResponse = doGet(resourceUri, preferHeader);
         //verify that "Allow: PUT" header is present
         confirmPresenceOfHeaderValueInMultiValueHeader("Allow", "PUT", getResponse);
 
