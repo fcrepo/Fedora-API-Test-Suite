@@ -19,6 +19,7 @@ package org.fcrepo.spec.testsuite.versioning;
 
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
 import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
+import static org.testng.Assert.assertTrue;
 import static org.testng.AssertJUnit.fail;
 
 import java.net.URI;
@@ -168,7 +169,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
 
         final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader);
 
-        // does the version look like the original still?
+        // is the memento exactly the same as the original?
         confirmResponseBodyNTriplesAreEqual(origResponse, versionResponse);
 
         // is version marked as memento?
@@ -232,13 +233,23 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
             originalResponse.getBody().asString() +
                     "<" + originalResource + "> <http://purl.org/dc/elements/1.1/description> \"test\"";
         final URI timeMapURI = getTimeMapUri(originalResponse);
-        if (hasHeaderValueInMultiValueHeader("Allow", "POST", doGet(timeMapURI.toString()))) {
+
+         final Response getTimemapResponse =  doGet(timeMapURI.toString());
+        if (hasHeaderValueInMultiValueHeader("Allow", "POST",getTimemapResponse)) {
+            //throws SkipException if not supported.
+            ensurePostWithMementoDatetimeHeaderIsSupported(getTimemapResponse);
             //create a memento using the Memento-Datetime and a body
             final String mementoUri =
                 createMemento(originalResource, "Sat, 1 Jan 2000 00:00:00 GMT", "text/turtle", body);
             // is the memento exactly the same as provided?
             confirmResponseBodyNTriplesAreEqual(body, doGet(mementoUri, acceptNTriples).getBody().asString());
 
+        }
+    }
+
+    private void ensurePostWithMementoDatetimeHeaderIsSupported(final Response response) {
+        if (!hasHeaderValueInMultiValueHeader("Vary-Post", MEMENTO_DATETIME_HEADER, response)) {
+            throw new SkipException("LDPCv POST with " + MEMENTO_DATETIME_HEADER + " is not supported.");
         }
     }
 
@@ -263,13 +274,15 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         final Response originalResponse = doGet(originalResource);
         final String body = originalResponse.getBody().asString();
         final URI timeMapURI = getTimeMapUri(originalResponse);
-        if (hasHeaderValueInMultiValueHeader("Allow", "POST", doGet(timeMapURI.toString()))) {
+        final Response getTimemapResponse =  doGet(timeMapURI.toString());
+        if (hasHeaderValueInMultiValueHeader("Allow", "POST", getTimemapResponse)) {
+            //throws SkipException if not supported.
+            ensurePostWithMementoDatetimeHeaderIsSupported(getTimemapResponse);
             //create a memento using the Memento-Datetime and a body
             final String mementoUri = createMemento(originalResource, mementoDateTime, "text/turtle", body);
             //verify Memento-Datetime- is in the request header
             confirmPresenceOfMementoDatetimeHeader(mementoDateTime, doGet(mementoUri));
         }
-
     }
 
     /**
