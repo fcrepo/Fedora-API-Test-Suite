@@ -38,6 +38,9 @@ import org.testng.annotations.Test;
  */
 public class LdpcvHttpPost extends AbstractVersioningTest {
 
+    private static final String PREFER_MINIMAL_CONTAINER_HEADER = "return=representation; " +
+            "omit=\"http://fedora.info/definitions/v4/repository#ServerManaged\"";
+
     /**
      * 4.3 may disallow post
      */
@@ -83,8 +86,9 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         // create the versioned resource
         final Response createResponse = createVersionedResource(uri, info);
 
-        // get the new resource, which should have all the proper memento headers
-        final Response origResponse = doGet(getLocation(createResponse), acceptNTriplesHeader);
+        // get the new resource, which should have all the proper memento headers and return only minimal container
+        final Header preferHeader = new Header("Prefer", PREFER_MINIMAL_CONTAINER_HEADER);
+        final Response origResponse = doGet(getLocation(createResponse), acceptNTriplesHeader, preferHeader);
         final URI timeMapURI = getTimeMapUri(origResponse);
 
         // create a version on the resource
@@ -94,7 +98,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         confirmPresenceOfVersionLocationHeader(timeMapResponse);
 
         // get the new memento
-        final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader);
+        final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader, preferHeader);
 
         // is the memento exactly the same as the original?
         confirmResponseBodyNTriplesAreEqual(origResponse, versionResponse);
@@ -156,8 +160,9 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         // create the versioned resource
         final Response createResponse = createVersionedResource(uri, info);
 
-        // get the new resource, which should have all the proper memento headers
-        final Response origResponse = doGet(getLocation(createResponse), acceptNTriplesHeader);
+        // get the new resource, which should have all the proper memento headers and return only minimal container
+        final Header preferHeader = new Header("Prefer", PREFER_MINIMAL_CONTAINER_HEADER);
+        final Response origResponse = doGet(getLocation(createResponse), acceptNTriplesHeader, preferHeader);
         final URI timeMapURI = getTimeMapUri(origResponse);
 
         // create a memento for the current time
@@ -166,7 +171,7 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
         // should have location header information of new memento
         confirmPresenceOfVersionLocationHeader(timeMapResponse);
 
-        final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader);
+        final Response versionResponse = doGet(getLocation(timeMapResponse), acceptNTriplesHeader, preferHeader);
 
         // does the version look like the original still?
         confirmResponseBodyNTriplesAreEqual(origResponse, versionResponse);

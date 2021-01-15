@@ -17,29 +17,6 @@
  */
 package org.fcrepo.spec.testsuite;
 
-import static io.restassured.config.RedirectConfig.redirectConfig;
-import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
-import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
-import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
-import static org.fcrepo.spec.testsuite.Constants.SLUG;
-import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
-import static org.fcrepo.spec.testsuite.authn.AuthUtil.auth;
-import static org.testng.AssertJUnit.fail;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.io.StringReader;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-import javax.ws.rs.core.Link;
-
 import io.restassured.RestAssured;
 import io.restassured.config.EncoderConfig;
 import io.restassured.config.LogConfig;
@@ -63,6 +40,29 @@ import org.hamcrest.Matchers;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
+import javax.ws.rs.core.Link;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import static io.restassured.config.RedirectConfig.redirectConfig;
+import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
+import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_BODY;
+import static org.fcrepo.spec.testsuite.Constants.BASIC_CONTAINER_LINK_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.SLUG;
+import static org.fcrepo.spec.testsuite.TestSuiteGlobals.registerTestResource;
+import static org.fcrepo.spec.testsuite.authn.AuthUtil.auth;
+import static org.testng.AssertJUnit.fail;
 
 /**
  * A crud base class for common crud functions.
@@ -376,8 +376,8 @@ public class AbstractTest {
         return auth(RestAssured.given(), webId).urlEncodingEnabled(false);
     }
 
-    protected Response doGet(final String uri, final Header header) {
-        final Response response = doGetUnverified(uri, header);
+    protected Response doGet(final String uri, final Header... headers) {
+        final Response response = doGetUnverified(uri, headers);
 
         response.then().statusCode(200);
 
@@ -396,8 +396,12 @@ public class AbstractTest {
         return doGet(uri, true);
     }
 
-    protected Response doGetUnverified(final String uri, final Header header) {
-        return createRequest().header(header).when().get(uri);
+    protected Response doGetUnverified(final String uri, final Header... headers) {
+        final RequestSpecification request = createRequest();
+        for (Header header : headers) {
+            request.header(header);
+        }
+        return request.when().get(uri);
     }
 
     protected Response doGetUnverified(final String uri) {
