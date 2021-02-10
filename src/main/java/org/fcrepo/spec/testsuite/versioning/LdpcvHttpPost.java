@@ -17,13 +17,6 @@
  */
 package org.fcrepo.spec.testsuite.versioning;
 
-import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
-import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
-import static org.testng.Assert.assertTrue;
-import static org.testng.AssertJUnit.fail;
-
-import java.net.URI;
-
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
@@ -31,6 +24,12 @@ import org.fcrepo.spec.testsuite.TestInfo;
 import org.junit.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.Test;
+
+import java.net.URI;
+
+import static org.fcrepo.spec.testsuite.Constants.MEMENTO_DATETIME_HEADER;
+import static org.fcrepo.spec.testsuite.Constants.MEMENTO_LINK_HEADER;
+import static org.testng.AssertJUnit.fail;
 
 /**
  * Tests for POST requests on LDP Version Container Resources
@@ -234,16 +233,15 @@ public class LdpcvHttpPost extends AbstractVersioningTest {
                     "<" + originalResource + "> <http://purl.org/dc/elements/1.1/description> \"test\"";
         final URI timeMapURI = getTimeMapUri(originalResponse);
 
-         final Response getTimemapResponse =  doGet(timeMapURI.toString());
-        if (hasHeaderValueInMultiValueHeader("Allow", "POST",getTimemapResponse)) {
+        final Response getTimemapResponse =  doGet(timeMapURI.toString());
+        if (hasHeaderValueInMultiValueHeader("Allow", "POST", getTimemapResponse)) {
             //throws SkipException if not supported.
             ensurePostWithMementoDatetimeHeaderIsSupported(getTimemapResponse);
             //create a memento using the Memento-Datetime and a body
             final String mementoUri =
-                createMemento(originalResource, "Sat, 1 Jan 2000 00:00:00 GMT", "text/turtle", body);
+                    createMemento(originalResource, "Sat, 1 Jan 2000 00:00:00 GMT", "text/turtle", body);
             // is the memento exactly the same as provided?
             confirmResponseBodyNTriplesAreEqual(body, doGet(mementoUri, acceptNTriples).getBody().asString());
-
         }
     }
 
