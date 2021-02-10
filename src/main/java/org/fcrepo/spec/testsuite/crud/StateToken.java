@@ -195,7 +195,7 @@ public class StateToken extends AbstractTest {
         final String resourceUri = getLocation(createResponse);
         final Header preferHeader = new Header("Prefer", "return=representation; " +
                 "include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"; " +
-                "omit=\"http://fedora.info/definitions/v4/repository#ServerManaged\"");
+                "omit=\"http://fedora.info/definitions/fcrepo#ServerManaged\"");
         final Response getResponse = doGet(resourceUri, preferHeader);
 
         //throw skip exception if state token not supported
