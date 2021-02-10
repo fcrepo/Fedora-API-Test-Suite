@@ -114,7 +114,7 @@ public class HttpPut extends AbstractTest {
         final String locationHeader = getLocation(resource);
         final Header preferHeader = new Header("Prefer",
                 "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"; " +
-                        "omit=\"http://fedora.info/definitions/v4/repository#ServerManaged\"");
+                        "omit=\"http://fedora.info/definitions/fcrepo#ServerManaged\"");
         final Response getResponse = doGet(locationHeader, preferHeader);
         final String body2 = getResponse.asString();
         final String etag = getETag(getResponse);
