@@ -112,8 +112,10 @@ public class HttpPut extends AbstractTest {
                                         SPEC_BASE_URL + "#http-put-ldprs", ps);
         final Response resource = createBasicContainer(uri, info);
         final String locationHeader = getLocation(resource);
-
-        final Response getResponse = doGet(locationHeader);
+        final Header preferHeader = new Header("Prefer",
+                "return=representation; include=\"http://www.w3.org/ns/ldp#PreferMinimalContainer\"; " +
+                        "omit=\"http://fedora.info/definitions/fcrepo#ServerManaged\"");
+        final Response getResponse = doGet(locationHeader, preferHeader);
         final String body2 = getResponse.asString();
         final String etag = getETag(getResponse);
 
