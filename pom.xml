@@ -23,7 +23,7 @@
     <maven.javadoc.plugin.version>3.2.0</maven.javadoc.plugin.version>
     <commons.cli.version>1.2</commons.cli.version>
     <commons.lang3.version>3.3.2</commons.lang3.version>
-    <commons.io.version>2.4</commons.io.version>
+    <commons.io.version>2.7</commons.io.version>
     <testng.version>6.10</testng.version>
     <rest.assured.version>3.1.0</rest.assured.version>
     <sesame.model.version>4.1.0</sesame.model.version>
