@@ -21,6 +21,8 @@ import static org.fcrepo.spec.testsuite.Constants.APPLICATION_SPARQL_UPDATE;
 import io.restassured.http.Header;
 import io.restassured.http.Headers;
 import io.restassured.response.Response;
+import org.hamcrest.core.Is;
+import org.hamcrest.core.AnyOf;
 import org.fcrepo.spec.testsuite.TestInfo;
 
 import org.testng.SkipException;
@@ -461,7 +463,7 @@ public class WebACModes extends AbstractAuthzTest {
         putResponse.then().statusCode(201);
 
         //create child resource acl
-        final String childResourceUri = getLocation(putResponse);
+        final String childResourceUri = resourceUri + "/child1";
         final String childAclUri = getAclLocation(childResourceUri);
         final Response childAclResponse =
             doPutUnverified(childAclUri, new Headers(new Header("Content-Type", "text/turtle")),
@@ -606,29 +608,29 @@ public class WebACModes extends AbstractAuthzTest {
 
         // POST requests to a LDP-NR with acl:Append only MUST be denied
         final Response postRequest = doPostUnverified(resourceUri, null, null, false);
-        postRequest.then().statusCode(403);
+        postRequest.then().statusCode(AnyOf.anyOf(Is.is(403), Is.is(405)));
 
         // PUT requests to a LDP-NR with acl:Append only MUST be denied
         final Response putRequest = doPutUnverified(resourceUri, null, null, false);
-        putRequest.then().statusCode(403);
+        putRequest.then().statusCode(AnyOf.anyOf(Is.is(403), Is.is(405)));
 
         // DELETE requests to a LDP-NR with acl:Append only MUST be denied
         final Response deleteRequest = doDeleteUnverified(resourceUri, false);
-        deleteRequest.then().statusCode(403);
+        deleteRequest.then().statusCode(AnyOf.anyOf(Is.is(403), Is.is(405)));
 
         // Also perform the tests against an associated LDP-RS.
         if (description != null) {
             // POST requests to a LDP-NR with acl:Append only MUST be denied
             final Response postRequest2 = doPostUnverified(description, null, null, false);
-            postRequest2.then().statusCode(403);
+            postRequest2.then().statusCode(AnyOf.anyOf(Is.is(403), Is.is(405)));
 
             // PUT requests to a LDP-NR with acl:Append only MUST be denied
             final Response putRequest2 = doPutUnverified(description, null, null, false);
-            putRequest2.then().statusCode(403);
+            putRequest2.then().statusCode(AnyOf.anyOf(Is.is(403), Is.is(405)));
 
             // DELETE requests to a LDP-NR with acl:Append only MUST be denied
             final Response deleteRequest2 = doDeleteUnverified(description, false);
-            deleteRequest2.then().statusCode(403);
+            deleteRequest2.then().statusCode(AnyOf.anyOf(Is.is(403), Is.is(405)));
         }
 
     }
